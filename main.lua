@@ -1,15 +1,3 @@
-push = require '/dependencies/push'
-
-Class = require 'dependencies/class'
-
-require '/dependencies/StateMachine'
-require '/dependencies/BaseState'
-
-require '/states/TitleScreenState'
-require '/states/PlayState'
-require '/states/TripState'
-require '/states/HelpState'
-
 --1280 800
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 800
@@ -19,13 +7,29 @@ WINDOW_HEIGHT = 800
 VIRTUAL_WIDTH = 1280
 VIRTUAL_HEIGHT = 800
 
+push = require '/dependencies/push'
+
+Class = require 'dependencies/class'
+
+require '/dependencies/StateMachine'
+require '/dependencies/BaseState'
+
+require '/states/TitleScreenState'
+require '/states/PlayState'
+require '/states/FailState'
+require '/states/WinState'
+require '/states/HelpState'
+
+
 function love.load()
 	love.graphics.setDefaultFilter('nearest', 'nearest')
 
-	love.window.setTitle('Trippy Happy')
+	love.window.setTitle('Joust Together')
 
-	pixelFont = love.graphics.newFont('fonts/Pixel.ttf', 40)
-	love.graphics.setFont(pixelFont)
+	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 25)
+	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 35)
+	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 100)
+	love.graphics.setFont(smallFont)
 
 	sounds = {
 		--['titleMusic'] = love.audio.newSource('music/titlemusic.mp3', 'static'),
@@ -98,7 +102,7 @@ function love.draw()
 end
 
 function displayFPS()
-	love.graphics.setFont(pixelFont)
+	love.graphics.setFont(smallFont)
 	love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
 	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
 end
