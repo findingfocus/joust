@@ -5,7 +5,7 @@ function PlayState:init()
 end
 
 playerX = VIRTUAL_WIDTH / 2
-local GRAVITY = 20
+local GRAVITY = 25
 PLAYER_SPEED = 250
 playerY = VIRTUAL_HEIGHT - 100
 playerDY = 0
@@ -39,8 +39,6 @@ function PlayState:update(dt)
 		grounded = false
 	end
 
-	--cloudScroll = (cloudScroll + CLOUD_SCROLL_SPEED * dt)
-	--	% CLOUD_LOOPING_POINT
 
 	if love.keyboard.wasPressed('r') then
 		--sounds['playMusic']:stop()

@@ -1,25 +1,4 @@
---1280 800
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 800
-
-
---600 375
-VIRTUAL_WIDTH = 1280
-VIRTUAL_HEIGHT = 800
-
-push = require '/dependencies/push'
-
-Class = require 'dependencies/class'
-
-require '/dependencies/StateMachine'
-require '/dependencies/BaseState'
-
-require '/states/TitleScreenState'
-require '/states/PlayState'
-require '/states/FailState'
-require '/states/WinState'
-require '/states/HelpState'
-
+require '/src/dependencies'
 
 function love.load()
 	love.graphics.setDefaultFilter('nearest', 'nearest')
