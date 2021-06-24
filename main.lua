@@ -3,7 +3,9 @@ require '/src/dependencies'
 function love.load()
 	love.graphics.setDefaultFilter('nearest', 'nearest')
 
-	love.window.setTitle('Joust Together')
+	love.window.setTitle('Joust')
+
+	love.mouse.setVisible(false)
 
 	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 25)
 	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 35)
@@ -46,6 +48,11 @@ function love.keypressed(key)
 
 	if key == 'escape' then
 		love.event.quit()
+	end
+
+	if key == 'tab' then
+		local state = not love.mouse.isVisible()
+		love.mouse.setVisible(state)
 	end
 end
 
