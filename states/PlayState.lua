@@ -4,6 +4,7 @@ function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 2 - 50, 500)
 	GRAVITY = 120
 	playerSpeed = 500
+	player1.facingRight = true
 end
 
 
@@ -13,6 +14,9 @@ end
 Left and right need to be positive negative scale
 
 
+
+under what conditions do we increment speed counter
+	when the direction your facing key is pressed up until 5
 --]]
 
 
@@ -27,22 +31,39 @@ function PlayState:update(dt)
 		gStateMachine:change('helpState')
 	end
 
-	if love.keyboard.wasPressed('right') then
-	player1.speedTier = player1.speedTier + 1
-	player1.facingRight = true
+	if love.keyboard.wasPressed('right') and player1.facingRight then
+		player1.speedTier = player1.speedTier + 1
 	end
 
-	if love.keyboard.wasPressed('left') then
+	if love.keyboard.wasPressed('left') and not player1.facingRight then
 		player1.speedTier = player1.speedTier + 1
+	end
+
+	if love.keyboard.wasPressed('right') and not player1.facingRight then
+		player1.speedTier = 0
+	end
+
+	if love.keyboard.wasPressed('left') and player1.facingRight then
+		player1.speedTier = 0
+	end
+
+
+	if love.keyboard.wasPressed('left') and player1.speedTier == 0 then
 		player1.facingRight = false
 	end
 
 
-	if love.keyboard.isDown('right') then
-		player1.x = (player1.x + playerSpeed * dt) % VIRTUAL_WIDTH
-		self.dx = 3
+	if love.keyboard.isDown('right') and player1.speedTier == 0 then
+		player1.facingRight = true
 	end
 
+	if love.keyboard.isDown('right') then
+		player1.x = (player1.x + playerSpeed * dt) % VIRTUAL_WIDTH
+	end
+
+	if love.keyboard.isDown('left') then
+		player1.x = (player1.x - playerSpeed * dt) % VIRTUAL_WIDTH
+	end
 --[[
 	repeat
 		PLAYER_SPEED = PLAYER_SPEED + self.dx
@@ -54,10 +75,7 @@ function PlayState:update(dt)
 
 	--]]
 
-	if love.keyboard.isDown('left') then
-		player1.x = (player1.x - playerSpeed * dt) % VIRTUAL_WIDTH
-		player1.dx = playerSpeed
-	end
+
 
 	if love.keyboard.wasPressed('space') and grounded then
 		player1.dy = -30
