@@ -3,8 +3,12 @@ PlayState = Class{__includes = BaseState}
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 2 - 50, 500)
 	GRAVITY = 120
-	playerSpeed = 500
 	player1.facingRight = true
+	playerSpeed = 1
+	playerSpeed2 = 4
+	playerSpeed3 = 7
+	playerSpeed4 = 12
+	playerSpeed5 = 20
 end
 
 
@@ -31,39 +35,93 @@ function PlayState:update(dt)
 		gStateMachine:change('helpState')
 	end
 
-	if love.keyboard.wasPressed('right') and player1.facingRight then
+
+	--PLAYER MOVING LEFT
+	if player1.speedTier > 0 and not player1.facingRight then
+		if player1.speedTier == 1 then
+			player1.x = player1.x - playerSpeed
+		elseif player1.speedTier == 2 then
+			player1.x = player1.x - playerSpeed * playerSpeed2
+		elseif player1.speedTier == 3 then
+			player1.x = player1.x - playerSpeed * playerSpeed3
+		elseif player1.speedTier == 4 then
+			player1.x = player1.x - playerSpeed * playerSpeed4
+		else
+			player1.x = player1.x - playerSpeed * playerSpeed5
+		end
+	end
+
+
+	--PLAYER MOVING RIGHT
+	if player1.speedTier > 0 and player1.facingRight then
+		if player1.speedTier == 1 then
+			player1.x = player1.x + playerSpeed
+		elseif player1.speedTier == 2 then
+			player1.x = player1.x + playerSpeed * playerSpeed2
+		elseif player1.speedTier == 3 then
+			player1.x = player1.x + playerSpeed * playerSpeed3
+		elseif player1.speedTier == 4 then
+			player1.x = player1.x + playerSpeed * playerSpeed4
+		else
+			player1.x = player1.x + playerSpeed * playerSpeed5
+		end
+	end
+
+	player1.x = player1.x % VIRTUAL_WIDTH
+
+--[[
+	if love.keyboard.isDown('left') then
+		player1.x = (player1.x - playerSpeed * dt) % VIRTUAL_WIDTH
+	end
+
+		--PLAYER MOVING RIGHT
+	if love.keyboard.isDown('right') then
+		player1.x = (player1.x + playerSpeed * dt) % VIRTUAL_WIDTH
+	end
+--]]
+
+
+
+
+
+
+
+	--INCREMENT SPEED LEFT
+	if love.keyboard.wasPressed('left') and player1.speedTier < 5 then
+
+		--TURNING
+		if player1.speedTier == 0 then
+			player1.facingRight = false
+		end
+		--SPEED INCREMEMENT
 		player1.speedTier = player1.speedTier + 1
 	end
 
-	if love.keyboard.wasPressed('left') and not player1.facingRight then
-		player1.speedTier = player1.speedTier + 1
-	end
-
-	if love.keyboard.wasPressed('right') and not player1.facingRight then
-		player1.speedTier = 0
-	end
-
+	--BRAKES
 	if love.keyboard.wasPressed('left') and player1.facingRight then
 		player1.speedTier = 0
 	end
 
 
-	if love.keyboard.wasPressed('left') and player1.speedTier == 0 then
-		player1.facingRight = false
-	end
 
 
-	if love.keyboard.isDown('right') and player1.speedTier == 0 then
-		player1.facingRight = true
+	--INCREMEMENT SPEED RIGHT
+	if love.keyboard.wasPressed('right') and player1.speedTier < 5 then
+		
+		--TURNING
+		if player1.speedTier == 0 then
+			player1.facingRight = true
+		end
+
+		--SPEED INCREMENT
+		player1.speedTier = player1.speedTier + 1
 	end
 
-	if love.keyboard.isDown('right') then
-		player1.x = (player1.x + playerSpeed * dt) % VIRTUAL_WIDTH
+	--BRAKES
+	if love.keyboard.wasPressed('right') and not player1.facingRight then
+		player1.speedTier = 0
 	end
 
-	if love.keyboard.isDown('left') then
-		player1.x = (player1.x - playerSpeed * dt) % VIRTUAL_WIDTH
-	end
 --[[
 	repeat
 		PLAYER_SPEED = PLAYER_SPEED + self.dx
@@ -88,6 +146,7 @@ function PlayState:update(dt)
 		playerY = 800 - 110
 		playerDY = 0
 		player1.speedTier = 0
+		player1.facingRight = true
 	end
 
 
@@ -107,11 +166,9 @@ function PlayState:render()
 		'',
 		'playerX: '..math.floor(player1.x),
 		'playerY: '..math.floor(player1.y),
-		'player.dx: '..math.floor(player1.dx),
 		'player1.speedTier: '..math.floor(player1.speedTier),
 		'player1.facingRight: '..tostring(player1.facingRight),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')
 end 
-

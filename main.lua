@@ -33,7 +33,7 @@ function love.load()
 		['helpState'] = function() return HelpState() end
 	}
 
-	gStateMachine:change('titleState')
+	gStateMachine:change('playState')
 
 	love.keyboard.keysPressed = {}
 
