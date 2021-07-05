@@ -6,27 +6,57 @@ function PlayState:init()
 	playerSpeed = 500
 end
 
+
+
+
+--[[
+Left and right need to be positive negative scale
+
+
+--]]
+
+
+
+
 function PlayState:update(dt)
 	--sounds['playMusic']:setLooping(true)
 	--sounds['playMusic']:play()
 	player1:update(dt)
+
 	if love.keyboard.wasPressed('h') then
 		gStateMachine:change('helpState')
 	end
 
+	if love.keyboard.wasPressed('right') then
+	player1.speedTier = player1.speedTier + 1
+	player1.facingRight = true
+	end
+
+	if love.keyboard.wasPressed('left') then
+		player1.speedTier = player1.speedTier + 1
+		player1.facingRight = false
+	end
+
+
 	if love.keyboard.isDown('right') then
 		player1.x = (player1.x + playerSpeed * dt) % VIRTUAL_WIDTH
-		self.dx = 6
+		self.dx = 3
 	end
 
 --[[
 	repeat
 		PLAYER_SPEED = PLAYER_SPEED + self.dx
 	until (PLAYER_SPEED >= 1800)
---]]
+
+	if love.keyboard.wasPressed('left') or 
+
+	end
+
+	--]]
+
 	if love.keyboard.isDown('left') then
 		player1.x = (player1.x - playerSpeed * dt) % VIRTUAL_WIDTH
-		player1.dx = 6
+		player1.dx = playerSpeed
 	end
 
 	if love.keyboard.wasPressed('space') and grounded then
@@ -39,8 +69,7 @@ function PlayState:update(dt)
 		playerX = 0
 		playerY = 800 - 110
 		playerDY = 0
-		PLAYER_SPEED = 500
-		player1.dx = 0
+		player1.speedTier = 0
 	end
 
 
@@ -61,7 +90,8 @@ function PlayState:render()
 		'playerX: '..math.floor(player1.x),
 		'playerY: '..math.floor(player1.y),
 		'player.dx: '..math.floor(player1.dx),
-		'PLAYER_SPEED: '..math.floor(PLAYER_SPEED),
+		'player1.speedTier: '..math.floor(player1.speedTier),
+		'player1.facingRight: '..tostring(player1.facingRight),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')

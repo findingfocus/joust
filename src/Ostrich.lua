@@ -6,7 +6,7 @@ function Ostrich:init(x, y)
 	self.width = 100
 	self.dy = 0
 	self.dx = 0 
-	local playerSpeed = 0
+	self.speedTier = 0
 end
 
 function Ostrich:update(dt)
