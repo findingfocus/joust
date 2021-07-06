@@ -1,11 +1,10 @@
 Ostrich = Class{}
 
-function Ostrich:init(x, y)
+function Ostrich:init(x, y, width)
 	self.x = x
 	self.y = y
-	self.width = 100
+	self.width = width
 	self.dy = 0
-	self.dx = 0 
 	self.speedTier = 0
 end
 

@@ -1,7 +1,7 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Ostrich(VIRTUAL_WIDTH / 2 - 50, 500)
+	player1 = Ostrich(VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT - 50 - 100, 100)
 	GRAVITY = 120
 	player1.facingRight = true
 	playerSpeed = 1
@@ -142,9 +142,9 @@ function PlayState:update(dt)
 	if love.keyboard.wasPressed('r') then
 		--sounds['playMusic']:stop()
 		--gStateMachine:change('titleState')
-		playerX = 0
-		playerY = 800 - 110
-		playerDY = 0
+		player1.x = VIRTUAL_WIDTH / 2 - 50
+		player1.y = VIRTUAL_HEIGHT - 50 - player1.width
+		--playerDY = 0
 		player1.speedTier = 0
 		player1.facingRight = true
 	end
