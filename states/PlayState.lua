@@ -2,13 +2,19 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT - 50 - 100, 100)
-	GRAVITY = 120
 	player1.facingRight = true
 	playerSpeed = 1
 	playerSpeed2 = 4
 	playerSpeed3 = 7
 	playerSpeed4 = 12
 	playerSpeed5 = 20
+	fps = 1
+	animationTimer = 1 / fps
+	frame = 1
+	totalFrames = 4
+	xoffset = 100
+	ostrichAtlas = love.graphics.newImage('src/pics/ostrichAtlas.png')
+	ostrichSprite = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas:getDimensions())
 end
 
 
@@ -29,7 +35,7 @@ under what conditions do we increment speed counter
 function PlayState:update(dt)
 	--sounds['playMusic']:setLooping(true)
 	--sounds['playMusic']:play()
-	player1:update(dt)
+	--player1:update(dt)
 
 	if love.keyboard.wasPressed('h') then
 		gStateMachine:change('helpState')
@@ -150,6 +156,18 @@ function PlayState:update(dt)
 	end
 
 
+
+	animationTimer = animationTimer - dt
+	if animationTimer <= 0 then
+		animationTimer = 1 / fps
+		frame = frame + 1
+		if frame > totalFrames then frame = 1 end
+		xoffset = 100 * (frame - 1)
+		ostrichSprite:setViewport(xoffset, 0, 100, 100)
+	end
+	
+	player1:update(dt)
+
 end
 
 
@@ -159,7 +177,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 193/255, 87/255, 255/255)
 	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - 50, VIRTUAL_WIDTH, 50)
 
-	player1:render()
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	love.graphics.print(table.concat({
 		'',
@@ -171,4 +189,6 @@ function PlayState:render()
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')
+	
+	player1:render()
 end 

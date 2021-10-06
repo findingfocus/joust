@@ -35,10 +35,10 @@ if love.keyboard.isDown('right') then
 end
 
 function Ostrich:render()
-	love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
-
-	love.graphics.rectangle('fill', self.x, self.y, self.width, self.width)
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	--love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
+
+	love.graphics.draw(ostrichAtlas, ostrichSprite, self.x, self.y)
 
 end
