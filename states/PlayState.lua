@@ -156,14 +156,25 @@ function PlayState:update(dt)
 	end
 
 
+-- OSTRICH ANIMATION CYCLE
+	
+	if player1.speedTier == 0 then
+		frame = 1
+		ostrichSprite:setViewport(0, 0, 100, 100)
+	end
 
-	animationTimer = animationTimer - dt
-	if animationTimer <= 0 then
-		animationTimer = 1 / fps
-		frame = frame + 1
-		if frame > totalFrames then frame = 1 end
-		xoffset = 100 * (frame - 1)
-		ostrichSprite:setViewport(xoffset, 0, 100, 100)
+	speedScale = (player1.speedTier * .035)
+	animationTimer = animationTimer - speedScale
+
+	if player1.speedTier > 0 then 
+		animationTimer = animationTimer - dt
+		if animationTimer <= 0 then
+			animationTimer = 1 / fps
+			frame = frame + 1
+			if frame > totalFrames then frame = 1 end
+			xoffset = 100 * (frame - 1)
+			ostrichSprite:setViewport(xoffset, 0, 100, 100)
+		end
 	end
 	
 	player1:update(dt)
@@ -186,9 +197,11 @@ function PlayState:render()
 		'playerY: '..math.floor(player1.y),
 		'player1.speedTier: '..math.floor(player1.speedTier),
 		'player1.facingRight: '..tostring(player1.facingRight),
+		'ANIMATION TIMER: ' ..tostring(animationTimer),
+		'SPEED SCALE: ' ..tostring(speedScale),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')
-	
+
 	player1:render()
 end 
