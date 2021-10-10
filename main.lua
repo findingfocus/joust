@@ -17,7 +17,12 @@ function love.load()
 		--['playMusic'] = love.audio.newSource('music/playstatemusic.mp3', 'static'),
 		--['tripMusic'] = love.audio.newSource('music/trippingmusic.mp3', 'static'),
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),
-		['select'] = love.audio.newSource('music/select.wav', 'static')
+		['select'] = love.audio.newSource('music/select.wav', 'static'),
+
+		['speed1'] = love.audio.newSource('music/1.mp3', 'static'),
+		['speed2'] = love.audio.newSource('music/2.mp3', 'static'),
+		['speed3'] = love.audio.newSource('music/3.mp3', 'static'),
+		['speed4'] = love.audio.newSource('music/4.mp3', 'static')
 	}
 --]]
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {

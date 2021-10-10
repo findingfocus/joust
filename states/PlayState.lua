@@ -156,6 +156,41 @@ function PlayState:update(dt)
 	end
 
 
+-- SOUNDS FOR WALKING
+---[[
+	if player1.speedTier == 0 then
+		sounds['speed1']:stop()
+		sounds['speed2']:stop()
+		sounds['speed3']:stop()
+		sounds['speed4']:stop()
+	end
+
+	if player1.speedTier == 1 then
+		sounds['speed1']:setLooping(true)
+		sounds['speed1']:play()
+	end
+
+	if player1.speedTier == 2 then
+		sounds['speed1']:stop()
+		sounds['speed2']:setLooping(true)
+		sounds['speed2']:play()
+	end
+
+	if player1.speedTier == 3 then
+		sounds['speed2']:stop()
+		sounds['speed3']:setLooping(true)
+		sounds['speed3']:play()
+	end
+
+	if player1.speedTier == 4 then
+		sounds['speed3']:stop()
+		sounds['speed4']:setLooping(true)
+		sounds['speed4']:play()
+	end
+--]]
+
+
+
 -- OSTRICH ANIMATION CYCLE
 	
 	if player1.speedTier == 0 then
@@ -197,7 +232,7 @@ function PlayState:render()
 		'playerY: '..math.floor(player1.y),
 		'player1.speedTier: '..math.floor(player1.speedTier),
 		'player1.facingRight: '..tostring(player1.facingRight),
-		'ANIMATION TIMER: ' ..tostring(animationTimer),
+		--'ANIMATION TIMER: ' ..tostring(animationTimer),
 		'SPEED SCALE: ' ..tostring(speedScale),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
