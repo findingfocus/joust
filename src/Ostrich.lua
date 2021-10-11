@@ -38,7 +38,10 @@ function Ostrich:render()
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
-
-	love.graphics.draw(ostrichAtlas, ostrichSprite, self.x, self.y)
+	if player1.facingRight then
+		love.graphics.draw(ostrichAtlas, ostrichSprite, self.x, self.y, 0, -1, 1, 100)
+	else
+		love.graphics.draw(ostrichAtlas, ostrichSprite, self.x, self.y)
+	end
 
 end

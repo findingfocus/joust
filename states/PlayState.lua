@@ -2,7 +2,7 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT - 50 - 100, 100)
-	player1.facingRight = true
+	player1.facingRight = false
 	playerSpeed = 1
 	playerSpeed2 = 4
 	playerSpeed3 = 7
