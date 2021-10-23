@@ -1,14 +1,15 @@
-Ostrich = Class{}
+Player2 = Class{}
 
-function Ostrich:init(x, y, width)
+function Player2:init(x, y, width)
 	self.x = x
 	self.y = y
 	self.width = width
 	self.dy = 0
 	self.speedTier = 0
+	self.grounded = true
 end
 
-function Ostrich:update(dt)
+function Player2:update(dt)
 	self.dy = self.dy + GRAVITY * dt
 	self.y = math.min(VIRTUAL_HEIGHT - self.width - 50, self.dy + self.y)
 
@@ -34,14 +35,14 @@ if love.keyboard.isDown('right') then
 	--]]
 end
 
-function Ostrich:render()
+function Player2:render()
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
-	if player1.facingRight then
-		love.graphics.draw(ostrichAtlas, ostrichSprite, self.x, self.y, 0, -1, 1, 100)
+	if player2.facingRight then
+		love.graphics.draw(ostrichAtlas2, ostrichSprite2, self.x, self.y, 0, -1, 1, 100)
 	else
-		love.graphics.draw(ostrichAtlas, ostrichSprite, self.x, self.y)
+		love.graphics.draw(ostrichAtlas2, ostrichSprite2, self.x, self.y)
 	end
 
 end
