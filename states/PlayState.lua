@@ -1,8 +1,8 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Player1(VIRTUAL_WIDTH / 2 - 100, VIRTUAL_HEIGHT - 50 - 100, 100)
-	player2 = Player2(VIRTUAL_WIDTH / 2 + 100, VIRTUAL_HEIGHT - 50 - 100, 100)
+	player1 = Player1(VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
+	player2 = Player2(VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
 	player1.facingRight = true
 	player2.facingRight = false
 	player1Speed = 1
@@ -101,7 +101,7 @@ function PlayState:update(dt)
 	end
 
 		--PLAYER2 MOVING RIGHT
-	if player2.speedTier > 0 and player1.facingRight then
+	if player2.speedTier > 0 and player2.facingRight then
 		if player2.speedTier == 1 then
 			player2.x = player2.x + player2Speed
 		elseif player2.speedTier == 2 then
@@ -146,7 +146,7 @@ function PlayState:update(dt)
 		player1.speedTier = player1.speedTier + 1
 	end
 
-	--BRAKES
+		--BRAKES
 	if love.keyboard.wasPressed('left') and player1.facingRight then
 		player1.speedTier = 0
 	end
@@ -163,7 +163,7 @@ function PlayState:update(dt)
 		player2.speedTier = player2.speedTier + 1
 	end
 
-	--BRAKES
+		--BRAKES
 	if love.keyboard.wasPressed('a') and player2.facingRight then
 		player2.speedTier = 0
 	end
@@ -240,8 +240,8 @@ function PlayState:update(dt)
 	if love.keyboard.wasPressed('r') then
 		--sounds['playMusic']:stop()
 		--gStateMachine:change('titleState')
-		player1.x = VIRTUAL_WIDTH / 2 - 100
-		player2.x = VIRTUAL_WIDTH / 2 + 100
+		player1.x = VIRTUAL_WIDTH / 3 - 50
+		player2.x = VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50
 		player1.y = VIRTUAL_HEIGHT - 50 - player1.width
 		player2.y = VIRTUAL_HEIGHT - 50 - player2.width
 		--playerDY = 0
