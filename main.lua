@@ -22,7 +22,14 @@ function love.load()
 		['speed1'] = love.audio.newSource('music/1.mp3', 'static'),
 		['speed2'] = love.audio.newSource('music/2.mp3', 'static'),
 		['speed3'] = love.audio.newSource('music/3.mp3', 'static'),
-		['speed4'] = love.audio.newSource('music/4.mp3', 'static')
+		['speed4'] = love.audio.newSource('music/4.mp3', 'static'),
+
+		['2speed1'] = love.audio.newSource('music/1-2.mp3', 'static'),
+		['2speed2'] = love.audio.newSource('music/2-2.mp3', 'static'),
+		['2speed3'] = love.audio.newSource('music/3-2.mp3', 'static'),
+		['2speed4'] = love.audio.newSource('music/4-2.mp3', 'static')
+
+
 	}
 --]]
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {

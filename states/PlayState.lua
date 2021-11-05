@@ -261,10 +261,24 @@ function PlayState:update(dt)
 		sounds['speed4']:stop()
 	end
 
+	if player2.speedTier == 0 then
+		sounds['2speed1']:stop()
+		sounds['2speed2']:stop()
+		sounds['2speed3']:stop()
+		sounds['2speed4']:stop()
+	end
+
+
 	if player1.speedTier == 1 then
 		sounds['speed1']:setLooping(true)
 		sounds['speed1']:play()
 	end
+
+	if player2.speedTier == 1 then
+		sounds['2speed1']:setLooping(true)
+		sounds['2speed1']:play()
+	end
+
 
 	if player1.speedTier == 2 then
 		sounds['speed1']:stop()
@@ -272,16 +286,36 @@ function PlayState:update(dt)
 		sounds['speed2']:play()
 	end
 
+	if player2.speedTier == 2 then
+		sounds['2speed1']:stop()
+		sounds['2speed2']:setLooping(true)
+		sounds['2speed2']:play()
+	end
+
+
 	if player1.speedTier == 3 then
 		sounds['speed2']:stop()
 		sounds['speed3']:setLooping(true)
 		sounds['speed3']:play()
 	end
 
+	if player2.speedTier == 3 then
+		sounds['2speed2']:stop()
+		sounds['2speed3']:setLooping(true)
+		sounds['2speed3']:play()
+	end
+
+
 	if player1.speedTier == 4 then
 		sounds['speed3']:stop()
 		sounds['speed4']:setLooping(true)
 		sounds['speed4']:play()
+	end
+
+	if player2.speedTier == 4 then
+		sounds['2speed3']:stop()
+		sounds['2speed4']:setLooping(true)
+		sounds['2speed4']:play()
 	end
 --]]
 
