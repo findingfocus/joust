@@ -136,7 +136,7 @@ function PlayState:update(dt)
 
 
 	--INCREMENT PLAYER1 SPEED TO THE LEFT
-	if love.keyboard.wasPressed('left') and player1.speedTier < 5 then
+	if love.keyboard.wasPressed('a') and player1.speedTier < 5 then
 
 		--TURNING
 		if player1.speedTier == 0 then
@@ -147,13 +147,13 @@ function PlayState:update(dt)
 	end
 
 		--BRAKES
-	if love.keyboard.wasPressed('left') and player1.facingRight then
+	if love.keyboard.wasPressed('a') and player1.facingRight then
 		player1.speedTier = 0
 	end
 
 
 --INCREMENT PLAYER2 SPEED TO THE LEFT
-	if love.keyboard.wasPressed('a') and player2.speedTier < 5 then
+	if love.keyboard.wasPressed('left') and player2.speedTier < 5 then
 
 		--TURNING
 		if player2.speedTier == 0 then
@@ -164,7 +164,7 @@ function PlayState:update(dt)
 	end
 
 		--BRAKES
-	if love.keyboard.wasPressed('a') and player2.facingRight then
+	if love.keyboard.wasPressed('left') and player2.facingRight then
 		player2.speedTier = 0
 	end
 
@@ -173,7 +173,7 @@ function PlayState:update(dt)
 
 
 	--INCREMEMENT PLAYER1 SPEED TO THE RIGHT
-	if love.keyboard.wasPressed('right') and player1.speedTier < 5 then
+	if love.keyboard.wasPressed('d') and player1.speedTier < 5 then
 		
 		--TURNING
 		if player1.speedTier == 0 then
@@ -187,7 +187,7 @@ function PlayState:update(dt)
 	--INCREMEMENT PLAYER2 SPEED TO THE RIGHT
 
 	---[[
-	if love.keyboard.wasPressed('d') and player2.speedTier < 5 then
+	if love.keyboard.wasPressed('right') and player2.speedTier < 5 then
 		
 		--TURNING
 		if player2.speedTier == 0 then
@@ -203,12 +203,12 @@ function PlayState:update(dt)
 
 
 	--BRAKES FOR PLAYER1
-	if love.keyboard.wasPressed('right') and not player1.facingRight then
+	if love.keyboard.wasPressed('d') and not player1.facingRight then
 		player1.speedTier = 0
 	end
 
 	--BRAKES FOR PLAYER2
-	if love.keyboard.wasPressed('d') and not player2.facingRight then
+	if love.keyboard.wasPressed('right') and not player2.facingRight then
 		player2.speedTier = 0
 	end
 
@@ -226,12 +226,12 @@ function PlayState:update(dt)
 
 
 	--PLAYER1 JUMPING
-	if love.keyboard.wasPressed('up') then
+	if love.keyboard.wasPressed('w') then
 		player1.dy = -30
 	end
 
 		--PLAYER2 JUMPING
-	if love.keyboard.wasPressed('w') then
+	if love.keyboard.wasPressed('up') then
 		player2.dy = -30
 	end
 
