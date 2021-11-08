@@ -227,12 +227,36 @@ function PlayState:update(dt)
 
 	--PLAYER1 JUMPING
 	if love.keyboard.wasPressed('w') then
-		player1.dy = -30
+		if player1.dy < -5 then
+			player1.dy = - 8
+		elseif player1.dy < -4 then
+			player1.dy = -6
+		elseif player1.dy < -3 then
+			player1.dy = -5
+		elseif player1.dy < -2 then
+			player1.dy = -4
+		elseif player1.dy < -1 then
+			player1.dy = -3
+		else
+			player1.dy = -2
+		end
 	end
 
 		--PLAYER2 JUMPING
 	if love.keyboard.wasPressed('up') then
-		player2.dy = -30
+		if player2.dy < -5 then
+			player2.dy = - 8
+		elseif player2.dy < -4 then
+			player2.dy = -6
+		elseif player2.dy < -3 then
+			player2.dy = -5
+		elseif player2.dy < -2 then
+			player2.dy = -4
+		elseif player2.dy < -1 then
+			player2.dy = -3
+		else
+			player2.dy = -2
+		end
 	end
 
 
@@ -367,7 +391,6 @@ function PlayState:update(dt)
 
 end
 
-
 function PlayState:render()
 	love.graphics.clear(0/255, 0/255, 0/255, 255/255)
 
@@ -385,10 +408,12 @@ function PlayState:render()
 		'player1.facingRight: '..tostring(player1.facingRight),
 		--'ANIMATION TIMER: ' ..tostring(animationTimer),
 		'SPEED SCALE: ' ..tostring(speedScale),
+		'PLAYER1.DY: ' ..tostring(math.floor(player1.dy)),
+		'PLAYER2.DY: ' ..tostring(math.floor(player2.dy)),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')
 
 	player1:render()
 	player2:render()
-end 
+end

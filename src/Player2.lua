@@ -13,6 +13,11 @@ function Player2:update(dt)
 	self.dy = self.dy + GRAVITY * dt
 	self.y = math.min(VIRTUAL_HEIGHT - self.width - 50, self.dy + self.y)
 
+	--bouncing off top
+	if self.y < 0 then
+		self.y = 0
+		self.dy = 2
+	end
 	--[[
 if love.keyboard.isDown('right') then
 		self.x = (self.x + PLAYER_SPEED * dt) % VIRTUAL_WIDTH

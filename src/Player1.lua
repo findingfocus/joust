@@ -11,7 +11,13 @@ end
 
 function Player1:update(dt)
 	self.dy = self.dy + GRAVITY * dt
-	self.y = math.min(VIRTUAL_HEIGHT - self.width - 50, self.dy + self.y)
+	self.y = math.min(VIRTUAL_HEIGHT - self.width - 50, self.y + self.dy)
+	
+	--bouncing off top
+	if self.y < 0 then
+		self.y = 0
+		self.dy = 2
+	end
 
 	--[[
 if love.keyboard.isDown('right') then
