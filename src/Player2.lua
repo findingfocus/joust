@@ -12,7 +12,11 @@ end
 function Player2:update(dt)
 	self.dy = self.dy + GRAVITY * dt
 	self.y = math.min(VIRTUAL_HEIGHT - self.width - 50, self.dy + self.y)
-
+	if self.y == VIRTUAL_HEIGHT - self.width - 50 then
+		self.grounded = true
+	elseif self.y < VIRTUAL_HEIGHT - self.width - 50 then
+		self.grounded = false 
+	end
 	--bouncing off top
 	if self.y < 0 then
 		self.y = 0

@@ -24,7 +24,7 @@ function PlayState:init()
 	xoffset1 = 100
 	xoffset2 = 100
 	ostrichAtlas = love.graphics.newImage('src/pics/ostrichAtlas1-6panel.png')
-	ostrichAtlas2 = love.graphics.newImage('src/pics/ostrichAtlas2.png')
+	ostrichAtlas2 = love.graphics.newImage('src/pics/ostrichAtlas2-6panel.png')
 	ostrichSprite = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas:getDimensions())
 	ostrichSprite2 = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas2:getDimensions())
 end
@@ -241,11 +241,12 @@ function PlayState:update(dt)
 			player1.dy = -2
 		end
 	end
-
-	if love.keyboard.wasPressed('up') and not player1.grounded then
+--[[
+	if love.keyboard.wasPressed('w') and not player1.grounded then
 		ostrichSprite:setViewport(500, 0, 100, 100)
 		--ostrichSprite:setViewport(400, 0, 100, 100)
 	end
+	--]]
 
 
 		--PLAYER2 JUMPING
@@ -355,17 +356,13 @@ function PlayState:update(dt)
 	if player1.speedTier == 0 and player1.grounded then
 		frame = 1
 		ostrichSprite:setViewport(0, 0, 100, 100)
-	elseif love.keyboard.wasPressed('w') and not player1.grounded then
-		ostrichSprite:setViewport(500, 0, 100, 100)
-	else
-		ostrichSprite:setViewport(400, 0, 100, 100)
 	end
-
+	
 	speedScale = (player1.speedTier * .035)
 	speedScale2 = (player2.speedTier * .035)
 	animationTimer1 = animationTimer1 - speedScale
 
-	if player1.speedTier > 0 then 
+	if player1.speedTier > 0 and player1.grounded then 
 		animationTimer1 = animationTimer1 - dt
 		if animationTimer1 <= 0 then
 			animationTimer1 = 1 / fps
@@ -376,8 +373,18 @@ function PlayState:update(dt)
 		end
 	end
 
+	--PLAYER 1 AERIAL ANIMATION HNADLING
+	if not player1.grounded then
+		if love.keyboard.wasPressed('w') and not player1.grounded then
+			ostrichSprite:setViewport(500, 0, 100, 100)
+		else
+			ostrichSprite:setViewport(400, 0, 100, 100)
+		end
+
+	end
+
 	-- OSTRICH2 ANIMATION CYCLE
-	if player2.speedTier == 0 then
+	if player2.speedTier == 0 and player2.grounded then
 		frame2 = 1
 		ostrichSprite2:setViewport(0, 0, 100, 100)
 	end
@@ -385,7 +392,7 @@ function PlayState:update(dt)
 	speedScale2 = (player2.speedTier * .035)
 	animationTimer2 = animationTimer2 - speedScale2
 
-	if player2.speedTier > 0 then 
+	if player2.speedTier > 0 and player2.grounded then 
 		animationTimer2 = animationTimer2 - dt
 		if animationTimer2 <= 0 then
 			animationTimer2 = 1 / fps
@@ -395,6 +402,16 @@ function PlayState:update(dt)
 			ostrichSprite2:setViewport(xoffset2, 0, 100, 100)
 		end
 	end
+
+	--PLAYER 2 AERIAL ANIMATION HNADLING
+	if not player2.grounded then
+		if love.keyboard.wasPressed('up') and not player2.grounded then
+			ostrichSprite2:setViewport(500, 0, 100, 100)
+		else
+			ostrichSprite2:setViewport(400, 0, 100, 100)
+		end
+	end
+
 	
 	player1:update(dt)
 	player2:update(dt)
@@ -421,6 +438,7 @@ function PlayState:render()
 		'PLAYER1.DY: ' ..tostring(math.floor(player1.dy)),
 		'PLAYER2.DY: ' ..tostring(math.floor(player2.dy)),
 		'PLAYER1.grounded: ' .. tostring(player1.grounded),
+		'PLAYER2.grounded: ' .. tostring(player2.grounded),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')
