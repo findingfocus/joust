@@ -23,7 +23,7 @@ function PlayState:init()
 	totalFrames = 4
 	xoffset1 = 100
 	xoffset2 = 100
-	ostrichAtlas = love.graphics.newImage('src/pics/ostrichAtlas.png')
+	ostrichAtlas = love.graphics.newImage('src/pics/ostrichAtlas1-6panel.png')
 	ostrichAtlas2 = love.graphics.newImage('src/pics/ostrichAtlas2.png')
 	ostrichSprite = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas:getDimensions())
 	ostrichSprite2 = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas2:getDimensions())
@@ -242,6 +242,12 @@ function PlayState:update(dt)
 		end
 	end
 
+	if love.keyboard.wasPressed('up') and not player1.grounded then
+		ostrichSprite:setViewport(500, 0, 100, 100)
+		--ostrichSprite:setViewport(400, 0, 100, 100)
+	end
+
+
 		--PLAYER2 JUMPING
 	if love.keyboard.wasPressed('up') then
 		if player2.dy < -5 then
@@ -346,9 +352,13 @@ function PlayState:update(dt)
 
 
 -- OSTRICH1 ANIMATION CYCLE
-	if player1.speedTier == 0 then
+	if player1.speedTier == 0 and player1.grounded then
 		frame = 1
 		ostrichSprite:setViewport(0, 0, 100, 100)
+	elseif love.keyboard.wasPressed('w') and not player1.grounded then
+		ostrichSprite:setViewport(500, 0, 100, 100)
+	else
+		ostrichSprite:setViewport(400, 0, 100, 100)
 	end
 
 	speedScale = (player1.speedTier * .035)
@@ -410,6 +420,7 @@ function PlayState:render()
 		'SPEED SCALE: ' ..tostring(speedScale),
 		'PLAYER1.DY: ' ..tostring(math.floor(player1.dy)),
 		'PLAYER2.DY: ' ..tostring(math.floor(player2.dy)),
+		'PLAYER1.grounded: ' .. tostring(player1.grounded),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')
