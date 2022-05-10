@@ -10,7 +10,7 @@ function Player1:init(x, y, width)
 end
 
 function Player1:update(dt)
-	self.dy = self.dy + GRAVITY * dt
+	self.dy =  self.dy + GRAVITY * dt
 	self.y = math.min(VIRTUAL_HEIGHT - self.width - 50, self.y + self.dy)
 	if self.y == VIRTUAL_HEIGHT - self.width - 50 then
 		self.grounded = true
