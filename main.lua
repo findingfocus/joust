@@ -7,9 +7,9 @@ function love.load()
 
 	love.mouse.setVisible(false)
 
-	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 25)
-	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 35)
-	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 100)
+	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 10)
+	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 16)
+	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 30)
 	love.graphics.setFont(smallFont)
 
 	sounds = {

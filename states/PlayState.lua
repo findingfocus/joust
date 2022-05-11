@@ -1,7 +1,7 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Player1(VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
+	player1 = Player1(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 150, 16)
 	player2 = Player2(VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
 	player1.facingRight = true
 	player2.facingRight = false
@@ -429,6 +429,7 @@ function PlayState:render()
 	love.graphics.print(table.concat({
 		'',
 		'',
+		'',
 		'playerX: '..math.floor(player1.x),
 		'playerY: '..math.floor(player1.y),
 		'player1.speedTier: '..math.floor(player1.speedTier),
@@ -444,5 +445,5 @@ function PlayState:render()
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')
 
 	player1:render()
-	player2:render()
+	--player2:render()
 end
