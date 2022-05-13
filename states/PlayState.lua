@@ -1,15 +1,15 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Player1(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 150, 16, 20)
+	player1 = Player1(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 36 - 20, 16, 20)
 	--player2 = Player2(VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
 	player1.facingRight = true
 	--player2.facingRight = false
-	player1Speed = 1
-	player1Speed2 = 3
-	player1Speed3 = 5
-	player1Speed4 = 8
-	player1Speed5 = 12
+	player1Speed = 1.3
+	player1Speed2 = 1.8
+	player1Speed3 = 3
+	player1Speed4 = 4.5
+	player1Speed5 = 6
 	--player2Speed = 1
 	--player2Speed2 = 4
 	--player2Speed3 = 7
@@ -142,7 +142,7 @@ function PlayState:update(dt)
 
 
 	--INCREMENT PLAYER1 SPEED TO THE LEFT
-	if love.keyboard.wasPressed('a') and player1.speedTier < 5 then
+	if love.keyboard.wasPressed('left') and player1.speedTier < 5 then
 
 		--TURNING
 		if player1.speedTier == 0 then
@@ -153,7 +153,7 @@ function PlayState:update(dt)
 	end
 
 		--BRAKES
-	if love.keyboard.wasPressed('a') and player1.facingRight then
+	if love.keyboard.wasPressed('left') and player1.facingRight then
 		player1.speedTier = 0
 	end
 
@@ -180,7 +180,7 @@ function PlayState:update(dt)
 
 
 	--INCREMEMENT PLAYER1 SPEED TO THE RIGHT
-	if love.keyboard.wasPressed('d') and player1.speedTier < 5 then
+	if love.keyboard.wasPressed('right') and player1.speedTier < 5 then
 		
 		--TURNING
 		if player1.speedTier == 0 then
@@ -210,7 +210,7 @@ function PlayState:update(dt)
 
 
 	--BRAKES FOR PLAYER1
-	if love.keyboard.wasPressed('d') and not player1.facingRight then
+	if love.keyboard.wasPressed('right') and not player1.facingRight then
 		player1.speedTier = 0
 	end
 
@@ -235,7 +235,7 @@ function PlayState:update(dt)
 
 
 	--PLAYER1 JUMPING
-	if love.keyboard.wasPressed('w') then
+	if love.keyboard.wasPressed('up') then
 		if player1.dy < -5 then
 			player1.dy = - 8
 		elseif player1.dy < -4 then
