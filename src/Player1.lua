@@ -1,9 +1,10 @@
 Player1 = Class{}
 
-function Player1:init(x, y, width)
+function Player1:init(x, y, width, height)
 	self.x = x
 	self.y = y
 	self.width = width
+	self.height = height
 	self.dy = 0
 	self.speedTier = 0
 	self.grounded = true
@@ -11,7 +12,7 @@ end
 
 function Player1:update(dt)
 	self.dy =  self.dy + GRAVITY * dt
-	self.y = math.min(VIRTUAL_HEIGHT - self.width - 50, self.y + self.dy)
+	self.y = math.min(VIRTUAL_HEIGHT - self.height - 36, self.y + self.dy)
 	if self.y == VIRTUAL_HEIGHT - self.width - 50 then
 		self.grounded = true
 	elseif self.y < VIRTUAL_HEIGHT - self.width - 50 then

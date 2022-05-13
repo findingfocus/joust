@@ -1,20 +1,21 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Player1(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 150, 16)
-	player2 = Player2(VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
+	player1 = Player1(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 150, 16, 20)
+	--player2 = Player2(VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
 	player1.facingRight = true
-	player2.facingRight = false
+	--player2.facingRight = false
 	player1Speed = 1
-	player1Speed2 = 4
-	player1Speed3 = 7
-	player1Speed4 = 12
-	player1Speed5 = 20
-	player2Speed = 1
-	player2Speed2 = 4
-	player2Speed3 = 7
-	player2Speed4 = 12
-	player2Speed5 = 20
+	player1Speed2 = 3
+	player1Speed3 = 5
+	player1Speed4 = 8
+	player1Speed5 = 12
+	--player2Speed = 1
+	--player2Speed2 = 4
+	--player2Speed3 = 7
+	--player2Speed4 = 12
+	--player2Speed5 = 20
+	slowScale = .3
 	fps = 1
 	animationTimer1 = 1 / fps
 	animationTimer2 = 1/ fps
@@ -57,18 +58,20 @@ function PlayState:update(dt)
 	--PLAYER1 MOVING LEFT
 	if player1.speedTier > 0 and not player1.facingRight then
 		if player1.speedTier == 1 then
-			player1.x = player1.x - player1Speed
+			player1.x = player1.x - player1Speed * slowScale
 		elseif player1.speedTier == 2 then
-			player1.x = player1.x - player1Speed * player1Speed2
+			player1.x = player1.x - player1Speed * slowScale * player1Speed2
 		elseif player1.speedTier == 3 then
-			player1.x = player1.x - player1Speed * player1Speed3
+			player1.x = player1.x - player1Speed * slowScale * player1Speed3
 		elseif player1.speedTier == 4 then
-			player1.x = player1.x - player1Speed * player1Speed4
+			player1.x = player1.x - player1Speed * slowScale * player1Speed4
 		else
-			player1.x = player1.x - player1Speed * player1Speed5
+			player1.x = player1.x - player1Speed * slowScale * player1Speed5
 		end
 	end
 
+
+--[[
 	--PLAYER2 MOVING LEFT
 		if player2.speedTier > 0 and not player2.facingRight then
 		if player2.speedTier == 1 then
@@ -83,23 +86,25 @@ function PlayState:update(dt)
 			player2.x = player2.x - player2Speed * player2Speed5
 		end
 	end
+--]]
 
 
 	--PLAYER1 MOVING RIGHT
 	if player1.speedTier > 0 and player1.facingRight then
 		if player1.speedTier == 1 then
-			player1.x = player1.x + player1Speed
+			player1.x = player1.x + player1Speed * slowScale
 		elseif player1.speedTier == 2 then
-			player1.x = player1.x + player1Speed * player1Speed2
+			player1.x = player1.x + player1Speed * slowScale * player1Speed2
 		elseif player1.speedTier == 3 then
-			player1.x = player1.x + player1Speed * player1Speed3
+			player1.x = player1.x + player1Speed * slowScale * player1Speed3
 		elseif player1.speedTier == 4 then
-			player1.x = player1.x + player1Speed * player1Speed4
+			player1.x = player1.x + player1Speed * slowScale * player1Speed4
 		else
-			player1.x = player1.x + player1Speed * player1Speed5
+			player1.x = player1.x + player1Speed * slowScale * player1Speed5
 		end
 	end
 
+--[[
 		--PLAYER2 MOVING RIGHT
 	if player2.speedTier > 0 and player2.facingRight then
 		if player2.speedTier == 1 then
@@ -114,9 +119,10 @@ function PlayState:update(dt)
 			player2.x = player2.x + player2Speed * player2Speed5
 		end
 	end
+--]]
 
 	player1.x = player1.x % VIRTUAL_WIDTH
-	player2.x = player2.x % VIRTUAL_WIDTH
+	--player2.x = player2.x % VIRTUAL_WIDTH
 
 --[[
 	if love.keyboard.isDown('left') then
@@ -152,6 +158,7 @@ function PlayState:update(dt)
 	end
 
 
+--[[
 --INCREMENT PLAYER2 SPEED TO THE LEFT
 	if love.keyboard.wasPressed('left') and player2.speedTier < 5 then
 
@@ -167,7 +174,7 @@ function PlayState:update(dt)
 	if love.keyboard.wasPressed('left') and player2.facingRight then
 		player2.speedTier = 0
 	end
-
+--]]
 
 
 
@@ -184,9 +191,9 @@ function PlayState:update(dt)
 		player1.speedTier = player1.speedTier + 1
 	end
 
-	--INCREMEMENT PLAYER2 SPEED TO THE RIGHT
 
-	---[[
+--[[
+	--INCREMEMENT PLAYER2 SPEED TO THE RIGHT
 	if love.keyboard.wasPressed('right') and player2.speedTier < 5 then
 		
 		--TURNING
@@ -207,10 +214,12 @@ function PlayState:update(dt)
 		player1.speedTier = 0
 	end
 
+--[[
 	--BRAKES FOR PLAYER2
 	if love.keyboard.wasPressed('right') and not player2.facingRight then
 		player2.speedTier = 0
 	end
+--]]
 
 --[[
 	repeat
@@ -249,6 +258,7 @@ function PlayState:update(dt)
 	--]]
 
 
+--[[
 		--PLAYER2 JUMPING
 	if love.keyboard.wasPressed('up') then
 		if player2.dy < -5 then
@@ -265,6 +275,7 @@ function PlayState:update(dt)
 			player2.dy = -2
 		end
 	end
+--]]
 
 
 
@@ -272,14 +283,14 @@ function PlayState:update(dt)
 		--sounds['playMusic']:stop()
 		--gStateMachine:change('titleState')
 		player1.x = VIRTUAL_WIDTH / 3 - 50
-		player2.x = VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50
+		--player2.x = VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50
 		player1.y = VIRTUAL_HEIGHT - 50 - player1.width
-		player2.y = VIRTUAL_HEIGHT - 50 - player2.width
+		--player2.y = VIRTUAL_HEIGHT - 50 - player2.width
 		--playerDY = 0
 		player1.speedTier = 0
-		player2.speedTier = 0
+		--player2.speedTier = 0
 		player1.facingRight = true
-		player2.facingRight = false
+		--player2.facingRight = false
 	end
 
 
@@ -292,24 +303,26 @@ function PlayState:update(dt)
 		sounds['speed4']:stop()
 	end
 
+--[[
 	if player2.speedTier == 0 then
 		sounds['2speed1']:stop()
 		sounds['2speed2']:stop()
 		sounds['2speed3']:stop()
 		sounds['2speed4']:stop()
 	end
-
+--]]
 
 	if player1.speedTier == 1 then
 		sounds['speed1']:setLooping(true)
 		sounds['speed1']:play()
 	end
 
+--[[]
 	if player2.speedTier == 1 then
 		sounds['2speed1']:setLooping(true)
 		sounds['2speed1']:play()
 	end
-
+--]]
 
 	if player1.speedTier == 2 then
 		sounds['speed1']:stop()
@@ -317,12 +330,13 @@ function PlayState:update(dt)
 		sounds['speed2']:play()
 	end
 
+--[[
 	if player2.speedTier == 2 then
 		sounds['2speed1']:stop()
 		sounds['2speed2']:setLooping(true)
 		sounds['2speed2']:play()
 	end
-
+--]]
 
 	if player1.speedTier == 3 then
 		sounds['speed2']:stop()
@@ -330,11 +344,13 @@ function PlayState:update(dt)
 		sounds['speed3']:play()
 	end
 
+--[[
 	if player2.speedTier == 3 then
 		sounds['2speed2']:stop()
 		sounds['2speed3']:setLooping(true)
 		sounds['2speed3']:play()
 	end
+--]]
 
 
 	if player1.speedTier == 4 then
@@ -343,14 +359,13 @@ function PlayState:update(dt)
 		sounds['speed4']:play()
 	end
 
+--[[
 	if player2.speedTier == 4 then
 		sounds['2speed3']:stop()
 		sounds['2speed4']:setLooping(true)
 		sounds['2speed4']:play()
 	end
 --]]
-
-
 
 -- OSTRICH1 ANIMATION CYCLE
 	if player1.speedTier == 0 and player1.grounded then
@@ -359,7 +374,7 @@ function PlayState:update(dt)
 	end
 	
 	speedScale = (player1.speedTier * .035)
-	speedScale2 = (player2.speedTier * .035)
+	--speedScale2 = (player2.speedTier * .035)
 	animationTimer1 = animationTimer1 - speedScale
 
 	if player1.speedTier > 0 and player1.grounded then 
@@ -383,6 +398,7 @@ function PlayState:update(dt)
 
 	end
 
+--[[
 	-- OSTRICH2 ANIMATION CYCLE
 	if player2.speedTier == 0 and player2.grounded then
 		frame2 = 1
@@ -411,18 +427,28 @@ function PlayState:update(dt)
 			ostrichSprite2:setViewport(400, 0, 100, 100)
 		end
 	end
-
+--]]
 	
 	player1:update(dt)
-	player2:update(dt)
+	--player2:update(dt)
 
 end
 
 function PlayState:render()
 	love.graphics.clear(0/255, 0/255, 0/255, 255/255)
 
-	love.graphics.setColor(255/255, 193/255, 87/255, 255/255)
-	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - 50, VIRTUAL_WIDTH, 50)
+	--lava stand-in
+	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - 13, VIRTUAL_WIDTH, 13)
+
+
+	--draw ground top level **to be made retractable
+	love.graphics.setColor(133/255, 70/255, 15/255, 255/255)
+	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - 36, VIRTUAL_WIDTH, 4)
+
+	--ground bottom stand-in
+	love.graphics.setColor(219/255, 164/255, 0/255, 255/255)
+	love.graphics.rectangle('fill', 53, VIRTUAL_HEIGHT - 36, 186, 32)
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
@@ -437,9 +463,9 @@ function PlayState:render()
 		--'ANIMATION TIMER: ' ..tostring(animationTimer),
 		'SPEED SCALE: ' ..tostring(speedScale),
 		'PLAYER1.DY: ' ..tostring(math.floor(player1.dy)),
-		'PLAYER2.DY: ' ..tostring(math.floor(player2.dy)),
+		--'PLAYER2.DY: ' ..tostring(math.floor(player2.dy)),
 		'PLAYER1.grounded: ' .. tostring(player1.grounded),
-		'PLAYER2.grounded: ' .. tostring(player2.grounded),
+		--'PLAYER2.grounded: ' .. tostring(player2.grounded),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.printf('Hello PlayState', 0, 200, VIRTUAL_HEIGHT / 2, 'center')
