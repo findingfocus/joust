@@ -237,9 +237,11 @@ function PlayState:update(dt)
 	--PLAYER1 JUMPING
 	if love.keyboard.wasPressed('space') then
 		if (player1.dy < -.5) then
-			player1.dy = -1
-		elseif (player1.dy < -.2) then
+			player1.dy = -1.5
+		elseif(player1.dy < -.4) then
 			player1.dy = -.7
+		elseif (player1.dy < -.2) then
+			player1.dy = -.6
 		else
 			player1.dy = -.4
 		end
