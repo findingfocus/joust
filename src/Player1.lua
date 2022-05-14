@@ -11,12 +11,16 @@ function Player1:init(x, y, width, height)
 end
 
 function Player1:update(dt)
-	self.dy =  self.dy + GRAVITY * dt
+	if not self.grounded then
+		self.dy =  self.dy + GRAVITY * dt
+	end
+	
 	self.y = math.min(VIRTUAL_HEIGHT - self.height - 36, self.y + self.dy)
 	if self.y == VIRTUAL_HEIGHT - self.height - 36 then
 		self.y = VIRTUAL_HEIGHT - 56 --depends on where ground is, right now its only the bottom floor
 		self.grounded = true
 		self.height = 20
+		self.dy = 0
 	elseif self.y < VIRTUAL_HEIGHT - self.height - 36 then
 		self.grounded = false
 		self.height = 17
@@ -25,7 +29,7 @@ function Player1:update(dt)
 	--bouncing off top
 	if self.y < 0 then
 		self.y = 0
-		self.dy = 2
+		self.dy = 1
 	end
 
 	--[[

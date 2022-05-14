@@ -235,7 +235,19 @@ function PlayState:update(dt)
 
 
 	--PLAYER1 JUMPING
-	if love.keyboard.wasPressed('up') then
+	if love.keyboard.wasPressed('space') then
+		if (player1.dy < -.5) then
+			player1.dy = -1
+		elseif (player1.dy < -.2) then
+			player1.dy = -.7
+		else
+			player1.dy = -.4
+		end
+	end
+
+--old jump logic
+--[[
+	if love.keyboard.wasPressed('space') then
 		if player1.dy < -5 then
 			player1.dy = - 8
 		elseif player1.dy < -4 then
@@ -250,6 +262,8 @@ function PlayState:update(dt)
 			player1.dy = -2
 		end
 	end
+--]]
+
 --[[
 	if love.keyboard.wasPressed('w') and not player1.grounded then
 		ostrichSprite:setViewport(500, 0, 100, 100)
@@ -452,17 +466,18 @@ function PlayState:render()
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
+	love.graphics.setFont(smallFont)
 	love.graphics.print(table.concat({
 		'',
 		'',
 		'',
-		'playerX: '..math.floor(player1.x),
-		'playerY: '..math.floor(player1.y),
-		'player1.speedTier: '..math.floor(player1.speedTier),
-		'player1.facingRight: '..tostring(player1.facingRight),
+		'PLAYER1.X: '..math.floor(player1.x),
+		'PLAYER1.Y: '..math.floor(player1.y),
+		'PLAYER1.facingRight: '..tostring(player1.facingRight),
 		--'ANIMATION TIMER: ' ..tostring(animationTimer),
+		'PLAYER1.speedTier: '..math.floor(player1.speedTier),
 		'SPEED SCALE: ' ..tostring(speedScale),
-		'PLAYER1.DY: ' ..tostring(math.floor(player1.dy)),
+		'PLAYER1.DY: ' ..tostring(string.format("%.2f", player1.dy)),
 		--'PLAYER2.DY: ' ..tostring(math.floor(player2.dy)),
 		'PLAYER1.grounded: ' .. tostring(player1.grounded),
 		--'PLAYER2.grounded: ' .. tostring(player2.grounded),

@@ -7,10 +7,9 @@ function love.load()
 
 	love.mouse.setVisible(false)
 
-	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 10)
+	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 8)
 	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 16)
-	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 30)
-	love.graphics.setFont(smallFont)
+	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)
 
 	sounds = {
 		--['titleMusic'] = love.audio.newSource('music/titlemusic.mp3', 'static'),
