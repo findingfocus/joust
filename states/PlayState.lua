@@ -121,7 +121,17 @@ function PlayState:update(dt)
 	end
 --]]
 
-	player1.x = player1.x % VIRTUAL_WIDTH
+	--LOOPS player to left side of screen
+	if player1.x > VIRTUAL_WIDTH then
+		player1.x = -player1.width
+	end
+
+	--LOOPS player to right side of screen
+	if player1.x < -player1.width then
+		player1.x = VIRTUAL_WIDTH
+	end
+
+	--player1.x = player1.x % VIRTUAL_WIDTH
 	--player2.x = player2.x % VIRTUAL_WIDTH
 
 --[[
