@@ -5,16 +5,6 @@ function PlayState:init()
 	--player2 = Player2(VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
 	player1.facingRight = true
 	--player2.facingRight = false
-	player1Speed = 1.3
-	player1Speed2 = 1.8
-	player1Speed3 = 3
-	player1Speed4 = 4.5
-	player1Speed5 = 6
-	--player2Speed = 1
-	--player2Speed2 = 4
-	--player2Speed3 = 7
-	--player2Speed4 = 12
-	--player2Speed5 = 20
 	slowScale = .3
 	fps = 1
 	animationTimer1 = 1 / fps
@@ -55,20 +45,6 @@ function PlayState:update(dt)
 	end
 
 
-	--PLAYER1 MOVING LEFT
-	if player1.speedTier > 0 and not player1.facingRight then
-		if player1.speedTier == 1 then
-			player1.x = player1.x - player1Speed * slowScale
-		elseif player1.speedTier == 2 then
-			player1.x = player1.x - player1Speed * slowScale * player1Speed2
-		elseif player1.speedTier == 3 then
-			player1.x = player1.x - player1Speed * slowScale * player1Speed3
-		elseif player1.speedTier == 4 then
-			player1.x = player1.x - player1Speed * slowScale * player1Speed4
-		else
-			player1.x = player1.x - player1Speed * slowScale * player1Speed5
-		end
-	end
 
 
 --[[
@@ -89,20 +65,7 @@ function PlayState:update(dt)
 --]]
 
 
-	--PLAYER1 MOVING RIGHT
-	if player1.speedTier > 0 and player1.facingRight then
-		if player1.speedTier == 1 then
-			player1.x = player1.x + player1Speed * slowScale
-		elseif player1.speedTier == 2 then
-			player1.x = player1.x + player1Speed * slowScale * player1Speed2
-		elseif player1.speedTier == 3 then
-			player1.x = player1.x + player1Speed * slowScale * player1Speed3
-		elseif player1.speedTier == 4 then
-			player1.x = player1.x + player1Speed * slowScale * player1Speed4
-		else
-			player1.x = player1.x + player1Speed * slowScale * player1Speed5
-		end
-	end
+
 
 --[[
 		--PLAYER2 MOVING RIGHT
@@ -150,24 +113,6 @@ function PlayState:update(dt)
 
 
 
-
-	--INCREMENT PLAYER1 SPEED TO THE LEFT
-	if love.keyboard.wasPressed('left') and player1.speedTier < 5 then
-
-		--TURNING
-		if player1.speedTier == 0 then
-			player1.facingRight = false
-		end
-		--SPEED INCREMEMENT
-		player1.speedTier = player1.speedTier + 1
-	end
-
-		--BRAKES
-	if love.keyboard.wasPressed('left') and player1.facingRight then
-		player1.speedTier = 0
-	end
-
-
 --[[
 --INCREMENT PLAYER2 SPEED TO THE LEFT
 	if love.keyboard.wasPressed('left') and player2.speedTier < 5 then
@@ -188,20 +133,6 @@ function PlayState:update(dt)
 
 
 
-
-	--INCREMEMENT PLAYER1 SPEED TO THE RIGHT
-	if love.keyboard.wasPressed('right') and player1.speedTier < 5 then
-		
-		--TURNING
-		if player1.speedTier == 0 then
-			player1.facingRight = true
-		end
-
-		--SPEED INCREMENT
-		player1.speedTier = player1.speedTier + 1
-	end
-
-
 --[[
 	--INCREMEMENT PLAYER2 SPEED TO THE RIGHT
 	if love.keyboard.wasPressed('right') and player2.speedTier < 5 then
@@ -216,13 +147,6 @@ function PlayState:update(dt)
 	end
 	--]]
 
-
-
-
-	--BRAKES FOR PLAYER1
-	if love.keyboard.wasPressed('right') and not player1.facingRight then
-		player1.speedTier = 0
-	end
 
 --[[
 	--BRAKES FOR PLAYER2
@@ -414,7 +338,7 @@ function PlayState:update(dt)
 		end
 	end
 
-	--PLAYER 1 AERIAL ANIMATION HNADLING
+	--PLAYER 1 AERIAL ANIMATION HANDLING
 	if not player1.grounded then
 		if love.keyboard.wasPressed('w') and not player1.grounded then
 			ostrichSprite:setViewport(500, 0, 100, 100)
@@ -491,7 +415,9 @@ function PlayState:render()
 		'SPEED SCALE: ' ..tostring(speedScale),
 		'PLAYER1.DY: ' ..tostring(string.format("%.2f", player1.dy)),
 		--'PLAYER2.DY: ' ..tostring(math.floor(player2.dy)),
-		'PLAYER1.grounded: ' .. tostring(player1.grounded),
+		'PLAYER1.grounded: ' ..tostring(player1.grounded),
+		'PLAYER1.skid: ' ..tostring(player1.skid),
+		'PLAYER1.dx: ' ..tostring(string.format("%.2f", player1.dx)),
 		--'PLAYER2.grounded: ' .. tostring(player2.grounded),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
