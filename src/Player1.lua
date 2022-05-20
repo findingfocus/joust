@@ -10,11 +10,6 @@ function Player1:init(x, y, width, height)
 	self.speedTier = 0
 	self.grounded = true
 	self.skid = false
-	speed1 = .4
-	speed2 = .7
-	speed3 = 1.2
-	speed4 = 1.75
-	speed5 = 2.35
 --[[
 	player1Speed = 1.3  == .39  ->.312
 	player1Speed2 = 1.8 == .702 ->.468
@@ -33,6 +28,13 @@ function Player1:update(dt)
 	if self.y == VIRTUAL_HEIGHT - self.height - 36 then
 		self.y = VIRTUAL_HEIGHT - 56 --depends on where ground is, right now its only the bottom floor
 		self.grounded = true
+		--[[
+		if self.dx > 0 then
+			self.facingRight = true
+		else
+			self.facingRight = false
+		end
+		--]]
 		self.height = 20
 		self.dy = 0
 	elseif self.y < VIRTUAL_HEIGHT - self.height - 36 then
@@ -45,41 +47,31 @@ function Player1:update(dt)
 		self.y = 0
 		self.dy = 1
 	end
-
-
-	--PLAYER1 MOVING LEFT
-	if self.speedTier > 0 and not self.facingRight and not self.skid then
-		if self.speedTier == 1 then
-			self.dx = speed1
-		elseif self.speedTier == 2 then
-			self.dx = speed2
-		elseif self.speedTier == 3 then
-			self.dx = speed3
-		elseif self.speedTier == 4 then
-			self.dx = speed4
-		else
-			self.dx = speed5
-		end
-	end
-
 	
 
 
-	--INCREMEMENT PLAYER1 SPEED TO THE RIGHT
-	if love.keyboard.wasPressed('right') and player1.speedTier < 5 then
+	--INCREMENT PLAYER1 SPEEDTIER WITH RIGHT PRESS
+	if love.keyboard.wasPressed('right') and self.speedTier < 5 then
 		
 		--TURNING
-		if player1.speedTier == 0 then
-			player1.facingRight = true
+		if self.speedTier == 0 then
+			self.facingRight = true
 		end
-
 		--SPEED INCREMENT
-		player1.speedTier = player1.speedTier + 1
+		self.speedTier = self.speedTier + 1
 	end
 
+	--TURNING RIGHT MIDAIR
+	if love.keyboard.wasPressed('right') and not self.facingRight and not self.grounded then
+		self.facingRight = true
+	end
 
+	--TURNING LEFT MIDAIR
+	if love.keyboard.wasPressed('left') and self.facingRight and not self.grounded then
+		self.facingRight = false
+	end
 
-	--INCREMENT PLAYER1 SPEED TO THE LEFT
+	--INCREMENT PLAYER1 SPEEDTIER WITH LEFT PRESS
 	if love.keyboard.wasPressed('left') and self.speedTier < 5 then
 
 		--TURNING
@@ -89,6 +81,8 @@ function Player1:update(dt)
 		--SPEED INCREMEMENT
 		self.speedTier = self.speedTier + 1
 	end
+
+
 
 
 
@@ -102,11 +96,12 @@ function Player1:update(dt)
 	--BRAKES when facing right
 	if love.keyboard.wasPressed('left') and self.facingRight and self.speedTier < 2 then
 		self.speedTier = 0
-	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier > 1 then
+	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier > 1 and self.grounded then
 	--SKID FLAG
 		self.skid = true
-		--sound['skid']:play()
-
+		--only play if grounded
+		sounds['skid']:setLooping(true)
+		sounds['skid']:play()
 	end
 
 
@@ -115,10 +110,11 @@ function Player1:update(dt)
 		--BRAKES when facing left
 	if love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier < 2 then
 		self.speedTier = 0
-	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier > 1 then
+	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier > 1 and self.grounded then
 	--SKID FLAG
 		self.skid = true
-		--sounds['skid']:play()
+		sounds['skid']:setLooping(true)
+		sounds['skid']:play()
 	end
 
 
@@ -138,46 +134,62 @@ function Player1:update(dt)
 	end
 	--]]
 
-	--PLAYER1 MOVING RIGHT
-	if self.speedTier > 0 and self.facingRight and not self.skid then
+	--PLAYER1 SPEED ASSIGNMENT MOVING RIGHT
+	if self.speedTier > 0 and self.facingRight and not self.skid and self.grounded then
 		if self.speedTier == 1 then
-			self.dx = speed1
+			self.dx = SPEED1
 		elseif self.speedTier == 2 then
-			self.dx = speed2
+			self.dx = SPEED2
 		elseif self.speedTier == 3 then
-			self.dx = speed3
+			self.dx = SPEED3
 		elseif self.speedTier == 4 then
-			self.dx = speed4
+			self.dx = SPEED4
 		else
-			self.dx = speed5
+			self.dx = SPEED5
+		end
+	end
+
+	--PLAYER1 SPEED ASSIGNMENT MOVING LEFT
+	if self.speedTier > 0 and not self.facingRight and not self.skid and self.grounded then
+		if self.speedTier == 1 then
+			self.dx = -SPEED1
+		elseif self.speedTier == 2 then
+			self.dx = -SPEED2
+		elseif self.speedTier == 3 then
+			self.dx = -SPEED3
+		elseif self.speedTier == 4 then
+			self.dx = -SPEED4
+		else
+			self.dx = -SPEED5
 		end
 	end
 
 
 
 
-
 	--UPDATES PLAYER X RIGHT VELOCITY BASED ON DX
-	if self.facingRight and not self.skid then
+	if self.dx > 0 and not self.skid then
 		self.x = self.x + self.dx
-	elseif self.facingRight and self.skid then
+	elseif self.dx > 0 and self.skid then
 		self.dx = math.max(0, self.dx - .08)
 		self.x = self.x + self.dx
 		if self.dx == 0 then
 			self.speedTier = 0
+			sounds['skid']:stop()
 			self.skid = false
 		end 
 	end
 
 
 	--UPDATES PLAYER X LEFT VELOCITY BASED ON DX
-	if not self.facingRight and not self.skid then
-		self.x = self.x - self.dx
-	elseif not self.facingRight and self.skid then
-		self.dx = math.max(0, self.dx - .08)
-		self.x = self.x - self.dx
+	if self.dx < 0 and not self.skid then
+		self.x = self.x + self.dx
+	elseif self.dx < 0 and self.skid then
+		self.dx = math.min(0, self.dx + .08)
+		self.x = self.x + self.dx
 		if self.dx == 0 then
 			self.speedTier = 0
+			sounds['skid']:stop()
 			self.skid = false
 		end
 	end
@@ -219,6 +231,85 @@ if love.keyboard.isDown('right') then
 		self.dy = -30
 	end
 	--]]
+	-- SOUNDS FOR WALKING
+---[[
+	if self.speedTier == 0 then
+		sounds['speed1']:stop()
+		sounds['speed2']:stop()
+		sounds['speed3']:stop()
+		sounds['speed4']:stop()
+	end
+
+	if not self.grounded then
+		sounds['speed1']:stop()
+		sounds['speed2']:stop()
+		sounds['speed3']:stop()
+		sounds['speed4']:stop()
+	end
+
+--[[
+	if player2.speedTier == 0 then
+		sounds['2speed1']:stop()
+		sounds['2speed2']:stop()
+		sounds['2speed3']:stop()
+		sounds['2speed4']:stop()
+	end
+--]]
+
+	if self.speedTier == 1 and self.grounded then
+		sounds['speed1']:setLooping(true)
+		sounds['speed1']:play()
+	end
+
+--[[]
+	if player2.speedTier == 1 then
+		sounds['2speed1']:setLooping(true)
+		sounds['2speed1']:play()
+	end
+--]]
+
+	if self.speedTier == 2 and self.grounded then
+		sounds['speed1']:stop()
+		sounds['speed2']:setLooping(true)
+		sounds['speed2']:play()
+	end
+
+--[[
+	if player2.speedTier == 2 then
+		sounds['2speed1']:stop()
+		sounds['2speed2']:setLooping(true)
+		sounds['2speed2']:play()
+	end
+--]]
+
+	if self.speedTier == 3 and self.grounded then
+		sounds['speed2']:stop()
+		sounds['speed3']:setLooping(true)
+		sounds['speed3']:play()
+	end
+
+--[[
+	if player2.speedTier == 3 then
+		sounds['2speed2']:stop()
+		sounds['2speed3']:setLooping(true)
+		sounds['2speed3']:play()
+	end
+--]]
+
+
+	if self.speedTier == 4 and self.grounded then
+		sounds['speed3']:stop()
+		sounds['speed4']:setLooping(true)
+		sounds['speed4']:play()
+	end
+
+--[[
+	if player2.speedTier == 4 then
+		sounds['2speed3']:stop()
+		sounds['2speed4']:setLooping(true)
+		sounds['2speed4']:play()
+	end
+--]]
 end
 
 function Player1:render()

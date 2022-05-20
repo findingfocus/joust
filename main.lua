@@ -26,7 +26,9 @@ function love.load()
 		['2speed1'] = love.audio.newSource('music/1-2.mp3', 'static'),
 		['2speed2'] = love.audio.newSource('music/2-2.mp3', 'static'),
 		['2speed3'] = love.audio.newSource('music/3-2.mp3', 'static'),
-		['2speed4'] = love.audio.newSource('music/4-2.mp3', 'static')
+		['2speed4'] = love.audio.newSource('music/4-2.mp3', 'static'),
+
+		['skid'] = love.audio.newSource('music/skid.mp3', 'static')
 
 
 	}
