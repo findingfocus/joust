@@ -10,6 +10,7 @@ function Player1:init(x, y, width, height)
 	self.speedTier = 0
 	self.grounded = true
 	self.skid = false
+	self.facingRight = true
 --[[
 	player1Speed = 1.3  == .39  ->.312
 	player1Speed2 = 1.8 == .702 ->.468
@@ -20,27 +21,43 @@ function Player1:init(x, y, width, height)
 end
 
 function Player1:update(dt)
+
+	--APPLY GRAVITY WHEN IN AIR
 	if not self.grounded then
 		self.dy =  self.dy + GRAVITY * dt
 	end
 	
-	self.y = math.min(VIRTUAL_HEIGHT - self.height - 36, self.y + self.dy)
-	if self.y == VIRTUAL_HEIGHT - self.height - 36 then
-		self.y = VIRTUAL_HEIGHT - 56 --depends on where ground is, right now its only the bottom floor
+	--CLAMPS Y TO GROUND
+	self.y = math.min(VIRTUAL_HEIGHT - self.height - GROUND_OFFSET, self.y + self.dy)
+
+
+	--
+	if self.y == VIRTUAL_HEIGHT - self.height - GROUND_OFFSET then
+		self.height = 20
+		--Sets y to appropriate height
+		self.y = VIRTUAL_HEIGHT - self.height - GROUND_OFFSET --depends on where ground is, right now its only the bottom floor
 		self.grounded = true
 		--[[
-		if self.dx > 0 then
+		if self.speedTier > 0 and self.facingRight then
 			self.facingRight = true
 		else
 			self.facingRight = false
 		end
 		--]]
-		self.height = 20
 		self.dy = 0
 	elseif self.y < VIRTUAL_HEIGHT - self.height - 36 then
 		self.grounded = false
 		self.height = 17
 	end
+
+	--ENSURES OSTRICH FACING DIRECTION OF DX
+	---[[
+	if self.grounded and self.speedTier > 0 and self.dx > 0 then
+		self.facingRight = true
+	elseif self.grounded and self.speedTier > 0 and self.dx < 0 then
+		self.facingRight = false
+	end
+--]]
 	
 	--bouncing off top
 	if self.y < 0 then
@@ -48,95 +65,91 @@ function Player1:update(dt)
 		self.dy = 1
 	end
 	
+		--LOOPS player to left side of screen
+	if self.x > VIRTUAL_WIDTH then
+		self.x = -self.width
+	end
 
+	--LOOPS player to right side of screen
+	if self.x < -self.width then
+		self.x = VIRTUAL_WIDTH
+	end
 
-	--INCREMENT PLAYER1 SPEEDTIER WITH RIGHT PRESS
-	if love.keyboard.wasPressed('right') and self.speedTier < 5 then
-		
-		--TURNING
-		if self.speedTier == 0 then
-			self.facingRight = true
+		--PLAYER1 JUMPING
+	if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('up') then
+		if (self.dy < -.5) then
+			self.dy = -1.5
+		elseif(self.dy < -.4) then
+			self.dy = -.7
+		elseif (self.dy < -.2) then
+			self.dy = -.6
+		else
+			self.dy = -.4
 		end
-		--SPEED INCREMENT
-		self.speedTier = self.speedTier + 1
 	end
 
-	--TURNING RIGHT MIDAIR
-	if love.keyboard.wasPressed('right') and not self.facingRight and not self.grounded then
-		self.facingRight = true
-	end
+	--TURN AND GO LEFT IF STOPPED
+	if love.keyboard.wasPressed('left') and self.speedTier == 0 and self.facingRight and self.grounded then
+		self.facingRight = false
+		self.speedTier = self.speedTier + 1
+
+	--INCREMENT PLAYER1 SPEEDTIER WHILE ALREADY MOVING LEFT
+	elseif love.keyboard.wasPressed('left') and self.speedTier < 5 and self.grounded and not self.facingRight then
+		self.speedTier = self.speedTier + 1
+
+	--STOPS when facing right
+	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier == 1 then
+		self.speedTier = 0
+
+	--SKID FLAG
+	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier > 1 and self.grounded then
+		self.skid = true
+		sounds['speed1']:stop()
+		sounds['speed2']:stop()
+		sounds['speed3']:stop()
+		sounds['speed4']:stop()
+		sounds['skid']:setLooping(true)
+		sounds['skid']:play()
 
 	--TURNING LEFT MIDAIR
-	if love.keyboard.wasPressed('left') and self.facingRight and not self.grounded then
+	elseif love.keyboard.wasPressed('left') and self.facingRight and not self.grounded then
 		self.facingRight = false
 	end
 
-	--INCREMENT PLAYER1 SPEEDTIER WITH LEFT PRESS
-	if love.keyboard.wasPressed('left') and self.speedTier < 5 then
 
-		--TURNING
-		if self.speedTier == 0 then
-			self.facingRight = false
-		end
-		--SPEED INCREMEMENT
+
+	--TURN AND GO RIGHT IF STOPPED
+	if love.keyboard.wasPressed('right') and self.speedTier == 0 and not self.facingRight and self.grounded then
+		self.facingRight = true
 		self.speedTier = self.speedTier + 1
-	end
+	
+	--INCREMENT PLAYER1 SPEEDTIER WHILE ALREADY MOVING RIGHT
+	elseif love.keyboard.wasPressed('right') and self.speedTier < 5 and self.grounded and self.facingRight then
+		self.speedTier = self.speedTier + 1
 
-
-
-
-
---[[
-		player1.dx = math.max(0, player1.dx - .5)
-		if player1.dx == 0 then
-			player1.skid = false
-		end
-	--]]
-
-	--BRAKES when facing right
-	if love.keyboard.wasPressed('left') and self.facingRight and self.speedTier < 2 then
+	--STOPS when facing left
+	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier == 1 then
 		self.speedTier = 0
-	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier > 1 and self.grounded then
 	--SKID FLAG
-		self.skid = true
-		--only play if grounded
-		sounds['skid']:setLooping(true)
-		sounds['skid']:play()
-	end
-
-
-
-
-		--BRAKES when facing left
-	if love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier < 2 then
-		self.speedTier = 0
 	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier > 1 and self.grounded then
-	--SKID FLAG
 		self.skid = true
+		sounds['speed1']:stop()
+		sounds['speed2']:stop()
+		sounds['speed3']:stop()
+		sounds['speed4']:stop()
 		sounds['skid']:setLooping(true)
 		sounds['skid']:play()
-	end
 
-
-	--[[
-	if player1.speedTier > 0 and not player1.facingRight then
-		if player1.speedTier == 1 then
-			player1.x = player1.x - player1Speed * slowScale
-		elseif player1.speedTier == 2 then
-			player1.x = player1.x - player1Speed * slowScale * player1Speed2
-		elseif player1.speedTier == 3 then
-			player1.x = player1.x - player1Speed * slowScale * player1Speed3
-		elseif player1.speedTier == 4 then
-			player1.x = player1.x - player1Speed * slowScale * player1Speed4
-		else
-			player1.x = player1.x - player1Speed * slowScale * player1Speed5
-		end
+	--TURNING RIGHT MIDAIR
+	elseif love.keyboard.wasPressed('right') and not self.facingRight and not self.grounded then
+		self.facingRight = true
 	end
-	--]]
 
 	--PLAYER1 SPEED ASSIGNMENT MOVING RIGHT
-	if self.speedTier > 0 and self.facingRight and not self.skid and self.grounded then
-		if self.speedTier == 1 then
+	if self.facingRight and not self.skid and self.grounded then
+		if self.speedTier == 0 then
+			self.dx = 0
+		elseif self.speedTier == 1 then
 			self.dx = SPEED1
 		elseif self.speedTier == 2 then
 			self.dx = SPEED2
@@ -150,8 +163,10 @@ function Player1:update(dt)
 	end
 
 	--PLAYER1 SPEED ASSIGNMENT MOVING LEFT
-	if self.speedTier > 0 and not self.facingRight and not self.skid and self.grounded then
-		if self.speedTier == 1 then
+	if not self.facingRight and not self.skid and self.grounded then
+		if self.speedTier == 0 then
+			self.dx = 0
+		elseif self.speedTier == 1 then
 			self.dx = -SPEED1
 		elseif self.speedTier == 2 then
 			self.dx = -SPEED2
@@ -163,8 +178,6 @@ function Player1:update(dt)
 			self.dx = -SPEED5
 		end
 	end
-
-
 
 
 	--UPDATES PLAYER X RIGHT VELOCITY BASED ON DX
@@ -281,13 +294,13 @@ if love.keyboard.isDown('right') then
 		sounds['2speed2']:play()
 	end
 --]]
-
+---[[
 	if self.speedTier == 3 and self.grounded then
 		sounds['speed2']:stop()
 		sounds['speed3']:setLooping(true)
 		sounds['speed3']:play()
 	end
-
+--]]	
 --[[
 	if player2.speedTier == 3 then
 		sounds['2speed2']:stop()
@@ -298,6 +311,12 @@ if love.keyboard.isDown('right') then
 
 
 	if self.speedTier == 4 and self.grounded then
+		sounds['speed3']:stop()
+		sounds['speed4']:setLooping(true)
+		sounds['speed4']:play()
+	end
+
+	if self.speedTier == 5 and self.grounded then
 		sounds['speed3']:stop()
 		sounds['speed4']:setLooping(true)
 		sounds['speed4']:play()

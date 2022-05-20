@@ -3,7 +3,6 @@ PlayState = Class{__includes = BaseState}
 function PlayState:init()
 	player1 = Player1(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 36 - 20, 16, 20)
 	--player2 = Player2(VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50, VIRTUAL_HEIGHT - 150, 100)
-	player1.facingRight = true
 	--player2.facingRight = false
 	slowScale = .3
 	fps = 1
@@ -84,15 +83,6 @@ function PlayState:update(dt)
 	end
 --]]
 
-	--LOOPS player to left side of screen
-	if player1.x > VIRTUAL_WIDTH then
-		player1.x = -player1.width
-	end
-
-	--LOOPS player to right side of screen
-	if player1.x < -player1.width then
-		player1.x = VIRTUAL_WIDTH
-	end
 
 	--player1.x = player1.x % VIRTUAL_WIDTH
 	--player2.x = player2.x % VIRTUAL_WIDTH
@@ -168,19 +158,6 @@ function PlayState:update(dt)
 
 
 
-	--PLAYER1 JUMPING
-	if love.keyboard.wasPressed('space') then
-		if (player1.dy < -.5) then
-			player1.dy = -1.5
-		elseif(player1.dy < -.4) then
-			player1.dy = -.7
-		elseif (player1.dy < -.2) then
-			player1.dy = -.6
-		else
-			player1.dy = -.4
-		end
-	end
-
 --old jump logic
 --[[
 	if love.keyboard.wasPressed('space') then
@@ -232,15 +209,21 @@ function PlayState:update(dt)
 	if love.keyboard.wasPressed('r') then
 		--sounds['playMusic']:stop()
 		--gStateMachine:change('titleState')
-		player1.x = VIRTUAL_WIDTH / 3 - 50
+		player1.x = VIRTUAL_WIDTH / 3 - 8
 		--player2.x = VIRTUAL_WIDTH - VIRTUAL_WIDTH / 3 - 50
-		player1.y = VIRTUAL_HEIGHT - 50 - player1.width
+		player1.y = VIRTUAL_HEIGHT - 36 - player1.height
 		--player2.y = VIRTUAL_HEIGHT - 50 - player2.width
 		--playerDY = 0
 		player1.speedTier = 0
 		--player2.speedTier = 0
 		player1.facingRight = true
+		player1.dx = 0
 		--player2.facingRight = false
+		sounds['speed1']:stop()
+		sounds['speed2']:stop()
+		sounds['speed3']:stop()
+		sounds['speed4']:stop()
+		sounds['skid']:stop()
 	end
 
 
