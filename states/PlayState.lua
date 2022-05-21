@@ -38,6 +38,7 @@ function PlayState:update(dt)
 	--sounds['playMusic']:setLooping(true)
 	--sounds['playMusic']:play()
 	--player1:update(dt)
+	deltaTime = dt
 
 	if love.keyboard.wasPressed('h') then
 		gStateMachine:change('helpState')
@@ -328,6 +329,7 @@ function PlayState:render()
 		'PLAYER1.grounded: ' ..tostring(player1.grounded),
 		'PLAYER1.skid: ' ..tostring(player1.skid),
 		'PLAYER1.dx: ' ..tostring(string.format("%.2f", player1.dx)),
+		'frameTracker: ' ..tostring(string.format("%.4f", player1.frameTracker)),
 		--'PLAYER2.grounded: ' .. tostring(player2.grounded),
 	}, '\n'))
 	--love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

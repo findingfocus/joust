@@ -11,6 +11,7 @@ function Player1:init(x, y, width, height)
 	self.grounded = true
 	self.skid = false
 	self.facingRight = true
+	self.frameTracker = 0
 --[[
 	player1Speed = 1.3  == .39  ->.312
 	player1Speed2 = 1.8 == .702 ->.468
@@ -75,7 +76,7 @@ function Player1:update(dt)
 		self.x = VIRTUAL_WIDTH
 	end
 
-		--PLAYER1 JUMPING
+	--PLAYER1 JUMPING
 	if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('up') then
 		if (self.dy < -.5) then
 			self.dy = -1.5
@@ -98,7 +99,7 @@ function Player1:update(dt)
 		self.speedTier = self.speedTier + 1
 
 	--STOPS when facing right
-	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier == 1 then
+	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier == 1 and self.grounded then
 		self.speedTier = 0
 
 	--SKID FLAG
@@ -117,6 +118,19 @@ function Player1:update(dt)
 	end
 
 
+	--RAMP SPEED UP IF LEFT IS HELD
+	if love.keyboard.isDown('left') and self.speedTier < 5 then
+		self.frameTracker = self.frameTracker + dt 
+		if self.frameTracker > .2 then
+			self.speedTier = self.speedTier + 1
+			self.frameTracker = 0
+		end
+	elseif love.keyboard.wasReleased('left') then
+		self.frameTracker = 0
+	end
+
+
+
 
 	--TURN AND GO RIGHT IF STOPPED
 	if love.keyboard.wasPressed('right') and self.speedTier == 0 and not self.facingRight and self.grounded then
@@ -128,8 +142,9 @@ function Player1:update(dt)
 		self.speedTier = self.speedTier + 1
 
 	--STOPS when facing left
-	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier == 1 then
+	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier == 1 and self.grounded then
 		self.speedTier = 0
+
 	--SKID FLAG
 	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier > 1 and self.grounded then
 		self.skid = true
@@ -144,6 +159,19 @@ function Player1:update(dt)
 	elseif love.keyboard.wasPressed('right') and not self.facingRight and not self.grounded then
 		self.facingRight = true
 	end
+
+	--RAMP SPEED UP IF RIGHT IS HELD
+	if love.keyboard.isDown('right') and self.speedTier < 5 then
+		self.frameTracker = self.frameTracker + dt 
+		if self.frameTracker > .2 then
+			self.speedTier = self.speedTier + 1
+			self.frameTracker = 0
+		end
+	elseif love.keyboard.wasReleased('right') then
+		self.frameTracker = 0
+	end
+
+
 
 	--PLAYER1 SPEED ASSIGNMENT MOVING RIGHT
 	if self.facingRight and not self.skid and self.grounded then

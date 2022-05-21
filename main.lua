@@ -49,6 +49,7 @@ function love.load()
 	gStateMachine:change('playState')
 
 	love.keyboard.keysPressed = {}
+	love.keyboard.keysReleased = {}
 
 end
 
@@ -69,8 +70,20 @@ function love.keypressed(key)
 	end
 end
 
+function love.keyreleased(key)
+	love.keyboard.keysReleased[key] = true
+end
+
 function love.keyboard.wasPressed(key)
 	if love.keyboard.keysPressed[key] then
+		return true
+	else
+		return false
+	end
+end
+
+function love.keyboard.wasReleased(key)
+	if love.keyboard.keysReleased[key] then
 		return true
 	else
 		return false
@@ -80,12 +93,12 @@ end
 
 
 
-
 function love.update(dt)
 
 	gStateMachine:update(dt)
 
-	love.keyboard.keysPressed = {} 
+	love.keyboard.keysPressed = {}
+	love.keyboard.keysReleased = {} 
 end
 
 
