@@ -12,9 +12,6 @@ function love.load()
 	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)
 
 	sounds = {
-		--['titleMusic'] = love.audio.newSource('music/titlemusic.mp3', 'static'),
-		--['playMusic'] = love.audio.newSource('music/playstatemusic.mp3', 'static'),
-		--['tripMusic'] = love.audio.newSource('music/trippingmusic.mp3', 'static'),
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),
 		['select'] = love.audio.newSource('music/select.wav', 'static'),
 
@@ -23,16 +20,9 @@ function love.load()
 		['speed3'] = love.audio.newSource('music/3.mp3', 'static'),
 		['speed4'] = love.audio.newSource('music/4.mp3', 'static'),
 
-		['2speed1'] = love.audio.newSource('music/1-2.mp3', 'static'),
-		['2speed2'] = love.audio.newSource('music/2-2.mp3', 'static'),
-		['2speed3'] = love.audio.newSource('music/3-2.mp3', 'static'),
-		['2speed4'] = love.audio.newSource('music/4-2.mp3', 'static'),
-
 		['skid'] = love.audio.newSource('music/skid.mp3', 'static')
-
-
 	}
---]]
+
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
 		vsync = true,
 		fullscreen = true,
@@ -42,7 +32,6 @@ function love.load()
 	gStateMachine = StateMachine {
 		['titleState'] = function() return TitleScreenState() end,
 		['playState'] = function() return PlayState() end,
-		['tripState'] = function() return TripState() end,
 		['helpState'] = function() return HelpState() end
 	}
 
@@ -89,9 +78,6 @@ function love.keyboard.wasReleased(key)
 		return false
 	end
 end
-
-
-
 
 function love.update(dt)
 

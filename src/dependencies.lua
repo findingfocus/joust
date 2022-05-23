@@ -3,8 +3,7 @@ push = require '/src/push'
 Class = require '/src/class'
 
 require '/src/constants'
-require '/src/Player1'
-require '/src/Player2'
+require '/src/Ostrich'
 
 require '/src/StateMachine'
 require '/src/BaseState'

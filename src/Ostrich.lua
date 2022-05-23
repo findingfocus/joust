@@ -1,6 +1,6 @@
-Player1 = Class{}
+Ostrich = Class{}
 
-function Player1:init(x, y, width, height)
+function Ostrich:init(x, y, width, height)
 	self.x = x
 	self.y = y
 	self.width = width
@@ -12,6 +12,18 @@ function Player1:init(x, y, width, height)
 	self.skid = false
 	self.facingRight = true
 	self.frameTracker = 0
+	fps = 1
+	animationTimer1 = 1 / fps
+	animationTimer2 = 1/ fps
+	frame1 = 1
+	frame2 = 1
+	totalFrames = 4
+	xoffset1 = 100
+	xoffset2 = 100
+	--ostrichAtlas = love.graphics.newImage('src/pics/ostrichAtlas1-6panel.png')
+	--ostrichAtlas2 = love.graphics.newImage('src/pics/ostrichAtlas2-6panel.png')
+	--ostrichSprite = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas:getDimensions())
+	--ostrichSprite2 = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas2:getDimensions())
 --[[
 	player1Speed = 1.3  == .39  ->.312
 	player1Speed2 = 1.8 == .702 ->.468
@@ -21,7 +33,7 @@ function Player1:init(x, y, width, height)
 --]]
 end
 
-function Player1:update(dt)
+function Ostrich:update(dt)
 
 	--APPLY GRAVITY WHEN IN AIR
 	if not self.grounded then
@@ -31,20 +43,12 @@ function Player1:update(dt)
 	--CLAMPS Y TO GROUND
 	self.y = math.min(VIRTUAL_HEIGHT - self.height - GROUND_OFFSET, self.y + self.dy)
 
-
-	--
+	--GROUNDING LOGIC
 	if self.y == VIRTUAL_HEIGHT - self.height - GROUND_OFFSET then
 		self.height = 20
 		--Sets y to appropriate height
 		self.y = VIRTUAL_HEIGHT - self.height - GROUND_OFFSET --depends on where ground is, right now its only the bottom floor
 		self.grounded = true
-		--[[
-		if self.speedTier > 0 and self.facingRight then
-			self.facingRight = true
-		else
-			self.facingRight = false
-		end
-		--]]
 		self.dy = 0
 	elseif self.y < VIRTUAL_HEIGHT - self.height - 36 then
 		self.grounded = false
@@ -52,21 +56,19 @@ function Player1:update(dt)
 	end
 
 	--ENSURES OSTRICH FACING DIRECTION OF DX
-	---[[
 	if self.grounded and self.speedTier > 0 and self.dx > 0 then
 		self.facingRight = true
 	elseif self.grounded and self.speedTier > 0 and self.dx < 0 then
 		self.facingRight = false
 	end
---]]
 	
-	--bouncing off top
+	--BOUNCING OFF TOP
 	if self.y < 0 then
 		self.y = 0
 		self.dy = 1
 	end
 	
-		--LOOPS player to left side of screen
+	--LOOPS player to left side of screen
 	if self.x > VIRTUAL_WIDTH then
 		self.x = -self.width
 	end
@@ -75,6 +77,9 @@ function Player1:update(dt)
 	if self.x < -self.width then
 		self.x = VIRTUAL_WIDTH
 	end
+
+
+	--INPUT HANDLING
 
 	--PLAYER1 JUMPING
 	if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('up') then
@@ -208,7 +213,7 @@ function Player1:update(dt)
 	end
 
 
-	--UPDATES PLAYER X RIGHT VELOCITY BASED ON DX
+	--UPDATES PLAYER X RIGHT VELOCITY BASED ON DX, DETERMINES SKID STOP
 	if self.dx > 0 and not self.skid then
 		self.x = self.x + self.dx
 	elseif self.dx > 0 and self.skid then
@@ -222,7 +227,7 @@ function Player1:update(dt)
 	end
 
 
-	--UPDATES PLAYER X LEFT VELOCITY BASED ON DX
+	--UPDATES PLAYER X LEFT VELOCITY BASED ON DX, DETERMINES SKID STOP
 	if self.dx < 0 and not self.skid then
 		self.x = self.x + self.dx
 	elseif self.dx < 0 and self.skid then
@@ -235,45 +240,7 @@ function Player1:update(dt)
 		end
 	end
 
-	--[[
-	if player1.speedTier > 0 and player1.facingRight then
-		if player1.speedTier == 1 then
-			player1.x = player1.x + player1Speed * slowScale
-		elseif player1.speedTier == 2 then
-			player1.x = player1.x + player1Speed * slowScale * player1Speed2
-		elseif player1.speedTier == 3 then
-			player1.x = player1.x + player1Speed * slowScale * player1Speed3
-		elseif player1.speedTier == 4 then
-			player1.x = player1.x + player1Speed * slowScale * player1Speed4
-		else
-			player1.x = player1.x + player1Speed * slowScale * player1Speed5
-		end
-	end
---]]
-
-
-	--[[
-if love.keyboard.isDown('right') then
-		self.x = (self.x + PLAYER_SPEED * dt) % VIRTUAL_WIDTH
-		self.dx = 6
-	end
-
----[[
-	repeat
-		PLAYER_SPEED = PLAYER_SPEED + self.dx
-	until (PLAYER_SPEED >= 1800)
-
-	if love.keyboard.isDown('left') then
-		self.x = (self.x - PLAYER_SPEED * dt) % VIRTUAL_WIDTH
-		PLAYER_SPEED = self.dx + 300
-	end
-
-	if love.keyboard.wasPressed('space') and grounded then
-		self.dy = -30
-	end
-	--]]
 	-- SOUNDS FOR WALKING
----[[
 	if self.speedTier == 0 then
 		sounds['speed1']:stop()
 		sounds['speed2']:stop()
@@ -288,26 +255,10 @@ if love.keyboard.isDown('right') then
 		sounds['speed4']:stop()
 	end
 
---[[
-	if player2.speedTier == 0 then
-		sounds['2speed1']:stop()
-		sounds['2speed2']:stop()
-		sounds['2speed3']:stop()
-		sounds['2speed4']:stop()
-	end
---]]
-
 	if self.speedTier == 1 and self.grounded then
 		sounds['speed1']:setLooping(true)
 		sounds['speed1']:play()
 	end
-
---[[]
-	if player2.speedTier == 1 then
-		sounds['2speed1']:setLooping(true)
-		sounds['2speed1']:play()
-	end
---]]
 
 	if self.speedTier == 2 and self.grounded then
 		sounds['speed1']:stop()
@@ -315,28 +266,11 @@ if love.keyboard.isDown('right') then
 		sounds['speed2']:play()
 	end
 
---[[
-	if player2.speedTier == 2 then
-		sounds['2speed1']:stop()
-		sounds['2speed2']:setLooping(true)
-		sounds['2speed2']:play()
-	end
---]]
----[[
 	if self.speedTier == 3 and self.grounded then
 		sounds['speed2']:stop()
 		sounds['speed3']:setLooping(true)
 		sounds['speed3']:play()
 	end
---]]	
---[[
-	if player2.speedTier == 3 then
-		sounds['2speed2']:stop()
-		sounds['2speed3']:setLooping(true)
-		sounds['2speed3']:play()
-	end
---]]
-
 
 	if self.speedTier == 4 and self.grounded then
 		sounds['speed3']:stop()
@@ -350,16 +284,9 @@ if love.keyboard.isDown('right') then
 		sounds['speed4']:play()
 	end
 
---[[
-	if player2.speedTier == 4 then
-		sounds['2speed3']:stop()
-		sounds['2speed4']:setLooping(true)
-		sounds['2speed4']:play()
-	end
---]]
 end
 
-function Player1:render()
+function Ostrich:render()
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
