@@ -5,24 +5,25 @@ function Ostrich:init(x, y, width, height)
 	self.y = y
 	self.width = width
 	self.height = height
+	self.atlas = playerAtlas
 	self.dy = 0
 	self.dx = 0
 	self.speedTier = 0
 	self.grounded = true
 	self.skid = false
 	self.facingRight = true
+	self.flapped = false
 	self.frameTracker = 0
+	speedScale = 0
 	fps = 1
-	animationTimer1 = 1 / fps
-	animationTimer2 = 1/ fps
-	frame1 = 1
-	frame2 = 1
+	animationTimer = 1 / fps
+	self.jumpTimer = 0
+	self.frame = 1
 	totalFrames = 4
-	xoffset1 = 100
-	xoffset2 = 100
+	self.xoffset = self.width
 	--ostrichAtlas = love.graphics.newImage('src/pics/ostrichAtlas1-6panel.png')
 	--ostrichAtlas2 = love.graphics.newImage('src/pics/ostrichAtlas2-6panel.png')
-	--ostrichSprite = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas:getDimensions())
+	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	--ostrichSprite2 = love.graphics.newQuad(0, 0, 100, 100, ostrichAtlas2:getDimensions())
 --[[
 	player1Speed = 1.3  == .39  ->.312
@@ -52,7 +53,7 @@ function Ostrich:update(dt)
 		self.dy = 0
 	elseif self.y < VIRTUAL_HEIGHT - self.height - 36 then
 		self.grounded = false
-		self.height = 17
+		self.height = 16
 	end
 
 	--ENSURES OSTRICH FACING DIRECTION OF DX
@@ -240,6 +241,56 @@ function Ostrich:update(dt)
 		end
 	end
 
+	---[[
+-- OSTRICH1 ANIMATION CYCLE
+
+	--STANDING STILL VIEWPORT
+	if self.speedTier == 0 and self.grounded then
+		self.frame = 1
+		ostrichSprite:setViewport(0, 0, self.width, self.height)
+	end
+	
+	fps = (self.speedTier / 12) + .3
+	animationTimer = animationTimer - fps
+
+	--PLAYER WALKING ANIMATION
+	if self.speedTier > 0 and self.grounded then 
+		animationTimer = animationTimer - dt
+		if animationTimer <= 0 then
+			animationTimer = 1 / fps
+			self.frame = self.frame + 1
+
+			--LOOP FRAME BACK TO 1
+			if self.frame > totalFrames then self.frame = 1 end
+
+			self.xoffset = self.width * (self.frame - 1)
+			ostrichSprite:setViewport(self.xoffset, 0, self.width, self.height)
+		end
+	end
+
+	--PLAYER AERIAL ANIMATION
+		if not self.grounded then
+			ostrichSprite:setViewport((self.width * 5), 0, self.width, self.height)
+			if (love.keyboard.wasPressed('space') or love.keyboard.wasPressed('up')) then
+				self.jumpTimer = 0
+				self.flapped = true
+			end
+
+			if self.flapped then
+				ostrichSprite:setViewport((self.width * 6), 0, self.width, self.height)				
+				self.jumpTimer = self.jumpTimer + dt
+				if self.jumpTimer > .1 then
+					self.flapped = false
+				end
+			end
+		end
+		
+	--PLAYER SKID ANIMATION
+	if self.skid then
+		ostrichSprite:setViewport((self.width * 4), 0, self.width, self.height)
+	end
+--]]
+
 	-- SOUNDS FOR WALKING
 	if self.speedTier == 0 then
 		sounds['speed1']:stop()
@@ -290,12 +341,12 @@ function Ostrich:render()
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
-	love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
---[[
+	--love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+---[[
 	if player1.facingRight then
-		love.graphics.draw(ostrichAtlas, ostrichSprite, self.x, self.y, 0, -1, 1, 100)
+		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y) 
 	else
-		love.graphics.draw(ostrichAtlas, ostrichSprite, self.x, self.y)
+		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, -1, 1, self.width)
 	end
 --]]
 end

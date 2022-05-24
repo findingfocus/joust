@@ -1,7 +1,7 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 36 - 20, 16, 20)
+	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 36 - 20, 16, 24)
 end
 
 function PlayState:update(dt)
@@ -23,37 +23,6 @@ function PlayState:update(dt)
 		sounds['skid']:stop()
 	end
 
---[[
--- OSTRICH1 ANIMATION CYCLE
-	if player1.speedTier == 0 and player1.grounded then
-		frame = 1
-		ostrichSprite:setViewport(0, 0, 100, 100)
-	end
-	
-	speedScale = (player1.speedTier * .035)
-	animationTimer1 = animationTimer1 - speedScale
-
-	if player1.speedTier > 0 and player1.grounded then 
-		animationTimer1 = animationTimer1 - dt
-		if animationTimer1 <= 0 then
-			animationTimer1 = 1 / fps
-			frame1 = frame1 + 1
-			if frame1 > totalFrames then frame1 = 1 end
-			xoffset1 = 100 * (frame1 - 1)
-			ostrichSprite:setViewport(xoffset1, 0, 100, 100)
-		end
-	end
-
-	--PLAYER 1 AERIAL ANIMATION HANDLING
-	if not player1.grounded then
-		if love.keyboard.wasPressed('w') and not player1.grounded then
-			ostrichSprite:setViewport(500, 0, 100, 100)
-		else
-			ostrichSprite:setViewport(400, 0, 100, 100)
-		end
---]]
-
-	
 	player1:update(dt)
 
 end
@@ -90,6 +59,8 @@ function PlayState:render()
 		'PLAYER1.grounded: ' ..tostring(player1.grounded),
 		'PLAYER1.skid: ' ..tostring(player1.skid),
 		'PLAYER1.dx: ' ..tostring(string.format("%.2f", player1.dx)),
+		'jumpTimer: ' ..tostring(player1.jumpTimer),
+		'flapped: ' ..tostring(player1.flapped),
 	}, '\n'))
 
 	player1:render()

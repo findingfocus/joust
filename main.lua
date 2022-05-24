@@ -11,6 +11,8 @@ function love.load()
 	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 16)
 	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)
 
+	playerAtlas = love.graphics.newImage('src/pics/joustPlayerAtlas.png')
+
 	sounds = {
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),
 		['select'] = love.audio.newSource('music/select.wav', 'static'),
