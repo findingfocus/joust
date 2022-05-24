@@ -4,6 +4,7 @@ Class = require '/src/class'
 
 require '/src/constants'
 require '/src/Ostrich'
+require '/src/Platform'
 
 require '/src/StateMachine'
 require '/src/BaseState'

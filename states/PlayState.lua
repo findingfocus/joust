@@ -2,6 +2,7 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 36 - 24, 16, 24)
+	platform1 = Platform(VIRTUAL_WIDTH / 3, VIRTUAL_HEIGHT / 2, 80, 4)
 end
 
 function PlayState:update(dt)
@@ -59,9 +60,10 @@ function PlayState:render()
 		'PLAYER1.grounded: ' ..tostring(player1.grounded),
 		'PLAYER1.skid: ' ..tostring(player1.skid),
 		'PLAYER1.dx: ' ..tostring(string.format("%.2f", player1.dx)),
-		'jumpTimer: ' ..tostring(player1.jumpTimer),
-		'flapped: ' ..tostring(player1.flapped),
+		--'jumpTimer: ' ..tostring(player1.jumpTimer),
+		--'flapped: ' ..tostring(player1.flapped),
 	}, '\n'))
 
 	player1:render()
+	platform1:render()
 end

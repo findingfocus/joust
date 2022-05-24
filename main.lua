@@ -11,7 +11,7 @@ function love.load()
 	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 16)
 	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)
 
-	playerAtlas = love.graphics.newImage('src/pics/joustPlayerAtlas.png')
+	playerAtlas = love.graphics.newImage('src/pics/joustPlayerAtlas2.png')
 
 	sounds = {
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),
@@ -22,7 +22,10 @@ function love.load()
 		['speed3'] = love.audio.newSource('music/3.mp3', 'static'),
 		['speed4'] = love.audio.newSource('music/4.mp3', 'static'),
 
-		['skid'] = love.audio.newSource('music/skid.mp3', 'static')
+		['skid'] = love.audio.newSource('music/skid.mp3', 'static'),
+		['flap'] = love.audio.newSource('music/flap.mp3', 'static'),
+		['land'] = love.audio.newSource('music/land.mp3', 'static'),
+		['collide'] = love.audio.newSource('music/collide.mp3', 'static'),
 	}
 
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {

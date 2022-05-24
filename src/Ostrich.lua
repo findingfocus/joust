@@ -34,6 +34,7 @@ function Ostrich:init(x, y, width, height)
 --]]
 end
 
+
 function Ostrich:update(dt)
 
 	--APPLY GRAVITY WHEN IN AIR
@@ -84,6 +85,7 @@ function Ostrich:update(dt)
 
 	--PLAYER1 JUMPING
 	if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('up') then
+		sounds['flap']:play()
 		if (self.dy < -.5) then
 			self.dy = -1.5
 		elseif(self.dy < -.4) then
@@ -125,7 +127,7 @@ function Ostrich:update(dt)
 
 
 	--RAMP SPEED UP IF LEFT IS HELD
-	if love.keyboard.isDown('left') and self.speedTier < 5 then
+	if love.keyboard.isDown('left') and self.speedTier < 5 and self.grounded then
 		self.frameTracker = self.frameTracker + dt 
 		if self.frameTracker > .2 then
 			self.speedTier = self.speedTier + 1
@@ -167,7 +169,7 @@ function Ostrich:update(dt)
 	end
 
 	--RAMP SPEED UP IF RIGHT IS HELD
-	if love.keyboard.isDown('right') and self.speedTier < 5 then
+	if love.keyboard.isDown('right') and self.speedTier < 5 and self.grounded then
 		self.frameTracker = self.frameTracker + dt 
 		if self.frameTracker > .2 then
 			self.speedTier = self.speedTier + 1
@@ -241,15 +243,26 @@ function Ostrich:update(dt)
 		end
 	end
 
+	function Ostrich:collides(collidable)
+		if self.x > collidable.x + collidable.width and self.x + self.width < collidable.x and self.y > collidable.y + collidable.height and self.y + self.height < collidable.y then
+			return true
+		else
+			return false
+		end
+
+	end
+
+	player1:collides(platform1)
+
+
 	---[[
 -- OSTRICH1 ANIMATION CYCLE
 
 	--STANDING STILL VIEWPORT
 	if self.speedTier == 0 and self.grounded then
 		self.frame = 1
-		ostrichSprite:setViewport(0, 0, self.width, self.height)
+		ostrichSprite:setViewport(1, 0, self.width, self.height)
 	end
-	
 	fps = (self.speedTier / 12) + .3
 	animationTimer = animationTimer - fps
 
@@ -263,21 +276,21 @@ function Ostrich:update(dt)
 			--LOOP FRAME BACK TO 1
 			if self.frame > totalFrames then self.frame = 1 end
 
-			self.xoffset = self.width * (self.frame - 1)
+			self.xoffset = self.frame + (self.width * (self.frame - 1))
 			ostrichSprite:setViewport(self.xoffset, 0, self.width, self.height)
 		end
 	end
 
 	--PLAYER AERIAL ANIMATION
 		if not self.grounded then
-			ostrichSprite:setViewport((self.width * 5), 0, self.width, self.height)
+			ostrichSprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
 			if (love.keyboard.wasPressed('space') or love.keyboard.wasPressed('up')) then
 				self.jumpTimer = 0
 				self.flapped = true
 			end
 
 			if self.flapped then
-				ostrichSprite:setViewport((self.width * 6), 0, self.width, self.height)				
+				ostrichSprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)				
 				self.jumpTimer = self.jumpTimer + dt
 				if self.jumpTimer > .1 then
 					self.flapped = false
@@ -287,7 +300,7 @@ function Ostrich:update(dt)
 		
 	--PLAYER SKID ANIMATION
 	if self.skid then
-		ostrichSprite:setViewport((self.width * 4), 0, self.width, self.height)
+		ostrichSprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
 	end
 --]]
 
@@ -334,14 +347,16 @@ function Ostrich:update(dt)
 		sounds['speed4']:setLooping(true)
 		sounds['speed4']:play()
 	end
-
 end
+
+
 
 function Ostrich:render()
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
 	--love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+	love.graphics.print('COLLISION: ' .. tostring(player1:collides(platform1)), VIRTUAL_WIDTH - 140, 5)
 ---[[
 	if player1.facingRight then
 		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y) 
