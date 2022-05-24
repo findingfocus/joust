@@ -46,7 +46,7 @@ function Ostrich:update(dt)
 
 	--GROUNDING LOGIC
 	if self.y == VIRTUAL_HEIGHT - self.height - GROUND_OFFSET then
-		self.height = 20
+		self.height = 24
 		--Sets y to appropriate height
 		self.y = VIRTUAL_HEIGHT - self.height - GROUND_OFFSET --depends on where ground is, right now its only the bottom floor
 		self.grounded = true

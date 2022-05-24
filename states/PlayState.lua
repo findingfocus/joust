@@ -1,7 +1,7 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 36 - 20, 16, 24)
+	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 36 - 24, 16, 24)
 end
 
 function PlayState:update(dt)
