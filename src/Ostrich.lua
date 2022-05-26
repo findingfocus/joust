@@ -1,5 +1,7 @@
 Ostrich = Class{}
 
+local turnTimer = 0
+
 function Ostrich:init(x, y, width, height)
 	self.x = x
 	self.y = y
@@ -32,6 +34,30 @@ function Ostrich:init(x, y, width, height)
 	player1Speed4 = 4.5 == 1.755 ->.585
 	player1Speed5 = 6   == 2.34
 --]]
+end
+
+function Ostrich:topCollides(collidable)
+	if (self.y < collidable.y + collidable.height and self.y > collidable.y) and (self.x < collidable.x + collidable.width and self.x + self.width > collidable.x) then
+		return true
+	end
+
+	return false
+end
+
+function Ostrich:bottomCollides(collidable)
+	if (self.y + self.height > collidable.y and self.y + self.height < collidable.y + collidable.height) and (self.x < collidable.x + collidable.width and self.x + self.width > collidable.x) then
+		return true
+	end
+
+	return false
+end
+
+function Ostrich:rightCollides(collidable)
+
+end
+
+function Ostrich:leftCollides(collidable)
+
 end
 
 
@@ -99,6 +125,7 @@ function Ostrich:update(dt)
 
 	--TURN AND GO LEFT IF STOPPED
 	if love.keyboard.wasPressed('left') and self.speedTier == 0 and self.facingRight and self.grounded then
+		turnTimer = 0
 		self.facingRight = false
 		self.speedTier = self.speedTier + 1
 
@@ -124,10 +151,21 @@ function Ostrich:update(dt)
 	elseif love.keyboard.wasPressed('left') and self.facingRight and not self.grounded then
 		self.facingRight = false
 	end
+---[[
+	--MAKES OSTRICH GO LEFT IF LEFT IS CONTINOUSLY HELD
+	if love.keyboard.isDown('left') and self.speedTier == 0 and self.grounded and self.facingRight then
+		turnTimer = turnTimer + dt
+		if turnTimer > .2 then
+			self.facingRight = false
+			turnTimer = 0
+		end
+		--self.speedTier = self.speedTier + 1
 
+	end
+--]]
 
 	--RAMP SPEED UP IF LEFT IS HELD
-	if love.keyboard.isDown('left') and self.speedTier < 5 and self.grounded then
+	if love.keyboard.isDown('left') and self.speedTier < 5 and self.grounded and not self.facingRight then
 		self.frameTracker = self.frameTracker + dt 
 		if self.frameTracker > .2 then
 			self.speedTier = self.speedTier + 1
@@ -136,12 +174,15 @@ function Ostrich:update(dt)
 	elseif love.keyboard.wasReleased('left') then
 		self.frameTracker = 0
 	end
+---[[
 
+--]]
 
 
 
 	--TURN AND GO RIGHT IF STOPPED
 	if love.keyboard.wasPressed('right') and self.speedTier == 0 and not self.facingRight and self.grounded then
+		turnTimer = 0
 		self.facingRight = true
 		self.speedTier = self.speedTier + 1
 	
@@ -169,7 +210,7 @@ function Ostrich:update(dt)
 	end
 
 	--RAMP SPEED UP IF RIGHT IS HELD
-	if love.keyboard.isDown('right') and self.speedTier < 5 and self.grounded then
+	if love.keyboard.isDown('right') and self.speedTier < 5 and self.grounded and self.facingRight then
 		self.frameTracker = self.frameTracker + dt 
 		if self.frameTracker > .2 then
 			self.speedTier = self.speedTier + 1
@@ -179,6 +220,16 @@ function Ostrich:update(dt)
 		self.frameTracker = 0
 	end
 
+	--MAKES OSTRICH GO LEFT IF LEFT IS CONTINOUSLY HELD
+	if love.keyboard.isDown('right') and self.speedTier == 0 and self.grounded and not self.facingRight then
+		turnTimer = turnTimer + dt
+		if turnTimer > .2 then
+			self.facingRight = true
+			turnTimer = 0
+		end
+		--self.speedTier = self.speedTier + 1
+
+	end
 
 
 	--PLAYER1 SPEED ASSIGNMENT MOVING RIGHT
@@ -242,18 +293,6 @@ function Ostrich:update(dt)
 			self.skid = false
 		end
 	end
-
-	function Ostrich:collides(collidable)
-		if self.x > collidable.x + collidable.width and self.x + self.width < collidable.x and self.y > collidable.y + collidable.height and self.y + self.height < collidable.y then
-			return true
-		else
-			return false
-		end
-
-	end
-
-	player1:collides(platform1)
-
 
 	---[[
 -- OSTRICH1 ANIMATION CYCLE
@@ -356,7 +395,8 @@ function Ostrich:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
 	--love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-	love.graphics.print('COLLISION: ' .. tostring(player1:collides(platform1)), VIRTUAL_WIDTH - 140, 5)
+	love.graphics.print('TOP COLLISION: ' .. tostring(self:topCollides(platform1)), VIRTUAL_WIDTH - 190, 5)
+	love.graphics.print('BOTTOM COLLISION: ' .. tostring(self:bottomCollides(platform1)), VIRTUAL_WIDTH - 190, 20)
 ---[[
 	if player1.facingRight then
 		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y) 
