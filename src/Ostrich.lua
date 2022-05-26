@@ -119,7 +119,7 @@ function Ostrich:update(dt)
 	--BOUNCING OFF TOP
 	if self.y < 0 then
 		self.y = 0
-		self.dy = 1
+		self.dy = .8
 	end
 	
 	--LOOPS player to left side of screen
@@ -185,8 +185,6 @@ function Ostrich:update(dt)
 			self.facingRight = false
 			turnTimer = 0
 		end
-		--self.speedTier = self.speedTier + 1
-
 	end
 --]]
 
@@ -200,11 +198,6 @@ function Ostrich:update(dt)
 	elseif love.keyboard.wasReleased('left') then
 		self.frameTracker = 0
 	end
----[[
-
---]]
-
-
 
 	--TURN AND GO RIGHT IF STOPPED
 	if love.keyboard.wasPressed('right') and self.speedTier == 0 and not self.facingRight and self.grounded then
@@ -253,8 +246,27 @@ function Ostrich:update(dt)
 			self.facingRight = true
 			turnTimer = 0
 		end
-		--self.speedTier = self.speedTier + 1
+	end
 
+
+	--COLLIDE LOGIC
+	if self:topCollides(platform1) then
+		self.y = platform1.y + platform1.height
+		self.dy = .8
+	end
+
+	--LEFT COLLIDES SETS POSITIVE DX
+	if self:leftCollides(platform1) then
+		self.x = platform1.x + platform1.width
+		self.facingRight = true
+		self.dx = math.abs(self.dx)
+	end
+
+	--RIGHT COLLIDES SETS POSITIVE DX
+	if self:rightCollides(platform1) then
+		self.x = platform1.x - self.width
+		self.facingRight = false
+		self.dx = -self.dx
 	end
 
 
