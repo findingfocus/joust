@@ -60,6 +60,10 @@ function PlayState:render()
 		'PLAYER1.grounded: ' ..tostring(player1.grounded),
 		'PLAYER1.skid: ' ..tostring(player1.skid),
 		'PLAYER1.dx: ' ..tostring(string.format("%.2f", player1.dx)),
+		'TOP COLL: ' .. tostring(player1:topCollides(platform1)),
+		'BOT COLL: ' .. tostring(player1:bottomCollides(platform1)),
+		'RIGHT COLL: ' .. tostring(player1:rightCollides(platform1)),
+		'LEFT COLL: ' .. tostring(player1:leftCollides(platform1)),
 		--'jumpTimer: ' ..tostring(player1.jumpTimer),
 		--'flapped: ' ..tostring(player1.flapped),
 	}, '\n'))

@@ -53,11 +53,19 @@ function Ostrich:bottomCollides(collidable)
 end
 
 function Ostrich:rightCollides(collidable)
+	if (self.x + self.width > collidable.x and self.x + self.width < collidable.x + collidable.width) and (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
+		return true
+	end
 
+	return false
 end
 
 function Ostrich:leftCollides(collidable)
+	if (self.x < collidable.x + collidable.width and self.x > collidable.x) and (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
+		return true
+	end
 
+	return false
 end
 
 
@@ -84,10 +92,28 @@ function Ostrich:update(dt)
 	end
 
 	--ENSURES OSTRICH FACING DIRECTION OF DX
-	if self.grounded and self.speedTier > 0 and self.dx > 0 then
+	if self.grounded and self.speedTier > 1 and self.dx > 0 then
 		self.facingRight = true
-	elseif self.grounded and self.speedTier > 0 and self.dx < 0 then
+		if love.keyboard.isDown('left') then
+			self.skid = true
+			sounds['speed1']:stop()
+			sounds['speed2']:stop()
+			sounds['speed3']:stop()
+			sounds['speed4']:stop()
+			sounds['skid']:setLooping(true)
+			sounds['skid']:play()
+		end
+	elseif self.grounded and self.speedTier > 1 and self.dx < 0 then
 		self.facingRight = false
+		if love.keyboard.isDown('right') then
+			self.skid = true
+			sounds['speed1']:stop()
+			sounds['speed2']:stop()
+			sounds['speed3']:stop()
+			sounds['speed4']:stop()
+			sounds['skid']:setLooping(true)
+			sounds['skid']:play()
+		end
 	end
 	
 	--BOUNCING OFF TOP
@@ -395,8 +421,6 @@ function Ostrich:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.setColor(255/255, 70/255, 70/255, 255/255)
 	--love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-	love.graphics.print('TOP COLLISION: ' .. tostring(self:topCollides(platform1)), VIRTUAL_WIDTH - 190, 5)
-	love.graphics.print('BOTTOM COLLISION: ' .. tostring(self:bottomCollides(platform1)), VIRTUAL_WIDTH - 190, 20)
 ---[[
 	if player1.facingRight then
 		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y) 
