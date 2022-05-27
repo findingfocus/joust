@@ -156,7 +156,7 @@ function Ostrich:update(dt)
 		self.dx = self.dx - SPEEDRAMP
 
 	--INCREMENT PLAYER1 SPEEDTIER WHILE ALREADY MOVING LEFT
-	elseif love.keyboard.isDown('left') and math.abs(self.dx) < MAXSPEED and self.grounded and not self.facingRight then
+	elseif love.keyboard.isDown('left') and (self.dx < 0 and math.abs(self.dx) <= MAXSPEED) and self.grounded and not self.facingRight and not self.skid then
 		self.dx = self.dx - SPEEDRAMP
 
 	--STOPS when facing right
@@ -187,11 +187,13 @@ function Ostrich:update(dt)
 		end
 	end
 --]]
-
+---[[
 	--RAMP SPEED UP IF LEFT IS HELD
-	if love.keyboard.isDown('left') and math.abs(self.dx) <= MAXSPEED and self.grounded and not self.facingRight and not self.skid then
+	if love.keyboard.isDown('left') and self.grounded and not self.facingRight and not self.skid then
 		self.dx = self.dx - SPEEDRAMP
 	end
+
+	--]]
 
 	--TURN AND GO RIGHT IF STOPPED
 	if love.keyboard.wasPressed('right') and self.dx == 0 and not self.facingRight and self.grounded then
@@ -200,7 +202,7 @@ function Ostrich:update(dt)
 		self.dx = self.dx + SPEEDRAMP
 	
 	--INCREMENT PLAYER1 SPEEDTIER WHILE ALREADY MOVING RIGHT
-	elseif love.keyboard.isDown('right') and self.dx < MAXSPEED and self.grounded and self.facingRight then
+	elseif love.keyboard.isDown('right') and (self.dx > 0 and self.dx <= MAXSPEED) and self.grounded and self.facingRight and not self.skid then
 		self.dx = self.dx + SPEEDRAMP
 
 	--STOPS when facing left
@@ -223,7 +225,7 @@ function Ostrich:update(dt)
 	end
 ---[[
 	--RAMP SPEED UP IF RIGHT IS HELD
-	if love.keyboard.isDown('right') and (self.dx > 0 and self.dx <= MAXSPEED) and self.grounded and self.facingRight and not self.skid then
+	if love.keyboard.isDown('right') and self.grounded and self.facingRight and not self.skid then
 			self.dx = self.dx + SPEEDRAMP
 	end
 	--]]
