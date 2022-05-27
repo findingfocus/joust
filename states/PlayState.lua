@@ -14,7 +14,7 @@ function PlayState:update(dt)
 	if love.keyboard.wasPressed('r') then
 		player1.x = VIRTUAL_WIDTH / 3 - 8
 		player1.y = VIRTUAL_HEIGHT - 36 - player1.height
-		player1.speedTier = 0
+		--player1.speedTier = 0
 		player1.facingRight = true
 		player1.dx = 0
 		sounds['speed1']:stop()
@@ -55,7 +55,7 @@ function PlayState:render()
 		'PLAYER1.Y: '..math.floor(player1.y),
 		'PLAYER1.facingRight: '..tostring(player1.facingRight),
 		--'ANIMATION TIMER: ' ..tostring(animationTimer),
-		'PLAYER1.speedTier: '..math.floor(player1.speedTier),
+		--'PLAYER1.speedTier: '..math.floor(player1.speedTier),
 		'PLAYER1.DY: ' ..tostring(string.format("%.2f", player1.dy)),
 		'PLAYER1.grounded: ' ..tostring(player1.grounded),
 		'PLAYER1.skid: ' ..tostring(player1.skid),

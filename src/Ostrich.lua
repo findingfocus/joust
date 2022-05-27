@@ -10,12 +10,12 @@ function Ostrich:init(x, y, width, height)
 	self.atlas = playerAtlas
 	self.dy = 0
 	self.dx = 0
-	self.speedTier = 0
+	--self.speedTier = 0
 	self.grounded = true
 	self.skid = false
 	self.facingRight = true
 	self.flapped = false
-	self.frameTracker = 0
+	--self.frameTracker = 0
 	speedScale = 0
 	fps = 1
 	animationTimer = 1 / fps
@@ -91,10 +91,10 @@ function Ostrich:update(dt)
 		self.height = 16
 	end
 
-	--ENSURES OSTRICH FACING DIRECTION OF DX
-	if self.grounded and self.speedTier > 1 and self.dx > 0 then
+	--ENSURES OSTRICH FACING DIRECTION OF DX - SKID LOGIC FOR > SPEED 2
+	if self.grounded and self.dx > 0 then
 		self.facingRight = true
-		if love.keyboard.isDown('left') then
+		if love.keyboard.isDown('left') and self.dx > .7 then
 			self.skid = true
 			sounds['speed1']:stop()
 			sounds['speed2']:stop()
@@ -103,9 +103,9 @@ function Ostrich:update(dt)
 			sounds['skid']:setLooping(true)
 			sounds['skid']:play()
 		end
-	elseif self.grounded and self.speedTier > 1 and self.dx < 0 then
+	elseif self.grounded and self.dx < 0 then
 		self.facingRight = false
-		if love.keyboard.isDown('right') then
+		if love.keyboard.isDown('right') and self.dx < -.7 then
 			self.skid = true
 			sounds['speed1']:stop()
 			sounds['speed2']:stop()
@@ -150,21 +150,21 @@ function Ostrich:update(dt)
 	end
 
 	--TURN AND GO LEFT IF STOPPED
-	if love.keyboard.wasPressed('left') and self.speedTier == 0 and self.facingRight and self.grounded then
+	if love.keyboard.wasPressed('left') and self.dx == 0 and self.facingRight and self.grounded then
 		turnTimer = 0
 		self.facingRight = false
-		self.speedTier = self.speedTier + 1
+		self.dx = self.dx - SPEEDRAMP
 
 	--INCREMENT PLAYER1 SPEEDTIER WHILE ALREADY MOVING LEFT
-	elseif love.keyboard.wasPressed('left') and self.speedTier < 5 and self.grounded and not self.facingRight then
-		self.speedTier = self.speedTier + 1
+	elseif love.keyboard.isDown('left') and math.abs(self.dx) < MAXSPEED and self.grounded and not self.facingRight then
+		self.dx = self.dx - SPEEDRAMP
 
 	--STOPS when facing right
-	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier == 1 and self.grounded then
-		self.speedTier = 0
+	elseif love.keyboard.wasPressed('left') and self.facingRight and (self.dx > 0 and self.dx < .4) and self.grounded then
+		self.dx = 0
 
 	--SKID FLAG
-	elseif love.keyboard.wasPressed('left') and self.facingRight and self.speedTier > 1 and self.grounded then
+	elseif love.keyboard.wasPressed('left') and self.facingRight and self.dx > .4 and self.grounded then
 		self.skid = true
 		sounds['speed1']:stop()
 		sounds['speed2']:stop()
@@ -179,7 +179,7 @@ function Ostrich:update(dt)
 	end
 ---[[
 	--MAKES OSTRICH GO LEFT IF LEFT IS CONTINOUSLY HELD
-	if love.keyboard.isDown('left') and self.speedTier == 0 and self.grounded and self.facingRight then
+	if love.keyboard.isDown('left') and self.dx == 0 and self.grounded and self.facingRight then
 		turnTimer = turnTimer + dt
 		if turnTimer > .2 then
 			self.facingRight = false
@@ -189,32 +189,26 @@ function Ostrich:update(dt)
 --]]
 
 	--RAMP SPEED UP IF LEFT IS HELD
-	if love.keyboard.isDown('left') and self.speedTier < 5 and self.grounded and not self.facingRight then
-		self.frameTracker = self.frameTracker + dt 
-		if self.frameTracker > .2 then
-			self.speedTier = self.speedTier + 1
-			self.frameTracker = 0
-		end
-	elseif love.keyboard.wasReleased('left') then
-		self.frameTracker = 0
+	if love.keyboard.isDown('left') and math.abs(self.dx) <= MAXSPEED and self.grounded and not self.facingRight and not self.skid then
+		self.dx = self.dx - SPEEDRAMP
 	end
 
 	--TURN AND GO RIGHT IF STOPPED
-	if love.keyboard.wasPressed('right') and self.speedTier == 0 and not self.facingRight and self.grounded then
+	if love.keyboard.wasPressed('right') and self.dx == 0 and not self.facingRight and self.grounded then
 		turnTimer = 0
 		self.facingRight = true
-		self.speedTier = self.speedTier + 1
+		self.dx = self.dx + SPEEDRAMP
 	
 	--INCREMENT PLAYER1 SPEEDTIER WHILE ALREADY MOVING RIGHT
-	elseif love.keyboard.wasPressed('right') and self.speedTier < 5 and self.grounded and self.facingRight then
-		self.speedTier = self.speedTier + 1
+	elseif love.keyboard.isDown('right') and self.dx < MAXSPEED and self.grounded and self.facingRight then
+		self.dx = self.dx + SPEEDRAMP
 
 	--STOPS when facing left
-	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier == 1 and self.grounded then
-		self.speedTier = 0
+	elseif love.keyboard.wasPressed('right') and not self.facingRight and (self.dx < 0 and self.dx > -.4) and self.grounded then
+		self.dx = 0
 
 	--SKID FLAG
-	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.speedTier > 1 and self.grounded then
+	elseif love.keyboard.wasPressed('right') and not self.facingRight and self.dx < -.4 and self.grounded then
 		self.skid = true
 		sounds['speed1']:stop()
 		sounds['speed2']:stop()
@@ -227,20 +221,15 @@ function Ostrich:update(dt)
 	elseif love.keyboard.wasPressed('right') and not self.facingRight and not self.grounded then
 		self.facingRight = true
 	end
-
+---[[
 	--RAMP SPEED UP IF RIGHT IS HELD
-	if love.keyboard.isDown('right') and self.speedTier < 5 and self.grounded and self.facingRight then
-		self.frameTracker = self.frameTracker + dt 
-		if self.frameTracker > .2 then
-			self.speedTier = self.speedTier + 1
-			self.frameTracker = 0
-		end
-	elseif love.keyboard.wasReleased('right') then
-		self.frameTracker = 0
+	if love.keyboard.isDown('right') and (self.dx > 0 and self.dx <= MAXSPEED) and self.grounded and self.facingRight and not self.skid then
+			self.dx = self.dx + SPEEDRAMP
 	end
+	--]]
 
-	--MAKES OSTRICH GO LEFT IF LEFT IS CONTINOUSLY HELD
-	if love.keyboard.isDown('right') and self.speedTier == 0 and self.grounded and not self.facingRight then
+	--MAKES OSTRICH GO RIGHT IF RIGHT IS CONTINOUSLY HELD
+	if love.keyboard.isDown('right') and self.dx == 0 and self.grounded and not self.facingRight then
 		turnTimer = turnTimer + dt
 		if turnTimer > .2 then
 			self.facingRight = true
@@ -269,7 +258,7 @@ function Ostrich:update(dt)
 		self.dx = -self.dx
 	end
 
-
+--[[
 	--PLAYER1 SPEED ASSIGNMENT MOVING RIGHT
 	if self.facingRight and not self.skid and self.grounded then
 		if self.speedTier == 0 then
@@ -303,7 +292,7 @@ function Ostrich:update(dt)
 			self.dx = -SPEED5
 		end
 	end
-
+--]]
 
 	--UPDATES PLAYER X RIGHT VELOCITY BASED ON DX, DETERMINES SKID STOP
 	if self.dx > 0 and not self.skid then
@@ -312,7 +301,6 @@ function Ostrich:update(dt)
 		self.dx = math.max(0, self.dx - .08)
 		self.x = self.x + self.dx
 		if self.dx == 0 then
-			self.speedTier = 0
 			sounds['skid']:stop()
 			self.skid = false
 		end 
@@ -326,7 +314,6 @@ function Ostrich:update(dt)
 		self.dx = math.min(0, self.dx + .08)
 		self.x = self.x + self.dx
 		if self.dx == 0 then
-			self.speedTier = 0
 			sounds['skid']:stop()
 			self.skid = false
 		end
@@ -336,15 +323,15 @@ function Ostrich:update(dt)
 -- OSTRICH1 ANIMATION CYCLE
 
 	--STANDING STILL VIEWPORT
-	if self.speedTier == 0 and self.grounded then
+	if self.dx == 0 and self.grounded then
 		self.frame = 1
 		ostrichSprite:setViewport(1, 0, self.width, self.height)
 	end
-	fps = (self.speedTier / 12) + .3
+	fps = math.abs(self.dx)
 	animationTimer = animationTimer - fps
 
 	--PLAYER WALKING ANIMATION
-	if self.speedTier > 0 and self.grounded then 
+	if self.dx ~= 0 and self.grounded then 
 		animationTimer = animationTimer - dt
 		if animationTimer <= 0 then
 			animationTimer = 1 / fps
@@ -382,7 +369,7 @@ function Ostrich:update(dt)
 --]]
 
 	-- SOUNDS FOR WALKING
-	if self.speedTier == 0 then
+	if self.dx == 0 then
 		sounds['speed1']:stop()
 		sounds['speed2']:stop()
 		sounds['speed3']:stop()
@@ -396,30 +383,30 @@ function Ostrich:update(dt)
 		sounds['speed4']:stop()
 	end
 
-	if self.speedTier == 1 and self.grounded then
+	if (math.abs(self.dx) > 0 and math.abs(self.dx) < .4) and self.grounded and not self.skid then
 		sounds['speed1']:setLooping(true)
 		sounds['speed1']:play()
 	end
 
-	if self.speedTier == 2 and self.grounded then
+	if (math.abs(self.dx) >= .4 and math.abs(self.dx) < .7) and self.grounded and not self.skid then
 		sounds['speed1']:stop()
 		sounds['speed2']:setLooping(true)
 		sounds['speed2']:play()
 	end
 
-	if self.speedTier == 3 and self.grounded then
+	if (math.abs(self.dx) >= .7 and math.abs(self.dx) < 1.2) and self.grounded and not self.skid then
 		sounds['speed2']:stop()
 		sounds['speed3']:setLooping(true)
 		sounds['speed3']:play()
 	end
 
-	if self.speedTier == 4 and self.grounded then
+	if (math.abs(self.dx) >= 1.2 and math.abs(self.dx) < 1.75) and self.grounded and not self.skid then
 		sounds['speed3']:stop()
 		sounds['speed4']:setLooping(true)
 		sounds['speed4']:play()
 	end
 
-	if self.speedTier == 5 and self.grounded then
+	if (math.abs(self.dx) >= 1.75 and math.abs(self.dx) < 2.35) and self.grounded and not self.skid then
 		sounds['speed3']:stop()
 		sounds['speed4']:setLooping(true)
 		sounds['speed4']:play()
