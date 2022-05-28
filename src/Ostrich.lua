@@ -1,5 +1,6 @@
 Ostrich = Class{}
 
+local goTimer = 0
 local turnTimer = 0
 
 function Ostrich:init(x, y, width, height)
@@ -149,19 +150,40 @@ function Ostrich:update(dt)
 		end
 	end
 
-	--TURN AND GO LEFT IF STOPPED
-	if love.keyboard.wasPressed('left') and self.dx == 0 and self.facingRight and self.grounded then
-		turnTimer = 0
-		self.facingRight = false
-		self.dx = self.dx - SPEEDRAMP
+	
+	---[[
 
-	--INCREMENT PLAYER1 SPEEDTIER WHILE ALREADY MOVING LEFT
-	elseif love.keyboard.isDown('left') and (self.dx < 0 and math.abs(self.dx) <= MAXSPEED) and self.grounded and not self.facingRight and not self.skid then
-		self.dx = self.dx - SPEEDRAMP
 
 	--STOPS when facing right
-	elseif love.keyboard.wasPressed('left') and self.facingRight and (self.dx > 0 and self.dx < .4) and self.grounded then
+	if love.keyboard.wasPressed('left') and self.facingRight and (self.dx > 0 and self.dx < .4) and self.grounded then
 		self.dx = 0
+
+	--MAKES OSTRICH FACE LEFT IF LEFT IS CONTINOUSLY HELD DURING SKID
+	elseif love.keyboard.isDown('left') and (self.dx > 0 and self.dx < .4) and self.grounded and self.facingRight then
+		self.dx = 0
+		turnTimer = turnTimer + dt
+--]]
+--TURN AND GO LEFT IF STOPPED
+	elseif love.keyboard.isDown('left') and self.dx == 0 and self.facingRight and self.grounded then
+		turnTimer = turnTimer + dt
+		if turnTimer > .5 then
+			self.facingRight = false
+			turnTimer = 0
+		end
+
+	elseif love.keyboard.wasPressed('left') and self.dx == 0 and not self.facingRight and self.grounded then
+		self.dx = -.24
+
+
+	elseif love.keyboard.wasPressed('left') and self.dx == 0 and self.grounded then
+		self.facingRight = false
+
+	elseif love.keyboard.isDown('left') and self.grounded and not self.facingRight and self.dx < 0 and not self.skid then
+		self.dx = math.max(self.dx - SPEEDRAMP, -MAXSPEED)
+
+
+
+
 
 	--SKID FLAG
 	elseif love.keyboard.wasPressed('left') and self.facingRight and self.dx > .4 and self.grounded then
@@ -178,22 +200,65 @@ function Ostrich:update(dt)
 		self.facingRight = false
 	end
 ---[[
-	--MAKES OSTRICH GO LEFT IF LEFT IS CONTINOUSLY HELD
-	if love.keyboard.isDown('left') and self.dx == 0 and self.grounded and self.facingRight then
+
+
+
+
+		--TURN
+
+
+	--SMALLER DX WHILE ALREADY MOVING LEFT
+	--[[
+	if love.keyboard.isDown('left') and (self.dx <= 0 and math.abs(self.dx) <= MAXSPEED) and self.grounded then
+		--self.dx = self.dx - SPEEDRAMP
 		turnTimer = turnTimer + dt
-		if turnTimer > .2 then
-			self.facingRight = false
-			turnTimer = 0
+			if turnTimer > .106 then
+				self.dx = self.dx - SPEEDRAMP
+				turnTimer = 0
+			end
+	end
+	--]]
+
+
+
+
+
+
+
+--[[ TURN THIS BACK ON ONCE LEFT IS WORKING PLEASE:)
+
+	--IF RIGHT IS PRESSED AFTER AND WHILE LEFT IS HELD,
+	if love.keyboard.isDown('left') and self.dx < -.4 then
+		if love.keyboard.wasPressed('right') then
+			self.skid = true
+		end
+	end
+
+	if love.keyboard.isDown('left') and self.dx == 0 then
+		if love.keyboard.isDown('right') then
+			self.facingRight = true
+			self.dx = self.dx + SPEEDRAMP
 		end
 	end
 --]]
----[[
-	--RAMP SPEED UP IF LEFT IS HELD
+
+
+
+
+
+
+
+--[[
+	-- NEGATIVE DX IF LEFT IS HELD
 	if love.keyboard.isDown('left') and self.grounded and not self.facingRight and not self.skid then
 		self.dx = self.dx - SPEEDRAMP
 	end
+--]]
 
-	--]]
+--]]
+
+
+
 
 	--TURN AND GO RIGHT IF STOPPED
 	if love.keyboard.wasPressed('right') and self.dx == 0 and not self.facingRight and self.grounded then
