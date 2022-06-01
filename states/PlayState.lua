@@ -14,7 +14,7 @@ function PlayState:update(dt)
 	if love.keyboard.wasPressed('r') then
 		player1.x = VIRTUAL_WIDTH / 3 - 8
 		player1.y = VIRTUAL_HEIGHT - 36 - player1.height
-		--player1.speedTier = 0
+		player1.skid = false
 		player1.facingRight = true
 		player1.dx = 0
 		sounds['speed1']:stop()

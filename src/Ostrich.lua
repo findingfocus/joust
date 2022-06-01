@@ -197,11 +197,11 @@ function Ostrich:update(dt)
 
 
 
-	---[[ 								LEFT INPUT HANDLING
+	---[[ 							
 	if self.grounded then
 		if self.facingRight then
 			--MOVE TO THE RIGHT IF NOT JUSTTURNED OR SKIDDING
-			if love.keyboard.isDown('right') and not self.skid and not self.justTurned then
+			if love.keyboard.isDown('right') --[[and not self.skid--]] and not self.justTurned then
 				self.dx = math.max(.12, (math.min(self.dx + SPEEDRAMP, MAXSPEED)))
 			end
 	
@@ -216,14 +216,14 @@ function Ostrich:update(dt)
 			elseif (self.dx > 0 and self.dx < .4) then
 				
 				--STOPS WHEN FACING RIGHT
-				if love.keyboard.wasPressed('left') then
+				if love.keyboard.isDown('left') then
 					self.dx = 0
 					self.justStopped = true
 				end
 
 			--SKID FLAG
-			elseif self.dx > .7 then
-				if love.keyboard.isDown('left') then
+			elseif self.dx > .4 then
+				if love.keyboard.wasPressed('left') then
 					self.skid = true
 					sounds['speed1']:stop()
 					sounds['speed2']:stop()
@@ -237,7 +237,7 @@ function Ostrich:update(dt)
 		elseif not self.facingRight then
 
 			--MOVE TO THE LEFT IF NOT JUSTTURNED OR SKIDDING
-			if love.keyboard.isDown('left') and not self.skid and not self.justTurned then
+			if love.keyboard.isDown('left') --[[and not self.skid --]]and not self.justTurned then
 					self.dx = math.min(-.12, (math.max(self.dx - SPEEDRAMP, -MAXSPEED)))
 			end
 
@@ -251,13 +251,13 @@ function Ostrich:update(dt)
 			--IF MOVING TO THE LEFT IN SPEED1
 			elseif (self.dx < 0 and self.dx > -.4) then
 				--STOPS WHEN FACING LEFT
-				if love.keyboard.wasPressed('right') then
+				if love.keyboard.isDown('right') then
 					self.dx = 0
 					self.justStopped = true
 				end
 			--SKID FLAG
-			elseif self.dx < -.7 then
-				if love.keyboard.isDown('right') then
+			elseif self.dx < -.4 then
+				if love.keyboard.wasPressed('right') then
 					self.skid = true
 					sounds['speed1']:stop()
 					sounds['speed2']:stop()
@@ -284,7 +284,19 @@ function Ostrich:update(dt)
 
 	end
 
-
+--[[
+	if love.keyboard.isDown('left') then
+		if love.keyboard.wasPressed('right') then
+			--self.skid = true
+			--self.dx = math.max(.12, (math.min(self.dx + SPEEDRAMP, MAXSPEED)))
+		end
+	elseif love.keyboard.isDown('right') then
+		if love.keyboard.wasPressed('left') then
+			--self.skid = true
+			--self.dx = math.min(-.12, (math.max(self.dx - SPEEDRAMP, -MAXSPEED)))
+		end
+	end
+--]]
 
 
 
@@ -375,9 +387,9 @@ function Ostrich:update(dt)
 
 
 		--UPDATES PLAYER X RIGHT VELOCITY BASED ON DX, DETERMINES SKID STOP
-	if self.dx > 0 and not self.skid then
+	if self.dx >= 0 and not self.skid then
 		self.x = self.x + self.dx
-	elseif self.dx > 0 and self.skid then
+	elseif self.dx >= 0 and self.skid then
 		self.dx = math.max(0, self.dx - .08)
 		self.x = self.x + self.dx
 		if self.dx == 0 then
@@ -389,9 +401,9 @@ function Ostrich:update(dt)
 
 
 	--UPDATES PLAYER X LEFT VELOCITY BASED ON DX, DETERMINES SKID STOP
-	if self.dx < 0 and not self.skid then
+	if self.dx <= 0 and not self.skid then
 		self.x = self.x + self.dx
-	elseif self.dx < 0 and self.skid then
+	elseif self.dx <= 0 and self.skid then
 		self.dx = math.min(0, self.dx + .08)
 		self.x = self.x + self.dx
 		if self.dx == 0 then
