@@ -64,6 +64,7 @@ function PlayState:render()
 		'justStopped = ' ..tostring(player1.justStopped),
 		'justTurned = ' ..tostring(player1.justTurned),
 		'love.keyboard.isDown(left) =' ..tostring(love.keyboard.isDown('left')),
+		'rightPriority = ' ..tostring(player1.rightPriority),
 		--'TOP COLL: ' .. tostring(player1:topCollides(platform1)),
 		--'BOT COLL: ' .. tostring(player1:bottomCollides(platform1)),
 		--'RIGHT COLL: ' .. tostring(player1:rightCollides(platform1)),

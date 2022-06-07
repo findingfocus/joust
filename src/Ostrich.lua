@@ -17,6 +17,7 @@ function Ostrich:init(x, y, width, height)
 	self.flapped = false
 	self.justStopped = false
 	self.justTurned = false
+	self.rightPriority = false
 	--self.frameTracker = 0
 	speedScale = 0
 	fps = 1
@@ -80,6 +81,33 @@ end
 
 
 function Ostrich:update(dt)
+
+	if love.keyboard.isDown('left') and not love.keyboard.isDown('right') then
+		self.rightPriority = false
+
+	elseif love.keyboard.isDown('right') and not love.keyboard.isDown('left') then
+		self.rightPriority = true
+	end
+
+
+--[[
+	while (love.keyboard.isDown('left')) do
+		if love.keyboard.isDown('right') then
+			self.rightPriority = true
+		end
+	end
+
+
+	while (love.keyboard.isDown('right')) do
+		if love.keyboard.isDown('left') then
+			self.rightPriority = false
+		end
+	end
+--]]
+
+
+
+
 
 	--APPLY GRAVITY WHEN IN AIR
 	if not self.grounded then
@@ -304,7 +332,7 @@ function Ostrich:update(dt)
 
 
 
---[[ TURN THIS BACK ON ONCE LEFT IS WORKING PLEASE:)
+---[[ TURN THIS BACK ON ONCE LEFT IS WORKING PLEASE:)
 
 	--IF RIGHT IS PRESSED AFTER AND WHILE LEFT IS HELD,
 	if love.keyboard.isDown('left') and self.dx < -.4 then
