@@ -17,7 +17,8 @@ function Ostrich:init(x, y, width, height)
 	self.flapped = false
 	self.justStopped = false
 	self.justTurned = false
-	self.rightPriority = false
+	--self.rightPriority = false
+	self.lastInputLocked = false
 	--self.frameTracker = 0
 	speedScale = 0
 	fps = 1
@@ -79,26 +80,50 @@ function Ostrich:leftCollides(collidable)
 	return false
 end
 
+lastInput = {"right"}
+
 
 function Ostrich:update(dt)
 
 	if love.keyboard.isDown('left') and not love.keyboard.isDown('right') then
 		self.rightPriority = false
+		lastInput = {}
+		table.insert(lastInput, "left")
 
 	elseif love.keyboard.isDown('right') and not love.keyboard.isDown('left') then
 		self.rightPriority = true
+		lastInput = {}
+		table.insert(lastInput, "right")
+
+	elseif love.keyboard.isDown('right') and love.keyboard.isDown('left') and not self.lastInputLocked then
+		--assign only one value until a key is released
+		if lastInput[1] == "left" then
+			lastInput = {}
+			table.insert(lastInput, "right")
+		elseif lastInput[1] == "right" then
+			lastInput = {}
+			table.insert(lastInput, "left")
+		end
+
+		self.lastInputLocked = true
+	end
+
+	if love.keyboard.wasReleased('left') or love.keyboard.wasReleased('right') then
+		self.lastInputLocked = false
 	end
 
 
+
+
 --[[
-	while (love.keyboard.isDown('left')) do
+	if love.keyboard.isDown('left') then
 		if love.keyboard.isDown('right') then
 			self.rightPriority = true
 		end
 	end
 
 
-	while (love.keyboard.isDown('right')) do
+	if love.keyboard.isDown('right') then
 		if love.keyboard.isDown('left') then
 			self.rightPriority = false
 		end
@@ -124,6 +149,28 @@ function Ostrich:update(dt)
 		self.y = VIRTUAL_HEIGHT - self.height - GROUND_OFFSET --depends on where ground is, right now its only the bottom floor
 		self.grounded = true
 		self.dy = 0
+		---[[
+		if love.keyboard.isDown('left') and lastInput[1] == "left" and self.dx > .7 then
+			self.skid = true
+			sounds['speed1']:stop()
+			sounds['speed2']:stop()
+			sounds['speed3']:stop()
+			sounds['speed4']:stop()
+		    --sounds['skid']:setLooping(true)
+			--sounds['skid']:play()
+		end
+		--]]
+		---[[
+		if love.keyboard.isDown('right') and lastInput[1] == "right" and self.dx < -.7 then
+			self.skid = true
+			sounds['speed1']:stop()
+			sounds['speed2']:stop()
+			sounds['speed3']:stop()
+			sounds['speed4']:stop()
+			--sounds['skid']:setLooping(true)
+			--sounds['skid']:play()
+		end
+		--]]
 	elseif self.y < VIRTUAL_HEIGHT - self.height - 36 then
 		self.grounded = false
 		self.height = 16
@@ -133,30 +180,10 @@ function Ostrich:update(dt)
 	--ENSURES OSTRICH FACING DIRECTION OF DX - SKID LOGIC FOR > SPEED 2
 	if self.grounded and self.dx > 0 then
 		self.facingRight = true
-		--[[
-		if love.keyboard.isDown('left') and self.dx > .7 then
-			self.skid = true
-			sounds['speed1']:stop()
-			sounds['speed2']:stop()
-			sounds['speed3']:stop()
-			sounds['speed4']:stop()
-			sounds['skid']:setLooping(true)
-			sounds['skid']:play()
-		end
-		--]]
+--OLD SKID WHILE IN AIR LOGIC PLACE
 	elseif self.grounded and self.dx < 0 then
 		self.facingRight = false
-		--[[
-		if love.keyboard.isDown('right') and self.dx < -.7 then
-			self.skid = true
-			sounds['speed1']:stop()
-			sounds['speed2']:stop()
-			sounds['speed3']:stop()
-			sounds['speed4']:stop()
-			sounds['skid']:setLooping(true)
-			sounds['skid']:play()
-		end
-		--]]
+---OLD SKID WHILE IN AIR LOGIC PLACE
 	end
 --]]
 	
@@ -229,13 +256,13 @@ function Ostrich:update(dt)
 	if self.grounded then
 		if self.facingRight then
 			--MOVE TO THE RIGHT IF NOT JUSTTURNED OR SKIDDING
-			if love.keyboard.isDown('right') --[[and not self.skid--]] and not self.justTurned then
-				self.dx = math.max(.12, (math.min(self.dx + SPEEDRAMP, MAXSPEED)))
+			if love.keyboard.isDown('right') and lastInput[1] == "right" and not self.skid and not self.justTurned then
+				self.dx = math.max(.15, (math.min(self.dx + SPEEDRAMP, MAXSPEED)))
 			end
 	
 			if self.dx == 0 then
 				--TURNS LEFT WHEN STOPPED
-				if love.keyboard.isDown('left') and not self.justStopped then
+				if love.keyboard.isDown('left') and lastInput[1] == "left" and not self.justStopped then
 					self.facingRight = false
 					self.justTurned = true
 				end
@@ -244,34 +271,36 @@ function Ostrich:update(dt)
 			elseif (self.dx > 0 and self.dx < .4) then
 				
 				--STOPS WHEN FACING RIGHT
-				if love.keyboard.isDown('left') then
+				if love.keyboard.isDown('left') and lastInput[1] == "left" then
 					self.dx = 0
 					self.justStopped = true
 				end
 
 			--SKID FLAG
 			elseif self.dx > .4 then
+				if love.keyboard.isDown('left') and love.keyboard.wasReleased('right') then
+						self.skid = true
+				end
+
 				if love.keyboard.wasPressed('left') then
 					self.skid = true
 					sounds['speed1']:stop()
 					sounds['speed2']:stop()
 					sounds['speed3']:stop()
 					sounds['speed4']:stop()
-					sounds['skid']:setLooping(true)
-					sounds['skid']:play()
 				end
 			end
 
 		elseif not self.facingRight then
 
 			--MOVE TO THE LEFT IF NOT JUSTTURNED OR SKIDDING
-			if love.keyboard.isDown('left') --[[and not self.skid --]]and not self.justTurned then
-					self.dx = math.min(-.12, (math.max(self.dx - SPEEDRAMP, -MAXSPEED)))
+			if love.keyboard.isDown('left') and lastInput[1] == "left" and not self.skid and not self.justTurned then
+					self.dx = math.min(-.15, (math.max(self.dx - SPEEDRAMP, -MAXSPEED)))
 			end
 
 			if self.dx == 0 then
 				--TURNS RIGHT WHEN STOPPED
-				if love.keyboard.isDown('right') and not self.justStopped then
+				if love.keyboard.isDown('right') and lastInput[1] == "right" and not self.justStopped then
 					self.facingRight = true
 					self.justTurned = true
 				end
@@ -279,20 +308,22 @@ function Ostrich:update(dt)
 			--IF MOVING TO THE LEFT IN SPEED1
 			elseif (self.dx < 0 and self.dx > -.4) then
 				--STOPS WHEN FACING LEFT
-				if love.keyboard.isDown('right') then
+				if love.keyboard.isDown('right') and lastInput[1] == "right" then
 					self.dx = 0
 					self.justStopped = true
 				end
 			--SKID FLAG
 			elseif self.dx < -.4 then
+				if love.keyboard.isDown('right') and love.keyboard.wasReleased('left') then
+						self.skid = true
+				end
+
 				if love.keyboard.wasPressed('right') then
 					self.skid = true
 					sounds['speed1']:stop()
 					sounds['speed2']:stop()
 					sounds['speed3']:stop()
 					sounds['speed4']:stop()
-					sounds['skid']:setLooping(true)
-					sounds['skid']:play()
 				end
 			end
 		end
@@ -310,6 +341,11 @@ function Ostrich:update(dt)
 
 		--FLAPPING DX CHANGE TO DO
 
+	end
+
+	if self.skid then
+		sounds['skid']:setLooping(true)
+		sounds['skid']:play()
 	end
 
 --[[
@@ -332,7 +368,7 @@ function Ostrich:update(dt)
 
 
 
----[[ TURN THIS BACK ON ONCE LEFT IS WORKING PLEASE:)
+--[[ TURN THIS BACK ON ONCE LEFT IS WORKING PLEASE:)
 
 	--IF RIGHT IS PRESSED AFTER AND WHILE LEFT IS HELD,
 	if love.keyboard.isDown('left') and self.dx < -.4 then
