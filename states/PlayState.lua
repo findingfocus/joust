@@ -50,6 +50,7 @@ function PlayState:render()
 	love.graphics.print(table.concat({
 		'',
 		'',
+		'',
 		'PLAYER1.X: '..math.floor(player1.x),
 		--'PLAYER1.Y: '..math.floor(player1.y),
 		'PLAYER1.facingRight: '..tostring(player1.facingRight),
