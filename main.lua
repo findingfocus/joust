@@ -12,6 +12,10 @@ function love.load()
 	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)
 
 	playerAtlas = love.graphics.newImage('src/pics/joustPlayerAtlas2.png')
+	keyloggerPlate = love.graphics.newImage('src/pics/keyloggerBackplate.png')
+	keylogger1 = love.graphics.newImage('src/pics/keylogger1.png')
+	keylogger2 = love.graphics.newImage('src/pics/keylogger2.png')
+	keylogger3 = love.graphics.newImage('src/pics/keylogger3.png')
 
 	sounds = {
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),

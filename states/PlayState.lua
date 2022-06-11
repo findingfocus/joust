@@ -77,4 +77,21 @@ function PlayState:render()
 
 	player1:render()
 	platform1:render()
+
+	--KEYLOGGER
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	love.graphics.draw(keyloggerPlate, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
+
+	if love.keyboard.isDown('left') then
+		love.graphics.draw(keylogger1, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
+	end
+	
+	if love.keyboard.isDown('a') then
+		love.graphics.draw(keylogger2, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
+	end
+
+	if love.keyboard.isDown('right') then
+		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
+	end
+
 end
