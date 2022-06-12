@@ -2,6 +2,8 @@ push = require '/src/push'
 
 Class = require '/src/class'
 
+require '/src/slam'
+
 require '/src/constants'
 require '/src/Ostrich'
 require '/src/Platform'

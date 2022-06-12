@@ -21,10 +21,8 @@ function love.load()
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),
 		['select'] = love.audio.newSource('music/select.wav', 'static'),
 
-		['speed1'] = love.audio.newSource('music/1.mp3', 'static'),
-		['speed2'] = love.audio.newSource('music/2.mp3', 'static'),
-		['speed3'] = love.audio.newSource('music/3.mp3', 'static'),
-		['speed4'] = love.audio.newSource('music/4.mp3', 'static'),
+		['leftStep'] = love.audio.newSource('music/leftStep.mp3', 'static'),
+		['rightStep'] = love.audio.newSource('music/rightStep.mp3', 'static'),
 
 		['skid'] = love.audio.newSource('music/skid.mp3', 'static'),
 		['flap'] = love.audio.newSource('music/flap.mp3', 'static'),
