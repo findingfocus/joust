@@ -3,6 +3,9 @@ PlayState = Class{__includes = BaseState}
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 36 - 24, 16, 24)
 	platform1 = Platform(VIRTUAL_WIDTH / 3, VIRTUAL_HEIGHT / 2, 80, 4)
+	groundPlatform = Platform(0, VIRTUAL_HEIGHT - player1.height - GROUND_OFFSET, VIRTUAL_WIDTH, 36)
+	collidablePlatforms = {groundPlatform, platform1}
+
 end
 
 function PlayState:update(dt)

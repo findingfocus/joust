@@ -28,6 +28,10 @@ function Ostrich:init(x, y, width, height)
 	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
 
+function Ostrich:checkGrounded(collidablePlatforms)
+
+end
+
 function Ostrich:topCollides(collidable)
 	if (self.y < collidable.y + collidable.height and self.y > collidable.y) then
 		if (self.x < collidable.x + collidable.width and self.x + self.width > collidable.x) then
@@ -72,6 +76,10 @@ lastInput = {"right"}
 
 
 function Ostrich:update(dt)
+
+	for k, platform in pairs(collidablePlatforms) do
+		self:checkGrounded(platform)
+	end
 
 	--APPLY GRAVITY WHEN IN AIR
 	if not self.grounded then
