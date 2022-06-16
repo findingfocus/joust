@@ -30,13 +30,16 @@ end
 
 function Ostrich:checkGrounded(collidablePlatforms)
 	if self.y == collidablePlatforms.y - 24 then
-		--if self.x < collidablePlatforms.x + collidablePlatforms.width and self.x + self.width > collidablePlatforms.x then
-			--self.grounded = true
+		if self.x < collidablePlatforms.x + collidablePlatforms.width and self.x + self.width > collidablePlatforms.x then
+			self.grounded = true
 			return true
-		--end
+		else
+			return false
+		end
 	end
-	--self.grounded = false
 	return false
+	--self.grounded = false
+	
 end
 
 function Ostrich:topCollides(collidable)
@@ -83,12 +86,53 @@ lastInput = {"right"}
 
 
 function Ostrich:update(dt)
-
-	--MOVE COLLISION DETECTION INTO HERE SOON
-	--[[
+	---[[
 	for k, platform in pairs(collidablePlatforms) do
-		self:checkGrounded(platform)
+			--BOTTOM COLLIDES
+		if self:bottomCollides(platform) then
+			self.height = 24
+			self.y = platform.y - self.height
+			self.dy = 0
+			self.grounded = true
+		end
+--[[	THIS OFF FIXES PLAYER HEIGHT BUG
+		if self:checkGrounded(platform) then
+			self.grounded = true
+		else
+			self.grounded = false
+		end
+--]]
+		if self:topCollides(platform) then
+			self.y = platform.y + platform.height
+			self.dy = .8
+		end
+
+		--LEFT COLLIDES SETS POSITIVE DX
+		if self:leftCollides(platform) then
+			sounds['collide']:play()
+			self.x = platform.x + platform.width
+			self.dx = math.abs(self.dx)
+		end
+
+		--RIGHT COLLIDES SETS POSITIVE DX
+		if self:rightCollides(platform) then
+			sounds['collide']:play()
+			self.x = platform.x - self.width
+			self.dx = -self.dx
+		end
 	end
+	--]]
+
+
+
+	
+
+
+
+
+
+
+
 	--]]
 
 	--APPLY GRAVITY WHEN IN AIR
@@ -313,7 +357,7 @@ function Ostrich:update(dt)
 	end
 
 
---[[
+---[[
 		--PLAYER1 JUMPING
 	if love.keyboard.wasPressed('a') then
 		self.grounded = false
@@ -360,38 +404,6 @@ function Ostrich:update(dt)
 		end
 	end
 
-
---COLLIDE LOGIC
-	if self:topCollides(platform1) then
-		self.y = platform1.y + platform1.height
-		self.dy = .8
-	end
-
-	--LEFT COLLIDES SETS POSITIVE DX
-	if self:leftCollides(platform1) then
-		sounds['collide']:play()
-		self.x = platform1.x + platform1.width
-		self.dx = math.abs(self.dx)
-	end
-
-	--RIGHT COLLIDES SETS POSITIVE DX
-	if self:rightCollides(platform1) then
-		sounds['collide']:play()
-		self.x = platform1.x - self.width
-		self.dx = -self.dx
-	end
-
-	--BOTTOM COLLIDES
-	if self:bottomCollides(groundPlatform) then
-		self.y = groundPlatform.y - 24
-		--self.height = 24
-		self.dy = 0
-		self.grounded = true
-	end
-
-	if not self:checkGrounded(groundPlatform) then
-		self.grounded = false
-	end
 
 
 
@@ -458,6 +470,8 @@ end
 
 function Ostrich:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	love.graphics.print('topCheckGrounded: ' .. tostring(self:checkGrounded(platform1)))
+	love.graphics.print('groundCheckGrounded: ' .. tostring(self:checkGrounded(groundPlatform)), 0, 10)
 
 	if player1.facingRight then
 		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y) 
