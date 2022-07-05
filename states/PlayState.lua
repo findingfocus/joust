@@ -21,6 +21,7 @@ function PlayState:update(dt)
 		player1.grounded = false
 		player1.facingRight = true
 		player1.dx = 0
+		player1.dy = 0
 		sounds['leftStep']:stop()
 		sounds['rightStep']:stop()
 		sounds['skid']:stop()
@@ -70,7 +71,7 @@ function PlayState:render()
 		--'lastInputLocked = ' ..lastInput[1],
 		'PLAYER1.grounded: ' ..tostring(player1.grounded),
 		--'TOP COLL: ' .. tostring(player1:topCollides(platform1)),
-		'BOT COLL: ' .. tostring(player1:bottomCollides(groundPlatform)),
+		'BOT COLL: ' .. tostring(player1:bottomCollides(platform1)),
 		--'topcheckGrounded: ' .. tostring(player1:checkGrounded(groundPlatform)),
  		--'RIGHT COLL: ' .. tostring(player1:rightCollides(platform1)),
 		--'LEFT COLL: ' .. tostring(player1:leftCollides(platform1)),

@@ -30,8 +30,8 @@ end
 
 function Ostrich:checkGrounded(collidablePlatforms)
 	if self.y == collidablePlatforms.y - 24 then
-		if self.x < collidablePlatforms.x + collidablePlatforms.width and self.x + self.width > collidablePlatforms.x then
-			self.grounded = true
+		if self.x < collidablePlatforms.x + collidablePlatforms.width - BUFFER and self.x + self.width > collidablePlatforms.x + BUFFER then
+			--self.grounded = true
 			return true
 		else
 			return false
@@ -54,7 +54,7 @@ end
 
 function Ostrich:bottomCollides(collidable)
 	if (self.y + self.height > collidable.y and self.y + self.height < collidable.y + collidable.height) then
-		if (self.x < collidable.x + collidable.width and self.x + self.width > collidable.x) then
+		if (self.x < collidable.x + collidable.width - BUFFER and self.x + self.width > collidable.x + BUFFER) then
 			return true
 		end
 	end
@@ -63,7 +63,7 @@ function Ostrich:bottomCollides(collidable)
 end
 
 function Ostrich:rightCollides(collidable)
-	if (self.x + self.width > collidable.x and self.x + self.width < collidable.x + collidable.width) then
+	if (self.x + self.width > collidable.x + BUFFER / 2 and self.x + self.width < collidable.x + collidable.width) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			return true
 		end
@@ -73,7 +73,7 @@ function Ostrich:rightCollides(collidable)
 end
 
 function Ostrich:leftCollides(collidable)
-	if (self.x < collidable.x + collidable.width and self.x > collidable.x) then
+	if (self.x < collidable.x + collidable.width - BUFFER / 2 and self.x > collidable.x) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			return true
 		end
@@ -86,7 +86,11 @@ lastInput = {"right"}
 
 
 function Ostrich:update(dt)
-	---[[
+	
+
+	--[[
+
+	--CYCLE THROUGH PLATFORMS
 	for k, platform in pairs(collidablePlatforms) do
 			--BOTTOM COLLIDES
 		if self:bottomCollides(platform) then
@@ -101,7 +105,8 @@ function Ostrich:update(dt)
 		else
 			self.grounded = false
 		end
---]]
+--]
+
 		if self:topCollides(platform) then
 			self.y = platform.y + platform.height
 			self.dy = .8
@@ -123,12 +128,34 @@ function Ostrich:update(dt)
 	end
 	--]]
 
+	if self:bottomCollides(platform1) then
+		self.height = 24
+		self.y = platform1.y - self.height
+		self.dy = 0
+		self.grounded = true
+	end
 
+	if self:topCollides(platform1) then
+		self.y = platform1.y + platform1.height
+		--self.dy = .8
+		self.dy = math.abs(self.dy)
+	end
 
-	
+	if self:leftCollides(platform1) then
+		sounds['collide']:play()
+		self.x = platform1.x + platform1.width
+		self.dx = math.abs(self.dx)
+	end
 
+	if self:rightCollides(platform1) then
+		sounds['collide']:play()
+		self.x = platform1.x - self.width
+		self.dx = -self.dx
+	end
 
-
+	if not self:checkGrounded(platform1) then
+			self.grounded = false
+	end
 
 
 
