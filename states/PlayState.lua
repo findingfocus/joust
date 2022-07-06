@@ -3,8 +3,8 @@ PlayState = Class{__includes = BaseState}
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 90, 16, 24)
 	platform1 = Platform(VIRTUAL_WIDTH / 3, VIRTUAL_HEIGHT / 2, 80, 4)
-	groundPlatform = Platform(0, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH, 36)
-	collidablePlatforms = {groundPlatform, platform1}
+	groundPlatform = Platform(-BUFFER - 1, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (BUFFER * 2 + 2), 36)
+	collidablePlatforms = {platform1, groundPlatform}
 
 end
 
@@ -56,22 +56,23 @@ function PlayState:render()
 		'',
 		'PLAYER1.X: '..math.floor(player1.x),
 		'PLAYER1.Y: '..math.floor(player1.y),
-		'PLAYER1.facingRight: '..tostring(player1.facingRight),
+		--'PLAYER1.facingRight: '..tostring(player1.facingRight),
 		--'ANIMATION TIMER: ' ..tostring(animationTimer),
 		--'PLAYER1.speedTier: '..math.floor(player1.speedTier),
 		'PLAYER1.DY: ' ..tostring(string.format("%.2f", player1.dy)),
-		'PLAYER1.skid: ' ..tostring(player1.skid),
-		'PLAYER1.dx: ' ..tostring(string.format("%.2f", player1.dx)),
+		--'PLAYER1.skid: ' ..tostring(player1.skid),
+		'PLAYER1.DX: ' ..tostring(string.format("%.2f", player1.dx)),
 		--'justStoppedTimer: ' ..tostring(string.format("%.3f", player1.justStoppedTimer)),
 		--'justTurnedTimer: ' ..tostring(string.format("%.3f", player1.justTurnedTimer)),
 		--'justStopped = ' ..tostring(player1.justStopped),
 		--'justTurned = ' ..tostring(player1.justTurned),
 		--'love.keyboard.isDown(left) =' ..tostring(love.keyboard.isDown('left')),
-		'self.skid = ' ..tostring(player1.skid),
+		--'self.skid = ' ..tostring(player1.skid),
 		--'lastInputLocked = ' ..lastInput[1],
 		'PLAYER1.grounded: ' ..tostring(player1.grounded),
 		--'TOP COLL: ' .. tostring(player1:topCollides(platform1)),
-		'BOT COLL: ' .. tostring(player1:bottomCollides(platform1)),
+		'platform1 BotCol: ' .. tostring(player1:bottomCollides(platform1)),
+		'groundPlat BotCol: ' .. tostring(player1:bottomCollides(groundPlatform)),
 		--'topcheckGrounded: ' .. tostring(player1:checkGrounded(groundPlatform)),
  		--'RIGHT COLL: ' .. tostring(player1:rightCollides(platform1)),
 		--'LEFT COLL: ' .. tostring(player1:leftCollides(platform1)),

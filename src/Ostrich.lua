@@ -18,6 +18,7 @@ function Ostrich:init(x, y, width, height)
 	self.justTurned = false
 	self.lastInputLocked = false
 	self.alternate = false
+	--self.platform = groundPlatform
 	speedScale = 0
 	fps = 1
 	animationTimer = 2 / fps
@@ -88,24 +89,18 @@ lastInput = {"right"}
 function Ostrich:update(dt)
 	
 
-	--[[
+	---[[
 
 	--CYCLE THROUGH PLATFORMS
-	for k, platform in pairs(collidablePlatforms) do
+	for index, platform in pairs(collidablePlatform) do
 			--BOTTOM COLLIDES
 		if self:bottomCollides(platform) then
 			self.height = 24
 			self.y = platform.y - self.height
 			self.dy = 0
 			self.grounded = true
+			self.platform = platform
 		end
---[[	THIS OFF FIXES PLAYER HEIGHT BUG
-		if self:checkGrounded(platform) then
-			self.grounded = true
-		else
-			self.grounded = false
-		end
---]
 
 		if self:topCollides(platform) then
 			self.y = platform.y + platform.height
@@ -128,6 +123,16 @@ function Ostrich:update(dt)
 	end
 	--]]
 
+	--[[
+	--BUSTED FALLING LOGIC
+	if not self:checkGrounded(self.platform) then
+		self.grounded = false
+	end
+--]]
+
+
+
+--[[ --HARD CODED PLATFORM 1 Collision logic working ok, minus perpetual side collision if dx is slow
 	if self:bottomCollides(platform1) then
 		self.height = 24
 		self.y = platform1.y - self.height
@@ -156,6 +161,7 @@ function Ostrich:update(dt)
 	if not self:checkGrounded(platform1) then
 			self.grounded = false
 	end
+--]]
 
 
 
