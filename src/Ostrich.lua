@@ -18,7 +18,6 @@ function Ostrich:init(x, y, width, height)
 	self.justTurned = false
 	self.lastInputLocked = false
 	self.alternate = false
-	--self.platform = groundPlatform
 	speedScale = 0
 	fps = 1
 	animationTimer = 2 / fps
@@ -56,6 +55,7 @@ end
 function Ostrich:bottomCollides(collidable)
 	if (self.y + self.height > collidable.y and self.y + self.height < collidable.y + collidable.height) then
 		if (self.x < collidable.x + collidable.width - BUFFER and self.x + self.width > collidable.x + BUFFER) then
+			ground = collidable
 			return true
 		end
 	end
@@ -66,7 +66,10 @@ end
 function Ostrich:rightCollides(collidable)
 	if (self.x + self.width > collidable.x + BUFFER / 2 and self.x + self.width < collidable.x + collidable.width) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
-			return true
+			if self.facingRight then
+				self.x = collidable.x - self.width
+				return true
+			end
 		end
 	end
 
@@ -76,7 +79,10 @@ end
 function Ostrich:leftCollides(collidable)
 	if (self.x < collidable.x + collidable.width - BUFFER / 2 and self.x > collidable.x) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
-			return true
+			if not self.facingRight then
+				self.x = collidable.x + collidable.width
+				return true
+			end
 		end
 	end
 
@@ -92,7 +98,7 @@ function Ostrich:update(dt)
 	---[[
 
 	--CYCLE THROUGH PLATFORMS
-	for index, platform in pairs(collidablePlatform) do
+	for index, platform in pairs(collidablePlatforms) do
 			--BOTTOM COLLIDES
 		if self:bottomCollides(platform) then
 			self.height = 24
@@ -123,10 +129,12 @@ function Ostrich:update(dt)
 	end
 	--]]
 
-	--[[
+	---[[
 	--BUSTED FALLING LOGIC
-	if not self:checkGrounded(self.platform) then
+
+	if not self:checkGrounded(ground) then
 		self.grounded = false
+		ground = Platform('name', 1, 1, 1, 1)
 	end
 --]]
 
@@ -393,6 +401,7 @@ function Ostrich:update(dt)
 ---[[
 		--PLAYER1 JUMPING
 	if love.keyboard.wasPressed('a') then
+		ground = Platform('name', 1, 1, 1, 1)
 		self.grounded = false
 		sounds['flap']:play()
 
