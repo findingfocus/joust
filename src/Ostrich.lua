@@ -284,19 +284,19 @@ function Ostrich:update(dt)
 
 	if self.grounded then
 		self.height = 24
-		--[[SKID UPON LANDING __MAKE THIS ONLY PLAY ONCE***
+		---[[SKID UPON LANDING __MAKE THIS ONLY PLAY ONCE***
 		if love.keyboard.isDown('left') and lastInput[1] == "left" and self.dx > .7 and not self.skid then
-			self.skid = true
 			sounds['leftStep']:stop()
 			sounds['rightStep']:stop()
 			sounds['skid']:play()
+			self.skid = true
 		end
 
 		if love.keyboard.isDown('right') and lastInput[1] == "right" and self.dx < -.7 and not self.skid then
-			self.skid = true
-			sounds['skid']:play()
 			sounds['leftStep']:stop()
 			sounds['rightStep']:stop()
+			sounds['skid']:play()
+			self.skid = true
 		end
 		--]]
 		if self.facingRight then
@@ -377,6 +377,7 @@ function Ostrich:update(dt)
 		
 	--AERIAL HANDLING
 	elseif not self.grounded then
+		self.skid = false
 		self.height = 16
 		--TURNING LEFT MIDAIR
 		if love.keyboard.wasPressed('left') and self.facingRight then
@@ -419,10 +420,46 @@ function Ostrich:update(dt)
 	--]]
 
 
+	if self.dx == 0 then
+		sounds['skid']:stop()
+		self.skid = false
+		self.justStopped = true
+	elseif self.dx > 0 and self.skid and self.grounded then
+		self.dx = math.max(0, self.dx - .08)
+		self.x = self.x + self.dx
+	elseif self.dx < 0 and self.skid and self.grounded then
+		self.dx = math.min(0, self.dx + .08)
+		self.x = self.x + self.dx
+	else
+		self.x = self.x + self.dx
+	end
+
+	--[[
+	if self.dx == 0 then
+		sounds['skid']:stop()
+		self.skid = false
+		self.justStopped = true
+	elseif self.dx > 0 and not self.skid then
+		self.x = self.x + self.dx
+	elseif self.dx > 0 and self.skid and self.grounded then
+		self.dx = math.max(0, self.dx - .08)
+		self.x = self.x + self.dx
+	elseif self.dx > 0 and self.skid and not self.grounded then
+		self.x = self.x + self.dx
+	elseif self.dx < 0 and not self.skid then
+		self.x = self.x + self.dx
+	elseif self.dx < 0 and self.skid and self.grounded then
+		self.dx = math.min(0, self.dx + .08)
+		self.x = self.x + self.dx
+	elseif self.dx < 0 and self.skid and not self.grounded then
+		self.x = self.x + self.dx
+	end
+	--]]
+--[[
 		--UPDATES PLAYER X RIGHT VELOCITY BASED ON DX, DETERMINES SKID STOP
 	if self.dx >= 0 and not self.skid then
 		self.x = self.x + self.dx
-	elseif self.dx >= 0 and self.skid then
+	elseif self.dx >= 0 and self.skid and self.grounded then
 		self.dx = math.max(0, self.dx - .08)
 		self.x = self.x + self.dx
 		if self.dx == 0 then
@@ -436,7 +473,7 @@ function Ostrich:update(dt)
 	--UPDATES PLAYER X LEFT VELOCITY BASED ON DX, DETERMINES SKID STOP
 	if self.dx <= 0 and not self.skid then
 		self.x = self.x + self.dx
-	elseif self.dx <= 0 and self.skid then
+	elseif self.dx <= 0 and self.skid and self.grounded then
 		self.dx = math.min(0, self.dx + .08)
 		self.x = self.x + self.dx
 		if self.dx == 0 then
@@ -445,7 +482,7 @@ function Ostrich:update(dt)
 			self.justStopped = true
 		end
 	end
-
+--]]
 
 
 
