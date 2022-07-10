@@ -18,7 +18,6 @@ function Ostrich:init(x, y, width, height)
 	self.justTurned = false
 	self.lastInputLocked = false
 	self.alternate = false
-	speedScale = 0
 	fps = 1
 	animationTimer = 2 / fps
 	self.jumpTimer = 0
@@ -31,15 +30,12 @@ end
 function Ostrich:checkGrounded(collidablePlatforms)
 	if self.y == collidablePlatforms.y - 24 then
 		if self.x < collidablePlatforms.x + collidablePlatforms.width - BUFFER and self.x + self.width > collidablePlatforms.x + BUFFER then
-			--self.grounded = true
 			return true
 		else
 			return false
 		end
 	end
 	return false
-	--self.grounded = false
-	
 end
 
 function Ostrich:topCollides(collidable)
@@ -127,54 +123,10 @@ function Ostrich:update(dt)
 			self.dx = -self.dx
 		end
 	end
-	--]]
-
-	---[[
-	--BUSTED FALLING LOGIC
 
 	if not self:checkGrounded(ground) then
 		self.grounded = false
-		ground = Platform('name', 1, 1, 1, 1)
 	end
---]]
-
-
-
---[[ --HARD CODED PLATFORM 1 Collision logic working ok, minus perpetual side collision if dx is slow
-	if self:bottomCollides(platform1) then
-		self.height = 24
-		self.y = platform1.y - self.height
-		self.dy = 0
-		self.grounded = true
-	end
-
-	if self:topCollides(platform1) then
-		self.y = platform1.y + platform1.height
-		--self.dy = .8
-		self.dy = math.abs(self.dy)
-	end
-
-	if self:leftCollides(platform1) then
-		sounds['collide']:play()
-		self.x = platform1.x + platform1.width
-		self.dx = math.abs(self.dx)
-	end
-
-	if self:rightCollides(platform1) then
-		sounds['collide']:play()
-		self.x = platform1.x - self.width
-		self.dx = -self.dx
-	end
-
-	if not self:checkGrounded(platform1) then
-			self.grounded = false
-	end
---]]
-
-
-
-
-	--]]
 
 	--APPLY GRAVITY WHEN IN AIR
 	if not self.grounded then
@@ -182,25 +134,6 @@ function Ostrich:update(dt)
 	end
 
 	self.y = self.y + self.dy
-	
-	--CLAMPS Y TO GROUND
-	--self.y = math.min(VIRTUAL_HEIGHT - self.height - GROUND_OFFSET, self.y + self.dy)
-
-	--GROUNDING LOGIC
-	
---[[ OLD BUSTED GROUNDED LOGIC
-	if self.y == VIRTUAL_HEIGHT - self.height - GROUND_OFFSET then
-		self.height = 24
-		--Sets y to appropriate height
-		self.y = VIRTUAL_HEIGHT - self.height - GROUND_OFFSET --depends on where ground is, right now its only the bottom floor
-		self.grounded = true
-		self.dy = 0
-
-	elseif self.y < VIRTUAL_HEIGHT - self.height - 36 then
-		self.grounded = false
-		self.height = 16
-	end
-	-]]
 
 	--ENSURES OSTRICH FACING DIRECTION OF DX - SKID LOGIC FOR > SPEED 2
 	if self.grounded and self.dx > 0 then
@@ -398,11 +331,8 @@ function Ostrich:update(dt)
 		end
 	end
 
-
----[[
 		--PLAYER1 JUMPING
 	if love.keyboard.wasPressed('a') then
-		ground = Platform('name', 1, 1, 1, 1)
 		self.grounded = false
 		sounds['flap']:play()
 
@@ -417,7 +347,6 @@ function Ostrich:update(dt)
 			self.dy = -.4
 		end
 	end
-	--]]
 
 
 	if self.dx == 0 then
@@ -433,59 +362,6 @@ function Ostrich:update(dt)
 	else
 		self.x = self.x + self.dx
 	end
-
-	--[[
-	if self.dx == 0 then
-		sounds['skid']:stop()
-		self.skid = false
-		self.justStopped = true
-	elseif self.dx > 0 and not self.skid then
-		self.x = self.x + self.dx
-	elseif self.dx > 0 and self.skid and self.grounded then
-		self.dx = math.max(0, self.dx - .08)
-		self.x = self.x + self.dx
-	elseif self.dx > 0 and self.skid and not self.grounded then
-		self.x = self.x + self.dx
-	elseif self.dx < 0 and not self.skid then
-		self.x = self.x + self.dx
-	elseif self.dx < 0 and self.skid and self.grounded then
-		self.dx = math.min(0, self.dx + .08)
-		self.x = self.x + self.dx
-	elseif self.dx < 0 and self.skid and not self.grounded then
-		self.x = self.x + self.dx
-	end
-	--]]
---[[
-		--UPDATES PLAYER X RIGHT VELOCITY BASED ON DX, DETERMINES SKID STOP
-	if self.dx >= 0 and not self.skid then
-		self.x = self.x + self.dx
-	elseif self.dx >= 0 and self.skid and self.grounded then
-		self.dx = math.max(0, self.dx - .08)
-		self.x = self.x + self.dx
-		if self.dx == 0 then
-			sounds['skid']:stop()
-			self.skid = false
-			self.justStopped = true
-		end 
-	end
-
-
-	--UPDATES PLAYER X LEFT VELOCITY BASED ON DX, DETERMINES SKID STOP
-	if self.dx <= 0 and not self.skid then
-		self.x = self.x + self.dx
-	elseif self.dx <= 0 and self.skid and self.grounded then
-		self.dx = math.min(0, self.dx + .08)
-		self.x = self.x + self.dx
-		if self.dx == 0 then
-			sounds['skid']:stop()
-			self.skid = false
-			self.justStopped = true
-		end
-	end
---]]
-
-
-
 
 -- OSTRICH1 ANIMATION CYCLE
 
@@ -549,8 +425,8 @@ end
 
 function Ostrich:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('topCheckGrounded: ' .. tostring(self:checkGrounded(platform1)))
-	love.graphics.print('groundCheckGrounded: ' .. tostring(self:checkGrounded(groundPlatform)), 0, 10)
+	--love.graphics.print('topCheckGrounded: ' .. tostring(self:checkGrounded(platform1)))
+	--love.graphics.print('groundCheckGrounded: ' .. tostring(self:checkGrounded(groundPlatform)), 0, 10)
 
 	if player1.facingRight then
 		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y) 
