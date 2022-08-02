@@ -63,7 +63,6 @@ function Ostrich:rightCollides(collidable)
 	if (self.x + self.width > collidable.x + BUFFER / 2 and self.x + self.width < collidable.x + collidable.width) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			if self.facingRight then
-				self.x = collidable.x - self.width
 				return true
 			end
 		end
@@ -76,7 +75,6 @@ function Ostrich:leftCollides(collidable)
 	if (self.x < collidable.x + collidable.width - BUFFER / 2 and self.x > collidable.x) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			if not self.facingRight then
-				self.x = collidable.x + collidable.width
 				return true
 			end
 		end
@@ -105,22 +103,23 @@ function Ostrich:update(dt)
 		end
 
 		if self:topCollides(platform) then
+			self.dy = math.abs(self.dy) - GRAVITYNEGATE
 			self.y = platform.y + platform.height
-			self.dy = .8
 		end
 
 		--LEFT COLLIDES SETS POSITIVE DX
 		if self:leftCollides(platform) then
 			sounds['collide']:play()
-			self.x = platform.x + platform.width
 			self.dx = math.abs(self.dx)
 		end
 
 		--RIGHT COLLIDES SETS POSITIVE DX
 		if self:rightCollides(platform) then
 			sounds['collide']:play()
-			self.x = platform.x - self.width
-			self.dx = -self.dx
+			if self.dx > 0 then
+				self.dx = -self.dx
+			end
+			
 		end
 	end
 
@@ -147,7 +146,7 @@ function Ostrich:update(dt)
 	--BOUNCING OFF TOP
 	if self.y < 0 then
 		self.y = 0
-		self.dy = .8
+		self.dy = math.abs(self.dy) - GRAVITYNEGATE
 	end
 	
 	--LOOPS player to left side of screen
