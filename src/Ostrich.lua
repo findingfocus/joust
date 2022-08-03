@@ -99,7 +99,7 @@ function Ostrich:update(dt)
 			self.y = platform.y - self.height
 			self.dy = 0
 			self.grounded = true
-			self.platform = platform
+			--self.platform = platform
 		end
 
 		if self:topCollides(platform) then

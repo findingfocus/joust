@@ -2,9 +2,11 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 90, 16, 24)
-	platform1 = Platform('platform1Name', VIRTUAL_WIDTH / 3, VIRTUAL_HEIGHT / 2, 80, 4)
-	groundPlatform = Platform('groundPlatformName', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
-	collidablePlatforms = {platform1, groundPlatform}
+	--platform2 = Platform('platform1R', 262, 45, 69, 8)
+	platform1 = Platform('platform1L', -30, 45, 69, 8)
+
+	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
+	collidablePlatforms = {groundPlatform, platform1}
 	ground = Platform('name', 1, 1, 1, 1)
 
 end
@@ -84,6 +86,7 @@ function PlayState:render()
 
 	player1:render()
 	platform1:render()
+	--platform2:render()
 
 	--KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
