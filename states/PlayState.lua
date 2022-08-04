@@ -1,12 +1,17 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 90, 16, 24)
-	--platform2 = Platform('platform1R', 262, 45, 69, 8)
-	platform1 = Platform('platform1L', -30, 45, 69, 8)
+	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
+	platform1 = Platform('platform1R', 262, 45, 69, 7)
+	platform1L = Platform('platform1L', -30, 45, 69, 7)
+	platform2 = Platform('platform2', 76, 55, 110, 7)
+	platform3 = Platform('platform3', 212, 104, 61, 7)
+	platform4 = Platform('platform4', 262, 112, 79, 7)
+	platform4L = Platform('platform4L', -30, 112, 79, 7)
+	platform5 = Platform('platform5', 96, 140, 79, 7)
 
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
-	collidablePlatforms = {groundPlatform, platform1}
+	collidablePlatforms = {groundPlatform, platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 	ground = Platform('name', 1, 1, 1, 1)
 
 end
@@ -19,7 +24,7 @@ function PlayState:update(dt)
 
 	if love.keyboard.wasPressed('r') then
 		player1.x = VIRTUAL_WIDTH / 3 - 8
-		player1.y = VIRTUAL_HEIGHT - 90
+		player1.y = VIRTUAL_HEIGHT - 65
 		player1.skid = false
 		player1.grounded = false
 		player1.facingRight = true
@@ -86,7 +91,12 @@ function PlayState:render()
 
 	player1:render()
 	platform1:render()
-	--platform2:render()
+	platform1L:render()
+	platform2:render()
+	platform3:render()
+	platform4:render()
+	platform4L:render()
+	platform5:render()
 
 	--KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
