@@ -25,10 +25,11 @@ function Ostrich:init(x, y, width, height)
 	totalFrames = 4
 	self.xoffset = self.width
 	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+	self.ground = Platform('name', 1, 1, 1, 1)
 end
 
 function Ostrich:checkGrounded(collidablePlatforms)
-	if self.y == collidablePlatforms.y - 24 then
+	if self.y == collidablePlatforms.y - self.height then
 		if self.x < collidablePlatforms.x + collidablePlatforms.width - BUFFER and self.x + self.width > collidablePlatforms.x + BUFFER then
 			return true
 		else
@@ -40,7 +41,7 @@ end
 
 function Ostrich:topCollides(collidable)
 	if (self.y < collidable.y + collidable.height and self.y > collidable.y) then
-		if (self.x < collidable.x + collidable.width and self.x + self.width > collidable.x) then
+		if (self.x < collidable.x + collidable.width -BUFFER and self.x + self.width > collidable.x + BUFFER) then
 			return true
 		end
 	end
@@ -51,7 +52,6 @@ end
 function Ostrich:bottomCollides(collidable)
 	if (self.y + self.height > collidable.y and self.y + self.height < collidable.y + collidable.height) then
 		if (self.x < collidable.x + collidable.width - BUFFER and self.x + self.width > collidable.x + BUFFER) then
-			ground = collidable
 			return true
 		end
 	end
@@ -99,7 +99,10 @@ function Ostrich:update(dt)
 			self.y = platform.y - self.height
 			self.dy = 0
 			self.grounded = true
-			--self.platform = platform
+		end
+
+		if self:checkGrounded(platform) then
+			self.ground = platform
 		end
 
 		if self:topCollides(platform) then
@@ -123,9 +126,10 @@ function Ostrich:update(dt)
 		end
 	end
 
-	if not self:checkGrounded(ground) then
+	if not self:checkGrounded(self.ground) then
 		self.grounded = false
 	end
+
 
 	--APPLY GRAVITY WHEN IN AIR
 	if not self.grounded then

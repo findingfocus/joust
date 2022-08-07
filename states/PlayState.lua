@@ -12,7 +12,6 @@ function PlayState:init()
 
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	collidablePlatforms = {groundPlatform, platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-	ground = Platform('name', 1, 1, 1, 1)
 
 end
 
@@ -23,8 +22,8 @@ function PlayState:update(dt)
 	end
 
 	if love.keyboard.wasPressed('r') then
-		player1.x = VIRTUAL_WIDTH / 3 - 8
-		player1.y = VIRTUAL_HEIGHT - 65
+		player1.x = platform4L.x + platform4L.width - player1.width--VIRTUAL_WIDTH / 3 - 8
+		player1.y = platform4L.y - player1.height--VIRTUAL_HEIGHT - 65
 		player1.skid = false
 		player1.grounded = false
 		player1.facingRight = true
@@ -81,6 +80,9 @@ function PlayState:render()
 		--'TOP COLL: ' .. tostring(player1:topCollides(platform1)),
 		'platform1 BotCol: ' .. tostring(player1:bottomCollides(platform1)),
 		'groundPlat BotCol: ' .. tostring(player1:bottomCollides(groundPlatform)),
+		'checkedGround4L: ' .. tostring(player1:checkGrounded(platform4L)),
+		'checkedGround4: ' .. tostring(player1:checkGrounded(platform4)),
+		'GROUND: ' .. tostring(player1.ground.name),
 		--'name: ' .. tostring(ground),
 		--'topcheckGrounded: ' .. tostring(player1:checkGrounded(groundPlatform)),
  		--'RIGHT COLL: ' .. tostring(player1:rightCollides(platform1)),
@@ -90,9 +92,9 @@ function PlayState:render()
 	}, '\n'))
 
 	player1:render()
-	platform1:render()
-	platform1L:render()
-	platform2:render()
+	--platform1:render()
+	--platform1L:render()
+	--platform2:render()
 	platform3:render()
 	platform4:render()
 	platform4L:render()
