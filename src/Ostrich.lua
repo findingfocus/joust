@@ -20,6 +20,7 @@ function Ostrich:init(x, y, width, height)
 	self.alternate = false
 	fps = 1
 	animationTimer = 2 / fps
+	collideTimer = 0
 	self.jumpTimer = 0
 	self.frame = 1
 	totalFrames = 4
@@ -62,9 +63,7 @@ end
 function Ostrich:rightCollides(collidable)
 	if (self.x + self.width > collidable.x + BUFFER / 2 and self.x + self.width < collidable.x + collidable.width) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
-			if self.facingRight then
-				return true
-			end
+			return true
 		end
 	end
 
@@ -74,9 +73,7 @@ end
 function Ostrich:leftCollides(collidable)
 	if (self.x < collidable.x + collidable.width - BUFFER / 2 and self.x > collidable.x) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
-			if not self.facingRight then
-				return true
-			end
+			return true
 		end
 	end
 
@@ -112,17 +109,38 @@ function Ostrich:update(dt)
 
 		--LEFT COLLIDES SETS POSITIVE DX
 		if self:leftCollides(platform) then
-			sounds['collide']:play()
+			if collideTimer == 0 then
+				sounds['collide']:play()
+			end
+
+			collideTimer = collideTimer + dt
+
+			if collideTimer > .5 then
+				collideTimer = 0
+			end
 			self.dx = math.abs(self.dx)
+		else
+			collideTimer = 0
 		end
+
 
 		--RIGHT COLLIDES SETS POSITIVE DX
 		if self:rightCollides(platform) then
-			sounds['collide']:play()
+			if collideTimer == 0 then
+				sounds['collide']:play()
+			end
+
+			collideTimer = collideTimer + dt
+
+			if collideTimer > .5 then
+				collideTimer = 0
+			end
+
 			if self.dx > 0 then
 				self.dx = -self.dx
 			end
-			
+		else
+			collideTimer = 0
 		end
 	end
 
