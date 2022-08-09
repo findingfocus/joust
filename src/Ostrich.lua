@@ -20,7 +20,6 @@ function Ostrich:init(x, y, width, height)
 	self.alternate = false
 	fps = 1
 	animationTimer = 2 / fps
-	collideTimer = 0
 	self.jumpTimer = 0
 	self.frame = 1
 	totalFrames = 4
@@ -42,7 +41,7 @@ end
 
 function Ostrich:topCollides(collidable)
 	if (self.y < collidable.y + collidable.height and self.y > collidable.y) then
-		if (self.x < collidable.x + collidable.width -BUFFER and self.x + self.width > collidable.x + BUFFER) then
+		if (self.x < collidable.x + collidable.width - BUFFER / 3 and self.x + self.width > collidable.x + BUFFER / 3) then
 			return true
 		end
 	end
@@ -102,46 +101,30 @@ function Ostrich:update(dt)
 			self.ground = platform
 		end
 
+
+
 		if self:topCollides(platform) then
 			self.dy = math.abs(self.dy) - GRAVITYNEGATE
-			self.y = platform.y + platform.height
+			self.y = platform.y + platform.height + 1
 		end
 
 		--LEFT COLLIDES SETS POSITIVE DX
 		if self:leftCollides(platform) then
-			if collideTimer == 0 then
+			if self.dx > .1 or self.dx < -.1 then
 				sounds['collide']:play()
 			end
-
-			collideTimer = collideTimer + dt
-
-			if collideTimer > .5 then
-				collideTimer = 0
-			end
 			self.dx = math.abs(self.dx)
-		else
-			collideTimer = 0
 		end
-
 
 		--RIGHT COLLIDES SETS POSITIVE DX
 		if self:rightCollides(platform) then
-			if collideTimer == 0 then
+			if self.dx > .1 or self.dx < -.1 then
 				sounds['collide']:play()
 			end
-
-			collideTimer = collideTimer + dt
-
-			if collideTimer > .5 then
-				collideTimer = 0
-			end
-
 			if self.dx > 0 then
 				self.dx = -self.dx
 			end
-		else
-			collideTimer = 0
-		end
+		end	
 	end
 
 	if not self:checkGrounded(self.ground) then
@@ -360,12 +343,12 @@ function Ostrich:update(dt)
 		--JUMPING DY
 		if (self.dy < -.5) then
 			self.dy = -1.5
-		elseif(self.dy < -.4) then
+		elseif(self.dy < -.3) then
 			self.dy = -.7
-		elseif (self.dy < -.2) then
-			self.dy = -.6
+		elseif (self.dy < -.1) then
+			self.dy = -.5
 		else
-			self.dy = -.4
+			self.dy = -.3
 		end
 	end
 
