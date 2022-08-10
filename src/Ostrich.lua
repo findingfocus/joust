@@ -101,12 +101,13 @@ function Ostrich:update(dt)
 			self.ground = platform
 		end
 
-
-
 		if self:topCollides(platform) then
-			self.dy = math.abs(self.dy) - GRAVITYNEGATE
-			self.y = platform.y + platform.height + 1
+			if self.dy < 0 then
+				self.dy = math.abs(self.dy) - GRAVITYNEGATE
+				self.y = platform.y + platform.height + 1
+			end
 		end
+
 
 		--LEFT COLLIDES SETS POSITIVE DX
 		if self:leftCollides(platform) then
@@ -222,14 +223,14 @@ function Ostrich:update(dt)
 	if self.grounded then
 		self.height = 24
 		---[[SKID UPON LANDING __MAKE THIS ONLY PLAY ONCE***
-		if love.keyboard.isDown('left') and lastInput[1] == "left" and self.dx > .7 and not self.skid then
+		if love.keyboard.isDown('left') and lastInput[1] == "left" and self.dx >= SKIDTHRESHOLD and not self.skid then
 			sounds['leftStep']:stop()
 			sounds['rightStep']:stop()
 			sounds['skid']:play()
 			self.skid = true
 		end
 
-		if love.keyboard.isDown('right') and lastInput[1] == "right" and self.dx < -.7 and not self.skid then
+		if love.keyboard.isDown('right') and lastInput[1] == "right" and self.dx <= -SKIDTHRESHOLD and not self.skid then
 			sounds['leftStep']:stop()
 			sounds['rightStep']:stop()
 			sounds['skid']:play()

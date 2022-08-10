@@ -83,7 +83,6 @@ function PlayState:render()
 		--'checkedGround4L: ' .. tostring(player1:checkGrounded(platform4L)),
 		--'checkedGround4: ' .. tostring(player1:checkGrounded(platform4)),
 		'GROUND: ' .. tostring(player1.ground.name),
-		'collideTimer: ' .. tostring(collideTimer),
 		--'topcollides5: ' .. tostring(player1:topCollides(platform5)),
 		--'name: ' .. tostring(ground),
 		--'topcheckGrounded: ' .. tostring(player1:checkGrounded(groundPlatform)),
