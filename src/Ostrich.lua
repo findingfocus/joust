@@ -41,7 +41,7 @@ end
 
 function Ostrich:topCollides(collidable)
 	if (self.y < collidable.y + collidable.height and self.y > collidable.y) then
-		if (self.x < collidable.x + collidable.width - BUFFER / 3 and self.x + self.width > collidable.x + BUFFER / 3) then
+		if (self.x < collidable.x + collidable.width - BUFFER and self.x + self.width > collidable.x + BUFFER) then
 			return true
 		end
 	end
@@ -434,7 +434,7 @@ function Ostrich:render()
 	--love.graphics.print('groundCheckGrounded: ' .. tostring(self:checkGrounded(groundPlatform)), 0, 10)
 
 	if player1.facingRight then
-		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y) 
+		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, 1, 1) 
 	else
 		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, -1, 1, self.width)
 	end

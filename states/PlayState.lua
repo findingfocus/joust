@@ -99,7 +99,8 @@ function PlayState:render()
 	platform3:render()
 	platform4:render()
 	platform4L:render()
-	platform5:render()
+	--platform5:render()
+	love.graphics.draw(platformLeft, 96, 140)
 
 	--KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

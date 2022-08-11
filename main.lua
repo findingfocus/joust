@@ -12,6 +12,8 @@ function love.load()
 	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)
 
 	playerAtlas = love.graphics.newImage('src/pics/joustPlayerAtlas2.png')
+	platformLeft = love.graphics.newImage('src/pics/platformLeft.png')
+	platformRight = love.graphics.newImage('src/pics/platformRight.png')
 	keyloggerPlate = love.graphics.newImage('src/pics/keyloggerBackplate.png')
 	keylogger1 = love.graphics.newImage('src/pics/keylogger1.png')
 	keylogger2 = love.graphics.newImage('src/pics/keylogger2.png')
