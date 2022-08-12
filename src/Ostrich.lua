@@ -87,6 +87,18 @@ function Ostrich:update(dt)
 
 	---[[
 
+	--COLLISION OF MAIN GROUND PLATFORM
+	if self:bottomCollides(groundPlatform) then
+		self.height = 24
+		self.y = groundPlatform.y - self.height
+		self.dy = 0
+		self.grounded = true
+	end
+
+	if self:checkGrounded(groundPlatform) then
+		self.ground = groundPlatform
+	end
+
 	--CYCLE THROUGH PLATFORMS
 	for index, platform in pairs(collidablePlatforms) do
 			--BOTTOM COLLIDES

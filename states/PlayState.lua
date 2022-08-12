@@ -11,7 +11,7 @@ function PlayState:init()
 	platform5 = Platform('platform5', 96, 140, 79, 7)
 
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
-	collidablePlatforms = {groundPlatform, platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
+	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 
 end
 
@@ -56,6 +56,11 @@ function PlayState:render()
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
+	for k, v in pairs(collidablePlatforms) do 
+		v:render()
+	end
+
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.setFont(smallFont)
 	love.graphics.print(table.concat({
 		'',
@@ -93,14 +98,6 @@ function PlayState:render()
 	}, '\n'))
 
 	player1:render()
-	--platform1:render()
-	--platform1L:render()
-	--platform2:render()
-	platform3:render()
-	platform4:render()
-	platform4L:render()
-	--platform5:render()
-	love.graphics.draw(platformLeft, 96, 140)
 
 	--KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
