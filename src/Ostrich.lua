@@ -18,6 +18,8 @@ function Ostrich:init(x, y, width, height)
 	self.justTurned = false
 	self.lastInputLocked = false
 	self.alternate = false
+	collideTimer = 0
+	justCollided = false
 	fps = 1
 	animationTimer = 2 / fps
 	self.jumpTimer = 0
@@ -124,7 +126,10 @@ function Ostrich:update(dt)
 		--LEFT COLLIDES SETS POSITIVE DX
 		if self:leftCollides(platform) then
 			if self.dx > .1 or self.dx < -.1 then
-				sounds['collide']:play()
+				if collideTimer == 0 then
+					justCollided = true
+					sounds['collide']:play()
+				end
 			end
 			self.dx = math.abs(self.dx)
 		end
@@ -132,12 +137,23 @@ function Ostrich:update(dt)
 		--RIGHT COLLIDES SETS POSITIVE DX
 		if self:rightCollides(platform) then
 			if self.dx > .1 or self.dx < -.1 then
-				sounds['collide']:play()
+				if collideTimer == 0 then
+					justCollided = true
+					sounds['collide']:play()
+				end
 			end
 			if self.dx > 0 then
 				self.dx = -self.dx
 			end
 		end	
+
+		if justCollided then
+			collideTimer = collideTimer + dt
+			if collideTimer > COLLIDETIMERTHRESHOLD then
+				justCollided = false
+				collideTimer = 0
+			end
+		end
 	end
 
 	if not self:checkGrounded(self.ground) then
@@ -330,11 +346,11 @@ function Ostrich:update(dt)
 		self.skid = false
 		self.height = 16
 		--TURNING LEFT MIDAIR
-		if love.keyboard.wasPressed('left') and self.facingRight then
+		if love.keyboard.isDown('left') and lastInput[1] == 'left' then
 			self.facingRight = false
 		end
 
-		if love.keyboard.wasPressed('right') and not self.facingRight then
+		if love.keyboard.isDown('right') and lastInput[1] == 'right' then
 			self.facingRight = true
 		end
 
@@ -442,8 +458,6 @@ end
 
 function Ostrich:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	--love.graphics.print('topCheckGrounded: ' .. tostring(self:checkGrounded(platform1)))
-	--love.graphics.print('groundCheckGrounded: ' .. tostring(self:checkGrounded(groundPlatform)), 0, 10)
 
 	if player1.facingRight then
 		love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, 1, 1) 

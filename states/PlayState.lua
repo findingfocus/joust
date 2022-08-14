@@ -56,6 +56,8 @@ function PlayState:render()
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
+	player1:render()
+	
 	for k, v in pairs(collidablePlatforms) do 
 		v:render()
 	end
@@ -97,7 +99,7 @@ function PlayState:render()
 		--'flapped: ' ..tostring(player1.flapped),
 	}, '\n'))
 --]]
-	player1:render()
+	
 
 	--KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
