@@ -18,6 +18,9 @@ function love.load()
 	keylogger1 = love.graphics.newImage('src/pics/keylogger1.png')
 	keylogger2 = love.graphics.newImage('src/pics/keylogger2.png')
 	keylogger3 = love.graphics.newImage('src/pics/keylogger3.png')
+	particle = love.graphics.newImage('src/pics/particle.png')
+	bubble = love.graphics.newImage('src/pics/bubble.png')
+	pop = love.graphics.newImage('src/pics/pop.png')
 
 	sounds = {
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),

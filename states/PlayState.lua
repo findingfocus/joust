@@ -9,6 +9,8 @@ function PlayState:init()
 	platform4 = Platform('platform4', 262, 122, 79, 7)
 	platform4L = Platform('platform4L', -30, 122, 79, 7)
 	platform5 = Platform('platform5', 96, 150, 79, 7)--79width
+	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT)
+	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT)
 
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
@@ -34,8 +36,21 @@ function PlayState:update(dt)
 		sounds['skid']:stop()
 	end
 
-	player1:update(dt)
+	if lavaBubble1.popped then
+		leftSpawnPoint = {11, 22}
+		leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
+		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT)
+	end
 
+	if lavaBubble2.popped then
+		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 22}
+		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
+		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT)
+	end
+
+	player1:update(dt)
+	lavaBubble1:update(dt)
+	lavaBubble2:update(dt)
 end
 
 function PlayState:render()
@@ -43,7 +58,7 @@ function PlayState:render()
 
 	--lava stand-in
 	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - 13, VIRTUAL_WIDTH, 13)
+	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT, VIRTUAL_WIDTH, LAVAHEIGHT)
 
 
 	--draw ground top level **to be made retractable
@@ -57,7 +72,9 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	player1:render()
-	
+	lavaBubble1:render()
+	lavaBubble2:render()
+
 	for k, v in pairs(collidablePlatforms) do 
 		v:render()
 	end

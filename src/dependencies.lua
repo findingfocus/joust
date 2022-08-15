@@ -7,6 +7,7 @@ require '/src/slam'
 require '/src/constants'
 require '/src/Ostrich'
 require '/src/Platform'
+require '/src/LavaBubble'
 
 require '/src/StateMachine'
 require '/src/BaseState'
