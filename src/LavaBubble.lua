@@ -16,20 +16,24 @@ end
 function LavaBubble:update(dt)
 	counter = counter + dt
 
+	--Spawns particle at determined randomSpawn time
 	if counter > self.randomSpawn then
 		particleSpawn = true
 	end
 
+	--Moves particle upwards
 	if particleSpawn then
 		self.y = self.y - .2
 	end
 
+	--Triggers bubble spawn once particle at top of lava
 	if self.y < VIRTUAL_HEIGHT - LAVAHEIGHT - 2 then
 		self.y = VIRTUAL_HEIGHT - LAVAHEIGHT - 2
 		particleSpawn = false
 		bubbleSpawn = true	
 	end
 
+	--Triggers popSpawn
 	if bubbleSpawn then
 		bubbleTimer = bubbleTimer + dt
 		if bubbleTimer > .1 then
@@ -38,6 +42,7 @@ function LavaBubble:update(dt)
 		end
 	end
 
+	--Triggers popped
 	if popSpawn then
 		popTimer = popTimer + dt
 		if popTimer > .1 then
