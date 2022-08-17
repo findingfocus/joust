@@ -10,17 +10,20 @@ function LavaBubble:init(x, y)
 	bubbleTimer = 0
 	popTimer = 0
 	counter = 0
-	self.randomSpawn = math.random(4, 11)
+	randomSpawn = 3
 end
 
 function LavaBubble:update(dt)
 	counter = counter + dt
 
 	--Spawns particle at determined randomSpawn time
-	if counter > self.randomSpawn then
+	if counter > randomSpawn then
+		counter = 0
 		particleSpawn = true
+		--lavaBubble2.particleSpawn = true
+		--randomSpawn = math.random(2, 3)
+		--counter = 0
 	end
-
 	--Moves particle upwards
 	if particleSpawn then
 		self.y = self.y - .2

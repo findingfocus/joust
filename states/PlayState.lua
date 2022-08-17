@@ -11,12 +11,10 @@ function PlayState:init()
 	platform5 = Platform('platform5', 96, 150, 79, 7)--79width
 	self.Bubble1 = {}
 	self.Bubble2 = {}
-	self.randomSpawn = math.random(4, 11)
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT)
 	table.insert(self.Bubble1, lavaBubble1)
 	table.insert(self.Bubble2, lavaBubble2)
-	counter = 0
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 end
@@ -40,18 +38,13 @@ function PlayState:update(dt)
 		sounds['skid']:stop()
 	end
 
-	counter = counter + dt
+	
 
-	--Spawns particle at determined randomSpawn time
-	if counter > self.randomSpawn then
-		lavaBubble1.particleSpawn = true
-		lavaBubble2.particleSpawn = true
-		self.randomSpawn = math.random(7, 11)
-	end
 
-	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
-
+	lavaBubble1:update(dt)
+	
+---[[
 	if lavaBubble1.popped then
 		table.remove(self.Bubble1, 1)
 		leftSpawnPoint = {11, 22}
@@ -59,15 +52,20 @@ function PlayState:update(dt)
 		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT)
 		table.insert(self.Bubble1, lavaBubble1)
 	end
-
+--]]
+	
+	
+---[[
 	if lavaBubble2.popped then
 		table.remove(self.Bubble2, 1)
-		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 22}
+		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 33}
 		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
 		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT)
 		table.insert(self.Bubble2, lavaBubble2)
 	end
+--]]
 
+	
 
 
 --[[
@@ -113,6 +111,14 @@ function PlayState:render()
 	for k, v in pairs(collidablePlatforms) do 
 		v:render()
 	end
+
+	love.graphics.print('counter: ' .. tostring(counter), 10, 10)
+	love.graphics.print('randomspawn: ' .. tostring(randomSpawn), 10, 20)
+	love.graphics.print('particleSpawn: ' .. tostring(lavaBubble1.particleSpawn), 10, 30)
+	love.graphics.print('particleY: ' .. tostring(lavaBubble1.y), 10, 40)
+	--love.graphics.print(tostring(self.Bubble1[2]), 10, 20)
+	--love.graphics.print(tostring(self.Bubble1[3]), 10, 30)
+
 --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.setFont(smallFont)
@@ -168,5 +174,4 @@ function PlayState:render()
 	if love.keyboard.isDown('right') then
 		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end
-
 end
