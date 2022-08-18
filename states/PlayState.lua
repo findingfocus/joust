@@ -4,15 +4,15 @@ function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
 	platform1 = Platform('platform1R', 262, 55, 69, 7)
 	platform1L = Platform('platform1L', -30, 55, 69, 7)
-	platform2 = Platform('platform2', 76, 65, 110, 7)--110width
+	platform2 = Platform('platform2', 76, 65, 110, 7)
 	platform3 = Platform('platform3', 212, 114, 61, 7)
 	platform4 = Platform('platform4', 262, 122, 79, 7)
 	platform4L = Platform('platform4L', -30, 122, 79, 7)
-	platform5 = Platform('platform5', 96, 150, 79, 7)--79width
+	platform5 = Platform('platform5', 96, 150, 79, 7)
 	self.Bubble1 = {}
 	self.Bubble2 = {}
-	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT)
-	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT)
+	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
+	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	table.insert(self.Bubble1, lavaBubble1)
 	table.insert(self.Bubble2, lavaBubble2)
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
@@ -38,52 +38,30 @@ function PlayState:update(dt)
 		sounds['skid']:stop()
 	end
 
-	
-
-
-	lavaBubble2:update(dt)
 	lavaBubble1:update(dt)
+	lavaBubble2:update(dt)
+	player1:update(dt)
 	
----[[
+--REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
 	if lavaBubble1.popped then
 		table.remove(self.Bubble1, 1)
-		leftSpawnPoint = {11, 22}
+		leftSpawnPoint = {11, 35}
 		leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
-		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT)
+		leftSpawnRandom = {1, 2, 5, 5, 7}
+		leftSpawnRandom = leftSpawnRandom[math.random(#leftSpawnRandom)]
+		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT, leftSpawnRandom)
 		table.insert(self.Bubble1, lavaBubble1)
 	end
---]]
-	
-	
----[[
+
 	if lavaBubble2.popped then
 		table.remove(self.Bubble2, 1)
-		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 33}
+		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 45}
 		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
-		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT)
+		rightSpawnRandom = {1, 2, 5, 5, 7}
+		rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
+		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
 		table.insert(self.Bubble2, lavaBubble2)
 	end
---]]
-
-	
-
-
---[[
-	if lavaBubble1.popped then
-		leftSpawnPoint = {11, 22}
-		leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
-		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT)
-	end
-
-	if lavaBubble2.popped then
-		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 22}
-		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
-		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT)
-	end
-	--]]
-
-	player1:update(dt)
-
 end
 
 function PlayState:render()
@@ -112,10 +90,11 @@ function PlayState:render()
 		v:render()
 	end
 
-	love.graphics.print('counter: ' .. tostring(counter), 10, 10)
-	love.graphics.print('randomspawn: ' .. tostring(randomSpawn), 10, 20)
-	love.graphics.print('particleSpawn: ' .. tostring(lavaBubble1.particleSpawn), 10, 30)
-	love.graphics.print('particleY: ' .. tostring(lavaBubble1.y), 10, 40)
+	love.graphics.setFont(smallFont)
+	--love.graphics.print('counter: ' .. tostring(lavaBubble1.counter), 10, 10)
+	--love.graphics.print('randomspawn: ' .. tostring(lavaBubble1.randomSpawn), 10, 20)
+	--love.graphics.print('particleSpawn: ' .. tostring(lavaBubble1.particleSpawn), 10, 30)
+	--love.graphics.print('particleY: ' .. tostring(lavaBubble1.y), 10, 40)
 	--love.graphics.print(tostring(self.Bubble1[2]), 10, 20)
 	--love.graphics.print(tostring(self.Bubble1[3]), 10, 30)
 
