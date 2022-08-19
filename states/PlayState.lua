@@ -13,8 +13,6 @@ function PlayState:init()
 	self.Bubble2 = {}
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
-	table.insert(self.Bubble1, lavaBubble1)
-	table.insert(self.Bubble2, lavaBubble2)
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 end
@@ -44,23 +42,19 @@ function PlayState:update(dt)
 	
 --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
 	if lavaBubble1.popped then
-		table.remove(self.Bubble1, 1)
 		leftSpawnPoint = {11, 35}
 		leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
 		leftSpawnRandom = {1, 2, 5, 5, 7}
 		leftSpawnRandom = leftSpawnRandom[math.random(#leftSpawnRandom)]
 		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT, leftSpawnRandom)
-		table.insert(self.Bubble1, lavaBubble1)
 	end
 
 	if lavaBubble2.popped then
-		table.remove(self.Bubble2, 1)
 		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 45}
 		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
 		rightSpawnRandom = {1, 2, 5, 5, 7}
 		rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
 		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
-		table.insert(self.Bubble2, lavaBubble2)
 	end
 end
 

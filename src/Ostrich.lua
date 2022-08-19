@@ -18,16 +18,16 @@ function Ostrich:init(x, y, width, height)
 	self.justTurned = false
 	self.lastInputLocked = false
 	self.alternate = false
-	collideTimer = 0
-	justCollided = false
-	fps = 1
-	animationTimer = 2 / fps
+	self.collideTimer = 0 
+	self.justCollided = false
+	self.fps = 1
+	self.animationTimer = 2 / self.fps
 	self.jumpTimer = 0
 	self.frame = 1
-	totalFrames = 4
+	self.totalFrames = 4
 	self.xoffset = self.width
-	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	self.ground = Platform('name', 1, 1, 1, 1)
+	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
 
 function Ostrich:checkGrounded(collidablePlatforms)
@@ -126,8 +126,8 @@ function Ostrich:update(dt)
 		--LEFT COLLIDES SETS POSITIVE DX
 		if self:leftCollides(platform) then
 			if self.dx > .1 or self.dx < -.1 then
-				if collideTimer == 0 then
-					justCollided = true
+				if self.collideTimer == 0 then
+					self.justCollided = true
 					sounds['collide']:play()
 				end
 			end
@@ -137,8 +137,8 @@ function Ostrich:update(dt)
 		--RIGHT COLLIDES SETS POSITIVE DX
 		if self:rightCollides(platform) then
 			if self.dx > .1 or self.dx < -.1 then
-				if collideTimer == 0 then
-					justCollided = true
+				if self.collideTimer == 0 then
+					self.justCollided = true
 					sounds['collide']:play()
 				end
 			end
@@ -147,11 +147,11 @@ function Ostrich:update(dt)
 			end
 		end	
 
-		if justCollided then
-			collideTimer = collideTimer + dt
-			if collideTimer > COLLIDETIMERTHRESHOLD then
-				justCollided = false
-				collideTimer = 0
+		if self.justCollided then
+			self.collideTimer = self.collideTimer + dt
+			if self.collideTimer > COLLIDETIMERTHRESHOLD then
+				self.justCollided = false
+				self.collideTimer = 0
 			end
 		end
 	end
@@ -398,9 +398,9 @@ function Ostrich:update(dt)
 
 -- OSTRICH1 ANIMATION CYCLE
 
-	fps = (math.abs(self.dx)) * .42 - (math.abs(self.dx) / 20 - .15)
+	self.fps = (math.abs(self.dx)) * .42 - (math.abs(self.dx) / 20 - .15)
 
-	animationTimer = animationTimer - fps
+	self.animationTimer = self.animationTimer - self.fps
 
 	--STANDING STILL VIEWPORT
 	if self.dx == 0 and self.grounded then
@@ -410,9 +410,9 @@ function Ostrich:update(dt)
 
 	--PLAYER WALKING ANIMATION
 	if self.dx ~= 0 and self.grounded then 
-		animationTimer = animationTimer - dt
-		if animationTimer <= 0 then
-			animationTimer = 1 / fps
+		self.animationTimer = self.animationTimer - dt
+		if self.animationTimer <= 0 then
+			self.animationTimer = 1 / self.fps
 			self.frame = self.frame + 1
 			---[[
 			if self.frame == 2 and self.alternate then
@@ -425,7 +425,7 @@ function Ostrich:update(dt)
 			--]]
 	end
 			--LOOP FRAME BACK TO 1
-			if self.frame > totalFrames then self.frame = 1 end
+			if self.frame > self.totalFrames then self.frame = 1 end
 
 		self.xoffset = self.frame + (self.width * (self.frame - 1))
 		ostrichSprite:setViewport(self.xoffset, 0, self.width, self.height)
