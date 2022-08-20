@@ -26,8 +26,8 @@ function Ostrich:init(x, y, width, height)
 	self.frame = 1
 	self.totalFrames = 4
 	self.xoffset = self.width
-	self.ground = Platform('name', 1, 1, 1, 1)
 	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+	self.ground = Platform('name', 1, 1, 1, 1)
 end
 
 function Ostrich:checkGrounded(collidablePlatforms)

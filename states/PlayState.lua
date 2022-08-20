@@ -2,6 +2,7 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
+	vulture1 = Vulture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 65, 16, 24)
 	platform1 = Platform('platform1R', 262, 55, 69, 7)
 	platform1L = Platform('platform1L', -30, 55, 69, 7)
 	platform2 = Platform('platform2', 76, 65, 110, 7)
@@ -38,6 +39,7 @@ function PlayState:update(dt)
 
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
+	vulture1:update(dt)
 	player1:update(dt)
 	
 --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
@@ -77,6 +79,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	player1:render()
+	vulture1:render()
 	lavaBubble1:render()
 	lavaBubble2:render()
 

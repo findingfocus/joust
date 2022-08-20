@@ -6,6 +6,7 @@ require '/src/slam'
 
 require '/src/constants'
 require '/src/Ostrich'
+require '/src/Vulture'
 require '/src/Platform'
 require '/src/LavaBubble'
 
