@@ -2,7 +2,6 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
-	vulture1 = Vulture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 65, 16, 24)
 	platform1 = Platform('platform1R', 262, 55, 69, 7)
 	platform1L = Platform('platform1L', -30, 55, 69, 7)
 	platform2 = Platform('platform2', 76, 65, 110, 7)
@@ -16,6 +15,7 @@ function PlayState:init()
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
+	vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3)
 end
 
 function PlayState:update(dt)
