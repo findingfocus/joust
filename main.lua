@@ -22,6 +22,9 @@ function love.load()
 	particle = love.graphics.newImage('src/pics/particle.png')
 	bubble = love.graphics.newImage('src/pics/bubble.png')
 	pop = love.graphics.newImage('src/pics/pop.png')
+	explosion1 = love.graphics.newImage('src/pics/explosion1.png')
+	explosion2 = love.graphics.newImage('src/pics/explosion2.png')
+	explosion3 = love.graphics.newImage('src/pics/explosion3.png')
 
 	sounds = {
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),
