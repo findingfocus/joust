@@ -81,6 +81,16 @@ function Ostrich:leftCollides(collidable)
 	return false
 end
 
+function Ostrich:sideCollidesEnemy(enemy)
+	if self.x < enemy.x + enemy.width and self.x > enemy.x then
+		if self.y < enemy.y + enemy.height and self.y > enemy.y then
+			return true
+		end
+	end
+
+	return false
+end
+
 lastInput = {"right"}
 
 
@@ -153,6 +163,32 @@ function Ostrich:update(dt)
 				self.justCollided = false
 				self.collideTimer = 0
 			end
+		end
+	end
+
+	--Check Enemy Collision
+	if self:sideCollidesEnemy(vulture1) then
+		--Check X position
+		--PLAYER AND VULTURE ARE SAME HEIGHT
+		if self.x == vulture1.x then
+			--Once working, see if you can evaluate facingRight as boolean to compare if vulture bool is same
+			if self.facingRight and vulture1.facingRight then
+				--explode vulture into egg
+			else if not self.facingRight and not vulture1.facingRight then
+				--explode vulture into egg
+			end
+			--Moves vulture x to be not colliding
+			vulture1.x = self.x + self.width
+			--Reverse objects DX
+			self.dx = self.dx * -1
+			vulture1.dx = vulture1.dx * -1
+
+		--PLAYER JOUST IS HIGHER
+		elseif self.x < vulture1.x then
+			--explode vulture into egg
+		else
+		--VULTURE JOUST IS HIGHER
+			--player explodes
 		end
 	end
 
