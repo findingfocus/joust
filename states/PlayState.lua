@@ -25,13 +25,17 @@ function PlayState:update(dt)
 	end
 
 	if love.keyboard.wasPressed('r') then
+		--[[
 		player1.x = platform4L.x + platform4L.width - player1.width--VIRTUAL_WIDTH / 3 - 8
 		player1.y = platform4L.y - player1.height--VIRTUAL_HEIGHT - 65
 		player1.skid = false
 		player1.grounded = false
 		player1.facingRight = true
+		player1.exploded = false
 		player1.dx = 0
 		player1.dy = 0
+		--]]
+		player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
 		sounds['leftStep']:stop()
 		sounds['rightStep']:stop()
 		sounds['skid']:stop()
@@ -88,6 +92,9 @@ function PlayState:render()
 	end
 
 	love.graphics.setFont(smallFont)
+	love.graphics.print('enemy collide: ' .. tostring(player1:sideCollidesEnemy(vulture1)), 10, 10)
+	love.graphics.print('enemy.y: ' .. tostring(vulture1.y), 10, 20)
+
 	--love.graphics.print('counter: ' .. tostring(lavaBubble1.counter), 10, 10)
 	--love.graphics.print('randomspawn: ' .. tostring(lavaBubble1.randomSpawn), 10, 20)
 	--love.graphics.print('particleSpawn: ' .. tostring(lavaBubble1.particleSpawn), 10, 30)

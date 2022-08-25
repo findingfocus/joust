@@ -32,6 +32,7 @@ function Vulture:init(x, y, width, height, platformSpawn)
 	self.jumping = false
 	self.jumpCounter = math.random(3, 5)
 	self.spawning = true
+	self.exploded = false
 	self.platformSpawn = platformSpawn
 	self.spawnHeight = 0
 end
@@ -228,6 +229,7 @@ function Vulture:update(dt)
 				--PLAYER1 JUMPING
 			if self.jumping then
 				self.grounded = false
+				self.dy = -.2
 			end
 
 			self.jumping = false
