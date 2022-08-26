@@ -9,6 +9,7 @@ require '/src/Ostrich'
 require '/src/Vulture'
 require '/src/Platform'
 require '/src/LavaBubble'
+require '/src/Egg'
 
 require '/src/StateMachine'
 require '/src/BaseState'
