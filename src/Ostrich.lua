@@ -83,7 +83,7 @@ function Ostrich:leftCollides(collidable)
 	return false
 end
 
-function Ostrich:sideCollidesEnemy(enemy)
+function Ostrich:collidesEnemy(enemy)
 	if self.x < enemy.x + enemy.width and self.x > enemy.x then
 		if self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
 			return true
@@ -169,7 +169,7 @@ function Ostrich:update(dt)
 		end
 
 		--Check Enemy Collision
-		if self:sideCollidesEnemy(vulture1) then
+		if self:collidesEnemy(vulture1) then
 			--Check Y position
 			--PLAYER AND VULTURE ARE SAME HEIGHT
 			if self.y == vulture1.y then
