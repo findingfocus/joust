@@ -305,7 +305,7 @@ function Vulture:render()
 			love.graphics.draw(self.atlas, vultureSpawnViewport, self.x, self.y, 0, -1, 1, self.width)
 		end
 	else
-		if vulture1.facingRight then
+		if self.facingRight then
 			love.graphics.draw(self.atlas, vultureSprite, self.x, self.y, 0, 1, 1) 
 		else
 			love.graphics.draw(self.atlas, vultureSprite, self.x, self.y, 0, -1, 1, self.width)

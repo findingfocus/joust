@@ -15,7 +15,9 @@ function PlayState:init()
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-	vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3)
+	Vultures = {}
+	table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3))
+	table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2))
 end
 
 function PlayState:update(dt)
@@ -43,7 +45,11 @@ function PlayState:update(dt)
 
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
-	vulture1:update(dt)
+
+	for k, vulture in pairs(Vultures) do
+		vulture:update(dt)
+	end
+
 	player1:update(dt)
 	
 --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
@@ -83,17 +89,21 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	player1:render()
-	vulture1:render()
+
+	for k, vulture in pairs(Vultures) do
+		vulture:render()
+	end
+	
 	lavaBubble1:render()
 	lavaBubble2:render()
 
-	for k, v in pairs(collidablePlatforms) do 
-		v:render()
+	for k, platform in pairs(collidablePlatforms) do 
+		platform:render()
 	end
 
-	love.graphics.setFont(smallFont)
-	love.graphics.print('enemy collide: ' .. tostring(player1:sideCollidesEnemy(vulture1)), 10, 10)
-	love.graphics.print('enemy.y: ' .. tostring(vulture1.y), 10, 20)
+	--love.graphics.setFont(smallFont)
+	--love.graphics.print('enemy collide: ' .. tostring(player1:collidesEnemy(Vultures[1])), 10, 10)
+	--love.graphics.print('enemy.y: ' .. tostring(vulture1.y), 10, 20)
 
 	--love.graphics.print('counter: ' .. tostring(lavaBubble1.counter), 10, 10)
 	--love.graphics.print('randomspawn: ' .. tostring(lavaBubble1.randomSpawn), 10, 20)

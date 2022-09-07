@@ -169,28 +169,30 @@ function Ostrich:update(dt)
 		end
 
 		--Check Enemy Collision
-		if self:collidesEnemy(vulture1) then
-			--Check Y position
-			--PLAYER AND VULTURE ARE SAME HEIGHT
-			if self.y == vulture1.y then
-				--Once working, see if you can evaluate facingRight as boolean to compare if vulture bool is same
-				if self.facingRight and vulture1.facingRight then
+		for k, vulture in pairs(Vultures) do
+			if self:collidesEnemy(vulture) then
+				--Check Y position
+				--PLAYER AND VULTURE ARE SAME HEIGHT
+				if self.y == vulture.y then
+					--Once working, see if you can evaluate facingRight as boolean to compare if vulture bool is same
+					if self.facingRight and vulture.facingRight then
+						--explode vulture into egg
+					elseif not self.facingRight and not vulture.facingRight then
+						--explode vulture into egg
+					end
+					--Moves vulture x to be not colliding
+					--vulture1.x = self.x + self.width
+					--Reverse objects DX
+					self.dx = self.dx * -1
+					vulture.dx = vulture.dx * -1
+				--PLAYER JOUST IS HIGHER
+				elseif self.y < vulture.y then
 					--explode vulture into egg
-				elseif not self.facingRight and not vulture1.facingRight then
-					--explode vulture into egg
+				elseif self.y > vulture.y then
+				--VULTURE JOUST IS HIGHER
+					self.exploded = true
+					--player explodes
 				end
-				--Moves vulture x to be not colliding
-				--vulture1.x = self.x + self.width
-				--Reverse objects DX
-				self.dx = self.dx * -1
-				vulture1.dx = vulture1.dx * -1
-			--PLAYER JOUST IS HIGHER
-			elseif self.y < vulture1.y then
-				--explode vulture into egg
-			elseif self.y > vulture1.y then
-			--VULTURE JOUST IS HIGHER
-				self.exploded = true
-				--player explodes
 			end
 		end
 
