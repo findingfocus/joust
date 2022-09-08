@@ -18,12 +18,15 @@ function PlayState:init()
 	Vultures = {}
 	table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3))
 	table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2))
+	self.lives = 4
+	self.helpToggle = false
+	self.gameOver = false
 end
 
 function PlayState:update(dt)
 
 	if love.keyboard.wasPressed('h') then
-		gStateMachine:change('helpState')
+		self.helpToggle = not self.helpToggle
 	end
 
 	if love.keyboard.wasPressed('r') then
@@ -43,11 +46,31 @@ function PlayState:update(dt)
 		sounds['skid']:stop()
 	end
 
+	--Respawn Vultures
+	if love.keyboard.wasPressed('v') then
+		table.remove(Vultures)
+		table.remove(Vultures)
+		table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3))
+		table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2))
+	end
+
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
 
 	for k, vulture in pairs(Vultures) do
 		vulture:update(dt)
+	end
+
+	if player1.death then
+		if self.lives == 1 then
+			self.lives = self.lives - 1
+			self.gameOver = true
+		elseif self.lives == 0 then
+
+		else
+			self.lives = self.lives - 1
+			player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
+		end
 	end
 
 	player1:update(dt)
@@ -89,6 +112,8 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	player1:render()
+	love.graphics.setFont(smallFont)
+	love.graphics.print('LIVES: ' .. tostring(self.lives), 10, VIRTUAL_HEIGHT - 25)
 
 	for k, vulture in pairs(Vultures) do
 		vulture:render()
@@ -166,5 +191,25 @@ function PlayState:render()
 
 	if love.keyboard.isDown('right') then
 		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
+	end
+
+	if self.gameOver then
+		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
+		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+		love.graphics.setFont(smallFont)
+		love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center', 0, 1, 1, -1, -1)
+		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
+	end
+
+	if self.helpToggle and not self.gameOver then
+		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
+		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+		love.graphics.setFont(smallFont)
+		love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+		love.graphics.printf('TO FLY, REPEATEDLY PRESS \'A\'', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center', 0, 1, 1, -1, -1)
+		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+		love.graphics.printf('TO FLY, REPEATEDLY PRESS \'A\'', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
 	end
 end

@@ -48,8 +48,7 @@ function love.load()
 
 	gStateMachine = StateMachine {
 		['titleState'] = function() return TitleScreenState() end,
-		['playState'] = function() return PlayState() end,
-		['helpState'] = function() return HelpState() end
+		['playState'] = function() return PlayState() end
 	}
 
 	gStateMachine:change('playState')

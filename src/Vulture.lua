@@ -226,10 +226,10 @@ function Vulture:update(dt)
 				self.height = 16
 			end
 
-				--PLAYER1 JUMPING
+				--VULTURE JUMPING HEIGHT
 			if self.jumping then
 				self.grounded = false
-				self.dy = -.2
+				self.dy = -.4
 			end
 
 			self.jumping = false
@@ -249,7 +249,7 @@ function Vulture:update(dt)
 				vultureSprite:setViewport(1, 0, self.width, self.height)
 			end
 
-			--PLAYER WALKING ANIMATION
+			--VULTURE WALKING ANIMATION
 			if self.dx ~= 0 and self.grounded then 
 				self.animationTimer = self.animationTimer - dt
 				if self.animationTimer <= 0 then
@@ -272,7 +272,7 @@ function Vulture:update(dt)
 				vultureSprite:setViewport(self.xoffset, 0, self.width, self.height)
 			end
 
-			--PLAYER AERIAL ANIMATION
+			--VULTURE AERIAL ANIMATION
 				if not self.grounded then
 					vultureSprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
 					if self.jumping then
@@ -289,7 +289,7 @@ function Vulture:update(dt)
 					end
 				end
 				
-			--PLAYER SKID ANIMATION
+			--VULTURE SKID ANIMATION
 			if self.skid then
 				vultureSprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
 			end
