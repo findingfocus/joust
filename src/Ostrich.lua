@@ -115,7 +115,6 @@ function Ostrich:update(dt)
 
 		if self.y < self.platformSpawnY - self.height then
 			self.y = self.platformSpawnY - self.height
-			ostrichSpawnViewport:setViewport(1, 0, self.width, self.spawnHeight)
 			self.spawning = false
 			self.grounded = true
 		end
