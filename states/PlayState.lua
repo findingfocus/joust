@@ -1,7 +1,6 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
 	platform1 = Platform('platform1R', 262, 55, 69, 7)
 	platform1L = Platform('platform1L', -30, 55, 69, 7)
 	platform2 = Platform('platform2', 76, 65, 110, 7)
@@ -13,7 +12,6 @@ function PlayState:init()
 	self.Bubble2 = {}
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
-	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 	Vultures = {}
 	table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3))
@@ -21,6 +19,8 @@ function PlayState:init()
 	self.lives = 4
 	self.helpToggle = false
 	self.gameOver = false
+	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
+	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 end
 
 function PlayState:update(dt)
@@ -40,7 +40,7 @@ function PlayState:update(dt)
 		player1.dx = 0
 		player1.dy = 0
 		--]]
-		player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
+		player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y)
 		sounds['leftStep']:stop()
 		sounds['rightStep']:stop()
 		sounds['skid']:stop()
@@ -61,6 +61,7 @@ function PlayState:update(dt)
 		vulture:update(dt)
 	end
 
+	--LOSE LIFE AND RESPAWN
 	if player1.death then
 		if self.lives == 1 then
 			self.lives = self.lives - 1
@@ -69,7 +70,7 @@ function PlayState:update(dt)
 
 		else
 			self.lives = self.lives - 1
-			player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - 65, 16, 24)
+			player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 		end
 	end
 
@@ -176,7 +177,7 @@ function PlayState:render()
 	}, '\n'))
 --]]
 	
-
+--[[
 	--KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(keyloggerPlate, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
@@ -192,6 +193,7 @@ function PlayState:render()
 	if love.keyboard.isDown('right') then
 		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end
+	--]]
 
 	if self.gameOver then
 		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
