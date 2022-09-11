@@ -28,7 +28,6 @@ function Vulture:init(x, y, width, height, platformSpawn)
 	self.xoffset = self.width
 	self.ground = Platform('name', 1, 1, 1, 1)
 	vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
-	vultureSpawnViewport = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	self.jumping = false
 	self.jumpCounter = math.random(3, 5)
 	self.spawning = true
@@ -60,7 +59,7 @@ end
 
 function Vulture:bottomCollides(collidable)
 	if (self.y + self.height > collidable.y and self.y + self.height < collidable.y + collidable.height) then
-		if (self.x < collidable.x + collidable.width - BUFFER and self.x + self.width > collidable.x + BUFFER) then
+		if (self.x < collidable.x + collidable.width and self.x + self.width > collidable.x) then
 			return true
 		end
 	end
@@ -69,7 +68,7 @@ function Vulture:bottomCollides(collidable)
 end
 
 function Vulture:rightCollides(collidable)
-	if (self.x + self.width > collidable.x + BUFFER / 2 and self.x + self.width < collidable.x + collidable.width) then
+	if (self.x + self.width > collidable.x and self.x + self.width < collidable.x + collidable.width) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			return true
 		end
@@ -79,7 +78,7 @@ function Vulture:rightCollides(collidable)
 end
 
 function Vulture:leftCollides(collidable)
-	if (self.x < collidable.x + collidable.width - BUFFER / 2 and self.x > collidable.x) then
+	if (self.x < collidable.x + collidable.width and self.x > collidable.x) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			return true
 		end
@@ -95,7 +94,7 @@ function Vulture:update(dt)
 	
 	if self.spawning then
 		self.spawnHeight = self.spawnHeight + 0.5
-		vultureSpawnViewport:setViewport(0, 0, self.width, self.spawnHeight, self.atlas:getDimensions())
+		vultureSprite:setViewport(0, 0, self.width, self.spawnHeight, self.atlas:getDimensions())
 		if self.y < self.platformSpawn.y - self.height then
 			self.y = self.platformSpawn.y - self.height
 			self.spawning = false
@@ -148,23 +147,23 @@ function Vulture:update(dt)
 				if self:leftCollides(platform) then
 					if self.dx > .1 or self.dx < -.1 then
 						if self.collideTimer == 0 then
+							self.dx = math.abs(self.dx)
 							self.justCollided = true
 							sounds['collide']:play()
 						end
 					end
-					self.dx = math.abs(self.dx)
 				end
 
 				--RIGHT COLLIDES SETS POSITIVE DX
 				if self:rightCollides(platform) then
 					if self.dx > .1 or self.dx < -.1 then
 						if self.collideTimer == 0 then
+							if self.dx > 0 then
+								self.dx = -self.dx
+							end
 							self.justCollided = true
 							sounds['collide']:play()
 						end
-					end
-					if self.dx > 0 then
-						self.dx = -self.dx
 					end
 				end	
 
@@ -300,9 +299,9 @@ function Vulture:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	if self.spawning then
 		if facingRight then
-			love.graphics.draw(self.atlas, vultureSpawnViewport, self.x, self.y)
+			love.graphics.draw(self.atlas, vultureSprite, self.x, self.y)
 		else
-			love.graphics.draw(self.atlas, vultureSpawnViewport, self.x, self.y, 0, -1, 1, self.width)
+			love.graphics.draw(self.atlas, vultureSprite, self.x, self.y, 0, -1, 1, self.width)
 		end
 	else
 		if self.facingRight then

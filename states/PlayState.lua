@@ -127,8 +127,8 @@ function PlayState:render()
 		platform:render()
 	end
 
-	--love.graphics.setFont(smallFont)
-	--love.graphics.print('enemy collide: ' .. tostring(player1:collidesEnemy(Vultures[1])), 10, 10)
+	love.graphics.setFont(smallFont)
+	love.graphics.print('vultureJustCOllided: ' .. tostring(Vultures[1].justCollided), 10, 10)
 	--love.graphics.print('enemy.y: ' .. tostring(vulture1.y), 10, 20)
 
 	--love.graphics.print('counter: ' .. tostring(lavaBubble1.counter), 10, 10)

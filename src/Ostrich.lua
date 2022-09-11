@@ -15,7 +15,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.skid = false
 	self.facingRight = true
 	self.flapped = false
-	self.justStopped = false
+	self.justStopped = false	
 	self.justTurned = false
 	self.lastInputLocked = false
 	self.alternate = false
@@ -33,7 +33,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.death = false
 	self.xoffset = self.width
 	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
-	ostrichSpawnViewport = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+	--ostrichSpawnViewport = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	self.ground = Platform('name', 1, 1, 1, 1)
 end
 
@@ -133,7 +133,7 @@ function Ostrich:update(dt)
 		end
 --]]
 
-		ostrichSpawnViewport:setViewport(1, 0, self.width, self.spawnHeight)
+		ostrichSprite:setViewport(1, 0, self.width, self.spawnHeight)
 
 	else
 		if not self.exploded then
@@ -152,13 +152,6 @@ function Ostrich:update(dt)
 			--CYCLE THROUGH PLATFORMS
 			for index, platform in pairs(collidablePlatforms) do
 					--BOTTOM COLLIDES
-				if self:bottomCollides(platform) then
-					self.height = 24
-					self.y = platform.y - self.height
-					self.dy = 0
-					self.grounded = true
-				end
-
 				if self:checkGrounded(platform) then
 					self.ground = platform
 				end
@@ -175,14 +168,14 @@ function Ostrich:update(dt)
 				if self:leftCollides(platform) then
 					if self.dx > .1 or self.dx < -.1 then
 						if self.collideTimer == 0 then
+							self.dx = math.abs(self.dx)
 							self.justCollided = true
 							sounds['collide']:play()
 						end
 					end
-					self.dx = math.abs(self.dx)
 				end
 
-				--RIGHT COLLIDES SETS POSITIVE DX
+				--RIGHT COLLIDES SETS NEGATIVE DX
 				if self:rightCollides(platform) then
 					if self.dx > .1 or self.dx < -.1 then
 						if self.collideTimer == 0 then
@@ -194,6 +187,14 @@ function Ostrich:update(dt)
 						self.dx = -self.dx
 					end
 				end	
+
+				if self:bottomCollides(platform) then
+					self.height = 24
+					self.y = platform.y - self.height
+					self.dy = 0
+					self.grounded = true
+				end
+
 
 				if self.justCollided then
 					self.collideTimer = self.collideTimer + dt
@@ -542,7 +543,7 @@ function Ostrich:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	love.graphics.setFont(smallFont)
-	love.graphics.print('x: ' .. tostring(self.spawning), 5, 5)
+	--love.graphics.print('x: ' .. tostring(self.spawning), 5, 5)
 	if not self.spawning then
 		if not self.exploded then
 			if self.facingRight then
@@ -568,9 +569,9 @@ function Ostrich:render()
 	else
 		if not self.exploded then
 			if self.facingRight then
-				love.graphics.draw(self.atlas, ostrichSpawnViewport, self.x, self.y, 0, 1, 1) 
+				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, 1, 1) 
 			else
-				love.graphics.draw(self.atlas, ostrichSpawnViewport, self.x, self.y, 0, -1, 1, self.width)
+				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, -1, 1, self.width)
 			end
 		end
 	end
