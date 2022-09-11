@@ -98,6 +98,29 @@ function Ostrich:collidesEnemy(enemy)
 	return false
 end
 
+function Ostrich:enemyLeftCollides(enemy)
+	if self.x < enemy.x + enemy.width and self.x > enemy.x then
+		if self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
+			if enemy.x + enemy.width < self.x + self.width / 2 then
+				return true
+			else
+				return false
+			end
+		end
+	end
+end
+
+function Ostrich:enemyRightCollides(enemy)
+	if self.x < enemy.x + enemy.width and self.x > enemy.x then
+		if self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
+			if enemy.x > self.x + self.width / 2 then
+				return true
+			end
+				return false
+		end
+	end
+end
+
 lastInput = {"right"}
 
 
@@ -163,6 +186,12 @@ function Ostrich:update(dt)
 					end
 				end
 
+				if self:bottomCollides(platform) then
+					self.height = 24
+					self.y = platform.y - self.height
+					self.dy = 0
+					self.grounded = true
+				end
 
 				--LEFT COLLIDES SETS POSITIVE DX
 				if self:leftCollides(platform) then
@@ -188,14 +217,6 @@ function Ostrich:update(dt)
 					end
 				end	
 
-				if self:bottomCollides(platform) then
-					self.height = 24
-					self.y = platform.y - self.height
-					self.dy = 0
-					self.grounded = true
-				end
-
-
 				if self.justCollided then
 					self.collideTimer = self.collideTimer + dt
 					if self.collideTimer > COLLIDETIMERTHRESHOLD then
@@ -207,21 +228,33 @@ function Ostrich:update(dt)
 
 			--Check Enemy Collision
 			for k, vulture in pairs(Vultures) do
+
 				if self:collidesEnemy(vulture) then
 					--Check Y position
 					--PLAYER AND VULTURE ARE SAME HEIGHT
 					if self.y == vulture.y then
 						--Once working, see if you can evaluate facingRight as boolean to compare if vulture bool is same
 						if self.facingRight and vulture.facingRight then
-							--explode vulture into egg
+							--explode vulture into egg?
 						elseif not self.facingRight and not vulture.facingRight then
-							--explode vulture into egg
+							--explode vulture into egg?
 						end
+
+						if self:enemyLeftCollides(vulture) then
+							vulture.dx = -1 * vulture.dx
+							vulture.x = self.x - vulture.width
+						elseif self:enemyRightCollides(vulture) then
+							vulture.dx = math.abs(vulture.dx)
+							vulture.x = self.x + self.width
+						end
+
+		
+		
 						--Moves vulture x to be not colliding
-						--vulture1.x = self.x + self.width
+						--vulture.x = self.x + self.width
 						--Reverse objects DX
-						self.dx = self.dx * -1
-						vulture.dx = vulture.dx * -1
+						
+		
 					--PLAYER JOUST IS HIGHER
 					elseif self.y < vulture.y then
 						--explode vulture into egg
@@ -232,6 +265,7 @@ function Ostrich:update(dt)
 					end
 				end
 			end
+
 
 			if not self:checkGrounded(self.ground) then
 				self.grounded = false

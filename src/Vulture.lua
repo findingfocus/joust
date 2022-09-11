@@ -7,7 +7,7 @@ function Vulture:init(x, y, width, height, platformSpawn)
 	self.height = height
 	self.atlas = vultureAtlas
 	self.dy = 0
-	self.dx = 0
+	self.dx = -1
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG
 	self.grounded = false
@@ -27,7 +27,7 @@ function Vulture:init(x, y, width, height, platformSpawn)
 	self.totalFrames = 4
 	self.xoffset = self.width
 	self.ground = Platform('name', 1, 1, 1, 1)
-	vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+	self.vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	self.jumping = false
 	self.jumpCounter = math.random(3, 5)
 	self.spawning = true
@@ -68,7 +68,7 @@ function Vulture:bottomCollides(collidable)
 end
 
 function Vulture:rightCollides(collidable)
-	if (self.x + self.width > collidable.x and self.x + self.width < collidable.x + collidable.width) then
+	if (self.x + self.width > collidable.x + BUFFER / 2 and self.x + self.width < collidable.x + collidable.width) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			return true
 		end
@@ -78,7 +78,7 @@ function Vulture:rightCollides(collidable)
 end
 
 function Vulture:leftCollides(collidable)
-	if (self.x < collidable.x + collidable.width and self.x > collidable.x) then
+	if (self.x < collidable.x + collidable.width - BUFFER / 2 and self.x > collidable.x) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			return true
 		end
@@ -92,21 +92,26 @@ end
 
 function Vulture:update(dt)
 	
+	--SETS GROWING VIEWPORT UPON SPWNING
 	if self.spawning then
 		self.spawnHeight = self.spawnHeight + 0.5
-		vultureSprite:setViewport(0, 0, self.width, self.spawnHeight, self.atlas:getDimensions())
+		self.vultureSprite:setViewport(0, 0, self.width, self.spawnHeight, self.atlas:getDimensions())
 		if self.y < self.platformSpawn.y - self.height then
 			self.y = self.platformSpawn.y - self.height
 			self.spawning = false
 		end
 		self.y = self.y - 0.5
-	else
-		self.jumpCounter = self.jumpCounter - dt
+	else -- IF NOT SPAWNING
+
+
+		--[[self.jumpCounter = self.jumpCounter - dt
 
 			if self.jumpCounter < 0 then
 				self.jumping = true
 				self.jumpCounter = math.random(1, 2)
 			end
+
+			--]]
 			---[[
 
 			--COLLISION OF MAIN GROUND PLATFORM
@@ -141,12 +146,11 @@ function Vulture:update(dt)
 						self.y = platform.y + platform.height + 1
 					end
 				end
-
-
 				--LEFT COLLIDES SETS POSITIVE DX
 				if self:leftCollides(platform) then
 					if self.dx > .1 or self.dx < -.1 then
 						if self.collideTimer == 0 then
+							self.x = platform.x + platform.width
 							self.dx = math.abs(self.dx)
 							self.justCollided = true
 							sounds['collide']:play()
@@ -159,6 +163,7 @@ function Vulture:update(dt)
 					if self.dx > .1 or self.dx < -.1 then
 						if self.collideTimer == 0 then
 							if self.dx > 0 then
+								self.x  = platform.x - self.width
 								self.dx = -self.dx
 							end
 							self.justCollided = true
@@ -176,9 +181,16 @@ function Vulture:update(dt)
 				end
 			end
 
+
+
+
+---[[
+
 			if not self:checkGrounded(self.ground) then
 				self.grounded = false
+				self.ground = Platform('name', 1, 1, 1, 1)
 			end
+			--]]
 
 
 			--APPLY GRAVITY WHEN IN AIR
@@ -187,15 +199,6 @@ function Vulture:update(dt)
 			end
 
 			self.y = self.y + self.dy
-
-			--ENSURES OSTRICH FACING DIRECTION OF DX - SKID LOGIC FOR > SPEED 2
-			if self.grounded and self.dx > 0 then
-				--self.facingRight = true
-		--OLD SKID WHILE IN AIR LOGIC PLACE
-			elseif self.grounded and self.dx < 0 then
-				--self.facingRight = false
-		---OLD SKID WHILE IN AIR LOGIC PLACE
-			end
 			
 			--BOUNCING OFF TOP
 			if self.y < 0 then
@@ -213,9 +216,6 @@ function Vulture:update(dt)
 				self.x = VIRTUAL_WIDTH
 			end
 
-
-			
-
 			if self.grounded then
 				self.height = 24
 				
@@ -225,18 +225,23 @@ function Vulture:update(dt)
 				self.height = 16
 			end
 
-				--VULTURE JUMPING HEIGHT
+			--VULTURE JUMPING HEIGHT
 			if self.jumping then
 				self.grounded = false
 				self.dy = -.4
 			end
 
 			self.jumping = false
-			self.dx = -1
 			self.x = self.x + self.dx
 
+			if self.dx < 0 then
+				self.facingRight = false
+			elseif self.dx > 0 then
+				self.facingRight = true
+			end
 
-		-- OSTRICH1 ANIMATION CYCLE
+
+		-- VULTURE ANIMATION CYCLE
 
 			self.fps = (math.abs(self.dx)) * .42 - (math.abs(self.dx) / 20 - .15)
 
@@ -245,7 +250,7 @@ function Vulture:update(dt)
 			--STANDING STILL VIEWPORT
 			if self.dx == 0 and self.grounded then
 				self.frame = 1
-				vultureSprite:setViewport(1, 0, self.width, self.height)
+				self.vultureSprite:setViewport(1, 0, self.width, self.height)
 			end
 
 			--VULTURE WALKING ANIMATION
@@ -268,19 +273,19 @@ function Vulture:update(dt)
 					if self.frame > self.totalFrames then self.frame = 1 end
 
 				self.xoffset = self.frame + (self.width * (self.frame - 1))
-				vultureSprite:setViewport(self.xoffset, 0, self.width, self.height)
+				self.vultureSprite:setViewport(self.xoffset, 0, self.width, self.height)
 			end
 
 			--VULTURE AERIAL ANIMATION
 				if not self.grounded then
-					vultureSprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
+					self.vultureSprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
 					if self.jumping then
 						self.jumpTimer = 0
 						self.flapped = true
 					end
 
 					if self.flapped then
-						vultureSprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)				
+						self.vultureSprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)				
 						self.jumpTimer = self.jumpTimer + dt
 						if self.jumpTimer > .1 then
 							self.flapped = false
@@ -290,7 +295,7 @@ function Vulture:update(dt)
 				
 			--VULTURE SKID ANIMATION
 			if self.skid then
-				vultureSprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
+				self.vultureSprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
 			end
 		end
 	end
@@ -298,16 +303,16 @@ function Vulture:update(dt)
 function Vulture:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	if self.spawning then
-		if facingRight then
-			love.graphics.draw(self.atlas, vultureSprite, self.x, self.y)
+		if self.facingRight then
+			love.graphics.draw(self.atlas, self.vultureSprite, self.x, self.y)
 		else
-			love.graphics.draw(self.atlas, vultureSprite, self.x, self.y, 0, -1, 1, self.width)
+			love.graphics.draw(self.atlas, self.vultureSprite, self.x, self.y, 0, -1, 1, self.width)
 		end
 	else
 		if self.facingRight then
-			love.graphics.draw(self.atlas, vultureSprite, self.x, self.y, 0, 1, 1) 
+			love.graphics.draw(self.atlas, self.vultureSprite, self.x, self.y, 0, 1, 1) 
 		else
-			love.graphics.draw(self.atlas, vultureSprite, self.x, self.y, 0, -1, 1, self.width)
+			love.graphics.draw(self.atlas, self.vultureSprite, self.x, self.y, 0, -1, 1, self.width)
 		end
 	end
 end
