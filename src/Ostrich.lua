@@ -88,7 +88,7 @@ function Ostrich:leftCollides(collidable)
 	return false
 end
 
-function Ostrich:collidesEnemy(enemy)
+function Ostrich:enemyCollides(enemy)
 	if self.x < enemy.x + enemy.width and self.x > enemy.x then
 		if self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
 			return true
@@ -99,13 +99,20 @@ function Ostrich:collidesEnemy(enemy)
 end
 
 function Ostrich:enemyLeftCollides(enemy)
+	if enemy.x + enemy.width < self.x + self.width then
+		return true
+	else
+		return false
+	end
+end
+--[[
+function Ostrich:enemyLeftCollides(enemy)
 	if self.x < enemy.x + enemy.width and self.x > enemy.x then
 		if self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
-			if enemy.x + enemy.width < self.x + self.width / 2 then
+			--if enemy.x + enemy.width < self.x + self.width / 2 then
 				return true
-			else
+		else
 				return false
-			end
 		end
 	end
 end
@@ -113,13 +120,13 @@ end
 function Ostrich:enemyRightCollides(enemy)
 	if self.x < enemy.x + enemy.width and self.x > enemy.x then
 		if self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
-			if enemy.x > self.x + self.width / 2 then
 				return true
-			end
+			else
 				return false
 		end
 	end
 end
+--]]
 
 lastInput = {"right"}
 
@@ -229,24 +236,36 @@ function Ostrich:update(dt)
 			--Check Enemy Collision
 			for k, vulture in pairs(Vultures) do
 
-				if self:collidesEnemy(vulture) then
+				if self:enemyCollides(vulture) then
 					--Check Y position
 					--PLAYER AND VULTURE ARE SAME HEIGHT
 					if self.y == vulture.y then
+
+						if self:enemyLeftCollides(vulture) then
+							--ensures different directions faced
+							if (self.facingRight and not vulture.facingRight) or (not self.facingRight and vulture.facingRight) then
+								self.dx = self.dx * -1
+								vulture.dx = vulture.dx * -1
+								vulture.x = self.x - vulture.width
+							end
+						else
+							--right collide logic
+							if (self.facingRight and not vulture.facingRight) or (not self.facingRight and vulture.facingRight) then
+								self.dx = self.dx * -1
+								vulture.dx = vulture.dx * -1
+								vulture.x = self.x + self.width
+							end
+						end
+
+
+						--[[
 						--Once working, see if you can evaluate facingRight as boolean to compare if vulture bool is same
 						if self.facingRight and vulture.facingRight then
 							--explode vulture into egg?
 						elseif not self.facingRight and not vulture.facingRight then
 							--explode vulture into egg?
 						end
-
-						if self:enemyLeftCollides(vulture) then
-							vulture.dx = -1 * vulture.dx
-							vulture.x = self.x - vulture.width
-						elseif self:enemyRightCollides(vulture) then
-							vulture.dx = math.abs(vulture.dx)
-							vulture.x = self.x + self.width
-						end
+						--]]
 
 		
 		
