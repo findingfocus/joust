@@ -250,7 +250,7 @@ function Vulture:update(dt)
 			--STANDING STILL VIEWPORT
 			if self.dx == 0 and self.grounded then
 				self.frame = 1
-				self.vultureSprite:setViewport(1, 0, self.width, self.height)
+				self.vultureSprite:setViewport(0, 0, self.width, self.height)
 			end
 
 			--VULTURE WALKING ANIMATION
@@ -311,6 +311,9 @@ function Vulture:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.setFont(smallFont)
 	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides(self)), 5, 10)
+	love.graphics.print('BottomCollision: ' .. tostring(player1:enemyBottomCollides(self)), 5, 20)
+	love.graphics.print('LeftCollision: ' .. tostring(player1:enemyLeftCollides(self)), 5, 30)
+	love.graphics.print('RightCollision: ' .. tostring(player1:enemyRightCollides(self)), 5, 40)
 --[[
 	love.graphics.setFont(smallFont)
 	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides()), 5, 10)

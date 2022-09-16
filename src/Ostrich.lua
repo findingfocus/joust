@@ -97,7 +97,7 @@ end
 
 function Ostrich:enemyTopCollides(enemy)
 --ostrich top C Vulture bottom
-	if self.x < enemy.x + enemy.width and self.x + self.width > enemy.x and self.y < enemy.y + enemy.height and self.y + 4 > enemy.y + enemy.height - 4 then
+	if self.x < enemy.x + enemy.width and self.x + self.width > enemy.x and self.y < enemy.y + enemy.height and self.y + 6 > enemy.y + enemy.height then
 		return true
 	else
 		return false
@@ -105,15 +105,27 @@ function Ostrich:enemyTopCollides(enemy)
 end
 
 function Ostrich:enemyBottomCollides(enemy)
-
+	if self.x < enemy.x + enemy.width and self.x + self.width > enemy.x and self.y + self.height > enemy.y and self.y + self.height - 6 < enemy.y then
+		return true
+	else
+		return false
+	end
 end
 
 function Ostrich:enemyLeftCollides(enemy)
-
+	if self.x < enemy.x + enemy.width and self.x + 8 > enemy.x + 8 and self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
+		return true
+	else
+		return false
+	end
 end
 
 function Ostrich:enemyRightCollides(enemy)
-
+	if self.x + 8 < enemy.x + 8 and self.x + self.width > enemy.x and self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
+		return true
+	else
+		return false
+	end
 end
 --]]
 
