@@ -32,7 +32,7 @@ function Vulture:init(x, y, width, height, platformSpawn)
 	self.jumpCounter = math.random(3, 5)
 	self.spawning = true
 	self.exploded = false
-	self.platformSpawn = platformSpawn
+	self.platformSpawnY = platformSpawn
 	self.spawnHeight = 0
 end
 
@@ -96,8 +96,8 @@ function Vulture:update(dt)
 	if self.spawning then
 		self.spawnHeight = self.spawnHeight + 0.5
 		self.vultureSprite:setViewport(0, 0, self.width, self.spawnHeight, self.atlas:getDimensions())
-		if self.y < self.platformSpawn.y - self.height then
-			self.y = self.platformSpawn.y - self.height
+		if self.y < self.platformSpawnY - self.height then
+			self.y = self.platformSpawnY - self.height
 			self.spawning = false
 		end
 		self.y = self.y - 0.5
@@ -298,10 +298,27 @@ function Vulture:update(dt)
 				self.vultureSprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
 			end
 		end
+
+		self.facingRight = false
+		self.dx = 0
+		mouseX = love.mouse.getX()
+		mouseY = love.mouse.getY()
+		self.x = mouseX
+		self.y = mouseY
 	end
 
 function Vulture:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	love.graphics.setFont(smallFont)
+	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides(self)), 5, 10)
+--[[
+	love.graphics.setFont(smallFont)
+	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides()), 5, 10)
+	love.graphics.print('mouseX: ' .. tostring(mouseX), 5, 10)
+	love.graphics.print('mouseY: ' .. tostring(mouseY), 5, 20)
+	love.graphics.print('vultureX: ' .. tostring(self.x), 5, 30)
+	love.graphics.print('vultureY: ' .. tostring(self.y), 5, 40)
+--]]
 	if self.spawning then
 		if self.facingRight then
 			love.graphics.draw(self.atlas, self.vultureSprite, self.x, self.y)

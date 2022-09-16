@@ -33,7 +33,6 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.death = false
 	self.xoffset = self.width
 	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
-	--ostrichSpawnViewport = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	self.ground = Platform('name', 1, 1, 1, 1)
 end
 
@@ -95,46 +94,36 @@ function Ostrich:Collides(enemy)
 		return true
 	end
 end
---[[
-function Ostrich:enemyLeftCollides(enemy)
-	if enemy.x + enemy.width < self.x + self.width then
+
+function Ostrich:enemyTopCollides(enemy)
+--ostrich top C Vulture bottom
+	if self.x < enemy.x + enemy.width and self.x + self.width > enemy.x and self.y < enemy.y + enemy.height and self.y + 4 > enemy.y + enemy.height - 4 then
 		return true
 	else
 		return false
 	end
 end
---]]
 
---[[
+function Ostrich:enemyBottomCollides(enemy)
+
+end
+
 function Ostrich:enemyLeftCollides(enemy)
-	if self.x < enemy.x + enemy.width and self.x > enemy.x then
-		if self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
-			--if enemy.x + enemy.width < self.x + self.width / 2 then
-				return true
-		else
-				return false
-		end
-	end
+
 end
 
 function Ostrich:enemyRightCollides(enemy)
-	if self.x < enemy.x + enemy.width and self.x > enemy.x then
-		if self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
-				return true
-			else
-				return false
-		end
-	end
+
 end
 --]]
 
 lastInput = {"right"}
 
-
 function Ostrich:update(dt)
 	
-	--if self.refresh then
-			---[[
+			
+		ostrichSprite:setViewport(1, 0, self.width, self.spawnHeight)
+
 		if self.spawning then
 			self.y = self.y - 0.5
 			self.spawnHeight = self.spawnHeight + 0.5	
@@ -148,7 +137,7 @@ function Ostrich:update(dt)
 				self.spawning = false
 				self.grounded = true
 			end
-	--[[
+
 			if self.spawnHeight >= 24 then
 				self.spawnHeight = 24
 				self.y = self.platformSpawnY - self.height
@@ -161,9 +150,6 @@ function Ostrich:update(dt)
 				self.grounded = true
 				self.y = self.platformSpawnY - self.height
 			end
-	--]]
-
-			ostrichSprite:setViewport(1, 0, self.width, self.spawnHeight)
 
 		else
 			if not self.exploded then
@@ -179,7 +165,7 @@ function Ostrich:update(dt)
 					self.ground = groundPlatform
 				end
 
-				--CYCLE THROUGH PLATFORMS
+---[[PLATFORMS COLLISIONS
 				for index, platform in pairs(collidablePlatforms) do
 						--BOTTOM COLLIDES
 					if self:checkGrounded(platform) then
@@ -232,17 +218,9 @@ function Ostrich:update(dt)
 						end
 					end
 				end
-	--[[
-				if self:enemyCollides(Vultures[1]) then
-					if self.y == Vultures[1].y then
-						if Vultures[1].x < self.x + self.width then
-							self.x = 0
-						end
-					end
-				end
-		--]]
-				---[[
-				--Check Enemy Collision
+--]]
+
+--[[ENEMY COLLISIONS
 				for k, vulture in pairs(Vultures) do
 
 					if self:Collides(vulture) then
@@ -276,136 +254,11 @@ function Ostrich:update(dt)
 									vulture.exploded = true
 								end
 							end
-							--[[
-							if self.x + self.width < vulture.x + vulture.width then -- Ostrich is on left
-								if self.facingRight and vulture.facingRight then
-									vulture.exploded = true
-								elseif self.facingRight and not vulture.facingRight then
-									self.x = 0
-								elseif not self.facingRight and vulture.facingRight then
-
-								elseif not self.facingRight and not vulture.facingRight then
-
-								end
-							else -- Ostrich is on the right
-								if self.facingRight and vulture.facingRight then
-
-								elseif self.facingRight and not vulture.facingRight then
-
-								elseif not self.facingRight and vulture.facingRight then
-
-								elseif not self.facingRight and not vulture.facingRight then
-							end
-							--]]
 						end
 					end
 				end
-	--]]
+--]]
 					
-
-
-
-
-
-	--[[
-						--PLAYER AND VULTURE ARE SAME HEIGHT
-						if self.y == Vultures[k].y then
-
-							--right-hit detection
-							--Ostrich is on the left and same height
-							if self.x < Vultures[k].x then
-								--if facing same direction and same y
-								if self.facingRight and Vultures[k].facingRight then
-									Vultures[k].exploded = true
-								elseif self.facingRight and not Vultures[k].facingRight then
-									self.x = 0
-									--self.dx = self.dx * -1
-									--vulture.dx = math.abs(vulture.dx)
-									--vulture.x = self.x + self.width
-								elseif not self.facingRight and Vultures[k].facingRight then
-									self.dx = self.dx * -1
-									self.x = Vultures[k].x - self.width
-								elseif not self.facingRight and not Vultures[k].facingRight then
-									self.exploded = true
-								end
-							end
-
-							if self.x > Vultures[k].x then
-							 --left-hit detection
-							--Ostrich is on the right and same height
-								if self.facingRight and Vultures[k].facingRight then
-									self.exploded = true
-								elseif not self.facingRight and not Vultures[k].facingRight then
-									Vultures[k].exploded = true
-								elseif self.facingRight and not Vultures[k].facingRight then
-									self.dx = self.dx * -1
-									self.x = Vultures[k].x + Vultures[k].width + 100
-								elseif not self.facingRight and Vultures[k].facingRight then --player face left, vulture face right
-									self.dx = self.dx * -1
-									Vultures[k].dx = self.dx * -1
-									Vultures[k].x = self.x - Vultures[k].width
-								end
-							end
-	--]]
-
-							--elseif not self.facingRight && vulture.facingRight then
-
-							--end
-	--[[
-						--PLAYER JOUST IS HIGHER
-						elseif self.y < vulture.y then
-							--explode vulture into egg
-
-						--VULTURE JOUST IS HIGHER
-						elseif self.y > vulture.y then
-							self.exploded = true
-							--player explodes
-						end
-	--]]
-													--[[
-							if self:enemyLeftCollides(vulture) then
-								--ensures different directions faced
-								if (self.facingRight and not vulture.facingRight) or (not self.facingRight and vulture.facingRight) then
-									self.dx = self.dx * -1
-									vulture.dx = vulture.dx * -1
-									vulture.x = self.x - vulture.width
-								end
-							else
-								--right collide logic
-								if (self.facingRight and not vulture.facingRight) or (not self.facingRight and vulture.facingRight) then
-									self.dx = self.dx * -1
-									vulture.dx = vulture.dx * -1
-									vulture.x = self.x + self.width
-								end
-							end
-							--]]
-
-							
-
-
-							--[[
-							--Once working, see if you can evaluate facingRight as boolean to compare if vulture bool is same
-							if self.facingRight and vulture.facingRight then
-								--explode vulture into egg?
-							elseif not self.facingRight and not vulture.facingRight then
-								--explode vulture into egg?
-							end
-							--]]
-
-			
-			
-							--Moves vulture x to be not colliding
-							--vulture.x = self.x + self.width
-					
-
-
-
-
-							--Reverse objects DX
-					--end
-				--end
-
-
 				if not self:checkGrounded(self.ground) then
 					self.grounded = false
 				end
@@ -444,7 +297,10 @@ function Ostrich:update(dt)
 				end
 
 
-				--INPUT HANDLING
+
+
+
+---[[INPUT HANDLING
 
 				--MULTIPLE DIRECTION INPUT HANDLING
 				if love.keyboard.isDown('left') and not love.keyboard.isDown('right') then
@@ -587,7 +443,7 @@ function Ostrich:update(dt)
 							end
 						end
 					end
-					
+
 				--AERIAL HANDLING
 				elseif not self.grounded then
 					self.skid = false
@@ -628,6 +484,8 @@ function Ostrich:update(dt)
 					end
 				end
 
+--]]
+
 
 				if self.dx == 0 then
 					sounds['skid']:stop()
@@ -643,8 +501,7 @@ function Ostrich:update(dt)
 					self.x = self.x + self.dx
 				end
 
-			-- OSTRICH1 ANIMATION CYCLE
-
+---[[OSTRICH1 ANIMATION CYCLE
 				self.fps = (math.abs(self.dx)) * .42 - (math.abs(self.dx) / 20 - .15)
 
 				self.animationTimer = self.animationTimer - self.fps
@@ -661,7 +518,6 @@ function Ostrich:update(dt)
 					if self.animationTimer <= 0 then
 						self.animationTimer = 1 / self.fps
 						self.frame = self.frame + 1
-						---[[
 						if self.frame == 2 and self.alternate then
 							self.alternate = false
 							sounds['leftStep']:play()
@@ -669,11 +525,10 @@ function Ostrich:update(dt)
 							self.alternate = true
 							sounds['rightStep']:play()
 						end
-						--]]
 					end
 				end
-						--LOOP FRAME BACK TO 1
-						if self.frame > self.totalFrames then self.frame = 1 end
+					--LOOP FRAME BACK TO 1
+					if self.frame > self.totalFrames then self.frame = 1 end
 
 					self.xoffset = self.frame + (self.width * (self.frame - 1))
 					ostrichSprite:setViewport(self.xoffset, 0, self.width, self.height)
@@ -699,6 +554,7 @@ function Ostrich:update(dt)
 				if self.skid then
 					ostrichSprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
 				end
+--]]
 			
 			elseif self.exploded then
 				self.explosionTimer = self.explosionTimer + dt
@@ -709,16 +565,12 @@ function Ostrich:update(dt)
 				self.death = true
 			end
 		end
-
 	end
---end
+
 
 
 function Ostrich:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-
-	love.graphics.setFont(smallFont)
-	love.graphics.print('Colliding:' .. tostring(self:Collides(Vultures[1])), 5, 5)
 
 	if not self.spawning then
 		if not self.exploded then
@@ -740,9 +592,8 @@ function Ostrich:render()
 				--render explosionSprite3
 			end
 		end
-
-		--IF SPAWNING
-	else
+		
+	else --IF SPAWNING
 		if not self.exploded then
 			if self.facingRight then
 				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, 1, 1) 

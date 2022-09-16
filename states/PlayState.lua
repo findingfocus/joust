@@ -14,18 +14,25 @@ function PlayState:init()
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 	Vultures = {}
-	table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3))
+	mouseVulture = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y)
+	--table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3))
 	--table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2))
+	table.insert(Vultures, mouseVulture)
 	self.lives = 4
 	self.helpToggle = false
 	self.gameOver = false
 	self.refresh = true
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
+	--mouseVulture = Vulture(VIRTUAL_WIDTH / 2 - 16 / 2, VIRTUAL_HEIGHT / 2 - 24 / 2, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 end
 
 function PlayState:update(dt)
-	if self.refresh then
+	--if self.refresh then
+		if player1:Collides(Vultures[1]) then
+			--self.refresh = false
+		end
+
 		if love.keyboard.wasPressed('h') then
 			self.helpToggle = not self.helpToggle
 		end
@@ -76,9 +83,6 @@ function PlayState:update(dt)
 		end
 
 		player1:update(dt)
-		if player1:Collides(Vultures[1]) then
-			--self.refresh = false
-		end
 		
 	--REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
 		if lavaBubble1.popped then
@@ -97,7 +101,7 @@ function PlayState:update(dt)
 			lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
 		end
 	end
-end
+--end
 
 function PlayState:render()
 	love.graphics.clear(0/255, 0/255, 0/255, 255/255)
@@ -118,6 +122,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	player1:render()
+
 	love.graphics.setFont(smallFont)
 	love.graphics.print('LIVES: ' .. tostring(self.lives), 10, VIRTUAL_HEIGHT - 25)
 
@@ -133,6 +138,7 @@ function PlayState:render()
 	end
 
 	love.graphics.setFont(smallFont)
+	--love.graphics.print('PlayState.refresh: ' .. tostring(self.refresh), 5, 5)
 	--love.graphics.print('leftColl Enemy: ' .. tostring(player1:enemyLeftCollides(Vultures[2])), 10, 10)
 	--love.graphics.print('leftCollideV1: ' .. tostring(player1:enemyLeftCollides(Vultures[1])), 10, 20)
 
