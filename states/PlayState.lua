@@ -14,10 +14,17 @@ function PlayState:init()
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 	Vultures = {}
-	mouseVulture = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y)
-	--table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3))
-	--table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2))
-	table.insert(Vultures, mouseVulture)
+	--mouseVulture = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y)
+	--table.insert(Vultures, mouseVulture)
+
+	--table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y))
+	--table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y))
+	
+	Vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y, 1)
+	Vulture2 = Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y, 2)
+	table.insert(Vultures, Vulture1)
+	table.insert(Vultures, Vulture2)
+
 	self.lives = 4
 	self.helpToggle = false
 	self.gameOver = false
@@ -29,9 +36,9 @@ end
 
 function PlayState:update(dt)
 	--if self.refresh then
-		if player1:Collides(Vultures[1]) then
+		--if player1:Collides(Vultures[1]) then
 			--self.refresh = false
-		end
+		--end
 
 		if love.keyboard.wasPressed('h') then
 			self.helpToggle = not self.helpToggle
@@ -58,8 +65,8 @@ function PlayState:update(dt)
 		if love.keyboard.wasPressed('v') then
 			table.remove(Vultures)
 			table.remove(Vultures)
-			table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3))
-			table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2))
+			table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y))
+			table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y))
 		end
 
 		lavaBubble1:update(dt)
@@ -100,6 +107,14 @@ function PlayState:update(dt)
 			rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
 			lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
 		end
+
+		if Vulture1.exploded then
+			table.remove(Vultures, 1)
+		end
+
+		if Vulture2.exploded then
+			table.remove(Vultures, Vulture2.index)
+		end
 	end
 --end
 
@@ -136,8 +151,17 @@ function PlayState:render()
 	for k, platform in pairs(collidablePlatforms) do 
 		platform:render()
 	end
-
+--[[
 	love.graphics.setFont(smallFont)
+	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides(Vulture1)), 5, 10)
+	love.graphics.print('BottomCollision: ' .. tostring(player1:enemyBottomCollides(Vulture1)), 5, 20)
+	love.graphics.print('LeftCollision: ' .. tostring(player1:enemyLeftCollides(Vulture1)), 5, 30)
+	love.graphics.print('RightCollision: ' .. tostring(player1:enemyRightCollides(Vulture1)), 5, 40)
+	love.graphics.print('grounded:' .. tostring(player1.grounded), 5, 50)
+	--]]
+	love.graphics.setFont(smallFont)
+	love.graphics.print('Vultures[' .. tostring(Vulture1.index) .. ']', Vulture1.x - 10, Vulture1.y - 10)
+	love.graphics.print('Vultures[' .. tostring(Vulture2.index) .. ']', Vulture2.x - 10, Vulture2.y - 10)
 	--love.graphics.print('PlayState.refresh: ' .. tostring(self.refresh), 5, 5)
 	--love.graphics.print('leftColl Enemy: ' .. tostring(player1:enemyLeftCollides(Vultures[2])), 10, 10)
 	--love.graphics.print('leftCollideV1: ' .. tostring(player1:enemyLeftCollides(Vultures[1])), 10, 20)
@@ -207,7 +231,6 @@ function PlayState:render()
 		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end
 	--]]
-
 	if self.gameOver then
 		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
 		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)

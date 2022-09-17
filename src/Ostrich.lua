@@ -196,6 +196,7 @@ function Ostrich:update(dt)
 						self.y = platform.y - self.height
 						self.dy = 0
 						self.grounded = true
+						self.ground = platform
 					end
 
 					--LEFT COLLIDES SETS POSITIVE DX
@@ -232,15 +233,15 @@ function Ostrich:update(dt)
 				end
 --]]
 				for k, vulture in pairs(Vultures) do
-					if self:enemyTopCollides then
+					if self:enemyTopCollides(vulture) then
 						self.exploded = true
 						vulture.dy = vulture.dy * -1
 						vulture.y = self.y - vulture.height
-					elseif self:enemyBottomCollides then
+					elseif self:enemyBottomCollides(vulture) then
 						vulture.exploded = true
 						self.dy = self.dy * -1
 						self.y = vulture.y - self.height
-					elseif self:enemyLeftCollides then
+					elseif self:enemyLeftCollides(vulture) then
 						if self.facingRight and vulture.facingRight then
 							self.exploded = true --TEST ORIGINAL TO SEE IF VULTURE DX IS SWAPPED
 						elseif not self.facingRight and not vulture.facingRight then
@@ -259,21 +260,25 @@ function Ostrich:update(dt)
 								vulture.exploded = true
 							end
 						end
-					elseif self:enemyRightCollides then
+					elseif self:enemyRightCollides(vulture) then
 						if self.facingRight and vulture.facingRight then
 							vulture.exploded = true
 						elseif not self.facingRight and not vulture.facingRight then
 							self.exploded = true
 						elseif self.facingRight and not vulture.facingRight then
+							--vulture.exploded = true
+							---[[
 							if self.y == vulture.y then
+
 								self.dx = self.dx * -1
 								vulture.dx = vulture.dx * -1
 								vulture.x = self.x + self.width
-							elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
-								self.exploded = true
-							elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
+							elseif self.y < vulture.y then --O HAS HIGHER LANCE
 								vulture.exploded = true
+							elseif self.y > vulture.y then --V HAS HIGHER LANCE
+								self.exploded = true
 							end
+							--]]
 						elseif not self.facingRight and vulture.facingRight then
 							self.dx = self.dx * -1
 							self.x = vulture.x - self.width

@@ -7,6 +7,7 @@ function love.load()
 
 	love.mouse.setVisible(false)
 
+	smallerFont = love.graphics.newFont('fonts/arcadeFont.ttf', 4)
 	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 8)
 	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 16)
 	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)
