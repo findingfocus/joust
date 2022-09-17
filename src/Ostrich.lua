@@ -138,7 +138,7 @@ function Ostrich:update(dt)
 
 		if self.spawning then
 			self.y = self.y - 0.5
-			self.spawnHeight = self.spawnHeight + 0.5	
+			self.spawnHeight = self.spawnHeight + 0.5
 
 			if self.spawnHeight > 24 then
 				self.spawnHeight = 24
@@ -231,7 +231,55 @@ function Ostrich:update(dt)
 					end
 				end
 --]]
-
+				for k, vulture in pairs(Vultures) do
+					if self:enemyTopCollides then
+						self.exploded = true
+						vulture.dy = vulture.dy * -1
+						vulture.y = self.y - vulture.height
+					elseif self:enemyBottomCollides then
+						vulture.exploded = true
+						self.dy = self.dy * -1
+						self.y = vulture.y - self.height
+					elseif self:enemyLeftCollides then
+						if self.facingRight and vulture.facingRight then
+							self.exploded = true --TEST ORIGINAL TO SEE IF VULTURE DX IS SWAPPED
+						elseif not self.facingRight and not vulture.facingRight then
+							vulture.exploded = true
+						elseif self.facingRight and not vulture.facingRight then
+							self.dx = self.dx * -1
+							self.x = vulture.x + vulture.width
+						elseif not self.facingRight and vulture.facingRight then
+							if self.y == vulture.y then
+								self.dx = self.dx * -1
+								vulture.dx = vulture.dx * -1
+								vulture.x = self.x - vulture.width
+							elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
+								self.exploded = true
+							elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
+								vulture.exploded = true
+							end
+						end
+					elseif self:enemyRightCollides then
+						if self.facingRight and vulture.facingRight then
+							vulture.exploded = true
+						elseif not self.facingRight and not vulture.facingRight then
+							self.exploded = true
+						elseif self.facingRight and not vulture.facingRight then
+							if self.y == vulture.y then
+								self.dx = self.dx * -1
+								vulture.dx = vulture.dx * -1
+								vulture.x = self.x + self.width
+							elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
+								self.exploded = true
+							elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
+								vulture.exploded = true
+							end
+						elseif not self.facingRight and vulture.facingRight then
+							self.dx = self.dx * -1
+							self.x = vulture.x - self.width
+						end 
+					end
+				end
 --[[ENEMY COLLISIONS
 				for k, vulture in pairs(Vultures) do
 
