@@ -14,109 +14,89 @@ function PlayState:init()
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 	Vultures = {}
-	--mouseVulture = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y)
-	--table.insert(Vultures, mouseVulture)
-
-	--table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y))
-	--table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y))
-	
 	Vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y, 1)
 	Vulture2 = Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y, 2)
-	table.insert(Vultures, Vulture1)
-	table.insert(Vultures, Vulture2)
-
+	Vulture3 = Vulture(platform5.x + 16, platform5.y, 16, 24, platform5.y, 3)
+	Vulture3.facingRight = true
+	Vulture3.dx = 1
+	Vultures[1] = Vulture1
+	Vultures[2] = Vulture2
+	Vultures[3] = Vulture3
 	self.lives = 4
 	self.helpToggle = false
 	self.gameOver = false
 	self.refresh = true
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
-	--mouseVulture = Vulture(VIRTUAL_WIDTH / 2 - 16 / 2, VIRTUAL_HEIGHT / 2 - 24 / 2, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 end
 
 function PlayState:update(dt)
-	--if self.refresh then
-		--if player1:Collides(Vultures[1]) then
-			--self.refresh = false
-		--end
+	if love.keyboard.wasPressed('h') then
+		self.helpToggle = not self.helpToggle
+	end
 
-		if love.keyboard.wasPressed('h') then
-			self.helpToggle = not self.helpToggle
-		end
+	--Reset Ostrich
+	if love.keyboard.wasPressed('r') then
+		player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y)
+		sounds['leftStep']:stop()
+		sounds['rightStep']:stop()
+		sounds['skid']:stop()
+	end
 
-		if love.keyboard.wasPressed('r') then
-			--[[
-			player1.x = platform4L.x + platform4L.width - player1.width--VIRTUAL_WIDTH / 3 - 8
-			player1.y = platform4L.y - player1.height--VIRTUAL_HEIGHT - 65
-			player1.skid = false
-			player1.grounded = false
-			player1.facingRight = true
-			player1.exploded = false
-			player1.dx = 0
-			player1.dy = 0
-			--]]
-			player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y)
-			sounds['leftStep']:stop()
-			sounds['rightStep']:stop()
-			sounds['skid']:stop()
-		end
+	--Reset Vultures
+	if love.keyboard.wasPressed('v') then
+		Vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y, 1)
+		Vulture2 = Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y, 2)
+		Vultures[1] = Vulture1
+		Vultures[2] = Vulture2
+	end
 
-		--Respawn Vultures
-		if love.keyboard.wasPressed('v') then
-			table.remove(Vultures)
-			table.remove(Vultures)
-			table.insert(Vultures, Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y))
-			table.insert(Vultures, Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y))
-		end
+	--LOSE LIFE AND RESPAWN
+	if player1.death then
+		if self.lives == 1 then
+			self.lives = self.lives - 1
+			self.gameOver = true
+		elseif self.lives == 0 then
 
-		lavaBubble1:update(dt)
-		lavaBubble2:update(dt)
-
-		for k, vulture in pairs(Vultures) do
-			vulture:update(dt)
-		end
-
-		--LOSE LIFE AND RESPAWN
-		if player1.death then
-			if self.lives == 1 then
-				self.lives = self.lives - 1
-				self.gameOver = true
-			elseif self.lives == 0 then
-
-			else
-				self.lives = self.lives - 1
-				player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
-			end
-		end
-
-		player1:update(dt)
-		
-	--REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
-		if lavaBubble1.popped then
-			leftSpawnPoint = {11, 35}
-			leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
-			leftSpawnRandom = {1, 2, 5, 5, 7}
-			leftSpawnRandom = leftSpawnRandom[math.random(#leftSpawnRandom)]
-			lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT, leftSpawnRandom)
-		end
-
-		if lavaBubble2.popped then
-			rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 45}
-			rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
-			rightSpawnRandom = {1, 2, 5, 5, 7}
-			rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
-			lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
-		end
-
-		if Vulture1.exploded then
-			table.remove(Vultures, 1)
-		end
-
-		if Vulture2.exploded then
-			table.remove(Vultures, Vulture2.index)
+		else
+			self.lives = self.lives - 1
+			player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 		end
 	end
---end
+
+	lavaBubble1:update(dt)
+	lavaBubble2:update(dt)
+
+	for k, vulture in pairs(Vultures) do
+		vulture:update(dt)
+	end
+	player1:update(dt)
+	
+--REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
+	if lavaBubble1.popped then
+		leftSpawnPoint = {11, 35}
+		leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
+		leftSpawnRandom = {1, 2, 5, 5, 7}
+		leftSpawnRandom = leftSpawnRandom[math.random(#leftSpawnRandom)]
+		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT, leftSpawnRandom)
+	end
+
+	if lavaBubble2.popped then
+		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 45}
+		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
+		rightSpawnRandom = {1, 2, 5, 5, 7}
+		rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
+		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
+	end
+
+	--Placing vultures in graveyard offscreen
+	for k, vulture in pairs(Vultures) do
+		if vulture.exploded then
+			vulture.x = -vulture.width
+			vulture.y = -vulture.height
+		end
+	end
+end
 
 function PlayState:render()
 	love.graphics.clear(0/255, 0/255, 0/255, 255/255)
@@ -151,71 +131,21 @@ function PlayState:render()
 	for k, platform in pairs(collidablePlatforms) do 
 		platform:render()
 	end
---[[
+
 	love.graphics.setFont(smallFont)
-	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides(Vulture1)), 5, 10)
-	love.graphics.print('BottomCollision: ' .. tostring(player1:enemyBottomCollides(Vulture1)), 5, 20)
-	love.graphics.print('LeftCollision: ' .. tostring(player1:enemyLeftCollides(Vulture1)), 5, 30)
-	love.graphics.print('RightCollision: ' .. tostring(player1:enemyRightCollides(Vulture1)), 5, 40)
-	love.graphics.print('grounded:' .. tostring(player1.grounded), 5, 50)
-	--]]
-	love.graphics.setFont(smallFont)
-	love.graphics.print('Vultures[' .. tostring(Vulture1.index) .. ']', Vulture1.x - 10, Vulture1.y - 10)
-	love.graphics.print('Vultures[' .. tostring(Vulture2.index) .. ']', Vulture2.x - 10, Vulture2.y - 10)
-	--love.graphics.print('PlayState.refresh: ' .. tostring(self.refresh), 5, 5)
-	--love.graphics.print('leftColl Enemy: ' .. tostring(player1:enemyLeftCollides(Vultures[2])), 10, 10)
-	--love.graphics.print('leftCollideV1: ' .. tostring(player1:enemyLeftCollides(Vultures[1])), 10, 20)
-
-	--love.graphics.print('enemy.y: ' .. tostring(vulture1.y), 10, 20)
-
-	--love.graphics.print('counter: ' .. tostring(lavaBubble1.counter), 10, 10)
-	--love.graphics.print('randomspawn: ' .. tostring(lavaBubble1.randomSpawn), 10, 20)
-	--love.graphics.print('particleSpawn: ' .. tostring(lavaBubble1.particleSpawn), 10, 30)
-	--love.graphics.print('particleY: ' .. tostring(lavaBubble1.y), 10, 40)
-	--love.graphics.print(tostring(self.Bubble1[2]), 10, 20)
-	--love.graphics.print(tostring(self.Bubble1[3]), 10, 30)
-
+	love.graphics.print('[' .. tostring(Vulture1.index) .. ']', Vulture1.x, Vulture1.y - 10)
+	love.graphics.print('[' .. tostring(Vulture2.index) .. ']', Vulture2.x, Vulture2.y - 10)
+	love.graphics.print('[' .. tostring(Vulture3.index) .. ']', Vulture3.x, Vulture3.y - 10)
 --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.setFont(smallFont)
 	love.graphics.print(table.concat({
 		'',
-		'',
-		'',
 		'PLAYER1.X: '..math.floor(player1.x),
-		'PLAYER1.Y: '..math.floor(player1.y),
-		--'PLAYER1.facingRight: '..tostring(player1.facingRight),
-		--'ANIMATION TIMER: ' ..tostring(animationTimer),
-		--'PLAYER1.speedTier: '..math.floor(player1.speedTier),
-		'PLAYER1.DY: ' ..tostring(string.format("%.2f", player1.dy)),
-		--'PLAYER1.skid: ' ..tostring(player1.skid),
-		'PLAYER1.DX: ' ..tostring(string.format("%.2f", player1.dx)),
-		--'justStoppedTimer: ' ..tostring(string.format("%.3f", player1.justStoppedTimer)),
-		--'justTurnedTimer: ' ..tostring(string.format("%.3f", player1.justTurnedTimer)),
-		--'justStopped = ' ..tostring(player1.justStopped),
-		--'justTurned = ' ..tostring(player1.justTurned),
-		--'love.keyboard.isDown(left) =' ..tostring(love.keyboard.isDown('left')),
-		'self.skid = ' ..tostring(player1.skid),
-		--'lastInputLocked = ' ..lastInput[1],
-		'PLAYER1.grounded: ' ..tostring(player1.grounded),
-		--'TOP COLL: ' .. tostring(player1:topCollides(platform1)),
-		'platform1 BotCol: ' .. tostring(player1:bottomCollides(platform1)),
-		'groundPlat BotCol: ' .. tostring(player1:bottomCollides(groundPlatform)),
-		--'checkedGround4L: ' .. tostring(player1:checkGrounded(platform4L)),
-		--'checkedGround4: ' .. tostring(player1:checkGrounded(platform4)),
-		'GROUND: ' .. tostring(player1.ground.name),
-		--'topcollides5: ' .. tostring(player1:topCollides(platform5)),
-		--'name: ' .. tostring(ground),
-		--'topcheckGrounded: ' .. tostring(player1:checkGrounded(groundPlatform)),
- 		--'RIGHT COLL: ' .. tostring(player1:rightCollides(platform1)),
-		--'LEFT COLL: ' .. tostring(player1:leftCollides(platform1)),
-		--'jumpTimer: ' ..tostring(player1.jumpTimer),
-		--'flapped: ' ..tostring(player1.flapped),
 	}, '\n'))
 --]]
 	
---[[
-	--KEYLOGGER
+---[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(keyloggerPlate, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 
@@ -230,7 +160,7 @@ function PlayState:render()
 	if love.keyboard.isDown('right') then
 		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end
-	--]]
+--]]
 	if self.gameOver then
 		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
 		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
