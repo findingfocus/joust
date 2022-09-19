@@ -18,7 +18,7 @@ function PlayState:init()
 	Vulture2 = Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y, 2)
 	Vulture3 = Vulture(platform5.x + 16, platform5.y, 16, 24, platform5.y, 3)
 	Vulture3.facingRight = true
-	Vulture3.dx = 1
+	Vulture3.dx = Vulture3.dx * -1
 	Vultures[1] = Vulture1
 	Vultures[2] = Vulture2
 	Vultures[3] = Vulture3
@@ -96,6 +96,23 @@ function PlayState:update(dt)
 			vulture.y = -vulture.height
 		end
 	end
+
+	for i, vulture in pairs(Vultures) do
+		for index, others in pairs(Vultures) do
+			if vulture.index ~= index then
+				if vulture:Collides(others) then
+					vulture.dx = vulture.dx * -1
+					others.dx = others.dx * -1
+					if vulture.x < others.x then
+						others.x = vulture.x + vulture.width + 1
+					else
+						others.x = vulture.x - others.width - 1
+					end
+				end
+			end
+		end
+	end
+
 end
 
 function PlayState:render()

@@ -8,7 +8,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.height = height
 	self.atlas = vultureAtlas
 	self.dy = 0
-	self.dx = -1
+	self.dx = -.5
 	self.fps = 1
 	self.animationTimer = 2 / self.fps
 	self.jumpTimer = 0
@@ -45,7 +45,16 @@ function Vulture:checkGrounded(collidablePlatforms)
 			return false
 		end
 	end
+
 	return false
+end
+
+function Vulture:Collides(vulture)
+	if (self.x > vulture.x + vulture.width) or (self.x + self.width < vulture.x) or (self.y > vulture.y + vulture.height) or (self.y + self.height < vulture.y) then
+			return false
+	else
+		return true
+	end
 end
 
 function Vulture:topCollides(collidable)
@@ -105,7 +114,8 @@ function Vulture:update(dt)
 
 			if self.jumpCounter < 0 then
 				self.jumping = true
-				self.jumpCounter = math.random(1, 2)
+				love.math.setRandomSeed(self.index)
+				self.jumpCounter = math.random(2, 3, 4)
 			end
 
 			--COLLISION OF MAIN GROUND PLATFORM
@@ -263,7 +273,7 @@ function Vulture:update(dt)
 					--LOOP FRAME BACK TO 1
 					if self.frame > self.totalFrames then self.frame = 1 end
 
-				self.xoffset = self.frame + (self.width * (self.frame - 1))
+				self.xoffset = self.frame + (self.width * (self.frame - 1)) - 1
 				self.vultureSprite:setViewport(self.xoffset, 0, self.width, self.height)
 			end
 
