@@ -152,7 +152,7 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 	love.graphics.print('[' .. tostring(Vulture1.index) .. ']', Vulture1.x, Vulture1.y - 10)
 	love.graphics.print('[' .. tostring(Vulture2.index) .. ']', Vulture2.x, Vulture2.y - 10)
-	love.graphics.print('[' .. tostring(Vulture3.index) .. ']', Vulture3.x, Vulture3.y - 10)
+	love.graphics.print('[' .. tostring(Vulture3.jumping) .. ']', Vulture3.x, Vulture3.y - 10)
 --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.setFont(smallFont)

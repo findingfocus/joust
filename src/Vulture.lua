@@ -14,6 +14,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.jumpTimer = 0
 	self.frame = 1
 	self.totalFrames = 4
+	self.flapCounter = 0
 	self.xoffset = self.width
 	self.jumpCounter = math.random(3, 5)
 	self.platformSpawnY = platformSpawn
@@ -115,7 +116,16 @@ function Vulture:update(dt)
 			if self.jumpCounter < 0 then
 				self.jumping = true
 				love.math.setRandomSeed(self.index)
-				self.jumpCounter = math.random(2, 3, 4)
+				--self.jumpCounter = math.random(.1, .1, .1, .1, .1, .1, .2, .2, .2, .3, .3, 2, 3)
+				self.jumpCounter = math.random(.5, 2, 3)
+				self.flapCounter = .05
+			end
+
+			if self.jumping then
+				self.flapCounter = self.flapCounter - dt
+				if self.flapCounter < 0 then
+					self.jumping = false
+				end
 			end
 
 			--COLLISION OF MAIN GROUND PLATFORM
@@ -197,6 +207,11 @@ function Vulture:update(dt)
 			--APPLY GRAVITY WHEN IN AIR
 			if not self.grounded then
 				self.dy =  self.dy + GRAVITY * dt
+				if self.flapCounter > 0 then
+					self.vultureSprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)
+				else
+					self.vultureSprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
+				end
 			end
 
 			self.y = self.y + self.dy
@@ -229,10 +244,14 @@ function Vulture:update(dt)
 			--VULTURE JUMPING HEIGHT
 			if self.jumping then
 				self.grounded = false
-				self.dy = -.4
+				self.dy = -.05
 			end
 
-			self.jumping = false
+			--if self.jumping then
+			--	self.vultureSprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)
+			--end
+			
+			--self.jumping = false
 			self.x = self.x + self.dx
 
 			if self.dx < 0 then
@@ -281,15 +300,15 @@ function Vulture:update(dt)
 				if not self.grounded then
 					self.vultureSprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
 					if self.jumping then
-						self.jumpTimer = 0
+						--self.jumpTimer = 0
 						self.flapped = true
 					end
 
 					if self.flapped then
 						self.vultureSprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)				
-						self.jumpTimer = self.jumpTimer + dt
+						--self.jumpTimer = self.jumpTimer + dt
 						if self.jumpTimer > .1 then
-							self.flapped = false
+							--self.flapped = false
 						end
 					end
 				end
