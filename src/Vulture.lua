@@ -15,10 +15,14 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.frame = 1
 	self.totalFrames = 3
 	self.flapCounter = 0
+	self.lastX = 0
+	self.lastY = 0
+	self.lastDX = 0
 	self.xoffset = self.width
 	self.timeBetweenJumps = 0
 	self.platformSpawnY = platformSpawn
 	self.spawnHeight = 0
+	self.egg = Egg(-self.x, -self.y, self.dx)
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG
 	self.grounded = false
@@ -33,6 +37,8 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.spawning = true
 	self.exploded = false
 	self.justJumped = false
+	self.eggSpawn = false
+	self.firstFrameExploded = false
 	self.ground = Platform('name', 1, 1, 1, 1)
 	self.vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
@@ -109,7 +115,9 @@ function Vulture:update(dt)
 		end
 		self.y = self.y - 0.5
 	elseif not self.exploded then -- IF NOT SPAWNING AND NOT EXPLODED
-
+			self.lastX = self.x
+			self.lastY = self.y
+			self.lastDX = self.dx
 			--COLLISION OF MAIN GROUND PLATFORM
 			if self:bottomCollides(groundPlatform) then
 				self.height = 24
@@ -288,9 +296,18 @@ function Vulture:update(dt)
 					end
 				end
 
-    --else -- IF EXPLODED
+    else -- IF EXPLODED
+    	if self.eggSpawn then
+    		if self.grounded then
+    			self.egg = Egg(self.lastX + 4, self.lastY + 2, self.lastDX)
+    		else
+    			self.egg = Egg(self.lastX + 4, self.lastY + 4, self.lastDX)
+    		end
 
+    		self.eggSpawn = false
+    	end
 	end
+
 end
 
 

@@ -183,7 +183,7 @@ function Ostrich:update(dt)
 
 				if self:topCollides(platform) then
 					if self.dy < 0 then
-						self.dy = math.abs(self.dy) - GRAVITYNEGATE
+						self.dy = math.abs(self.dy / 2) - GRAVITYNEGATE
 						self.y = platform.y + platform.height + 1
 					end
 				end
@@ -237,6 +237,7 @@ function Ostrich:update(dt)
 					vulture.y = self.y - vulture.height
 				elseif self:enemyBottomCollides(vulture) then
 					vulture.exploded = true
+					vulture.firstFrameExploded = true
 					self.dy = self.dy * -1
 					self.y = vulture.y - self.height
 				elseif self:enemyLeftCollides(vulture) then
@@ -244,6 +245,7 @@ function Ostrich:update(dt)
 						self.exploded = true
 					elseif not self.facingRight and not vulture.facingRight then
 						vulture.exploded = true
+						vulture.firstFrameExploded = true
 					elseif self.facingRight and not vulture.facingRight then
 						self.dx = self.dx * -1
 						self.x = vulture.x + vulture.width
@@ -256,11 +258,13 @@ function Ostrich:update(dt)
 							self.exploded = true
 						elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
 							vulture.exploded = true
+							vulture.firstFrameExploded = true
 						end
 					end
 				elseif self:enemyRightCollides(vulture) then
 					if self.facingRight and vulture.facingRight then
 						vulture.exploded = true
+						vulture.firstFrameExploded = true
 					elseif not self.facingRight and not vulture.facingRight then
 						self.exploded = true
 					elseif self.facingRight and not vulture.facingRight then
@@ -270,8 +274,10 @@ function Ostrich:update(dt)
 							vulture.x = self.x + self.width
 						elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
 							vulture.exploded = true
+							vulture.firstFrameExploded = true
 						elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
 							self.exploded = true
+							vulture.firstFrameExploded = true
 						end
 					elseif not self.facingRight and vulture.facingRight then
 						self.dx = self.dx * -1

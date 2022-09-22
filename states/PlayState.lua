@@ -92,8 +92,13 @@ function PlayState:update(dt)
 	--Placing vultures in graveyard offscreen
 	for k, vulture in pairs(Vultures) do
 		if vulture.exploded then
+			if vulture.firstFrameExploded then
+				vulture.eggSpawn = true --MAKE THIS ONLY TRUE THE FRAME WE EXPLODE
+				vulture.firstFrameExploded = false
+			end
 			vulture.x = -vulture.width
 			vulture.y = -vulture.height
+			vulture.egg:update(dt)
 		end
 	end
 
@@ -135,11 +140,15 @@ function PlayState:render()
 
 	player1:render()
 
+
 	love.graphics.setFont(smallFont)
 	love.graphics.print('LIVES: ' .. tostring(self.lives), 10, VIRTUAL_HEIGHT - 25)
 
 	for k, vulture in pairs(Vultures) do
 		vulture:render()
+		if vulture.exploded then
+			vulture.egg:render()
+		end
 	end
 	
 	lavaBubble1:render()
@@ -150,8 +159,9 @@ function PlayState:render()
 	end
 
 	love.graphics.setFont(smallFont)
-	--love.graphics.print('[' .. tostring(Vulture1.grounded) .. ']', Vulture1.x, Vulture1.y - 10)
-	--love.graphics.print('[' .. tostring(Vulture2.grounded) .. ']', Vulture2.x, Vulture2.y - 10)
+	--love.graphics.print('[' .. tostring(1) .. ']', Vulture1.x, Vulture1.y - 10)
+	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
+	--love.graphics.print('eggSpawn: ' .. tostring(Vultures[1].eggSpawn), 5, 15)
 	--slove.graphics.print('[' .. tostring(Vulture3.grounded) .. ']', Vulture3.x, Vulture3.y - 10)
 --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
@@ -178,6 +188,12 @@ function PlayState:render()
 		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end
 --]]
+--[[
+	if Vultures[1].exploded then
+		Vultures[1].egg:render()
+	end
+--]]
+
 	if self.gameOver then
 		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
 		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
