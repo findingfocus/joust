@@ -7,11 +7,12 @@ function Egg:init(lastX, lastY, dx)
 	self.height = 8
 	self.atlas = eggAtlas
 	self.dx = dx
+	self.dy = 0
 	self.eggSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
 
 function Egg:groundCollide(collidable)
-	if self.x < collidable.x + collidable.width and self.x + self.width > collidable.x and self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
+	if self.x < collidable.x + collidable.width - BUFFER + 1 and self.x + self.width > collidable.x + BUFFER - 1 and self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
 		return true
 	end
 	return false
@@ -20,11 +21,12 @@ end
 function Egg:update(dt)
 	self.x = self.x + self.dx
 	if self.dx > 0 then
-		self.dx = math.max(0, self.dx - .0035)
+		self.dx = math.max(0, self.dx - .002)
 	elseif self.dx < 0 then
-		self.dx = math.min(0, self.dx + .0035)
+		self.dx = math.min(0, self.dx + .002)
 	end
-	self.y = self.y + GRAVITY / 2
+	self.dy = self.dy + .02
+	self.y = self.y + self.dy
 end
 
 function Egg:render()

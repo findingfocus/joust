@@ -118,6 +118,22 @@ function PlayState:update(dt)
 		end
 	end
 
+	for l, vulture in pairs(Vultures) do
+		if vulture.egg:groundCollide(groundPlatform) then
+				vulture.egg.y = groundPlatform.y - vulture.egg.height
+				vulture.egg.dy = math.max(-vulture.egg.dy + .25, -.9)
+		end
+
+		for m, platform in pairs(collidablePlatforms) do
+			if vulture.egg:groundCollide(platform) then
+				vulture.egg.y = platform.y - vulture.egg.height
+				vulture.egg.dy = math.max(-vulture.egg.dy + .25, -.9)
+			end
+		end
+	end
+
+
+
 end
 
 function PlayState:render()
@@ -160,6 +176,7 @@ function PlayState:render()
 
 	love.graphics.setFont(smallFont)
 	--love.graphics.print('[' .. tostring(1) .. ']', Vulture1.x, Vulture1.y - 10)
+	--love.graphics.print('egg dy: ' .. tostring(Vultures[1].egg.dy), 5, 15)
 	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
 	--love.graphics.print('eggSpawn: ' .. tostring(Vultures[1].eggSpawn), 5, 15)
 	--slove.graphics.print('[' .. tostring(Vulture3.grounded) .. ']', Vulture3.x, Vulture3.y - 10)
