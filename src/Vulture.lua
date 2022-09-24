@@ -22,6 +22,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.timeBetweenJumps = 0
 	self.platformSpawnY = platformSpawn
 	self.spawnHeight = 0
+	self.explosionTimer = 0
 	self.egg = Egg(-self.x, -self.y, self.dx)
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG
@@ -297,6 +298,8 @@ function Vulture:update(dt)
 				end
 
     else -- IF EXPLODED
+    	self.explosionTimer = self.explosionTimer + dt
+
     	if self.eggSpawn then
     		if self.grounded then
     			self.egg = Egg(self.lastX + 4, self.lastY + 2, self.lastDX)
@@ -341,6 +344,18 @@ function Vulture:render()
 			else
 				love.graphics.draw(self.atlas, self.vultureSprite, math.floor(self.x), self.y, 0, -1, 1, self.width)
 			end
+		end
+	elseif self.exploded then
+				--Render explosion sprites
+		if self.explosionTimer <= .05 then
+			love.graphics.draw(explosion1, self.lastX, self.lastY)
+			--render explosionSprite1
+		elseif self.explosionTimer <= .1 then
+			love.graphics.draw(explosion2, self.lastX, self.lastY)
+			--render explosionSprite2
+		elseif self.explosionTimer <= .15 then
+			love.graphics.draw(explosion3, self.lastX, self.lastY)
+			--render explosionSprite3
 		end
 	end
 end
