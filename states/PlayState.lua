@@ -119,6 +119,24 @@ function PlayState:update(dt)
 	end
 
 	for l, vulture in pairs(Vultures) do
+		if player1:Collides(vulture.egg) and not vulture.egg.invulnerable then
+			if math.abs(player1.dx) < .3 then
+				if player1.x + (player1.width / 2) < vulture.egg.x + 4.1 and player1.x + (player1.width / 2) > vulture.egg.x + 3.9 then
+					-- add increment points
+					vulture.egg.x = -vulture.egg.width
+					vulture.egg.y = -vulture.egg.height
+					vulture.egg.dx = 0
+					vulture.egg.dy = 0
+				end
+
+			elseif math.abs(player1.dx) > .3 then
+				vulture.egg.x = -vulture.egg.width
+				vulture.egg.y = -vulture.egg.height
+				vulture.egg.dx = 0
+				vulture.egg.dy = 0
+
+			end
+		end
 		if vulture.egg:groundCollide(groundPlatform) then
 				vulture.egg.y = groundPlatform.y - vulture.egg.height
 				vulture.egg.dy = math.max(-vulture.egg.dy + .25, -.9)
@@ -175,8 +193,8 @@ function PlayState:render()
 	end
 
 	love.graphics.setFont(smallFont)
-	--love.graphics.print('[' .. tostring(1) .. ']', Vulture1.x, Vulture1.y - 10)
-	--love.graphics.print('egg dy: ' .. tostring(Vultures[1].egg.dy), 5, 15)
+	love.graphics.print('[' .. tostring(1) .. ']', Vulture1.x, Vulture1.y - 10)
+	love.graphics.print('playerDX: ' .. tostring(player1.dx), 5, 15)
 	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
 	--love.graphics.print('eggSpawn: ' .. tostring(Vultures[1].eggSpawn), 5, 15)
 	--slove.graphics.print('[' .. tostring(Vulture3.grounded) .. ']', Vulture3.x, Vulture3.y - 10)

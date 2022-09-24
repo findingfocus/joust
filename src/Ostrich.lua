@@ -579,6 +579,7 @@ function Ostrich:update(dt)
 			self.death = true
 		end
 	end
+
 end
 
 function Ostrich:render()

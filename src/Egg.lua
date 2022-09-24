@@ -8,6 +8,8 @@ function Egg:init(lastX, lastY, dx)
 	self.atlas = eggAtlas
 	self.dx = dx
 	self.dy = 0
+	self.invulnerableTimer = 0
+	self.invulnerable = false
 	self.eggSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
 

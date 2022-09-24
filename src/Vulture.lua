@@ -299,18 +299,23 @@ function Vulture:update(dt)
 
     else -- IF EXPLODED
     	self.explosionTimer = self.explosionTimer + dt
-
     	if self.eggSpawn then
     		if self.grounded then
     			self.egg = Egg(self.lastX + 4, self.lastY + 2, self.lastDX)
     		else
     			self.egg = Egg(self.lastX + 4, self.lastY + 4, self.lastDX)
     		end
-
     		self.eggSpawn = false
+    		self.egg.invulnerable = true
     	end
 	end
 
+	if self.egg.invulnerable then
+		self.egg.invulnerableTimer = self.egg.invulnerableTimer + dt
+		if self.egg.invulnerableTimer > .6 then
+			self.egg.invulnerable = false
+		end
+	end
 end
 
 
