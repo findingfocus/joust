@@ -192,9 +192,16 @@ function PlayState:render()
 		platform:render()
 	end
 
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
+	love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
+	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
+	love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
+	
+
 	love.graphics.setFont(smallFont)
-	love.graphics.print('[' .. tostring(1) .. ']', Vulture1.x, Vulture1.y - 10)
-	love.graphics.print('playerDX: ' .. tostring(player1.dx), 5, 15)
+	--love.graphics.print('[' .. tostring(1) .. ']', Vulture1.x, Vulture1.y - 10)
+	--love.graphics.print('playerDX: ' .. tostring(player1.dx), 5, 15)
 	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
 	--love.graphics.print('eggSpawn: ' .. tostring(Vultures[1].eggSpawn), 5, 15)
 	--slove.graphics.print('[' .. tostring(Vulture3.grounded) .. ']', Vulture3.x, Vulture3.y - 10)
@@ -207,7 +214,7 @@ function PlayState:render()
 	}, '\n'))
 --]]
 	
----[[KEYLOGGER
+--[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(keyloggerPlate, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 
