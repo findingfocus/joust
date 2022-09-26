@@ -104,8 +104,7 @@ function Vulture:leftCollides(collidable)
 	return false
 end
 
-function Vulture:update(dt)
-	
+function Vulture:update(dt)	
 	--SETS GROWING VIEWPORT UPON SPWNING
 	if self.spawning then
 		self.spawnHeight = self.spawnHeight + 0.5

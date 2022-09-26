@@ -14,15 +14,19 @@ function PlayState:init()
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 	Vultures = {}
-	Vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y, 1)
-	Vulture2 = Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y, 2)
-	Vulture3 = Vulture(platform5.x + 16, platform5.y, 16, 24, platform5.y, 3)
-	Vulture3.facingRight = true
-	Vulture3.dx = Vulture3.dx * -1
-	Vultures[1] = Vulture1
-	Vultures[2] = Vulture2
-	Vultures[3] = Vulture3
-	self.lives = 4
+	--Vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y, 1)
+	--Vulture2 = Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y, 2)
+	--Vulture3 = Vulture(platform5.x + 16, platform5.y, 16, 24, platform5.y, 3)
+	--Vulture3.facingRight = true
+	--Vulture3.dx = Vulture3.dx * -1
+	--Vultures[1] = Vulture1
+	--Vultures[2] = Vulture2
+	--Vultures[3] = Vulture3
+	self.wave = 1
+	self.lives = 8
+	self.spawnPointIndex = 0
+	self.vultureSpawnPointIndex = math.random(4)
+	self.vultureSpawnTimer = 0
 	self.helpToggle = false
 	self.gameOver = false
 	self.refresh = true
@@ -38,6 +42,17 @@ end
 function PlayState:update(dt)
 	if love.keyboard.wasPressed('h') then
 		self.helpToggle = not self.helpToggle
+	end
+
+	if self.wave == 1 then
+		self.vultureSpawnTimer = self.vultureSpawnTimer + dt
+		if self.vultureSpawnTimer > 1 then
+			--Vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y, 1)
+			--Vultures[1] = Vulture1
+			--Vulture1 = Vulture(5, 5, 16, 24, 5, 1)
+			--Vultures[1] = Vulture1
+		end
+		--Vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y, 1)
 	end
 
 	--Reset Ostrich
@@ -63,11 +78,10 @@ function PlayState:update(dt)
 		if self.lives == 1 then
 			self.lives = self.lives - 1
 			self.gameOver = true
-		elseif self.lives == 0 then
-
 		else
 			self.lives = self.lives - 1
-			player1 = Ostrich(SpawnZonePoints[2].x, SpawnZonePoints[2].y, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
+			self.spawnPointIndex = math.random(4)
+			player1 = Ostrich(SpawnZonePoints[self.spawnPointIndex].x, SpawnZonePoints[self.spawnPointIndex].y, 16, 24, SpawnZonePoints[self.spawnPointIndex].y)
 			--player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 		end
 	end
@@ -208,7 +222,7 @@ function PlayState:render()
 	
 
 	love.graphics.setFont(smallFont)
-	love.graphics.print('SpawnZonePoints[2].y: ' .. tostring(SpawnZonePoints[2].y), 5, 15)
+	love.graphics.print('self.vultureSpawnTimer: ' .. tostring(self.vultureSpawnTimer), 5, 15)
 	--love.graphics.print('playerDX: ' .. tostring(player1.dx), 5, 15)
 	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
 	--love.graphics.print('eggSpawn: ' .. tostring(Vultures[1].eggSpawn), 5, 15)
