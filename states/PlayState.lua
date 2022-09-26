@@ -28,6 +28,11 @@ function PlayState:init()
 	self.refresh = true
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
+	SpawnZonePoints = {}
+	SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y)
+	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
+	SpawnZonePoints[3] = SpawnZonePoint(platform2.x + 20, platform2.y)
+	SpawnZonePoints[4] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
 end
 
 function PlayState:update(dt)
@@ -45,8 +50,10 @@ function PlayState:update(dt)
 
 	--Reset Vultures
 	if love.keyboard.wasPressed('v') then
-		Vulture1 = Vulture(platform3.x + 16, platform3.y, 16, 24, platform3.y, 1)
-		Vulture2 = Vulture(platform2.x + 16, platform2.y, 16, 24, platform2.y, 2)
+		Vulture1 = Vulture(platform3.x + 20, platform3.y, 16, 24, platform3.y, 1)
+		--Vulture1 = Vulture(platform4L.x + platform4L.width - 27, platform4L.y, 16, 24, platform4L.y, 1)
+		Vulture2 = Vulture(platform2.x + 20, platform2.y, 16, 24, platform2.y, 2)
+		--Vulture2 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, 2)
 		Vultures[1] = Vulture1
 		Vultures[2] = Vulture2
 	end
@@ -60,7 +67,8 @@ function PlayState:update(dt)
 
 		else
 			self.lives = self.lives - 1
-			player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
+			player1 = Ostrich(SpawnZonePoints[2].x, SpawnZonePoints[2].y, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
+			--player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 		end
 	end
 
@@ -200,7 +208,7 @@ function PlayState:render()
 	
 
 	love.graphics.setFont(smallFont)
-	--love.graphics.print('[' .. tostring(1) .. ']', Vulture1.x, Vulture1.y - 10)
+	love.graphics.print('SpawnZonePoints[2].y: ' .. tostring(SpawnZonePoints[2].y), 5, 15)
 	--love.graphics.print('playerDX: ' .. tostring(player1.dx), 5, 15)
 	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
 	--love.graphics.print('eggSpawn: ' .. tostring(Vultures[1].eggSpawn), 5, 15)

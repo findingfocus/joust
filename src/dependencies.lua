@@ -10,6 +10,7 @@ require '/src/Vulture'
 require '/src/Platform'
 require '/src/LavaBubble'
 require '/src/Egg'
+require '/src/SpawnZonePoint'
 
 require '/src/StateMachine'
 require '/src/BaseState'
