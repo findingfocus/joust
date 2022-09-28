@@ -29,6 +29,16 @@ function Egg:update(dt)
 	end
 	self.dy = self.dy + .02
 	self.y = self.y + self.dy
+
+	--LOOPS EGG to left side of screen
+	if self.x > VIRTUAL_WIDTH then
+		self.x = -self.width
+	end
+
+	--LOOPS EGG to right side of screen
+	if self.x < -self.width then
+		self.x = VIRTUAL_WIDTH
+	end
 end
 
 function Egg:render()
