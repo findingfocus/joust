@@ -182,28 +182,31 @@ end
 function PlayState:render()
 	love.graphics.clear(0/255, 0/255, 0/255, 255/255)
 
-	--lava stand-in
-	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT, VIRTUAL_WIDTH, LAVAHEIGHT)
-
-
 	--draw ground top level **to be made retractable
 	love.graphics.setColor(133/255, 70/255, 15/255, 255/255)
 	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - 36, VIRTUAL_WIDTH, 4)
 
 	--ground bottom stand-in
-	love.graphics.setColor(219/255, 164/255, 0/255, 255/255)
-	love.graphics.rectangle('fill', 53, VIRTUAL_HEIGHT - 36, 186, 32)
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	--love.graphics.rectangle('fill', 53, VIRTUAL_HEIGHT - 36, 186, 32)
+	love.graphics.draw(groundBottom, 53, VIRTUAL_HEIGHT - 36)
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+
+	--lava stand-in
+	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT, VIRTUAL_WIDTH, LAVAHEIGHT)
+
 
 	player1:render()
 
 
 	love.graphics.setFont(smallFont)
-	love.graphics.print('LIVES: ' .. tostring(self.lives), 10, VIRTUAL_HEIGHT - 25)
+	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
+	love.graphics.print(tostring(self.lives), 138, VIRTUAL_HEIGHT - 28)
 
 	for k, vulture in pairs(Vultures) do
+		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		vulture:render()
 		if vulture.exploded then
 			vulture.egg:render()

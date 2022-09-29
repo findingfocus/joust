@@ -30,6 +30,7 @@ function love.load()
 	explosion3 = love.graphics.newImage('src/pics/explosion3.png')
 	eggAtlas = love.graphics.newImage('src/pics/eggAtlas.png')
 	platformSpawn = love.graphics.newImage('src/pics/platformSpawn.png')
+	groundBottom = love.graphics.newImage('src/pics/groundBottom.png')
 
 	sounds = {
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),
