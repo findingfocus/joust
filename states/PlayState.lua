@@ -19,6 +19,7 @@ function PlayState:init()
 	self.spawnPointIndex = 0
 	self.vultureSpawnPointIndex = 0
 	self.vultureSpawnTimer = 10
+	self.score = 0
 	self.helpToggle = false
 	self.gameOver = false
 	self.refresh = true
@@ -32,6 +33,7 @@ function PlayState:init()
 end
 
 function PlayState:update(dt)
+	self.score = self.score + 10
 	if love.keyboard.wasPressed('h') then
 		self.helpToggle = not self.helpToggle
 	end
@@ -204,6 +206,7 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	love.graphics.print(tostring(self.lives), 138, VIRTUAL_HEIGHT - 28)
+	love.graphics.print(string.format("%06d", self.score), 67, VIRTUAL_HEIGHT - 28)
 
 	for k, vulture in pairs(Vultures) do
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
