@@ -23,6 +23,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.platformSpawnY = platformSpawn
 	self.spawnHeight = 0
 	self.explosionTimer = 0
+	self.pointTier = 500
 	self.egg = Egg(-self.x, -self.y, self.dx)
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG

@@ -9,6 +9,8 @@ function love.load()
 
 	math.randomseed(os.time())
 
+	Score = 0
+
 	smallerFont = love.graphics.newFont('fonts/arcadeFont.ttf', 6)
 	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 8)
 	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 16)

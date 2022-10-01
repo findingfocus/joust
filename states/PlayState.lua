@@ -16,10 +16,10 @@ function PlayState:init()
 	Vultures = {}
 	self.wave = 1
 	self.lives = 8
+	self.eggCounter = 0
 	self.spawnPointIndex = 0
 	self.vultureSpawnPointIndex = 0
 	self.vultureSpawnTimer = 10
-	self.score = 0
 	self.helpToggle = false
 	self.gameOver = false
 	self.refresh = true
@@ -33,7 +33,6 @@ function PlayState:init()
 end
 
 function PlayState:update(dt)
-	self.score = self.score + 10
 	if love.keyboard.wasPressed('h') then
 		self.helpToggle = not self.helpToggle
 	end
@@ -147,13 +146,20 @@ function PlayState:update(dt)
 
 	for l, vulture in pairs(Vultures) do
 		if player1:Collides(vulture.egg) and not vulture.egg.invulnerable then
+
 			if math.abs(player1.dx) < .3 then
 				if player1.x + (player1.width / 2) < vulture.egg.x + 4.1 and player1.x + (player1.width / 2) > vulture.egg.x + 3.9 then
-					-- add increment points
 					vulture.egg.x = -vulture.egg.width
 					vulture.egg.y = -vulture.egg.height
 					vulture.egg.dx = 0
 					vulture.egg.dy = 0
+					if self.eggCounter == 0 then
+						Score = Score + 250
+					elseif self.eggCounter == 1 then
+						Score = Score + 500
+					elseif self.eggCounter == 2 then
+						Score = Score + 750
+					end
 				end
 
 			elseif math.abs(player1.dx) > .3 then
@@ -161,7 +167,16 @@ function PlayState:update(dt)
 				vulture.egg.y = -vulture.egg.height
 				vulture.egg.dx = 0
 				vulture.egg.dy = 0
-
+				if self.eggCounter == 0 then
+					Score = Score + 250
+					self.eggCounter = self.eggCounter + 1
+				elseif self.eggCounter == 1 then
+					Score = Score + 500
+					self.eggCounter = self.eggCounter + 1
+				elseif self.eggCounter == 2 then
+					Score = Score + 750
+					self.eggCounter = self.eggCounter + 1
+				end
 			end
 		end
 		if vulture.egg:groundCollide(groundPlatform) then
@@ -206,7 +221,6 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	love.graphics.print(tostring(self.lives), 138, VIRTUAL_HEIGHT - 28)
-	love.graphics.print(string.format("%06d", self.score), 67, VIRTUAL_HEIGHT - 28)
 
 	for k, vulture in pairs(Vultures) do
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

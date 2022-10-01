@@ -17,6 +17,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.totalFrames = 4
 	self.explosionTimer = 0
 	self.spawnHeight = 0
+	--self.score = 0
 	self.xoffset = self.width
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG
@@ -240,12 +241,14 @@ function Ostrich:update(dt)
 					vulture.firstFrameExploded = true
 					self.dy = self.dy * -1
 					self.y = vulture.y - self.height
+					Score = Score + vulture.pointTier
 				elseif self:enemyLeftCollides(vulture) then
 					if self.facingRight and vulture.facingRight then
 						self.exploded = true
 					elseif not self.facingRight and not vulture.facingRight then
 						vulture.exploded = true
 						vulture.firstFrameExploded = true
+						Score = Score + vulture.pointTier
 					elseif self.facingRight and not vulture.facingRight then
 						self.dx = self.dx * -1
 						self.x = vulture.x + vulture.width
@@ -259,12 +262,14 @@ function Ostrich:update(dt)
 						elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
 							vulture.exploded = true
 							vulture.firstFrameExploded = true
+							Score = Score + vulture.pointTier
 						end
 					end
 				elseif self:enemyRightCollides(vulture) then
 					if self.facingRight and vulture.facingRight then
 						vulture.exploded = true
 						vulture.firstFrameExploded = true
+						Score = Score + vulture.pointTier
 					elseif not self.facingRight and not vulture.facingRight then
 						self.exploded = true
 					elseif self.facingRight and not vulture.facingRight then
@@ -275,6 +280,7 @@ function Ostrich:update(dt)
 						elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
 							vulture.exploded = true
 							vulture.firstFrameExploded = true
+							Score = Score + vulture.pointTier
 						elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
 							self.exploded = true
 							vulture.firstFrameExploded = true
@@ -583,6 +589,10 @@ function Ostrich:update(dt)
 end
 
 function Ostrich:render()
+	love.graphics.setFont(smallFont)
+	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
+	love.graphics.print(string.format("%06d", Score), 67, VIRTUAL_HEIGHT - 28)
+
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	if not self.spawning then
