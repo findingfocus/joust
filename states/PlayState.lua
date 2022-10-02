@@ -246,7 +246,7 @@ function PlayState:render()
 
 	love.graphics.setFont(smallFont)
 	--love.graphics.print('self.vultureSpawnTimer: ' .. tostring(self.vultureSpawnTimer), 5, 15)
-	--love.graphics.print('playerDX: ' .. tostring(player1.dx), 5, 15)
+	--love.graphics.print('TS: ' .. tostring(player1.temporarySafety), 5, 15)
 	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
 	--love.graphics.print('eggSpawn: ' .. tostring(Vultures[1].eggSpawn), 5, 15)
 	--slove.graphics.print('[' .. tostring(Vulture3.grounded) .. ']', Vulture3.x, Vulture3.y - 10)

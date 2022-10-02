@@ -17,6 +17,8 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.totalFrames = 4
 	self.explosionTimer = 0
 	self.spawnHeight = 0
+	self.safetyTime = 5
+	self.temporarySafety = true
 	--self.score = 0
 	self.xoffset = self.width
 	self.justStoppedTimer = INPUTLAG
@@ -132,6 +134,15 @@ end
 lastInput = {"right"}
 
 function Ostrich:update(dt)
+	self.safetyTime = self.safetyTime - dt
+
+	if self.safetyTime < 0 then
+		self.temporarySafety = false
+	end
+
+	if love.keyboard.wasPressed('left') or love.keyboard.wasPressed('right') or love.keyboard.wasPressed('a') then
+		self.temporarySafety = false
+	end
 		ostrichSprite:setViewport(1, 0, self.width, self.spawnHeight)
 ---[[SPAWNING LOGIC
 	if self.spawning then
@@ -232,63 +243,65 @@ function Ostrich:update(dt)
 
 ---[[ENEMY COLLISIONS
 			for k, vulture in pairs(Vultures) do
-				if self:enemyTopCollides(vulture) then
-					self.exploded = true
-					vulture.dy = vulture.dy * -1
-					vulture.y = self.y - vulture.height
-				elseif self:enemyBottomCollides(vulture) then
-					vulture.exploded = true
-					vulture.firstFrameExploded = true
-					self.dy = self.dy * -1
-					self.y = vulture.y - self.height
-					Score = Score + vulture.pointTier
-				elseif self:enemyLeftCollides(vulture) then
-					if self.facingRight and vulture.facingRight then
+				if not self.temporarySafety then
+					if self:enemyTopCollides(vulture) then
 						self.exploded = true
-					elseif not self.facingRight and not vulture.facingRight then
+						vulture.dy = vulture.dy * -1
+						vulture.y = self.y - vulture.height
+					elseif self:enemyBottomCollides(vulture) then
 						vulture.exploded = true
 						vulture.firstFrameExploded = true
+						self.dy = self.dy * -1
+						self.y = vulture.y - self.height
 						Score = Score + vulture.pointTier
-					elseif self.facingRight and not vulture.facingRight then
-						self.dx = self.dx * -1
-						self.x = vulture.x + vulture.width
-					elseif not self.facingRight and vulture.facingRight then
-						if self.y == vulture.y then
-							self.dx = self.dx * -1
-							vulture.dx = vulture.dx * -1
-							vulture.x = self.x - vulture.width
-						elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
+					elseif self:enemyLeftCollides(vulture) then
+						if self.facingRight and vulture.facingRight then
 							self.exploded = true
-						elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
+						elseif not self.facingRight and not vulture.facingRight then
 							vulture.exploded = true
 							vulture.firstFrameExploded = true
 							Score = Score + vulture.pointTier
+						elseif self.facingRight and not vulture.facingRight then
+							self.dx = self.dx * -1
+							self.x = vulture.x + vulture.width
+						elseif not self.facingRight and vulture.facingRight then
+							if self.y == vulture.y then
+								self.dx = self.dx * -1
+								vulture.dx = vulture.dx * -1
+								vulture.x = self.x - vulture.width
+							elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
+								self.exploded = true
+							elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
+								vulture.exploded = true
+								vulture.firstFrameExploded = true
+								Score = Score + vulture.pointTier
+							end
 						end
+					elseif self:enemyRightCollides(vulture) then
+						if self.facingRight and vulture.facingRight then
+							vulture.exploded = true
+							vulture.firstFrameExploded = true
+							Score = Score + vulture.pointTier
+						elseif not self.facingRight and not vulture.facingRight then
+							self.exploded = true
+						elseif self.facingRight and not vulture.facingRight then
+							if self.y == vulture.y then
+								self.dx = self.dx * -1
+								vulture.dx = vulture.dx * -1
+								vulture.x = self.x + self.width
+							elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
+								vulture.exploded = true
+								vulture.firstFrameExploded = true
+								Score = Score + vulture.pointTier
+							elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
+								self.exploded = true
+								vulture.firstFrameExploded = true
+							end
+						elseif not self.facingRight and vulture.facingRight then
+							self.dx = self.dx * -1
+							self.x = vulture.x - self.width
+						end 
 					end
-				elseif self:enemyRightCollides(vulture) then
-					if self.facingRight and vulture.facingRight then
-						vulture.exploded = true
-						vulture.firstFrameExploded = true
-						Score = Score + vulture.pointTier
-					elseif not self.facingRight and not vulture.facingRight then
-						self.exploded = true
-					elseif self.facingRight and not vulture.facingRight then
-						if self.y == vulture.y then
-							self.dx = self.dx * -1
-							vulture.dx = vulture.dx * -1
-							vulture.x = self.x + self.width
-						elseif self.y < vulture.y then --OSTRICH HAS HIGHER LANCE
-							vulture.exploded = true
-							vulture.firstFrameExploded = true
-							Score = Score + vulture.pointTier
-						elseif self.y > vulture.y then --VULTURE HAS HIGHER LANCE
-							self.exploded = true
-							vulture.firstFrameExploded = true
-						end
-					elseif not self.facingRight and vulture.facingRight then
-						self.dx = self.dx * -1
-						self.x = vulture.x - self.width
-					end 
 				end
 			end				
 --]]
