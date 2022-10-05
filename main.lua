@@ -18,6 +18,7 @@ function love.load()
 
 	playerAtlas = love.graphics.newImage('src/pics/joustPlayerAtlas2.png')
 	vultureAtlas = love.graphics.newImage('src/pics/vultureAtlas.png')
+	temporarySafetyAtlas = love.graphics.newImage('src/pics/temporarySafetyAtlas.png')
 	platformLeft = love.graphics.newImage('src/pics/platformLeft.png')
 	platformRight = love.graphics.newImage('src/pics/platformRight.png')
 	keyloggerPlate = love.graphics.newImage('src/pics/keyloggerBackplate.png')
