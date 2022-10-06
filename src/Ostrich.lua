@@ -6,6 +6,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.width = width
 	self.height = height
 	self.atlas = playerAtlas
+	self.temporarySafetyAtlas = temporarySafetyAtlas
 	self.platformSpawnY = platformSpawnY
 	self.dy = 0
 	self.dx = 0
@@ -18,11 +19,13 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.explosionTimer = 0
 	self.spawnHeight = 0
 	self.safetyTime = 5
+	self.spawnFrameCount = 0
 	self.temporarySafety = true
 	--self.score = 0
 	self.xoffset = self.width
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG
+	self.spawnFrame1 = true
 	self.grounded = false
 	self.skid = false
 	self.facingRight = true
@@ -37,6 +40,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.justCollided = false
 	self.ground = Platform('name', 1, 1, 1, 1)
 	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+	spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas:getDimensions())
 end
 
 function Ostrich:checkGrounded(collidablePlatforms)
@@ -143,7 +147,30 @@ function Ostrich:update(dt)
 	if love.keyboard.wasPressed('left') or love.keyboard.wasPressed('right') or love.keyboard.wasPressed('a') then
 		self.temporarySafety = false
 	end
-		ostrichSprite:setViewport(1, 0, self.width, self.spawnHeight)
+
+---[[TEMPORARY SAFETY SPRITE SWITCHING
+	if self.temporarySafety then
+		if self.spawnFrameCount > 2 then
+			self.spawnFrameCount = 0
+			if self.spawnFrame1 then
+				self.spawnFrame1 = not self.spawnFrame1
+			else
+				self.spawnFrame1 = true
+			end
+		end
+
+		if self.spawnFrame1 then
+			spawningSprite:setViewport(1, 0, self.width, self.spawnHeight) -- SPAWN FRAME 1
+			self.spawnFrameCount = self.spawnFrameCount + 1
+		else 
+			spawningSprite:setViewport(18, 0, self.width, self.spawnHeight) -- SPAWN FRAME 2
+			self.spawnFrameCount = self.spawnFrameCount + 1
+		end
+	end
+--]]
+
+
+
 ---[[SPAWNING LOGIC
 	if self.spawning then
 		self.y = self.y - 0.5
@@ -610,9 +637,9 @@ function Ostrich:render()
 
 	if not self.spawning then
 		if not self.exploded then
-			if self.facingRight then
+			if self.facingRight and not self.temporarySafety then
 				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, 1, 1) 
-			else
+			elseif not self.temporarySafety then
 				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, -1, 1, self.width)
 			end
 		elseif self.exploded then
@@ -628,13 +655,14 @@ function Ostrich:render()
 				--render explosionSprite3
 			end
 		end
-		
-	else --IF SPAWNING
+	end
+
+	if self.temporarySafety then --IF SPAWNING
 		if not self.exploded then
 			if self.facingRight then
-				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, 1, 1) 
+				love.graphics.draw(self.temporarySafetyAtlas, spawningSprite, self.x, self.y, 0, 1, 1) 
 			else
-				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, -1, 1, self.width)
+				love.graphics.draw(self.temporarySafetyAtlas, spawningSprite, self.x, self.y, 0, -1, 1, self.width)
 			end
 		end
 	end

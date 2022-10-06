@@ -191,9 +191,6 @@ function PlayState:update(dt)
 			end
 		end
 	end
-
-
-
 end
 
 function PlayState:render()
@@ -214,9 +211,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
 	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT, VIRTUAL_WIDTH, LAVAHEIGHT)
 
-
 	player1:render()
-
 
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
@@ -275,12 +270,6 @@ function PlayState:render()
 		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end
 --]]
---[[
-	if Vultures[1].exploded then
-		Vultures[1].egg:render()
-	end
---]]
-
 	if self.gameOver then
 		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
 		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
