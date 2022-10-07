@@ -21,7 +21,6 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.safetyTime = 5
 	self.spawnFrameCount = 0
 	self.temporarySafety = true
-	--self.score = 0
 	self.xoffset = self.width
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG
@@ -144,8 +143,10 @@ function Ostrich:update(dt)
 		self.temporarySafety = false
 	end
 
-	if love.keyboard.wasPressed('left') or love.keyboard.wasPressed('right') or love.keyboard.wasPressed('a') then
-		self.temporarySafety = false
+	if love.keyboard.isDown('left') or love.keyboard.isDown('right') or love.keyboard.isDown('a') then
+		if not self.spawning then
+			self.temporarySafety = false
+		end
 	end
 
 ---[[TEMPORARY SAFETY SPRITE SWITCHING
@@ -180,7 +181,7 @@ function Ostrich:update(dt)
 			self.spawnHeight = 24
 		end
 
-		if self.y < self.platformSpawnY - self.height then
+		if self.y <= self.platformSpawnY - self.height then
 			self.y = self.platformSpawnY - self.height
 			self.spawning = false
 			self.grounded = true
@@ -199,7 +200,7 @@ function Ostrich:update(dt)
 			self.y = self.platformSpawnY - self.height
 		end
 --]]
-	else
+	else -- IF NOT SPAWNING
 		if not self.exploded then
 			--COLLISION OF MAIN GROUND PLATFORM
 			if self:bottomCollides(groundPlatform) then
