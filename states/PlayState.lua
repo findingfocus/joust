@@ -20,6 +20,7 @@ function PlayState:init()
 	self.spawnPointIndex = 0
 	self.vultureSpawnPointIndex = 0
 	self.vultureSpawnTimer = 10
+	self.onlyScore = PrintScore(-20,-20, 0)
 	self.helpToggle = false
 	self.gameOver = false
 	self.refresh = true
@@ -153,6 +154,9 @@ function PlayState:update(dt)
 					vulture.egg.y = -vulture.egg.height
 					vulture.egg.dx = 0
 					vulture.egg.dy = 0
+					vulture.egg.collected = true
+					self.onlyScore = PrintScore(vulture.egg.lastX, vulture.egg.lastY, 250)
+
 					if self.eggCounter == 0 then
 						Score = Score + 250
 					elseif self.eggCounter == 1 then
@@ -167,6 +171,9 @@ function PlayState:update(dt)
 				vulture.egg.y = -vulture.egg.height
 				vulture.egg.dx = 0
 				vulture.egg.dy = 0
+				vulture.egg.collected = true
+				self.onlyScore = PrintScore(vulture.egg.lastX, vulture.egg.lastY, 250)
+
 				if self.eggCounter == 0 then
 					Score = Score + 250
 					self.eggCounter = self.eggCounter + 1
@@ -191,6 +198,8 @@ function PlayState:update(dt)
 			end
 		end
 	end
+
+	self.onlyScore:update(dt)
 end
 
 function PlayState:render()
@@ -289,4 +298,11 @@ function PlayState:render()
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		love.graphics.printf('TO FLY, REPEATEDLY PRESS \'A\'', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
 	end
+
+	--SCORE
+	love.graphics.setFont(smallFont)
+	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
+	love.graphics.print(string.format("%06d", Score), 67, VIRTUAL_HEIGHT - 28)
+
+	self.onlyScore:render()
 end

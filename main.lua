@@ -11,7 +11,7 @@ function love.load()
 
 	Score = 0
 
-	smallerFont = love.graphics.newFont('fonts/arcadeFont.ttf', 6)
+	smallerFont = love.graphics.newFont('fonts/visitor.ttf', 10)
 	smallFont = love.graphics.newFont('fonts/arcadeFont.ttf', 8)
 	mediumFont = love.graphics.newFont('fonts/arcadeFont.ttf', 16)
 	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)

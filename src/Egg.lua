@@ -3,6 +3,8 @@ Egg = Class{}
 function Egg:init(lastX, lastY, dx)
 	self.x = lastX
 	self.y = lastY
+	self.lastX = 0
+	self.lastY = 0
 	self.width = 8
 	self.height = 8
 	self.atlas = eggAtlas
@@ -10,6 +12,7 @@ function Egg:init(lastX, lastY, dx)
 	self.dy = 0
 	self.invulnerableTimer = 0
 	self.invulnerable = false
+	self.collected = false
 	self.eggSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
 
@@ -21,6 +24,11 @@ function Egg:groundCollide(collidable)
 end
 
 function Egg:update(dt)
+	if not self.collected then
+		self.lastX = self.x
+		self.lastY = self.y
+	end 
+
 	self.x = self.x + self.dx
 	if self.dx > 0 then
 		self.dx = math.max(0, self.dx - .002)

@@ -630,10 +630,6 @@ function Ostrich:update(dt)
 end
 
 function Ostrich:render()
-	love.graphics.setFont(smallFont)
-	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
-	love.graphics.print(string.format("%06d", Score), 67, VIRTUAL_HEIGHT - 28)
-
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	if not self.spawning then

@@ -11,6 +11,7 @@ require '/src/Platform'
 require '/src/LavaBubble'
 require '/src/Egg'
 require '/src/SpawnZonePoint'
+require '/src/PrintScore'
 
 require '/src/StateMachine'
 require '/src/BaseState'
