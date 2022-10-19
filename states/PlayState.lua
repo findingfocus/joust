@@ -25,6 +25,8 @@ function PlayState:init()
 	self.gameOver = false
 	self.refresh = true
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 8, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
+	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
+	player1.temporarySafety = false
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	SpawnZonePoints = {}
 	SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y)
