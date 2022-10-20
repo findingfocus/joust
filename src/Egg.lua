@@ -17,10 +17,16 @@ function Egg:init(lastX, lastY, dx)
 end
 
 function Egg:groundCollide(collidable)
+	if self.x < collidable.x + collidable.width - BUFFER + 1 and self.x + self.width > collidable.x + BUFFER - 1 and self.y + 5 < collidable.y + (collidable.height / 2) and self.y + self.height > collidable.y then
+		return true
+	end
+	return false
+--[[
 	if self.x < collidable.x + collidable.width - BUFFER + 1 and self.x + self.width > collidable.x + BUFFER - 1 and self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
 		return true
 	end
 	return false
+--]]
 end
 
 function Egg:update(dt)
