@@ -17,7 +17,7 @@ function Egg:init(lastX, lastY, dx)
 end
 
 function Egg:groundCollide(collidable)
-	if self.x < collidable.x + collidable.width - BUFFER + 1 and self.x + self.width > collidable.x + BUFFER - 1 and self.y + 5 < collidable.y + (collidable.height / 2) and self.y + self.height > collidable.y then
+	if self.x < collidable.x + collidable.width - (BUFFER / 2) and self.x + self.width > collidable.x + (BUFFER / 2) and self.y + 6 < collidable.y + 2 and self.y + self.height > collidable.y then
 		return true
 	end
 	return false
@@ -27,6 +27,22 @@ function Egg:groundCollide(collidable)
 	end
 	return false
 --]]
+end
+
+function Egg:leftCollide(collidable)
+	if self.x < collidable.x + collidable.width - 2 and self.x + (self.width / 2 - 2) > collidable.x + collidable.width - (self.width / 2) and self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
+		return true
+	end
+
+	return false
+end
+
+function Egg:rightCollide(collidable)
+	if self.x + (self.width / 2) < collidable.x + (self.width / 2 - 4) and self.x + self.width > collidable.x and self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
+		return true
+	end
+
+	return false
 end
 
 function Egg:update(dt)

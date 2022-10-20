@@ -33,6 +33,9 @@ function PlayState:init()
 	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
 	SpawnZonePoints[3] = SpawnZonePoint(platform2.x + 20, platform2.y)
 	SpawnZonePoints[4] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
+	self.eggTest = Egg(0, 0, 0)
+	self.mouseX = 0
+	self.mouseY = 0
 end
 
 function PlayState:update(dt)
@@ -201,7 +204,12 @@ function PlayState:update(dt)
 		end
 	end
 
+	self.mouseX = love.mouse.getX()
+	self.mouseY = love.mouse.getY()
+
 	self.onlyScore:update(dt)
+	self.eggTest.x = self.mouseX
+	self.eggTest.y = self.mouseY
 end
 
 function PlayState:render()
@@ -251,6 +259,9 @@ function PlayState:render()
 	
 
 	love.graphics.setFont(smallFont)
+	love.graphics.print('testEgg:groundCollide: ' .. tostring(self.eggTest:groundCollide(platform2)), 5, 15)
+	love.graphics.print('testEgg:leftCollide: ' .. tostring(self.eggTest:leftCollide(platform2)), 5, 25)
+	love.graphics.print('testEgg:rightCollide: ' .. tostring(self.eggTest:rightCollide(platform2)), 5, 35)
 	--love.graphics.print('self.vultureSpawnTimer: ' .. tostring(self.vultureSpawnTimer), 5, 15)
 	--love.graphics.print('TS: ' .. tostring(player1.temporarySafety), 5, 15)
 	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
@@ -305,6 +316,7 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	love.graphics.print(string.format("%06d", Score), 67, VIRTUAL_HEIGHT - 28)
-
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	self.eggTest:render()
 	self.onlyScore:render()
 end
