@@ -303,11 +303,7 @@ function Vulture:update(dt)
     else -- IF EXPLODED
     	self.explosionTimer = self.explosionTimer + dt
     	if self.eggSpawn then
-    		--if self.grounded then
-    			self.egg = Egg(self.lastX + 4, self.lastY + 2, self.lastDX)
-    		--else
-    			--self.egg = Egg(self.lastX + 4, self.lastY + 4, self.lastDX)
-    		--end
+    		self.egg = Egg(self.lastX + 4, self.lastY + 2, self.lastDX)
     		self.eggSpawn = false
     		self.egg.invulnerable = true
     	end
@@ -323,21 +319,10 @@ end
 
 
 function Vulture:render()
-	--[[
+--[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.setFont(smallFont)
 	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides(self)), 5, 10)
-	love.graphics.print('BottomCollision: ' .. tostring(player1:enemyBottomCollides(self)), 5, 20)
-	love.graphics.print('LeftCollision: ' .. tostring(player1:enemyLeftCollides(self)), 5, 30)
-	love.graphics.print('RightCollision: ' .. tostring(player1:enemyRightCollides(self)), 5, 40)
-	--]]
---[[
-	love.graphics.setFont(smallFont)
-	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides()), 5, 10)
-	love.graphics.print('mouseX: ' .. tostring(mouseX), 5, 10)
-	love.graphics.print('mouseY: ' .. tostring(mouseY), 5, 20)
-	love.graphics.print('vultureX: ' .. tostring(self.x), 5, 30)
-	love.graphics.print('vultureY: ' .. tostring(self.y), 5, 40)
 --]]
 	if not self.exploded then
 		if self.spawning then
