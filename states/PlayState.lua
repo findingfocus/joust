@@ -201,6 +201,14 @@ function PlayState:update(dt)
 				vulture.egg.y = platform.y - vulture.egg.height
 				vulture.egg.dy = math.max(-vulture.egg.dy + .25, -.9)
 			end
+			if vulture.egg:leftCollide(platform) then
+				vulture.egg.x = platform.x + platform.width
+				vulture.egg.dx = math.abs(vulture.egg.dx)
+			end
+			if vulture.egg:rightCollide(platform) then
+				vulture.egg.x = platform.x - vulture.egg.width
+				vulture.egg.dx = -1 * vulture.egg.dx
+			end
 		end
 	end
 
@@ -259,9 +267,9 @@ function PlayState:render()
 	
 
 	love.graphics.setFont(smallFont)
-	love.graphics.print('testEgg:groundCollide: ' .. tostring(self.eggTest:groundCollide(platform2)), 5, 15)
-	love.graphics.print('testEgg:leftCollide: ' .. tostring(self.eggTest:leftCollide(platform2)), 5, 25)
-	love.graphics.print('testEgg:rightCollide: ' .. tostring(self.eggTest:rightCollide(platform2)), 5, 35)
+	--love.graphics.print('testEgg:groundCollide: ' .. tostring(self.eggTest:groundCollide(platform2)), 5, 15)
+	--love.graphics.print('testEgg:leftCollide: ' .. tostring(self.eggTest:leftCollide(platform2)), 5, 25)
+	--love.graphics.print('testEgg:rightCollide: ' .. tostring(self.eggTest:rightCollide(platform2)), 5, 35)
 	--love.graphics.print('self.vultureSpawnTimer: ' .. tostring(self.vultureSpawnTimer), 5, 15)
 	--love.graphics.print('TS: ' .. tostring(player1.temporarySafety), 5, 15)
 	--love.graphics.print('exploded: ' .. tostring(Vultures[1].exploded), 5, 5)
@@ -317,6 +325,6 @@ function PlayState:render()
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	love.graphics.print(string.format("%06d", Score), 67, VIRTUAL_HEIGHT - 28)
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	self.eggTest:render()
+	--self.eggTest:render()
 	self.onlyScore:render()
 end
