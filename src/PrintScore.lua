@@ -1,7 +1,7 @@
 PrintScore = Class{}
 
 function PrintScore:init(lastX, lastY, scoreAmount)
-	self.timer = 3
+	self.timer = 0
 	self.lastX = lastX
 	self.lastY = lastY
 	self.scoreAmount = scoreAmount

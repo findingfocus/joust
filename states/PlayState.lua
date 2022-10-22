@@ -16,15 +16,17 @@ function PlayState:init()
 	Vultures = {}
 	self.wave = 1
 	self.lives = 8
-	self.eggCounter = 0
+	self.eggCount = 1
 	self.spawnPointIndex = 0
 	self.vultureSpawnPointIndex = 0
 	self.vultureSpawnTimer = 10
-	self.onlyScore = PrintScore(-20,-20, 0)
+	self.scoresTable = {}
+	self.wave1ScorePopulate = false
+	self.lowestEggScore = 0
 	self.helpToggle = false
 	self.gameOver = false
 	self.refresh = true
-	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 15, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
+	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
@@ -41,6 +43,16 @@ function PlayState:update(dt)
 	end
 
 	if self.wave == 1 then
+		if not self.wave1ScorePopulate then
+			self.lowestEggScore = 250
+			--ADD SCORE OBJECT FOR WAVE 1
+			for i = 1, 4 do
+				table.insert(self.scoresTable, PrintScore(-20, -20, self.lowestEggScore))
+				self.lowestEggScore = self.lowestEggScore + 250 --Increment by bounder score
+			end
+			self.wave1ScorePopulate = true
+		end
+
 		if self.vultureSpawnTimer > 0 then
 			self.vultureSpawnTimer = self.vultureSpawnTimer - dt
 		else
@@ -157,35 +169,25 @@ function PlayState:update(dt)
 					vulture.egg.dx = 0
 					vulture.egg.dy = 0
 					vulture.egg.collected = true
-					self.onlyScore = PrintScore(vulture.egg.lastX, vulture.egg.lastY, 250)
-
-					if self.eggCounter == 0 then
-						Score = Score + 250
-					elseif self.eggCounter == 1 then
-						Score = Score + 500
-					elseif self.eggCounter == 2 then
-						Score = Score + 750
-					end
+					self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
+					self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
+					self.scoresTable[self.eggCount].timer = 3
+					Score = Score + self.scoresTable[self.eggCount].scoreAmount
+					self.eggCount = self.eggCount + 1
 				end
+			
 
-			elseif math.abs(player1.dx) > .3 then
+			elseif math.abs(player1.dx) >= .3 then
 				vulture.egg.x = -vulture.egg.width
 				vulture.egg.y = -vulture.egg.height
 				vulture.egg.dx = 0
 				vulture.egg.dy = 0
 				vulture.egg.collected = true
-				self.onlyScore = PrintScore(vulture.egg.lastX, vulture.egg.lastY, 250)
-
-				if self.eggCounter == 0 then
-					Score = Score + 250
-					self.eggCounter = self.eggCounter + 1
-				elseif self.eggCounter == 1 then
-					Score = Score + 500
-					self.eggCounter = self.eggCounter + 1
-				elseif self.eggCounter == 2 then
-					Score = Score + 750
-					self.eggCounter = self.eggCounter + 1
-				end
+				self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
+				self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
+				self.scoresTable[self.eggCount].timer = 3
+				Score = Score + self.scoresTable[self.eggCount].scoreAmount
+				self.eggCount = self.eggCount + 1
 			end
 		end
 		if vulture.egg:groundCollide(groundPlatform) then
@@ -209,7 +211,9 @@ function PlayState:update(dt)
 		end
 	end
 
-	self.onlyScore:update(dt)
+	for k, v in pairs(self.scoresTable) do
+		self.scoresTable[k]:update(dt)
+	end
 end
 
 function PlayState:render()
@@ -302,5 +306,8 @@ function PlayState:render()
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	love.graphics.print(string.format("%06d", Score), 67, VIRTUAL_HEIGHT - 28)
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	self.onlyScore:render()
+
+	for k, v in pairs(self.scoresTable) do
+		self.scoresTable[k]:render()
+	end
 end
