@@ -173,6 +173,8 @@ function PlayState:update(dt)
 					self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
 					self.scoresTable[self.eggCount].timer = 3
 					Score = Score + self.scoresTable[self.eggCount].scoreAmount
+					--CHECK EGG GROUNDED
+					--ADD AERIAL EGG BONUS IF NOT GROUNDED
 					self.eggCount = self.eggCount + 1
 				end
 			
@@ -187,6 +189,8 @@ function PlayState:update(dt)
 				self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
 				self.scoresTable[self.eggCount].timer = 3
 				Score = Score + self.scoresTable[self.eggCount].scoreAmount
+				--CHECK EGG GROUNDED
+				--ADD AERIAL EGG BONUS IF NOT GROUNDED
 				self.eggCount = self.eggCount + 1
 			end
 		end

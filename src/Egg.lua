@@ -20,7 +20,7 @@ function Egg:groundCollide(collidable)
 	if self.x < collidable.x + collidable.width - (BUFFER / 2) and self.x + self.width > collidable.x + (BUFFER / 2) and self.y + 6 < collidable.y + 2 and self.y + self.height > collidable.y then
 		return true
 	end
-	
+
 	return false
 end
 
@@ -35,6 +35,16 @@ end
 function Egg:rightCollide(collidable)
 	if self.x + (self.width / 2) < collidable.x + (self.width / 2 - 4) and self.x + self.width > collidable.x and self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
 		return true
+	end
+
+	return false
+end
+
+function Egg:eggGrounded(collidable)
+	if self.x < collidable.x + collidable.width and self.x + self.width > collidable.x then
+		if self.y == collidable.y - self.height then
+			return true
+		end
 	end
 
 	return false
