@@ -45,7 +45,7 @@ function PlayState:update(dt)
 	if self.wave == 1 then
 		if not self.wave1ScorePopulate then
 			self.lowestEggScore = 250
-			--ADD SCORE OBJECT FOR WAVE 1
+			--SCORE TABLE INITIALIZATION
 			for i = 1, 4 do
 				table.insert(self.scoresTable, PrintScore(-20, -20, self.lowestEggScore))
 				self.lowestEggScore = self.lowestEggScore + 250 --Increment by bounder score
@@ -172,7 +172,12 @@ function PlayState:update(dt)
 					self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
 					self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
 					self.scoresTable[self.eggCount].timer = 3
-					Score = Score + self.scoresTable[self.eggCount].scoreAmount
+					if vulture.egg.bouncedOffFloor then
+						self.scoresTable[self.eggCount].doubleScore = false
+						Score = Score + self.scoresTable[self.eggCount].scoreAmount
+					else
+						Score = Score + (self.scoresTable[self.eggCount].scoreAmount) * 2
+					end
 					--CHECK EGG GROUNDED
 					--ADD AERIAL EGG BONUS IF NOT GROUNDED
 					self.eggCount = self.eggCount + 1
@@ -188,6 +193,12 @@ function PlayState:update(dt)
 				self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
 				self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
 				self.scoresTable[self.eggCount].timer = 3
+				if vulture.egg.bouncedOffFloor then
+					Score = Score + self.scoresTable[self.eggCount].scoreAmount
+					self.scoresTable[self.eggCount].doubleScore = false
+				else
+					Score = Score + self.scoresTable[self.eggCount].scoreAmount * 2
+				end
 				Score = Score + self.scoresTable[self.eggCount].scoreAmount
 				--CHECK EGG GROUNDED
 				--ADD AERIAL EGG BONUS IF NOT GROUNDED
@@ -195,12 +206,14 @@ function PlayState:update(dt)
 			end
 		end
 		if vulture.egg:groundCollide(groundPlatform) then
+				vulture.egg.bouncedOffFloor = true
 				vulture.egg.y = groundPlatform.y - vulture.egg.height
 				vulture.egg.dy = math.max(-vulture.egg.dy + .25, -.9)
 		end
 
 		for m, platform in pairs(collidablePlatforms) do
 			if vulture.egg:groundCollide(platform) then
+				vulture.egg.bouncedOffFloor = true
 				vulture.egg.y = platform.y - vulture.egg.height
 				vulture.egg.dy = math.max(-vulture.egg.dy + .25, -.9)
 			end

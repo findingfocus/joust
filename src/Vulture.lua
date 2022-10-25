@@ -311,7 +311,7 @@ function Vulture:update(dt)
 
 	if self.egg.invulnerable then
 		self.egg.invulnerableTimer = self.egg.invulnerableTimer + dt
-		if self.egg.invulnerableTimer > .6 then
+		if self.egg.invulnerableTimer > .4 then
 			self.egg.invulnerable = false
 		end
 	end
