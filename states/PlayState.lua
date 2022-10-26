@@ -176,10 +176,8 @@ function PlayState:update(dt)
 						self.scoresTable[self.eggCount].doubleScore = false
 						Score = Score + self.scoresTable[self.eggCount].scoreAmount
 					else
-						Score = Score + (self.scoresTable[self.eggCount].scoreAmount) * 2
+						Score = Score + self.scoresTable[self.eggCount].scoreAmount * 2
 					end
-					--CHECK EGG GROUNDED
-					--ADD AERIAL EGG BONUS IF NOT GROUNDED
 					self.eggCount = self.eggCount + 1
 				end
 			
@@ -199,9 +197,6 @@ function PlayState:update(dt)
 				else
 					Score = Score + self.scoresTable[self.eggCount].scoreAmount * 2
 				end
-				Score = Score + self.scoresTable[self.eggCount].scoreAmount
-				--CHECK EGG GROUNDED
-				--ADD AERIAL EGG BONUS IF NOT GROUNDED
 				self.eggCount = self.eggCount + 1
 			end
 		end

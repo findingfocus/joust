@@ -17,7 +17,10 @@ function love.load()
 	largeFont = love.graphics.newFont('fonts/arcadeFont.ttf', 32)
 
 	playerAtlas = love.graphics.newImage('src/pics/joustPlayerAtlas2.png')
-	vultureAtlas = love.graphics.newImage('src/pics/vultureAtlas.png')
+	bounderAtlas = love.graphics.newImage('src/pics/bounderAtlas.png')
+	hunterAtlas = love.graphics.newImage('src/pics/hunterAtlas.png')
+	shadowlordAtlas = love.graphics.newImage('src/pics/shadowlordAtlas.png')
+
 	temporarySafetyAtlas = love.graphics.newImage('src/pics/temporarySafetyAtlas.png')
 	platformLeft = love.graphics.newImage('src/pics/platformLeft.png')
 	platformRight = love.graphics.newImage('src/pics/platformRight.png')

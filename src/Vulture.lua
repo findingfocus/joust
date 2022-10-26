@@ -6,7 +6,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.y = y
 	self.width = width
 	self.height = height
-	self.atlas = vultureAtlas
+	self.atlas = bounderAtlas
 	self.dy = 0
 	self.dx = -.5
 	self.fps = 1
