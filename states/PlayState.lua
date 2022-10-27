@@ -20,9 +20,9 @@ function PlayState:init()
 	self.spawnPointIndex = 0
 	self.vultureSpawnPointIndex = 0
 	self.vultureSpawnTimer = 10
+	self.lowestEggScore = 0
 	self.scoresTable = {}
 	self.wave1ScorePopulate = false
-	self.lowestEggScore = 0
 	self.helpToggle = false
 	self.gameOver = false
 	self.refresh = true
@@ -45,10 +45,11 @@ function PlayState:update(dt)
 	if self.wave == 1 then
 		if not self.wave1ScorePopulate then
 			self.lowestEggScore = 250
+
 			--SCORE TABLE INITIALIZATION
 			for i = 1, 4 do
 				table.insert(self.scoresTable, PrintScore(-20, -20, self.lowestEggScore))
-				self.lowestEggScore = self.lowestEggScore + 250 --Increment by bounder score
+				self.lowestEggScore = self.lowestEggScore + 250 --Incremented by bounder score
 			end
 			self.wave1ScorePopulate = true
 		end
@@ -58,7 +59,7 @@ function PlayState:update(dt)
 		else
 			self.vultureSpawnTimer = 0
 		end
-
+		--SPAWNING VULTURES FOR WAVE 1
 		if self.vultureSpawnTimer < 9 and self.vultureSpawnTimer > 8 then
 			self.vultureSpawnTimer = 8
 			self.vultureSpawnPointIndex = math.random(4)
@@ -93,7 +94,7 @@ function PlayState:update(dt)
 		Vultures[2] = Vulture2
 	end
 
-	--LOSE LIFE AND RESPAWN
+	--PLAYER 1 OSTRICH DEATH AND RESPAWN
 	if player1.death then
 		if self.lives == 1 then
 			self.lives = self.lives - 1
@@ -130,7 +131,7 @@ function PlayState:update(dt)
 		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
 	end
 
-	--Placing vultures in graveyard offscreen
+	--PLACE VULTURE IN GRAVEYARD UPON DEATH
 	for k, vulture in pairs(Vultures) do
 		if vulture.exploded then
 			if vulture.firstFrameExploded then
@@ -142,7 +143,7 @@ function PlayState:update(dt)
 			vulture.egg:update(dt)
 		end
 	end
-
+	--VULTURE TO VULTURE COLLISION
 	for i, vulture in pairs(Vultures) do
 		for index, others in pairs(Vultures) do
 			if vulture.index ~= index then
@@ -161,7 +162,6 @@ function PlayState:update(dt)
 
 	for l, vulture in pairs(Vultures) do
 		if player1:Collides(vulture.egg) and not vulture.egg.invulnerable then
-
 			if math.abs(player1.dx) < .3 then
 				if player1.x + (player1.width / 2) < vulture.egg.x + 4.1 and player1.x + (player1.width / 2) > vulture.egg.x + 3.9 then
 					vulture.egg.x = -vulture.egg.width
@@ -180,7 +180,6 @@ function PlayState:update(dt)
 					end
 					self.eggCount = self.eggCount + 1
 				end
-			
 
 			elseif math.abs(player1.dx) >= .3 then
 				vulture.egg.x = -vulture.egg.width
