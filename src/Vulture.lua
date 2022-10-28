@@ -108,8 +108,8 @@ end
 function Vulture:update(dt)	
 	--SETS GROWING VIEWPORT UPON SPWNING
 	if self.spawning then
-		self.lastX = self.x
-		self.lastY = self.y
+		--self.lastX = self.x
+		--self.lastY = self.y
 		self.lastDX = self.dx
 		self.spawnHeight = self.spawnHeight + 0.5
 		self.vultureSprite:setViewport(1, 0, self.width, self.spawnHeight, self.atlas:getDimensions())
@@ -213,13 +213,13 @@ function Vulture:update(dt)
 			end
 			
 			--LOOPS player to left side of screen
-			if self.x > VIRTUAL_WIDTH then
-				self.x = -self.width
+			if self.x > VIRTUAL_WIDTH - 1 then
+				self.x = -self.width + 1
 			end
 
 			--LOOPS player to right side of screen
-			if self.x < -self.width then
-				self.x = VIRTUAL_WIDTH
+			if self.x < -self.width + 1 then
+				self.x = VIRTUAL_WIDTH - 1
 			end
 
 			if self.grounded then

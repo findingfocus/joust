@@ -57,13 +57,13 @@ function Egg:update(dt)
 	self.y = self.y + self.dy
 
 	--LOOPS EGG to left side of screen
-	if self.x > VIRTUAL_WIDTH then
-		self.x = -self.width
+	if self.x > VIRTUAL_WIDTH - 1 then
+		self.x = -self.width + 1
 	end
 
 	--LOOPS EGG to right side of screen
-	if self.x < -self.width then
-		self.x = VIRTUAL_WIDTH
+	if self.x < -self.width + 1 then
+		self.x = VIRTUAL_WIDTH - 1
 	end
 end
 

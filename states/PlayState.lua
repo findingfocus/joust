@@ -47,7 +47,7 @@ function PlayState:update(dt)
 			self.lowestEggScore = 250
 
 			--SCORE TABLE INITIALIZATION
-			for i = 1, 4 do
+			for i = 1, 3 do
 				table.insert(self.scoresTable, PrintScore(-20, -20, self.lowestEggScore))
 				self.lowestEggScore = self.lowestEggScore + 250 --Incremented by bounder score
 			end
@@ -161,9 +161,9 @@ function PlayState:update(dt)
 	end
 
 	for l, vulture in pairs(Vultures) do
-		if player1:Collides(vulture.egg) and not vulture.egg.invulnerable then
+		if player1:Collides(vulture.egg) and not vulture.egg.invulnerable and not vulture.egg.collected then
 			if math.abs(player1.dx) < .3 then
-				if player1.x + (player1.width / 2) < vulture.egg.x + 4.1 and player1.x + (player1.width / 2) > vulture.egg.x + 3.9 then
+				if player1.x + (player1.width / 2) < vulture.egg.x + 4.2 and player1.x + (player1.width / 2) > vulture.egg.x + 3.8 then
 					vulture.egg.x = -vulture.egg.width
 					vulture.egg.y = -vulture.egg.height
 					vulture.egg.dx = 0

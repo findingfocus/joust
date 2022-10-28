@@ -362,13 +362,13 @@ function Ostrich:update(dt)
 			end
 			
 			--LOOPS player to left side of screen
-			if self.x > VIRTUAL_WIDTH then
-				self.x = -self.width
+			if self.x > VIRTUAL_WIDTH - 1 then
+				self.x = -self.width + 1
 			end
 
 			--LOOPS player to right side of screen
-			if self.x < -self.width then
-				self.x = VIRTUAL_WIDTH
+			if self.x < -self.width + 1 then
+				self.x = VIRTUAL_WIDTH - 1
 			end
 
 ---[[INPUT HANDLING
