@@ -35,6 +35,7 @@ function PlayState:init()
 	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
 	SpawnZonePoints[3] = SpawnZonePoint(platform2.x + 20, platform2.y)
 	SpawnZonePoints[4] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
+	self.monster = Pterodactyl(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2)
 end
 
 function PlayState:update(dt)
@@ -225,6 +226,8 @@ function PlayState:update(dt)
 	for k, v in pairs(self.scoresTable) do
 		self.scoresTable[k]:update(dt)
 	end
+
+	self.monster:update(dt)
 end
 
 function PlayState:render()
@@ -321,4 +324,6 @@ function PlayState:render()
 	for k, v in pairs(self.scoresTable) do
 		self.scoresTable[k]:render()
 	end
+
+	self.monster:render()
 end

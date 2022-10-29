@@ -20,6 +20,7 @@ function love.load()
 	bounderAtlas = love.graphics.newImage('src/pics/bounderAtlas.png')
 	hunterAtlas = love.graphics.newImage('src/pics/hunterAtlas.png')
 	shadowlordAtlas = love.graphics.newImage('src/pics/shadowlordAtlas.png')
+	pterodactylAtlas = love.graphics.newImage('src/pics/pterodactylAtlas.png')
 
 	temporarySafetyAtlas = love.graphics.newImage('src/pics/temporarySafetyAtlas.png')
 	platformLeft = love.graphics.newImage('src/pics/platformLeft.png')

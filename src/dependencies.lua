@@ -12,6 +12,7 @@ require '/src/LavaBubble'
 require '/src/Egg'
 require '/src/SpawnZonePoint'
 require '/src/PrintScore'
+require '/src/Pterodactyl'
 
 require '/src/StateMachine'
 require '/src/BaseState'
