@@ -8,7 +8,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.height = height
 	self.atlas = bounderAtlas
 	self.dy = 0
-	self.dx = -.5
+	self.dx = -.7
 	self.fps = 1
 	self.animationTimer = 2 / self.fps
 	self.jumpTimer = 1

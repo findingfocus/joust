@@ -171,7 +171,7 @@ function PlayState:update(dt)
 					vulture.egg.collected = true
 					self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
 					self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
-					self.scoresTable[self.eggCount].timer = 3
+					self.scoresTable[self.eggCount].timer = 1.5
 					if vulture.egg.bouncedOffFloor then
 						self.scoresTable[self.eggCount].doubleScore = false
 						Score = Score + self.scoresTable[self.eggCount].scoreAmount
@@ -189,7 +189,7 @@ function PlayState:update(dt)
 				vulture.egg.collected = true
 				self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
 				self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
-				self.scoresTable[self.eggCount].timer = 3
+				self.scoresTable[self.eggCount].timer = 1.5
 				if vulture.egg.bouncedOffFloor then
 					Score = Score + self.scoresTable[self.eggCount].scoreAmount
 					self.scoresTable[self.eggCount].doubleScore = false
