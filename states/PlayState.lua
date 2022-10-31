@@ -35,7 +35,7 @@ function PlayState:init()
 	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
 	SpawnZonePoints[3] = SpawnZonePoint(platform2.x + 20, platform2.y)
 	SpawnZonePoints[4] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
-	self.monster = Pterodactyl(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2)
+	self.monster = Pterodactyl(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2 - 30)
 end
 
 function PlayState:update(dt)
@@ -277,7 +277,7 @@ function PlayState:render()
 	
 
 	love.graphics.setFont(smallFont)
-	--love.graphics.print('xoffset: ' .. tostring(player1.xoffset), 5, 15)
+	--love.graphics.print('dy: ' .. tostring(player1.dy), 5, 15)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

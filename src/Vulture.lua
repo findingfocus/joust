@@ -144,7 +144,7 @@ function Vulture:update(dt)
 
 				if self:topCollides(platform) then
 					if self.dy < 0 then
-						self.dy = math.abs(self.dy) - GRAVITYNEGATE
+						self.dy = math.abs(self.dy) / 2
 						self.y = platform.y + platform.height + 1
 					end
 				end
@@ -209,7 +209,7 @@ function Vulture:update(dt)
 			--BOUNCING OFF TOP
 			if self.y < 0 then
 				self.y = 0
-				self.dy = math.abs(self.dy) - GRAVITYNEGATE
+				self.dy = math.abs(self.dy) / 2
 			end
 			
 			--LOOPS player to left side of screen

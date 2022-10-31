@@ -222,9 +222,9 @@ function Ostrich:update(dt)
 				end
 
 				if self:topCollides(platform) then
+					self.y = platform.y + platform.height + 1
 					if self.dy < 0 then
-						self.dy = math.abs(self.dy / 2) - GRAVITYNEGATE
-						self.y = platform.y + platform.height + 1
+						self.dy = (math.abs(self.dy / 2)) / 2 -- the divide by is to help negate gravity
 					end
 				end
 
@@ -358,7 +358,7 @@ function Ostrich:update(dt)
 			--BOUNCING OFF TOP
 			if self.y <= 0 then
 				self.y = 1
-				self.dy = math.abs(self.dy) - GRAVITYNEGATE
+				self.dy = math.abs(self.dy) / 2 --Division to offset gravity
 			end
 			
 			--LOOPS player to left side of screen
