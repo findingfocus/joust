@@ -227,6 +227,32 @@ function PlayState:update(dt)
 		self.scoresTable[k]:update(dt)
 	end
 
+	for k, platform in pairs(collidablePlatforms) do
+		if self.monster:leftCollides(platform) then
+			self.monster.x = platform.x + platform.width
+			self.monster.dx = self.monster.dx * -1
+		elseif self.monster:rightCollides(platform) then
+			self.monster.x = platform.x - self.monster.width
+			self.monster.dx = self.monster.dx * -1
+		elseif self.monster:topCollides(platform) then
+			self.monster.y = platform.y + platform.height
+			self.monster.dy = math.abs(self.monster.dy)
+		elseif self.monster:bottomCollides(platform) then
+			self.monster.y = platform.y - self.monster.height
+			self.monster.dy = self.monster.dy * -1
+		end
+	end	
+
+	if self.monster.y + self.monster.height > groundPlatform.y then
+		self.monster.y = groundPlatform.y - self.monster.height
+		self.monster.dy = self.monster.dy * -1
+	end
+
+	if self.monster.y < 0 then
+		self.monster.y = 0
+		self.monster.dy = math.abs(self.monster.dy)
+	end
+
 	self.monster:update(dt)
 end
 
