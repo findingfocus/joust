@@ -35,10 +35,11 @@ function PlayState:init()
 	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
 	SpawnZonePoints[3] = SpawnZonePoint(platform2.x + 20, platform2.y)
 	SpawnZonePoints[4] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
-	self.monster = Pterodactyl(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2 - 30)
+	self.monster = Pterodactyl(VIRTUAL_WIDTH / 2 - 30, VIRTUAL_HEIGHT / 2 - 30)
 end
 
 function PlayState:update(dt)
+
 	if love.keyboard.wasPressed('h') then
 		self.helpToggle = not self.helpToggle
 	end
@@ -226,7 +227,7 @@ function PlayState:update(dt)
 	for k, v in pairs(self.scoresTable) do
 		self.scoresTable[k]:update(dt)
 	end
-
+---[[
 	for k, platform in pairs(collidablePlatforms) do
 		if self.monster:leftCollides(platform) then
 			self.monster.x = platform.x + platform.width
@@ -252,6 +253,7 @@ function PlayState:update(dt)
 		self.monster.y = 0
 		self.monster.dy = math.abs(self.monster.dy)
 	end
+	--]]
 
 	self.monster:update(dt)
 end
@@ -303,7 +305,8 @@ function PlayState:render()
 	
 
 	love.graphics.setFont(smallFont)
-	--love.graphics.print('dy: ' .. tostring(player1.dy), 5, 15)
+	
+	--love.graphics.print('leftCollide: ' .. tostring(self.monster:leftCollides(platform2)), 5, 15)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

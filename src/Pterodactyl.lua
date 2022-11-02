@@ -16,6 +16,8 @@ function Pterodactyl:init(x, y)
 	self.exploded = true
 	self.atlas = pterodactylAtlas
 	self.pterodactylSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+	--self.mouseX = 0
+	--self.mouseY = 0
 end
 
 function Pterodactyl:leftCollides(collidable)
@@ -29,7 +31,7 @@ function Pterodactyl:leftCollides(collidable)
 end
 
 function Pterodactyl:rightCollides(collidable)
-	if self.x + self.width - 3 < collidable.x + collidable.width - 3 and self.x + self.width > collidable.x then
+	if self.x + self.width < collidable.x + 3 and self.x + self.width > collidable.x then
 		if self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
 			return true
 		end
@@ -40,7 +42,7 @@ end
 
 function Pterodactyl:topCollides(collidable)
 	if self.x < collidable.x + collidable.width and self.x + self.width > collidable.x then
-		if self.y < collidable.y + collidable.height and self.y + self.height - 3 > collidable.y + collidable.height - 3 then
+		if self.y < collidable.y + collidable.height and self.y > collidable.y + collidable.height - 3 then
 			return true
 		end
 	end
@@ -50,7 +52,7 @@ end
 
 function Pterodactyl:bottomCollides(collidable)
 	if self.x < collidable.x + collidable.width and self.x + self.width > collidable.x then
-		if self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
+		if self.y + self.height < collidable.y + 3 and self.y + self.height > collidable.y then
 			return true
 		end
 	end
@@ -63,21 +65,26 @@ end
 function Pterodactyl:update(dt)
 	self.x = self.x + self.dx
 	self.y = self.y + self.dy
+	--self.mouseX = love.mouse.getX()
+	--self.mouseY = love.mouse.getY()
+	--self.x = self.mouseX
+	--self.y = self.mouseY
 
 	if self.dx > 0 then
 		self.facingRight = true
 	else
 		self.facingRight = false
 	end
-
+---[[
 	if self.x > VIRTUAL_WIDTH then
 		self.x = -self.width
 	end
 
+
 	if self.x + self.width < 0 then
 		self.x = VIRTUAL_WIDTH
 	end
-
+--]] 
 	self.animationTimer = self.animationTimer - dt
 
 	if self.animationTimer <= 0 then
