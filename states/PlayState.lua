@@ -266,7 +266,19 @@ function PlayState:update(dt)
 			self.monster.y = vulture.y - self.monster.height
 			self.monster.dy = math.abs(self.monster.dy) * -1
 		end
+	end
 
+--THIS IS WHERE YOURE WORKING COME BACK AND FINISH JOUST TO PTERO COLLISION
+	if not player1.temporarySafety and self.monster.facingRight == false then
+		--Check if joust kills ptero first
+		if self.monster:leftCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+			player1.death = true
+		end
+	elseif not player1.temporarySafety and self.monster.facingRight == true then
+		--Check if joust kills ptero first
+		if self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+			player1.death = true
+		end
 	end
 
 

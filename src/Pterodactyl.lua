@@ -16,8 +16,8 @@ function Pterodactyl:init(x, y)
 	self.exploded = true
 	self.atlas = pterodactylAtlas
 	self.pterodactylSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
-	--self.mouseX = 0
-	--self.mouseY = 0
+	self.mouseX = 0
+	self.mouseY = 0
 end
 
 function Pterodactyl:leftCollides(collidable)
@@ -63,19 +63,21 @@ end
 
 
 function Pterodactyl:update(dt)
-	self.x = self.x + self.dx
-	self.y = self.y + self.dy
-	--self.mouseX = love.mouse.getX()
-	--self.mouseY = love.mouse.getY()
-	--self.x = self.mouseX
-	--self.y = self.mouseY
+	--self.x = self.x + self.dx
+	--self.y = self.y + self.dy
+	self.mouseX = love.mouse.getX()
+	self.mouseY = love.mouse.getY()
+	self.x = self.mouseX
+	self.y = self.mouseY
 
 	if self.dx > 0 then
 		self.facingRight = true
 	else
 		self.facingRight = false
 	end
----[[
+
+	self.facingRight = false
+--[[
 	if self.x > VIRTUAL_WIDTH then
 		self.x = -self.width
 	end
