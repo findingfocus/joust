@@ -227,7 +227,10 @@ function PlayState:update(dt)
 	for k, v in pairs(self.scoresTable) do
 		self.scoresTable[k]:update(dt)
 	end
----[[
+
+---[[PTERODACTYL COLLISION
+
+	--PTERODACTYL AND PLATFORM COLLISION
 	for k, platform in pairs(collidablePlatforms) do
 		if self.monster:leftCollides(platform) then
 			self.monster.x = platform.x + platform.width
@@ -244,16 +247,40 @@ function PlayState:update(dt)
 		end
 	end	
 
-	if self.monster.y + self.monster.height > groundPlatform.y then
+	--PTERODACTYL AND VULTURE COLLISION
+	for i, vulture in pairs(Vultures) do
+		if self.monster:leftCollides(vulture) then
+			vulture.dx = math.abs(vulture.dx) * -1
+			self.monster.x = vulture.x + vulture.width
+			self.monster.dx = math.abs(self.monster.dx)
+		elseif self.monster:rightCollides(vulture) then
+			vulture.dx = math.abs(vulture.dx)
+			self.monster.x = vulture.x - self.monster.width
+			self.monster.dx = math.abs(self.monster.dx) * -1
+		elseif self.monster:topCollides(vulture) then
+			vulture.dy = math.abs(vulture.dy) * -1
+			self.monster.y = vulture.y + vulture.height
+			self.monster.dy = math.abs(self.monster.dy)
+		elseif self.monster:bottomCollides(vulture) then
+			vulture.dy = math.abs(vulture.dy)
+			self.monster.y = vulture.y - self.monster.height
+			self.monster.dy = math.abs(self.monster.dy) * -1
+		end
+
+	end
+
+
+	if self.monster.y + self.monster.height > groundPlatform.y then --GROUND
 		self.monster.y = groundPlatform.y - self.monster.height
 		self.monster.dy = self.monster.dy * -1
 	end
 
-	if self.monster.y < 0 then
+	if self.monster.y < 0 then --TOP OF SCREEN COLLISION
 		self.monster.y = 0
 		self.monster.dy = math.abs(self.monster.dy)
 	end
-	--]]
+--]]
+
 
 	self.monster:update(dt)
 end
