@@ -19,7 +19,7 @@ function PlayState:init()
 	self.eggCount = 1
 	self.spawnPointIndex = 0
 	self.vultureSpawnPointIndex = 0
-	self.vultureSpawnTimer = 10
+	self.vultureSpawnTimer = 100--10
 	self.lowestEggScore = 0
 	self.scoresTable = {}
 	self.wave1ScorePopulate = false
@@ -35,7 +35,7 @@ function PlayState:init()
 	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
 	SpawnZonePoints[3] = SpawnZonePoint(platform2.x + 20, platform2.y)
 	SpawnZonePoints[4] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
-	self.monster = Pterodactyl(VIRTUAL_WIDTH / 2 - 30, VIRTUAL_HEIGHT / 2 - 30)
+	self.monster = Pterodactyl(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2 - 30 )
 end
 
 function PlayState:update(dt)
@@ -268,32 +268,54 @@ function PlayState:update(dt)
 		end
 	end
 
---THIS IS WHERE YOURE WORKING COME BACK AND FINISH JOUST TO PTERO COLLISION
-	if not player1.temporarySafety and self.monster.facingRight == false then
-		--Check if joust kills ptero first
-		if self.monster:leftCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+--LANCE TO PTERODACTYL COLLISION
+	if not player1.temporarySafety and not self.monster.facingRight then
+		--Check if joust kills ptero when ptero facing left and player facing right
+		if player1.facingRight then
+			if self.monster:leftCollides(player1) then
+				if player1.y + 4 > self.monster.y + 1 and player1.y + 4 < self.monster.y + 8 and self.monster.frame == 3 then
+					self.monster.exploded = true
+				elseif self.monster:leftCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+					player1.death = true
+				end
+			end
+		end
+
+	elseif not player1.temporarySafety and self.monster.facingRight then
+		--Check if joust kills ptero when ptero facing right and player facing left
+		if not player1.facingRight then
+			if self.monster:rightCollides(player1) then
+				if player1.y + 4 > self.monster.y + 1 and player1.y + 4 < self.monster.y + 8 and self.monster.frame == 3 then
+					self.monster.exploded = true
+				elseif self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+					player1.death = true
+				end
+			end
+		end
+	end
+
+--Kills player if collision while facing same direction as pterodactyl
+	if player1.facingRight and self.monster.facingRight then
+		if self.monster:leftCollides(player1) or self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
 			player1.death = true
 		end
-	elseif not player1.temporarySafety and self.monster.facingRight == true then
-		--Check if joust kills ptero first
-		if self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+	elseif not player1.facingRight and not self.monster.facingRight then
+		if self.monster:leftCollides(player1) or self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
 			player1.death = true
 		end
 	end
 
-
+--BOUNCES PTERO OFF FLOOR
 	if self.monster.y + self.monster.height > groundPlatform.y then --GROUND
 		self.monster.y = groundPlatform.y - self.monster.height
 		self.monster.dy = self.monster.dy * -1
 	end
-
+--BOUNCES PTERO OFF TOP OF SCREEN
 	if self.monster.y < 0 then --TOP OF SCREEN COLLISION
 		self.monster.y = 0
 		self.monster.dy = math.abs(self.monster.dy)
 	end
 --]]
-
-
 	self.monster:update(dt)
 end
 
@@ -316,6 +338,7 @@ function PlayState:render()
 	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT, VIRTUAL_WIDTH, LAVAHEIGHT)
 
 	player1:render()
+	self.monster:render()
 
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
@@ -392,6 +415,4 @@ function PlayState:render()
 	for k, v in pairs(self.scoresTable) do
 		self.scoresTable[k]:render()
 	end
-
-	self.monster:render()
 end

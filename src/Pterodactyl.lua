@@ -3,7 +3,7 @@ Pterodactyl = Class{}
 function Pterodactyl:init(x, y)
 	self.x = x
 	self.y = y
-	self.dx = 1.5
+	self.dx = -1.8
 	self.dy = .5
 	self.width = 24
 	self.height = 16
@@ -13,15 +13,18 @@ function Pterodactyl:init(x, y)
 	self.xoffset = 1
 	self.totalFrames = 3
 	self.facingRight = true
-	self.exploded = true
+	self.exploded = false
 	self.atlas = pterodactylAtlas
 	self.pterodactylSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	self.mouseX = 0
 	self.mouseY = 0
+	self.lastX = 0
+	self.lastY = 0
+	self.explodedTimer = 2
 end
 
 function Pterodactyl:leftCollides(collidable)
-	if self.x < collidable.x + collidable.width and self.x > collidable.x + collidable.width - 3 then
+	if self.x < collidable.x + collidable.width and self.x > collidable.x + collidable.width - 4 then
 		if self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
 			return true
 		end
@@ -31,7 +34,7 @@ function Pterodactyl:leftCollides(collidable)
 end
 
 function Pterodactyl:rightCollides(collidable)
-	if self.x + self.width < collidable.x + 3 and self.x + self.width > collidable.x then
+	if self.x + self.width < collidable.x + 4 and self.x + self.width > collidable.x then
 		if self.y < collidable.y + collidable.height and self.y + self.height > collidable.y then
 			return true
 		end
@@ -63,47 +66,72 @@ end
 
 
 function Pterodactyl:update(dt)
-	--self.x = self.x + self.dx
-	--self.y = self.y + self.dy
-	self.mouseX = love.mouse.getX()
-	self.mouseY = love.mouse.getY()
-	self.x = self.mouseX
-	self.y = self.mouseY
+	if not self.exploded then
 
-	if self.dx > 0 then
-		self.facingRight = true
-	else
-		self.facingRight = false
-	end
+		self.x = self.x + self.dx
+		self.y = self.y + self.dy
+		--self.mouseX = love.mouse.getX()
+		--self.mouseY = love.mouse.getY()
+		--self.x = self.mouseX
+		--self.y = self.mouseY
+		self.lastX = self.x
+		self.lastY = self.y
 
-	self.facingRight = false
---[[
-	if self.x > VIRTUAL_WIDTH then
-		self.x = -self.width
-	end
+		if self.dx > 0 then
+			self.facingRight = true
+		else
+			self.facingRight = false
+		end
 
+		--OVERWRITES DIRECTION, PLEASE ADJUST WHEN SPAWNING LOGIC IN PLACE
+		--self.facingRight = false
 
-	if self.x + self.width < 0 then
-		self.x = VIRTUAL_WIDTH
-	end
---]] 
-	self.animationTimer = self.animationTimer - dt
+	
+	---[[
+		if self.x > VIRTUAL_WIDTH then
+			self.x = -self.width
+		end
 
-	if self.animationTimer <= 0 then
-		self.animationTimer = 1 / self.fps
-		self.frame = self.frame + 1
-		if self.frame > self.totalFrames then self.frame = 1 end
-		self.xoffset = (self.width * (self.frame - 1)) + self.frame
-		self.pterodactylSprite:setViewport(self.xoffset, 0, self.width, self.height)
+		if self.x + self.width < 0 then
+			self.x = VIRTUAL_WIDTH
+		end
+	--]] 
+		self.animationTimer = self.animationTimer - dt
+
+		if self.animationTimer <= 0 then
+			self.animationTimer = 1 / self.fps
+			self.frame = self.frame + 1
+			if self.frame > self.totalFrames then self.frame = 1 end
+			self.xoffset = (self.width * (self.frame - 1)) + self.frame
+			self.pterodactylSprite:setViewport(self.xoffset, 0, self.width, self.height)
+		end
+	else -- If exploded
+		self.x = -25
+		self.y = -25
+
+		if self.explodedTimer > 0 then
+			self.explodedTimer = self.explodedTimer - dt
+		end
 	end
 end
 
 function Pterodactyl:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	
-	if self.facingRight then
-		love.graphics.draw(self.atlas, self.pterodactylSprite, self.x, self.y)
-	else
-		love.graphics.draw(self.atlas, self.pterodactylSprite, self.x, self.y, 0, -1, 1, self.width)
+	if not self.exploded then
+		if self.facingRight then
+			love.graphics.draw(self.atlas, self.pterodactylSprite, self.x, self.y)
+		else
+			love.graphics.draw(self.atlas, self.pterodactylSprite, self.x, self.y, 0, -1, 1, self.width)
+		end
+	else --IF EXPLODED
+		self.pterodactylSprite:setViewport(75, 0, self.width, self.height)
+		if self.explodedTimer > 0 then
+			if self.facingRight then
+				love.graphics.draw(self.atlas, self.pterodactylSprite, self.lastX, self.lastY)
+			else
+				love.graphics.draw(self.atlas, self.pterodactylSprite, self.lastX, self.lastY, 0, -1, 1, self.width)
+			end
+		end
 	end
 end
