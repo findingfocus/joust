@@ -1,9 +1,9 @@
 Pterodactyl = Class{}
 
-function Pterodactyl:init(x, y)
+function Pterodactyl:init(x, y, dx)
 	self.x = x
 	self.y = y
-	self.dx = -1.8
+	self.dx = dx
 	self.dy = .5
 	self.width = 24
 	self.height = 16

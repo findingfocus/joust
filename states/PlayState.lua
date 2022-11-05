@@ -19,7 +19,7 @@ function PlayState:init()
 	self.eggCount = 1
 	self.spawnPointIndex = 0
 	self.vultureSpawnPointIndex = 0
-	self.vultureSpawnTimer = 100--10
+	self.vultureSpawnTimer = 10
 	self.lowestEggScore = 0
 	self.scoresTable = {}
 	self.wave1ScorePopulate = false
@@ -30,18 +30,36 @@ function PlayState:init()
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
+	self.vultureCount = 0
+	self.pteroTimer = 1
 	SpawnZonePoints = {}
 	SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y)
 	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
 	SpawnZonePoints[3] = SpawnZonePoint(platform2.x + 20, platform2.y)
 	SpawnZonePoints[4] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
-	self.monster = Pterodactyl(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2 - 30 )
+	PteroSpawnPoints = {}
+	PteroSpawnPoints[1] = SpawnZonePoint(-24, 12, 1.8)
+	PteroSpawnPoints[2] = SpawnZonePoint(VIRTUAL_WIDTH, 12, -1.8)
+	PteroSpawnPoints[3] = SpawnZonePoint(-24, 75, 1.8)
+	PteroSpawnPoints[4] = SpawnZonePoint(VIRTUAL_WIDTH, 75, -1.8)
+	PteroSpawnPoints[5] = SpawnZonePoint(-24, VIRTUAL_HEIGHT - 80, 1.8)
+	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
+	self.randomPteroIndex = math.random(6)
+	self.monster = Pterodactyl(PteroSpawnPoints[self.randomPteroIndex].x, PteroSpawnPoints[self.randomPteroIndex].y, PteroSpawnPoints[self.randomPteroIndex].dx)--(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2 - 30, -1.8)
 end
 
 function PlayState:update(dt)
 
 	if love.keyboard.wasPressed('h') then
 		self.helpToggle = not self.helpToggle
+	end
+
+	--VultureCount
+	self.vultureCount = 0
+	for i, vulture in pairs(Vultures) do
+		if not vulture.exploded then
+			self.vultureCount = self.vultureCount + 1
+		end
 	end
 
 	if self.wave == 1 then
@@ -54,6 +72,11 @@ function PlayState:update(dt)
 				self.lowestEggScore = self.lowestEggScore + 250 --Incremented by bounder score
 			end
 			self.wave1ScorePopulate = true
+			self.pteroTimer = 60
+		end
+
+		if self.pteroTimer > 0 then
+			self.pteroTimer = self.pteroTimer - dt
 		end
 
 		if self.vultureSpawnTimer > 0 then
@@ -368,7 +391,8 @@ function PlayState:render()
 
 	love.graphics.setFont(smallFont)
 	
-	--love.graphics.print('leftCollide: ' .. tostring(self.monster:leftCollides(platform2)), 5, 15)
+	love.graphics.print('vultureCount: ' .. tostring(self.vultureCount), 5, 15)
+	love.graphics.print('pteroTimer: ' .. tostring(math.floor(self.pteroTimer)), 5, 25)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
