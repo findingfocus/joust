@@ -14,7 +14,11 @@ function Egg:init(lastX, lastY, dx)
 	self.bouncedOffFloor = false
 	self.invulnerable = false
 	self.collected = false
-	self.eggSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+	self.jockeySpawn = false
+	self.eggSprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
+	self.hatched = false
+	self.hatchCountdown = 15
+	self.hatchAnim = 0
 end
 
 function Egg:groundCollide(collidable)
@@ -49,10 +53,11 @@ function Egg:update(dt)
 
 	self.x = self.x + self.dx
 	if self.dx > 0 then
-		self.dx = math.max(0, self.dx - .002)
+		self.dx = math.max(0, self.dx - .003)
 	elseif self.dx < 0 then
-		self.dx = math.min(0, self.dx + .002)
+		self.dx = math.min(0, self.dx + .003)
 	end
+
 	self.dy = self.dy + .02
 	self.y = self.y + self.dy
 
@@ -65,8 +70,36 @@ function Egg:update(dt)
 	if self.x < -self.width + 1 then
 		self.x = VIRTUAL_WIDTH - 1
 	end
+
+	if self.dx == 0 and not self.hatched then
+		self.hatchCountdown = self.hatchCountdown - dt
+	end
+
+	if self.hatchCountdown < 0 then
+		self.hatchCountdown = 0
+		self.hatched = true
+	end
+
+	--EGG HATCHING ANIMATION
+	if self.hatched then
+		if self.hatchAnim < .4 then
+			self.hatchAnim = self.hatchAnim + dt
+		end
+
+		if self.hatchAnim > .4 then
+			self.jockeySpawn = true
+		elseif self.hatchAnim > .3 then --FRAME 4
+			self.eggSprite:setViewport(28, 0, self.height, self.height)
+		elseif self.hatchAnim > .2 then --FRAME 3
+			self.eggSprite:setViewport(19, 0, self.height, self.height)
+		elseif self.hatchAnim > .1 then --FRAME 2
+			self.eggSprite:setViewport(10, 0, self.height, self.height)
+		end
+	end
 end
 
 function Egg:render()
-	love.graphics.draw(self.atlas, self.eggSprite, self.x, self.y)
+	if not self.jockeySpawn then
+		love.graphics.draw(self.atlas, self.eggSprite, self.x, self.y)
+	end
 end
