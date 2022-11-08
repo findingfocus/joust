@@ -17,8 +17,9 @@ function Egg:init(lastX, lastY, dx)
 	self.jockeySpawn = false
 	self.eggSprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
 	self.hatched = false
-	self.hatchCountdown = 15
+	self.hatchCountdown = 3--15
 	self.hatchAnim = 0
+	self.jockey = Jockey(-20, -20)
 end
 
 function Egg:groundCollide(collidable)
@@ -62,12 +63,12 @@ function Egg:update(dt)
 	self.y = self.y + self.dy
 
 	--LOOPS EGG to left side of screen
-	if self.x > VIRTUAL_WIDTH - 1 then
+	if self.x > VIRTUAL_WIDTH - 1 and not self.collected then
 		self.x = -self.width + 1
 	end
 
 	--LOOPS EGG to right side of screen
-	if self.x < -self.width + 1 then
+	if self.x < -self.width + 1 and not self.collected then
 		self.x = VIRTUAL_WIDTH - 1
 	end
 
@@ -88,6 +89,7 @@ function Egg:update(dt)
 
 		if self.hatchAnim > .4 then
 			self.jockeySpawn = true
+			self.jockey = Jockey(self.lastX, self.lastY)
 		elseif self.hatchAnim > .3 then --FRAME 4
 			self.eggSprite:setViewport(28, 0, self.height, self.height)
 		elseif self.hatchAnim > .2 then --FRAME 3

@@ -21,6 +21,7 @@ function love.load()
 	hunterAtlas = love.graphics.newImage('src/pics/hunterAtlas.png')
 	shadowlordAtlas = love.graphics.newImage('src/pics/shadowlordAtlas.png')
 	pterodactylAtlas = love.graphics.newImage('src/pics/pterodactylAtlas.png')
+	whiteJockey = love.graphics.newImage('src/pics/whiteJockey.png')
 
 	temporarySafetyAtlas = love.graphics.newImage('src/pics/temporarySafetyAtlas.png')
 	platformLeft = love.graphics.newImage('src/pics/platformLeft.png')

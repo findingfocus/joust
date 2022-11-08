@@ -153,6 +153,7 @@ function PlayState:update(dt)
 
 	for k, vulture in pairs(Vultures) do
 		vulture:update(dt)
+		vulture.egg.jockey:update(dt)
 	end
 	player1:update(dt)
 	
@@ -274,7 +275,7 @@ function PlayState:update(dt)
 --]]
 ---[[PLAYER TO EGG COLLISIONS
 	for l, vulture in pairs(Vultures) do
-		if player1:Collides(vulture.egg) and not vulture.egg.invulnerable and not vulture.egg.collected then
+		if player1:Collides(vulture.egg) and not vulture.egg.invulnerable and not vulture.egg.collected then --do we need to add if not egg hatched here that would move egg to graveyard upon hatching then we need jockey to inherit x y?
 			if math.abs(player1.dx) < .3 then
 				if player1.x + (player1.width / 2) < vulture.egg.x + 4.2 and player1.x + (player1.width / 2) > vulture.egg.x + 3.8 then
 					vulture.egg.x = -vulture.egg.width
@@ -282,6 +283,7 @@ function PlayState:update(dt)
 					vulture.egg.dx = 0
 					vulture.egg.dy = 0
 					vulture.egg.collected = true
+					self.jockey = Jockey(-20, -20)
 					self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
 					self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
 					self.scoresTable[self.eggCount].timer = 1.5
@@ -300,6 +302,7 @@ function PlayState:update(dt)
 				vulture.egg.dx = 0
 				vulture.egg.dy = 0
 				vulture.egg.collected = true
+				self.jockey = Jockey(-20, -20)
 				self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
 				self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
 				self.scoresTable[self.eggCount].timer = 1.5
@@ -461,6 +464,9 @@ function PlayState:render()
 		vulture:render()
 		if vulture.exploded then
 			vulture.egg:render()
+			if not vulture.egg.collected then -- this needs to change when we have jockey inherit x and y
+				vulture.egg.jockey:render()
+			end
 		end
 	end
 	
