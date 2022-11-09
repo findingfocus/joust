@@ -14,7 +14,7 @@ function Egg:init(lastX, lastY, dx)
 	self.bouncedOffFloor = false
 	self.invulnerable = false
 	self.collected = false
-	self.jockeySpawn = false
+	self.jockeySpawned = false
 	self.eggSprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
 	self.hatched = false
 	self.hatchCountdown = 3--15
@@ -87,9 +87,11 @@ function Egg:update(dt)
 			self.hatchAnim = self.hatchAnim + dt
 		end
 
-		if self.hatchAnim > .4 then
-			self.jockeySpawn = true
+		if self.hatchAnim > .4 and not self.jockeySpawned then
 			self.jockey = Jockey(self.lastX, self.lastY)
+			self.jockeySpawned = true
+			self.x = -20
+			self.y = -20
 		elseif self.hatchAnim > .3 then --FRAME 4
 			self.eggSprite:setViewport(28, 0, self.height, self.height)
 		elseif self.hatchAnim > .2 then --FRAME 3
@@ -101,7 +103,7 @@ function Egg:update(dt)
 end
 
 function Egg:render()
-	if not self.jockeySpawn then
+	if not self.jockeySpawned then
 		love.graphics.draw(self.atlas, self.eggSprite, self.x, self.y)
 	end
 end

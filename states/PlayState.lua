@@ -283,7 +283,6 @@ function PlayState:update(dt)
 					vulture.egg.dx = 0
 					vulture.egg.dy = 0
 					vulture.egg.collected = true
-					self.jockey = Jockey(-20, -20)
 					self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
 					self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
 					self.scoresTable[self.eggCount].timer = 1.5
@@ -302,7 +301,6 @@ function PlayState:update(dt)
 				vulture.egg.dx = 0
 				vulture.egg.dy = 0
 				vulture.egg.collected = true
-				self.jockey = Jockey(-20, -20)
 				self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
 				self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
 				self.scoresTable[self.eggCount].timer = 1.5
@@ -315,6 +313,18 @@ function PlayState:update(dt)
 				self.eggCount = self.eggCount + 1
 			end
 		end
+
+		if player1:Collides(vulture.egg.jockey) then
+			vulture.egg.jockey.collected = true
+			self.scoresTable[self.eggCount].doubleScore = false
+			Score = Score + self.scoresTable[self.eggCount].scoreAmount
+			self.scoresTable[self.eggCount].lastX = vulture.egg.jockey.lastX
+			self.scoresTable[self.eggCount].lastY = vulture.egg.jockey.lastY
+			self.scoresTable[self.eggCount].timer = 1.5
+			vulture.egg.jockey.x = -20
+			vulture.egg.jockey.y = -20
+		end
+
 		if vulture.egg:groundCollide(groundPlatform) then
 				vulture.egg.bouncedOffFloor = true
 				vulture.egg.y = groundPlatform.y - vulture.egg.height
@@ -462,11 +472,13 @@ function PlayState:render()
 	for k, vulture in pairs(Vultures) do
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		vulture:render()
+
 		if vulture.exploded then
 			vulture.egg:render()
-			if not vulture.egg.collected then -- this needs to change when we have jockey inherit x and y
-				vulture.egg.jockey:render()
-			end
+		end
+
+		if vulture.egg.jockeySpawned then
+			vulture.egg.jockey:render()
 		end
 	end
 	
