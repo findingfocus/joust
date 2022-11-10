@@ -46,13 +46,24 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	self.randomPteroIndex = math.random(6)
 	self.monster = Pterodactyl(-30, -30, 0)
+	--self.mouseX = 0
+	--self.mouseY = 0
+	--tester = Vulture(self.mouseX, self.mouseY, 16, 24)
 end
 
 function PlayState:update(dt)
+--[[
+	self.mouseX = love.mouse:getX()
+	self.mouseY = love.mouse:getY()
+
+	tester.x = self.mouseX
+	tester.y = self.mouseY
 
 	if love.keyboard.wasPressed('h') then
 		self.helpToggle = not self.helpToggle
 	end
+--]]
+
 
 ---[[VultureCount
 	self.vultureCount = 0
@@ -122,7 +133,7 @@ function PlayState:update(dt)
 
 	--Reset Vultures
 	if love.keyboard.wasPressed('v') then
-		Vulture1 = Vulture(platform3.x + 20, platform3.y, 16, 24, platform3.y, 1)
+		Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, 1)
 		Vulture2 = Vulture(platform2.x + 20, platform2.y, 16, 24, platform2.y, 2)
 		Vultures[1] = Vulture1
 		Vultures[2] = Vulture2
@@ -258,11 +269,12 @@ function PlayState:update(dt)
 							vulture.x = player1.x + player1.width
 						elseif player1.y < vulture.y then --OSTRICH HAS HIGHER LANCE
 							self.pteroTimer = self.vultureCount * 20 - 20
+							vulture.exploded = true
 							vulture.firstFrameExploded = true
 							Score = Score + vulture.pointTier
 						elseif player1.y > vulture.y then --VULTURE HAS HIGHER LANCE
 							player1.exploded = true
-							vulture.firstFrameExploded = true
+							--vulture.firstFrameExploded = true
 						end
 					elseif not player1.facingRight and vulture.facingRight then
 						player1.dx = player1.dx * -1
@@ -499,8 +511,8 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 
 --DEBUG INFO
-	--love.graphics.print('vultureCount: ' .. tostring(self.vultureCount), 5, 15)
-	--love.graphics.print('pteroTimer: ' .. tostring(math.floor(self.pteroTimer)), 5, 25)
+	--love.graphics.print('enemyLeftCollides: ' .. tostring(player1:enemyRightCollides(tester)), 5, 15)
+	--love.graphics.print('enemyRightCollides: ' .. tostring(player1:enemyLeftCollides(tester)), 5, 25)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
@@ -547,4 +559,6 @@ function PlayState:render()
 	for k, v in pairs(self.scoresTable) do
 		self.scoresTable[k]:render()
 	end
+
+	--tester:render()
 end

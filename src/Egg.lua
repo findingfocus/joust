@@ -72,7 +72,7 @@ function Egg:update(dt)
 		self.x = VIRTUAL_WIDTH - 1
 	end
 
-	if self.dx == 0 and not self.hatched then
+	if self.dx == 0 and not self.collected then
 		self.hatchCountdown = self.hatchCountdown - dt
 	end
 

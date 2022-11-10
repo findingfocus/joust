@@ -8,6 +8,8 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.atlas = playerAtlas
 	self.temporarySafetyAtlas = temporarySafetyAtlas
 	self.platformSpawnY = platformSpawnY
+	self.lastX = 0
+	self.lastY = 0
 	self.dy = 0
 	self.dx = 0
 	self.collideTimer = 0 
@@ -118,7 +120,7 @@ function Ostrich:enemyBottomCollides(enemy)
 end
 
 function Ostrich:enemyLeftCollides(enemy)
-	if self.x < enemy.x + enemy.width and self.x + 8 > enemy.x + 8 and self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
+	if self.x < enemy.x + enemy.width and self.x + (self.width / 2) > enemy.x + (self.width / 2) and self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
 		return true
 	else
 		return false
@@ -126,13 +128,13 @@ function Ostrich:enemyLeftCollides(enemy)
 end
 
 function Ostrich:enemyRightCollides(enemy)
-	if self.x + 8 < enemy.x + 8 and self.x + self.width > enemy.x and self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
+	if self.x + (self.width / 2) < enemy.x + (enemy.width / 2) and self.x + self.width > enemy.x and self.y < enemy.y + enemy.height and self.y + self.height > enemy.y then
 		return true
 	else
 		return false
 	end
 end
---]]
+
 
 lastInput = {"right"}
 
@@ -202,6 +204,8 @@ function Ostrich:update(dt)
 --]]
 	else -- IF NOT SPAWNING
 		if not self.exploded then
+			self.lastX = self.x
+			self.lastY = self.y
 			--COLLISION OF MAIN GROUND PLATFORM
 			if self:bottomCollides(groundPlatform) then
 				self.height = 24
@@ -555,6 +559,8 @@ function Ostrich:update(dt)
 	
 		elseif self.exploded then
 			self.explosionTimer = self.explosionTimer + dt
+			self.x = -20
+			self.y = -20
 		end
 		
 		if self.explosionTimer > .3 then
@@ -577,13 +583,13 @@ function Ostrich:render()
 		elseif self.exploded then
 			--Render explosion sprites
 			if self.explosionTimer <= .1 then
-				love.graphics.draw(explosion1, self.x, self.y)
+				love.graphics.draw(explosion1, self.lastX, self.lastY)
 				--render explosionSprite1
 			elseif self.explosionTimer <= .2 then
-				love.graphics.draw(explosion2, self.x, self.y)
+				love.graphics.draw(explosion2, self.lastX, self.lastY)
 				--render explosionSprite2
 			elseif self.explosionTimer <= .3 then
-				love.graphics.draw(explosion3, self.x, self.y)
+				love.graphics.draw(explosion3, self.lastX, self.lastY)
 				--render explosionSprite3
 			end
 		end
