@@ -37,7 +37,6 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.alternate = false
 	self.spawning = true
 	self.exploded = false
-	self.death = false
 	self.justCollided = false
 	self.ground = Platform('name', 1, 1, 1, 1)
 	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
@@ -558,13 +557,11 @@ function Ostrich:update(dt)
 			end
 	
 		elseif self.exploded then
-			self.explosionTimer = self.explosionTimer + dt
+			if self.explosionTimer < .4 then
+				self.explosionTimer = self.explosionTimer + dt
+			end
 			self.x = -20
 			self.y = -20
-		end
-		
-		if self.explosionTimer > .3 then
-			self.death = true
 		end
 	end
 

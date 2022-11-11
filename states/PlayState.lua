@@ -140,7 +140,7 @@ function PlayState:update(dt)
 	end
 
 	--PLAYER 1 OSTRICH DEATH AND RESPAWN
-	if player1.death then
+	if player1.exploded and player1.explosionTimer > .35 then
 		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
 		self.monster = Pterodactyl(-30, -30, 0)
 		self.pteroTimer = self.vultureCount * 20
@@ -184,7 +184,7 @@ function PlayState:update(dt)
 		rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
 		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
 	end
-
+---[[ WE MOVED THIS INTO OUR VULTURE CLASS
 	--PLACE VULTURE IN GRAVEYARD UPON DEATH
 	for k, vulture in pairs(Vultures) do
 		if vulture.exploded then
@@ -192,11 +192,12 @@ function PlayState:update(dt)
 				vulture.eggSpawn = true --MAKE THIS ONLY TRUE THE FRAME WE EXPLODE
 				vulture.firstFrameExploded = false
 			end
-			vulture.x = -vulture.width
-			vulture.y = -vulture.height
+			vulture.x = -20
+			vulture.y = -20
 			vulture.egg:update(dt)
 		end
 	end
+--]] 
 	--VULTURE TO VULTURE COLLISION
 	for i, vulture in pairs(Vultures) do
 		for index, others in pairs(Vultures) do
@@ -232,7 +233,7 @@ function PlayState:update(dt)
 				elseif player1:enemyLeftCollides(vulture) then
 					if player1.facingRight and vulture.facingRight then
 						player1.exploded = true
-					elseif not self.facingRight and not vulture.facingRight then
+					elseif not player1.facingRight and not vulture.facingRight then
 						vulture.exploded = true
 						self.pteroTimer = self.vultureCount * 20 - 20
 						vulture.firstFrameExploded = true
@@ -326,7 +327,7 @@ function PlayState:update(dt)
 			end
 		end
 
-		if player1:Collides(vulture.egg.jockey) then
+		if player1:Collides(vulture.egg.jockey) and vulture.egg.jockeySpawned then
 			vulture.egg.jockey.collected = true
 			self.scoresTable[self.eggCount].doubleScore = false
 			Score = Score + self.scoresTable[self.eggCount].scoreAmount
@@ -413,7 +414,7 @@ function PlayState:update(dt)
 				if player1.y + 4 > self.monster.y + 1 and player1.y + 4 < self.monster.y + 8 and self.monster.frame == 3 then
 					self.monster.exploded = true
 				elseif self.monster:leftCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
-					player1.death = true
+					player1.exploded = true
 				end
 			end
 		end
@@ -425,7 +426,7 @@ function PlayState:update(dt)
 				if player1.y + 4 > self.monster.y + 1 and player1.y + 4 < self.monster.y + 8 and self.monster.frame == 3 then
 					self.monster.exploded = true
 				elseif self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
-					player1.death = true
+					player1.exploded = true
 				end
 			end
 		end
@@ -434,11 +435,11 @@ function PlayState:update(dt)
 --Kills player if collision while facing same direction as pterodactyl
 	if player1.facingRight and self.monster.facingRight then
 		if self.monster:leftCollides(player1) or self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
-			player1.death = true
+			player1.exploded = true
 		end
 	elseif not player1.facingRight and not self.monster.facingRight then
 		if self.monster:leftCollides(player1) or self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
-			player1.death = true
+			player1.exploded = true
 		end
 	end
 
