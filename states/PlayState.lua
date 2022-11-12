@@ -48,7 +48,7 @@ function PlayState:init()
 	self.monster = Pterodactyl(-30, -30, 0)
 	--self.mouseX = 0
 	--self.mouseY = 0
-	--tester = Vulture(self.mouseX, self.mouseY, 16, 24)
+	Vultures[1] = Vulture(-20, -20, 16, 24, 0, 1)
 end
 
 function PlayState:update(dt)
@@ -92,6 +92,7 @@ function PlayState:update(dt)
 
 		if self.pteroTimer < 0 then
 			self.monster = Pterodactyl(PteroSpawnPoints[self.randomPteroIndex].x, PteroSpawnPoints[self.randomPteroIndex].y, PteroSpawnPoints[self.randomPteroIndex].dx)
+			self.inert = false
 			self.pteroTimer = 0
 		end
 
@@ -106,18 +107,19 @@ function PlayState:update(dt)
 			self.vultureSpawnPointIndex = math.random(4)
 			Vulture1 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 1)
 			Vultures[1] = Vulture1
+			Vulture1.inert = false
 			self.pteroTimer = self.pteroTimer + 20
 		elseif self.vultureSpawnTimer < 7 and self.vultureSpawnTimer > 6 then
 			self.vultureSpawnTimer = 6
 			self.vultureSpawnPointIndex = math.random(4)
-			Vulture2 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 2)
-			Vultures[2] = Vulture2
+			--Vulture2 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 2)
+			--Vultures[2] = Vulture2
 			self.pteroTimer = self.pteroTimer + 20
 		elseif self.vultureSpawnTimer < 5 and self.vultureSpawnTimer > 4 then
 			self.vultureSpawnTimer = 0
 			self.vultureSpawnPointIndex = math.random(4)
-			Vulture3 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 3)
-			Vultures[3] = Vulture3
+			--Vulture3 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 3)
+			--Vultures[3] = Vulture3
 			self.pteroTimer = self.pteroTimer + 20
 		end
 	end
@@ -443,16 +445,6 @@ function PlayState:update(dt)
 		end
 	end
 
---BOUNCES PTERO OFF FLOOR
-	if self.monster.y + self.monster.height > groundPlatform.y then --GROUND
-		self.monster.y = groundPlatform.y - self.monster.height
-		self.monster.dy = self.monster.dy * -1
-	end
---BOUNCES PTERO OFF TOP OF SCREEN
-	if self.monster.y < 0 then --TOP OF SCREEN COLLISION
-		self.monster.y = 0
-		self.monster.dy = math.abs(self.monster.dy)
-	end
 --]]
 	self.monster:update(dt)
 end
@@ -512,8 +504,11 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 
 --DEBUG INFO
-	--love.graphics.print('enemyLeftCollides: ' .. tostring(player1:enemyRightCollides(tester)), 5, 15)
-	--love.graphics.print('enemyRightCollides: ' .. tostring(player1:enemyLeftCollides(tester)), 5, 25)
+	--love.graphics.print('enemyBottomCollides: ' .. tostring(self.monster:leftCollides(player1)), 5, 15)
+	--love.graphics.print('enemyRightCollides: ' .. tostring(self.monster:rightCollides(player1)), 5, 25)
+	--love.graphics.print('enemyLeftCollides: ' .. tostring(self.monster:topCollides(player1)), 5, 35)
+	--love.graphics.print('enemyLeftCollides: ' .. tostring(self.monster:bottomCollides(player1)), 5, 45)
+	----love.graphics.print('enemyRightCollides: ' .. tostring(player1:enemyLeftCollides(tester)), 5, 25)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

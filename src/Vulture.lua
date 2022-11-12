@@ -41,6 +41,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.justJumped = false
 	self.eggSpawn = false
 	self.firstFrameExploded = false
+	self.inert = true
 	self.ground = Platform('name', 1, 1, 1, 1)
 	self.vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
@@ -205,19 +206,24 @@ function Vulture:update(dt)
 			self.y = self.y + self.dy
 			
 			--BOUNCING OFF TOP
-			if self.y < 0 then
-				self.y = 0
-				self.dy = math.abs(self.dy) / 2
-			end
-			
-			--LOOPS player to left side of screen
-			if self.x > VIRTUAL_WIDTH - 1 then
-				self.x = -self.width + 1
-			end
+			if not self.inert then
+				
+				self.x = self.x + self.dx
 
-			--LOOPS player to right side of screen
-			if self.x < -self.width + 1 then
-				self.x = VIRTUAL_WIDTH - 1
+				if self.y < 0 then
+					self.y = 0
+					self.dy = math.abs(self.dy) / 2
+				end
+			
+				--LOOPS player to left side of screen
+				if self.x > VIRTUAL_WIDTH - 1 then
+					self.x = -self.width + 1
+				end
+
+				--LOOPS player to right side of screen
+				if self.x < -self.width + 1 then
+					self.x = VIRTUAL_WIDTH - 1
+				end
 			end
 
 			if self.grounded then
@@ -228,8 +234,6 @@ function Vulture:update(dt)
 				self.skid = false
 				self.height = 16
 			end
-
-			self.x = self.x + self.dx
 
 			if self.dx < 0 then
 				self.facingRight = false

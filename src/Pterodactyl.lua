@@ -14,6 +14,7 @@ function Pterodactyl:init(x, y, dx)
 	self.totalFrames = 3
 	self.facingRight = true
 	self.exploded = false
+	self.inert = true
 	self.atlas = pterodactylAtlas
 	self.pterodactylSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	self.mouseX = 0
@@ -67,15 +68,16 @@ end
 
 function Pterodactyl:update(dt)
 	if not self.exploded then
-
-		self.x = self.x + self.dx
-		self.y = self.y + self.dy
+		if not self.inert then
+			self.x = self.x + self.dx
+			self.y = self.y + self.dy
 		--self.mouseX = love.mouse.getX()
 		--self.mouseY = love.mouse.getY()
 		--self.x = self.mouseX
 		--self.y = self.mouseY
-		self.lastX = self.x
-		self.lastY = self.y
+			self.lastX = self.x
+			self.lastY = self.y
+		end
 
 		if self.dx > 0 then
 			self.facingRight = true
@@ -88,12 +90,25 @@ function Pterodactyl:update(dt)
 
 	
 	---[[
-		if self.x > VIRTUAL_WIDTH then
-			self.x = -self.width
-		end
+		if not self.inert then
+			if self.x > VIRTUAL_WIDTH then
+				self.x = -self.width
+			end
 
-		if self.x + self.width < 0 then
-			self.x = VIRTUAL_WIDTH
+			if self.x + self.width < 0 then
+				self.x = VIRTUAL_WIDTH
+			end
+
+			--BOUNCES PTERO OFF FLOOR
+			if self.y + self.height > groundPlatform.y then --GROUND
+				self.y = groundPlatform.y - self.height
+				self.dy = self.dy * -1
+			end
+			--BOUNCES PTERO OFF TOP OF SCREEN
+			if self.y < 0 then --TOP OF SCREEN COLLISION
+				self.y = 0
+				self.dy = math.abs(self.dy)
+			end
 		end
 	--]] 
 		self.animationTimer = self.animationTimer - dt
