@@ -8,30 +8,28 @@ function PlayState:init()
 	platform4 = Platform('platform4', 262, 122, 79, 7)
 	platform4L = Platform('platform4L', -30, 122, 79, 7)
 	platform5 = Platform('platform5', 96, 150, 79, 7)
-	self.Bubble1 = {}
-	self.Bubble2 = {}
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 	Vultures = {}
-	self.wave = 1
-	self.lives = 8
-	self.eggCount = 1
-	self.spawnPointIndex = 0
-	self.vultureSpawnPointIndex = 0
-	self.vultureSpawnTimer = 10
-	self.lowestEggScore = 0
-	self.scoresTable = {}
-	self.wave1ScorePopulate = false
-	self.helpToggle = false
-	self.gameOver = false
-	self.refresh = true
+	scoresTable = {}
+	wave = 1
+	lives = 8
+	eggCount = 1
+	spawnPointIndex = 0
+	vultureSpawnPointIndex = 0
+	vultureSpawnTimer = 10
+	lowestEggScore = 0
+	wave1ScorePopulate = false
+	helpToggle = false
+	gameOver = false
+	refresh = true
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
-	self.vultureCount = 0
-	self.pteroTimer = 0
+	vultureCount = 0
+	pteroTimer = 0
 	SpawnZonePoints = {}
 	SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y)
 	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
@@ -44,85 +42,85 @@ function PlayState:init()
 	PteroSpawnPoints[4] = SpawnZonePoint(VIRTUAL_WIDTH, 75, -1.8)
 	PteroSpawnPoints[5] = SpawnZonePoint(-24, VIRTUAL_HEIGHT - 80, 1.8)
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
-	self.randomPteroIndex = math.random(6)
+	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-	--self.mouseX = 0
-	--self.mouseY = 0
+	--mouseX = 0
+	--mouseY = 0
 	Vultures[1] = Vulture(-20, -20, 16, 24, 0, 1)
 end
 
 function PlayState:update(dt)
 --[[
-	self.mouseX = love.mouse:getX()
-	self.mouseY = love.mouse:getY()
+	mouseX = love.mouse:getX()
+	mouseY = love.mouse:getY()
 
-	tester.x = self.mouseX
-	tester.y = self.mouseY
+	tester.x = mouseX
+	tester.y = mouseY
 
 	if love.keyboard.wasPressed('h') then
-		self.helpToggle = not self.helpToggle
+		helpToggle = not helpToggle
 	end
 --]]
 
 
 ---[[VultureCount
-	self.vultureCount = 0
+	vultureCount = 0
 	for i, vulture in pairs(Vultures) do
 		if not vulture.exploded then
-			self.vultureCount = self.vultureCount + 1
+			vultureCount = vultureCount + 1
 		end
 	end
 --]]
 
-	if self.wave == 1 then
-		if not self.wave1ScorePopulate then
-			self.lowestEggScore = 250
+	if wave == 1 then
+		if not wave1ScorePopulate then
+			lowestEggScore = 250
 
 			--SCORE TABLE INITIALIZATION
 			for i = 1, 3 do
-				table.insert(self.scoresTable, PrintScore(-20, -20, self.lowestEggScore))
-				self.lowestEggScore = self.lowestEggScore + 250 --Incremented by bounder score
+				table.insert(scoresTable, PrintScore(-20, -20, lowestEggScore))
+				lowestEggScore = lowestEggScore + 250 --Incremented by bounder score
 			end
-			self.wave1ScorePopulate = true
+			wave1ScorePopulate = true
 		end
 
-		if self.pteroTimer > 0 then
-			self.pteroTimer = self.pteroTimer - dt
+		if pteroTimer > 0 then
+			pteroTimer = pteroTimer - dt
 		end
 
-		if self.pteroTimer < 0 then
-			monster = Pterodactyl(PteroSpawnPoints[self.randomPteroIndex].x, PteroSpawnPoints[self.randomPteroIndex].y, PteroSpawnPoints[self.randomPteroIndex].dx)
+		if pteroTimer < 0 then
+			monster = Pterodactyl(PteroSpawnPoints[randomPteroIndex].x, PteroSpawnPoints[randomPteroIndex].y, PteroSpawnPoints[randomPteroIndex].dx)
 			monster.graveyard = false
-			self.pteroTimer = 0
+			pteroTimer = 0
 		end
 
-		if self.vultureSpawnTimer > 0 then
-			self.vultureSpawnTimer = self.vultureSpawnTimer - dt
+		if vultureSpawnTimer > 0 then
+			vultureSpawnTimer = vultureSpawnTimer - dt
 		else
-			self.vultureSpawnTimer = 0
+			vultureSpawnTimer = 0
 		end
 ---[[SPAWNING VULTURES FOR WAVE 1
-		if self.vultureSpawnTimer < 9 and self.vultureSpawnTimer > 8 then
-			self.vultureSpawnTimer = 8
-			self.vultureSpawnPointIndex = math.random(4)
-			Vulture1 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 1)
+		if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
+			vultureSpawnTimer = 8
+			vultureSpawnPointIndex = math.random(4)
+			Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 1)
 			Vultures[1] = Vulture1
 			Vulture1.graveyard = false
-			self.pteroTimer = self.pteroTimer + 20
-		elseif self.vultureSpawnTimer < 7 and self.vultureSpawnTimer > 6 then
-			self.vultureSpawnTimer = 6
-			self.vultureSpawnPointIndex = math.random(4)
-			Vulture2 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 2)
+			pteroTimer = pteroTimer + 20
+		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
+			vultureSpawnTimer = 6
+			vultureSpawnPointIndex = math.random(4)
+			Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 2)
 			Vultures[2] = Vulture2
 			Vulture2.graveyard = false
-			self.pteroTimer = self.pteroTimer + 20
-		elseif self.vultureSpawnTimer < 5 and self.vultureSpawnTimer > 4 then
-			self.vultureSpawnTimer = 0
-			self.vultureSpawnPointIndex = math.random(4)
-			Vulture3 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 3)
+			pteroTimer = pteroTimer + 20
+		elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
+			vultureSpawnTimer = 0
+			vultureSpawnPointIndex = math.random(4)
+			Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 3)
 			Vultures[3] = Vulture3
 			Vulture3.graveyard = false
-			self.pteroTimer = self.pteroTimer + 20
+			pteroTimer = pteroTimer + 20
 		end
 	end
 --]]
@@ -148,19 +146,19 @@ function PlayState:update(dt)
 		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
 		monster.graveyard = true
 		monster = Pterodactyl(-30, -30, 0)
-		self.pteroTimer = self.vultureCount * 20
-		if self.lives == 1 then
-			self.lives = self.lives - 1
-			self.gameOver = true
+		pteroTimer = vultureCount * 20
+		if lives == 1 then
+			lives = lives - 1
+			gameOver = true
 		else
-			self.lives = self.lives - 1
-			self.spawnPointIndex = math.random(4)
-			player1 = Ostrich(SpawnZonePoints[self.spawnPointIndex].x, SpawnZonePoints[self.spawnPointIndex].y, 16, 24, SpawnZonePoints[self.spawnPointIndex].y)
+			lives = lives - 1
+			spawnPointIndex = math.random(4)
+			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y)
 		end
 	end
 
 	--KILLS PTERO IF NO VULTURES ON SCREEN
-	if self.vultureCount == 0 then
+	if vultureCount == 0 then
 		monster = Pterodactyl(-30, -30, 0)
 	end
 
@@ -230,7 +228,7 @@ function PlayState:update(dt)
 					vulture.y = player1.y - vulture.height
 				elseif player1:enemyBottomCollides(vulture) then
 					vulture.exploded = true
-					self.pteroTimer = self.vultureCount * 20 - 20
+					pteroTimer = vultureCount * 20 - 20
 					vulture.firstFrameExploded = true
 					player1.dy = player1.dy * -1
 					player1.y = vulture.y - player1.height
@@ -240,7 +238,7 @@ function PlayState:update(dt)
 						player1.exploded = true
 					elseif not player1.facingRight and not vulture.facingRight then
 						vulture.exploded = true
-						self.pteroTimer = self.vultureCount * 20 - 20
+						pteroTimer = vultureCount * 20 - 20
 						vulture.firstFrameExploded = true
 						Score = Score + vulture.pointTier
 					elseif player1.facingRight and not vulture.facingRight then
@@ -255,7 +253,7 @@ function PlayState:update(dt)
 							player1.exploded = true
 						elseif player1.y < vulture.y then --OSTRICH HAS HIGHER LANCE
 							vulture.exploded = true
-							self.pteroTimer = self.vultureCount * 20 - 20
+							pteroTimer = vultureCount * 20 - 20
 							vulture.firstFrameExploded = true
 							Score = Score + vulture.pointTier
 						end
@@ -263,7 +261,7 @@ function PlayState:update(dt)
 				elseif player1:enemyRightCollides(vulture) then
 					if player1.facingRight and vulture.facingRight then
 						vulture.exploded = true
-						self.pteroTimer = self.vultureCount * 20 - 20
+						pteroTimer = vultureCount * 20 - 20
 						vulture.firstFrameExploded = true
 						Score = Score + vulture.pointTier
 					elseif not player1.facingRight and not vulture.facingRight then
@@ -274,7 +272,7 @@ function PlayState:update(dt)
 							vulture.dx = vulture.dx * -1
 							vulture.x = player1.x + player1.width
 						elseif player1.y < vulture.y then --OSTRICH HAS HIGHER LANCE
-							self.pteroTimer = self.vultureCount * 20 - 20
+							pteroTimer = vultureCount * 20 - 20
 							vulture.exploded = true
 							vulture.firstFrameExploded = true
 							Score = Score + vulture.pointTier
@@ -301,16 +299,16 @@ function PlayState:update(dt)
 					vulture.egg.dx = 0
 					vulture.egg.dy = 0
 					vulture.egg.collected = true
-					self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
-					self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
-					self.scoresTable[self.eggCount].timer = 1.5
+					scoresTable[eggCount].lastX = vulture.egg.lastX
+					scoresTable[eggCount].lastY = vulture.egg.lastY
+					scoresTable[eggCount].timer = 1.5
 					if vulture.egg.bouncedOffFloor then
-						self.scoresTable[self.eggCount].doubleScore = false
-						Score = Score + self.scoresTable[self.eggCount].scoreAmount
+						scoresTable[eggCount].doubleScore = false
+						Score = Score + scoresTable[eggCount].scoreAmount
 					else
-						Score = Score + self.scoresTable[self.eggCount].scoreAmount * 2
+						Score = Score + scoresTable[eggCount].scoreAmount * 2
 					end
-					self.eggCount = self.eggCount + 1
+					eggCount = eggCount + 1
 				end
 
 			elseif math.abs(player1.dx) >= .3 then
@@ -319,26 +317,26 @@ function PlayState:update(dt)
 				vulture.egg.dx = 0
 				vulture.egg.dy = 0
 				vulture.egg.collected = true
-				self.scoresTable[self.eggCount].lastX = vulture.egg.lastX
-				self.scoresTable[self.eggCount].lastY = vulture.egg.lastY
-				self.scoresTable[self.eggCount].timer = 1.5
+				scoresTable[eggCount].lastX = vulture.egg.lastX
+				scoresTable[eggCount].lastY = vulture.egg.lastY
+				scoresTable[eggCount].timer = 1.5
 				if vulture.egg.bouncedOffFloor then
-					Score = Score + self.scoresTable[self.eggCount].scoreAmount
-					self.scoresTable[self.eggCount].doubleScore = false
+					Score = Score + scoresTable[eggCount].scoreAmount
+					scoresTable[eggCount].doubleScore = false
 				else
-					Score = Score + self.scoresTable[self.eggCount].scoreAmount * 2
+					Score = Score + scoresTable[eggCount].scoreAmount * 2
 				end
-				self.eggCount = self.eggCount + 1
+				eggCount = eggCount + 1
 			end
 		end
 
 		if player1:Collides(vulture.egg.jockey) and vulture.egg.jockeySpawned then
 			vulture.egg.jockey.collected = true
-			self.scoresTable[self.eggCount].doubleScore = false
-			Score = Score + self.scoresTable[self.eggCount].scoreAmount
-			self.scoresTable[self.eggCount].lastX = vulture.egg.jockey.lastX
-			self.scoresTable[self.eggCount].lastY = vulture.egg.jockey.lastY
-			self.scoresTable[self.eggCount].timer = 1.5
+			scoresTable[eggCount].doubleScore = false
+			Score = Score + scoresTable[eggCount].scoreAmount
+			scoresTable[eggCount].lastX = vulture.egg.jockey.lastX
+			scoresTable[eggCount].lastY = vulture.egg.jockey.lastY
+			scoresTable[eggCount].timer = 1.5
 			vulture.egg.jockey.x = -20
 			vulture.egg.jockey.y = -20
 		end
@@ -367,8 +365,8 @@ function PlayState:update(dt)
 	end
 --]]
 
-	for k, v in pairs(self.scoresTable) do
-		self.scoresTable[k]:update(dt)
+	for k, v in pairs(scoresTable) do
+		scoresTable[k]:update(dt)
 	end
 
 ---[[PTERODACTYL COLLISION
@@ -477,7 +475,7 @@ function PlayState:render()
 
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
-	love.graphics.print(tostring(self.lives), 138, VIRTUAL_HEIGHT - 28)
+	love.graphics.print(tostring(lives), 138, VIRTUAL_HEIGHT - 28)
 
 	for k, vulture in pairs(Vultures) do
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
@@ -531,7 +529,7 @@ function PlayState:render()
 		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end
 --]]
-	if self.gameOver then
+	if gameOver then
 		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
 		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
 		love.graphics.setFont(smallFont)
@@ -541,7 +539,7 @@ function PlayState:render()
 		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
 	end
 
-	if self.helpToggle and not self.gameOver then
+	if helpToggle and not gameOver then
 		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
 		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
 		love.graphics.setFont(smallFont)
@@ -557,8 +555,8 @@ function PlayState:render()
 	love.graphics.print(string.format("%06d", Score), 67, VIRTUAL_HEIGHT - 28)
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
-	for k, v in pairs(self.scoresTable) do
-		self.scoresTable[k]:render()
+	for k, v in pairs(scoresTable) do
+		scoresTable[k]:render()
 	end
 
 	--tester:render()
