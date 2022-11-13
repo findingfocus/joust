@@ -45,7 +45,7 @@ function PlayState:init()
 	PteroSpawnPoints[5] = SpawnZonePoint(-24, VIRTUAL_HEIGHT - 80, 1.8)
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	self.randomPteroIndex = math.random(6)
-	self.monster = Pterodactyl(-30, -30, 0)
+	monster = Pterodactyl(-30, -30, 0)
 	--self.mouseX = 0
 	--self.mouseY = 0
 	Vultures[1] = Vulture(-20, -20, 16, 24, 0, 1)
@@ -91,8 +91,8 @@ function PlayState:update(dt)
 		end
 
 		if self.pteroTimer < 0 then
-			self.monster = Pterodactyl(PteroSpawnPoints[self.randomPteroIndex].x, PteroSpawnPoints[self.randomPteroIndex].y, PteroSpawnPoints[self.randomPteroIndex].dx)
-			self.inert = false
+			monster = Pterodactyl(PteroSpawnPoints[self.randomPteroIndex].x, PteroSpawnPoints[self.randomPteroIndex].y, PteroSpawnPoints[self.randomPteroIndex].dx)
+			monster.graveyard = false
 			self.pteroTimer = 0
 		end
 
@@ -107,19 +107,21 @@ function PlayState:update(dt)
 			self.vultureSpawnPointIndex = math.random(4)
 			Vulture1 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 1)
 			Vultures[1] = Vulture1
-			Vulture1.inert = false
+			Vulture1.graveyard = false
 			self.pteroTimer = self.pteroTimer + 20
 		elseif self.vultureSpawnTimer < 7 and self.vultureSpawnTimer > 6 then
 			self.vultureSpawnTimer = 6
 			self.vultureSpawnPointIndex = math.random(4)
-			--Vulture2 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 2)
-			--Vultures[2] = Vulture2
+			Vulture2 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 2)
+			Vultures[2] = Vulture2
+			Vulture2.graveyard = false
 			self.pteroTimer = self.pteroTimer + 20
 		elseif self.vultureSpawnTimer < 5 and self.vultureSpawnTimer > 4 then
 			self.vultureSpawnTimer = 0
 			self.vultureSpawnPointIndex = math.random(4)
-			--Vulture3 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 3)
-			--Vultures[3] = Vulture3
+			Vulture3 = Vulture(SpawnZonePoints[self.vultureSpawnPointIndex].x, SpawnZonePoints[self.vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[self.vultureSpawnPointIndex].y, 3)
+			Vultures[3] = Vulture3
+			Vulture3.graveyard = false
 			self.pteroTimer = self.pteroTimer + 20
 		end
 	end
@@ -144,7 +146,8 @@ function PlayState:update(dt)
 	--PLAYER 1 OSTRICH DEATH AND RESPAWN
 	if player1.exploded and player1.explosionTimer > .35 then
 		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
-		self.monster = Pterodactyl(-30, -30, 0)
+		monster.graveyard = true
+		monster = Pterodactyl(-30, -30, 0)
 		self.pteroTimer = self.vultureCount * 20
 		if self.lives == 1 then
 			self.lives = self.lives - 1
@@ -158,7 +161,7 @@ function PlayState:update(dt)
 
 	--KILLS PTERO IF NO VULTURES ON SCREEN
 	if self.vultureCount == 0 then
-		self.monster = Pterodactyl(-30, -30, 0)
+		monster = Pterodactyl(-30, -30, 0)
 	end
 
 	lavaBubble1:update(dt)
@@ -372,62 +375,64 @@ function PlayState:update(dt)
 
 	--PTERODACTYL AND PLATFORM COLLISION
 	for k, platform in pairs(collidablePlatforms) do
-		if self.monster:leftCollides(platform) then
-			self.monster.x = platform.x + platform.width
-			self.monster.dx = self.monster.dx * -1
-		elseif self.monster:rightCollides(platform) then
-			self.monster.x = platform.x - self.monster.width
-			self.monster.dx = self.monster.dx * -1
-		elseif self.monster:topCollides(platform) then
-			self.monster.y = platform.y + platform.height
-			self.monster.dy = math.abs(self.monster.dy)
-		elseif self.monster:bottomCollides(platform) then
-			self.monster.y = platform.y - self.monster.height
-			self.monster.dy = self.monster.dy * -1
+		if monster:leftCollides(platform) then
+			monster.x = platform.x + platform.width
+			monster.dx = monster.dx * -1
+		elseif monster:rightCollides(platform) then
+			monster.x = platform.x - monster.width
+			monster.dx = monster.dx * -1
+		elseif monster:topCollides(platform) then
+			monster.y = platform.y + platform.height
+			monster.dy = math.abs(monster.dy)
+		elseif monster:bottomCollides(platform) then
+			monster.y = platform.y - monster.height
+			monster.dy = monster.dy * -1
 		end
 	end	
 
 	--PTERODACTYL AND VULTURE COLLISION
 	for i, vulture in pairs(Vultures) do
-		if self.monster:leftCollides(vulture) then
+		if monster:leftCollides(vulture) then
 			vulture.dx = math.abs(vulture.dx) * -1
-			self.monster.x = vulture.x + vulture.width
-			self.monster.dx = math.abs(self.monster.dx)
-		elseif self.monster:rightCollides(vulture) then
+			monster.x = vulture.x + vulture.width
+			monster.dx = math.abs(monster.dx)
+		elseif monster:rightCollides(vulture) then
 			vulture.dx = math.abs(vulture.dx)
-			self.monster.x = vulture.x - self.monster.width
-			self.monster.dx = math.abs(self.monster.dx) * -1
-		elseif self.monster:topCollides(vulture) then
+			monster.x = vulture.x - monster.width
+			monster.dx = math.abs(monster.dx) * -1
+		elseif monster:topCollides(vulture) then
 			vulture.dy = math.abs(vulture.dy) * -1
-			self.monster.y = vulture.y + vulture.height
-			self.monster.dy = math.abs(self.monster.dy)
-		elseif self.monster:bottomCollides(vulture) then
+			monster.y = vulture.y + vulture.height
+			monster.dy = math.abs(monster.dy)
+		elseif monster:bottomCollides(vulture) then
 			vulture.dy = math.abs(vulture.dy)
-			self.monster.y = vulture.y - self.monster.height
-			self.monster.dy = math.abs(self.monster.dy) * -1
+			monster.y = vulture.y - monster.height
+			monster.dy = math.abs(monster.dy) * -1
 		end
 	end
 
 --LANCE TO PTERODACTYL COLLISION
-	if not player1.temporarySafety and not self.monster.facingRight then
+	if not player1.temporarySafety and not monster.facingRight then
 		--Check if joust kills ptero when ptero facing left and player facing right
 		if player1.facingRight then
-			if self.monster:leftCollides(player1) then
-				if player1.y + 4 > self.monster.y + 1 and player1.y + 4 < self.monster.y + 8 and self.monster.frame == 3 then
-					self.monster.exploded = true
-				elseif self.monster:leftCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+			if monster:leftCollides(player1) then
+				if player1.y + 4 > monster.y + 1 and player1.y + 4 < monster.y + 8 and monster.frame == 3 then
+					monster.exploded = true
+					monster.graveyard = true
+				elseif monster:leftCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
 					player1.exploded = true
 				end
 			end
 		end
 
-	elseif not player1.temporarySafety and self.monster.facingRight then
+	elseif not player1.temporarySafety and monster.facingRight then
 		--Check if joust kills ptero when ptero facing right and player facing left
 		if not player1.facingRight then
-			if self.monster:rightCollides(player1) then
-				if player1.y + 4 > self.monster.y + 1 and player1.y + 4 < self.monster.y + 8 and self.monster.frame == 3 then
-					self.monster.exploded = true
-				elseif self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+			if monster:rightCollides(player1) then
+				if player1.y + 4 > monster.y + 1 and player1.y + 4 < monster.y + 8 and monster.frame == 3 then
+					monster.exploded = true
+					monster.graveyard = true
+				elseif monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
 					player1.exploded = true
 				end
 			end
@@ -435,18 +440,18 @@ function PlayState:update(dt)
 	end
 
 --Kills player if collision while facing same direction as pterodactyl
-	if player1.facingRight and self.monster.facingRight then
-		if self.monster:leftCollides(player1) or self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+	if player1.facingRight and monster.facingRight then
+		if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
 			player1.exploded = true
 		end
-	elseif not player1.facingRight and not self.monster.facingRight then
-		if self.monster:leftCollides(player1) or self.monster:rightCollides(player1) or self.monster:topCollides(player1) or self.monster:bottomCollides(player1) then
+	elseif not player1.facingRight and not monster.facingRight then
+		if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
 			player1.exploded = true
 		end
 	end
 
 --]]
-	self.monster:update(dt)
+	monster:update(dt)
 end
 
 function PlayState:render()
@@ -468,7 +473,7 @@ function PlayState:render()
 	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT, VIRTUAL_WIDTH, LAVAHEIGHT)
 
 	player1:render()
-	self.monster:render()
+	monster:render()
 
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
@@ -504,10 +509,10 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 
 --DEBUG INFO
-	--love.graphics.print('enemyBottomCollides: ' .. tostring(self.monster:leftCollides(player1)), 5, 15)
-	--love.graphics.print('enemyRightCollides: ' .. tostring(self.monster:rightCollides(player1)), 5, 25)
-	--love.graphics.print('enemyLeftCollides: ' .. tostring(self.monster:topCollides(player1)), 5, 35)
-	--love.graphics.print('enemyLeftCollides: ' .. tostring(self.monster:bottomCollides(player1)), 5, 45)
+	--love.graphics.print('enemyBottomCollides: ' .. tostring(monster:leftCollides(player1)), 5, 15)
+	--love.graphics.print('enemyRightCollides: ' .. tostring(monster:rightCollides(player1)), 5, 25)
+	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:topCollides(player1)), 5, 35)
+	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:bottomCollides(player1)), 5, 45)
 	----love.graphics.print('enemyRightCollides: ' .. tostring(player1:enemyLeftCollides(tester)), 5, 25)
 	
 --[[KEYLOGGER

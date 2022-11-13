@@ -41,7 +41,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.justJumped = false
 	self.eggSpawn = false
 	self.firstFrameExploded = false
-	self.inert = true
+	self.graveyard = true
 	self.ground = Platform('name', 1, 1, 1, 1)
 	self.vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
@@ -206,7 +206,7 @@ function Vulture:update(dt)
 			self.y = self.y + self.dy
 			
 			--BOUNCING OFF TOP
-			if not self.inert then
+			if not self.graveyard then
 				
 				self.x = self.x + self.dx
 
