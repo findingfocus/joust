@@ -334,11 +334,10 @@ function PlayState:update(dt)
 			vulture.egg.jockey.collected = true
 			scoresTable[eggCount].doubleScore = false
 			Score = Score + scoresTable[eggCount].scoreAmount
+			scoresTable[eggCount].timer = 1.5
 			scoresTable[eggCount].lastX = vulture.egg.jockey.lastX
 			scoresTable[eggCount].lastY = vulture.egg.jockey.lastY
-			scoresTable[eggCount].timer = 1.5
-			vulture.egg.jockey.x = -20
-			vulture.egg.jockey.y = -20
+			vulture.egg.jockey.graveyard = true
 		end
 
 		if vulture.egg:groundCollide(groundPlatform) then
@@ -507,7 +506,7 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 
 --DEBUG INFO
-	--love.graphics.print('enemyBottomCollides: ' .. tostring(monster:leftCollides(player1)), 5, 15)
+	--love.graphics.print('jockeyX: ' .. tostring(Vultures[1].egg.jockey.x), 5, 15)
 	--love.graphics.print('enemyRightCollides: ' .. tostring(monster:rightCollides(player1)), 5, 25)
 	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:topCollides(player1)), 5, 35)
 	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:bottomCollides(player1)), 5, 45)

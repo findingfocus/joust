@@ -89,6 +89,7 @@ function Egg:update(dt)
 
 		if self.hatchAnim > .4 and not self.jockeySpawned then
 			self.jockey = Jockey(self.lastX, self.lastY)
+			self.jockey.graveyard = false
 			self.jockeySpawned = true
 			self.x = -20
 			self.y = -20
