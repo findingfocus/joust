@@ -47,6 +47,8 @@ function PlayState:init()
 	--mouseX = 0
 	--mouseY = 0
 	Vultures[1] = Vulture(-20, -20, 16, 24, 0, 1)
+	Vultures[2] = Vulture(-20, -20, 16, 24, 0, 1)
+	Vultures[3] = Vulture(-20, -20, 16, 24, 0, 1)
 end
 
 function PlayState:update(dt)
@@ -506,9 +508,10 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 
 --DEBUG INFO
-	--love.graphics.print('jockeyX: ' .. tostring(Vultures[1].egg.jockey.x), 5, 15)
-	--love.graphics.print('enemyRightCollides: ' .. tostring(monster:rightCollides(player1)), 5, 25)
-	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:topCollides(player1)), 5, 35)
+	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
+	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
+	--love.graphics.print('jockeyCollide[2]: ' .. tostring(player1:Collides(Vultures[2].egg.jockey)), 5, 25)
+	--love.graphics.print('jockeyCollide[3]: ' .. tostring(player1:Collides(Vultures[3].egg.jockey)), 5, 35)
 	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:bottomCollides(player1)), 5, 45)
 	----love.graphics.print('enemyRightCollides: ' .. tostring(player1:enemyLeftCollides(tester)), 5, 25)
 	
