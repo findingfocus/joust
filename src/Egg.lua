@@ -1,8 +1,9 @@
 Egg = Class{}
 
-function Egg:init(lastX, lastY, dx)
+function Egg:init(lastX, lastY, dx, index)
 	self.x = lastX
 	self.y = lastY
+	self.index = index
 	self.lastX = 0
 	self.lastY = 0
 	self.width = 8

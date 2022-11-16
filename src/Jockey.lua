@@ -1,8 +1,9 @@
 Jockey = Class{}
 
-function Jockey:init(x, y)
+function Jockey:init(x, y, index)
 self.x = x
 self.y = y - 6
+self.index = index
 self.width = 8
 self.height = 14
 self.image = whiteJockey

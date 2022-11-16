@@ -12,6 +12,8 @@ function PlayState:init()
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
 	Vultures = {}
+	Eggs = {}
+	Jockeys = {}
 	scoresTable = {}
 	wave = 1
 	lives = 8
@@ -24,6 +26,7 @@ function PlayState:init()
 	helpToggle = false
 	gameOver = false
 	refresh = true
+	tablesPopulated = false
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
@@ -84,6 +87,16 @@ function PlayState:update(dt)
 				lowestEggScore = lowestEggScore + 250 --Incremented by bounder score
 			end
 			wave1ScorePopulate = true
+		end
+
+		if not tablesPopulated then
+			for i = 1, 3 do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, i)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+			end
+
+			tablesPopulated = true
 		end
 
 		if pteroTimer > 0 then
