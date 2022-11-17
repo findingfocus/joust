@@ -16,6 +16,7 @@ function Egg:init(lastX, lastY, dx, index)
 	self.invulnerable = false
 	self.collected = false
 	self.jockeySpawned = false
+	self.graveyard = true
 	self.eggSprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
 	self.hatched = false
 	self.hatchCountdown = 3--15
@@ -48,6 +49,13 @@ function Egg:rightCollide(collidable)
 end
 
 function Egg:update(dt)
+	if self.graveyard then
+		self.x = -20
+		self.y = -20
+		self.dx = 0
+		self.dy = 0
+	end
+
 	if not self.collected then
 		self.lastX = self.x
 		self.lastY = self.y
@@ -72,7 +80,7 @@ function Egg:update(dt)
 	if self.x < -self.width + 1 and not self.collected then
 		self.x = VIRTUAL_WIDTH - 1
 	end
-
+---[[ OLD EGG HATCHING ANIMATION __WE LEFT OFF HERE MOVING THIS TO PLAYSTATE!!!!!!!!!!!!
 	if self.dx == 0 and not self.collected then
 		self.hatchCountdown = self.hatchCountdown - dt
 	end
@@ -82,7 +90,7 @@ function Egg:update(dt)
 		self.hatched = true
 	end
 
-	--EGG HATCHING ANIMATION
+
 	if self.hatched then
 		if self.hatchAnim < .4 then
 			self.hatchAnim = self.hatchAnim + dt
@@ -102,6 +110,7 @@ function Egg:update(dt)
 			self.eggSprite:setViewport(10, 0, self.height, self.height)
 		end
 	end
+	--]]
 end
 
 function Egg:render()

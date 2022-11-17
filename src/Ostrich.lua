@@ -138,6 +138,12 @@ end
 lastInput = {"right"}
 
 function Ostrich:update(dt)
+	if self.graveyard then
+		self.x = -20
+		self.y = -20
+		self.dx = 0
+		self.dy = 0
+	end
 	self.safetyTime = self.safetyTime - dt
 
 	if self.safetyTime < 0 then
@@ -560,8 +566,6 @@ function Ostrich:update(dt)
 			if self.explosionTimer < .4 then
 				self.explosionTimer = self.explosionTimer + dt
 			end
-			self.x = -20
-			self.y = -20
 		end
 	end
 

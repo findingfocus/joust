@@ -107,6 +107,12 @@ function Vulture:leftCollides(collidable)
 end
 
 function Vulture:update(dt)	
+	if self.graveyard then
+		self.x = -20
+		self.y = -20
+		self.dx = 0
+		self.dy = 0
+	end
 	--SETS GROWING VIEWPORT UPON SPWNING
 	if self.spawning then
 		self.lastDX = self.dx
@@ -207,7 +213,7 @@ function Vulture:update(dt)
 			
 			--BOUNCING OFF TOP
 			if not self.graveyard then
-				
+
 				self.x = self.x + self.dx
 
 				if self.y < 0 then
@@ -304,11 +310,6 @@ function Vulture:update(dt)
 
     else -- IF EXPLODED
     	self.explosionTimer = self.explosionTimer + dt
-    	if self.eggSpawn then
-    		self.egg = Egg(self.lastX + 4, self.lastY + 2, self.lastDX)
-    		self.eggSpawn = false
-    		self.egg.invulnerable = true
-    	end
 	end
 
 	if self.egg.invulnerable then

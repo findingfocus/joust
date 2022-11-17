@@ -179,12 +179,14 @@ function PlayState:update(dt)
 
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
+	player1:update(dt)
 
+--[[Old vulture update logic
 	for k, vulture in pairs(Vultures) do
 		vulture:update(dt)
-		vulture.egg.jockey:update(dt)
 	end
-	player1:update(dt)
+--]]
+	
 	
 --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
 	if lavaBubble1.popped then
@@ -204,6 +206,8 @@ function PlayState:update(dt)
 	end
 ---[[ WE MOVED THIS INTO OUR VULTURE CLASS
 	--PLACE VULTURE IN GRAVEYARD UPON DEATH
+
+--[[Old Egg Spawn Logic	
 	for k, vulture in pairs(Vultures) do
 		if vulture.exploded then
 			if vulture.firstFrameExploded then
@@ -212,9 +216,11 @@ function PlayState:update(dt)
 			end
 			vulture.x = -20
 			vulture.y = -20
-			vulture.egg:update(dt)
+			--vulture.egg:update(dt) --MOVE THIS TO UPDATE ALL IN EGGS TABLE
 		end
 	end
+--]]
+
 --]] 
 	--VULTURE TO VULTURE COLLISION
 	for i, vulture in pairs(Vultures) do
@@ -234,77 +240,175 @@ function PlayState:update(dt)
 	end
 
 ---[[PLAYER TO ENEMY COLLISIONS
-	for k, vulture in pairs(Vultures) do
+	for i = 1, 3 do
 		if not player1.temporarySafety then
-			if vulture.spawning == false then
-				if player1:enemyTopCollides(vulture) then
+			if Vultures[i].spawning == false then
+				if player1:enemyTopCollides(Vultures[i]) then
 					player1.exploded = true
-					vulture.dy = vulture.dy * -1
-					vulture.y = player1.y - vulture.height
-				elseif player1:enemyBottomCollides(vulture) then
-					vulture.exploded = true
+					player1.graveyard = true
+					Vultures[i].dy = Vultures[i].dy * -1
+					Vultures[i].y = player1.y - Vultures[i].height
+				elseif player1:enemyBottomCollides(Vultures[i]) then
+					Vultures[i].exploded = true
+					Vultures[i].graveyard = true
+					Eggs[i].graveyard = false
+					Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+					Eggs[i].invulnerable = true
 					pteroTimer = vultureCount * 20 - 20
-					vulture.firstFrameExploded = true
+					Vultures[i].firstFrameExploded = true
 					player1.dy = player1.dy * -1
-					player1.y = vulture.y - player1.height
-					Score = Score + vulture.pointTier
-				elseif player1:enemyLeftCollides(vulture) then
-					if player1.facingRight and vulture.facingRight then
+					player1.y = Vultures[i].y - player1.height
+					Score = Score + Vultures[i].pointTier
+				elseif player1:enemyLeftCollides(Vultures[i]) then
+					if player1.facingRight and Vultures[i].facingRight then
 						player1.exploded = true
-					elseif not player1.facingRight and not vulture.facingRight then
-						vulture.exploded = true
+						player1.graveyard = true
+					elseif not player1.facingRight and not Vultures[i].facingRight then
+						Vultures[i].exploded = true
+						Vultures[i].graveyard = true
+						Eggs[i].graveyard = false
+						Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+						Eggs[i].invulnerable = true
 						pteroTimer = vultureCount * 20 - 20
-						vulture.firstFrameExploded = true
-						Score = Score + vulture.pointTier
-					elseif player1.facingRight and not vulture.facingRight then
+						Vultures[i].firstFrameExploded = true
+						Score = Score + Vultures[i].pointTier
+					elseif player1.facingRight and not Vultures[i].facingRight then
 						player1.dx = player1.dx * -1
-						player1.x = vulture.x + vulture.width
-					elseif not player1.facingRight and vulture.facingRight then
-						if player1.y == vulture.y then
+						player1.x = Vultures[i].x + Vultures[i].width
+					elseif not player1.facingRight and Vultures[i].facingRight then
+						if player1.y == Vultures[i].y then
 							player1.dx = player1.dx * -1
-							vulture.dx = vulture.dx * -1
-							vulture.x = player1.x - vulture.width
-						elseif player1.y > vulture.y then --VULTURE HAS HIGHER LANCE
+							Vultures[i].dx = Vultures[i].dx * -1
+							Vultures[i].x = player1.x - Vultures[i].width
+						elseif player1.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
 							player1.exploded = true
-						elseif player1.y < vulture.y then --OSTRICH HAS HIGHER LANCE
-							vulture.exploded = true
+							player1.graveyard = true
+						elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
+							Vultures[i].exploded = true
+							Vultures[i].graveyard = true
+							Eggs[i].graveyard = false
+							Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+							Eggs[i].invulnerable = true
 							pteroTimer = vultureCount * 20 - 20
-							vulture.firstFrameExploded = true
-							Score = Score + vulture.pointTier
+							Vultures[i].firstFrameExploded = true
+							Score = Score + Vultures[i].pointTier
 						end
 					end
-				elseif player1:enemyRightCollides(vulture) then
-					if player1.facingRight and vulture.facingRight then
-						vulture.exploded = true
+				elseif player1:enemyRightCollides(Vultures[i]) then
+					if player1.facingRight and Vultures[i].facingRight then
+						Vultures[i].exploded = true
+						Vultures[i].graveyard = true
+						Eggs[i].graveyard = false
+						Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+						Eggs[i].invulnerable = true
 						pteroTimer = vultureCount * 20 - 20
-						vulture.firstFrameExploded = true
-						Score = Score + vulture.pointTier
-					elseif not player1.facingRight and not vulture.facingRight then
+						Vultures[i].firstFrameExploded = true
+						Score = Score + Vultures[i].pointTier
+					elseif not player1.facingRight and not Vultures[i].facingRight then
 						player1.exploded = true
-					elseif player1.facingRight and not vulture.facingRight then
-						if player1.y == vulture.y then
+						player1.graveyard = true
+					elseif player1.facingRight and not Vultures[i].facingRight then
+						if player1.y == Vultures[i].y then
 							player1.dx = player1.dx * -1
-							vulture.dx = vulture.dx * -1
-							vulture.x = player1.x + player1.width
-						elseif player1.y < vulture.y then --OSTRICH HAS HIGHER LANCE
+							Vultures[i].dx = Vultures[i].dx * -1
+							Vultures[i].x = player1.x + player1.width
+						elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
 							pteroTimer = vultureCount * 20 - 20
-							vulture.exploded = true
-							vulture.firstFrameExploded = true
-							Score = Score + vulture.pointTier
-						elseif player1.y > vulture.y then --VULTURE HAS HIGHER LANCE
+							Vultures[i].exploded = true
+							Vultures[i].graveyard = true
+							Eggs[i].graveyard = false
+							Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+							Eggs[i].invulnerable = true
+							Vultures[i].firstFrameExploded = true
+							Score = Score + Vultures[i].pointTier
+						elseif player1.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
 							player1.exploded = true
-							--vulture.firstFrameExploded = true
+							player1.graveyard = true
 						end
-					elseif not player1.facingRight and vulture.facingRight then
+					elseif not player1.facingRight and Vultures[i].facingRight then
 						player1.dx = player1.dx * -1
-						player1.x = vulture.x - player1.width
+						player1.x = Vultures[i].x - player1.width
 					end 
 				end
 			end
 		end
 	end				
 --]]
----[[PLAYER TO EGG COLLISIONS
+---[[PLAYER TO OBJECT COLLISIONS
+	for i = 1, 3 do
+		if player1:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then
+
+			--PLAYER TO EGG COLLISIONS
+			--SLOW COLLISION
+			if math.abs(player1.dx) < .3 then
+				if player1.x + (player1.width / 2) < Eggs[i].x + 4.2 and player1.x + (player1.width / 2) > Eggs[i].x + 3.8 then
+					Eggs[i].graveyard = true
+					Eggs[i].collected = true
+					scoresTable[eggCount].lastX = Eggs[i].lastX
+					scoresTable[eggCount].lastY = Eggs[i].lastY
+					scoresTable[eggCount].timer = 1.5
+					if Eggs[i].bouncedOffFloor then
+						scoresTable[eggCount].doubleScore = false
+						Score = Score + scoresTable[eggCount].scoreAmount
+					else
+						Score = Score + scoresTable[eggCount].scoreAmount * 2
+					end
+					eggCount = eggCount + 1
+				end
+			--FAST COLLISION
+			elseif math.abs(player1.dx) >= .3 then
+				Eggs[i].graveyard = true
+				Eggs[i].collected = true
+				scoresTable[eggCount].lastX = Eggs[i].lastX
+				scoresTable[eggCount].lastY = Eggs[i].lastY
+				scoresTable[eggCount].timer = 1.5
+				if Eggs[i].bouncedOffFloor then
+					Score = Score + scoresTable[eggCount].scoreAmount
+					scoresTable[eggCount].doubleScore = false
+				else
+					Score = Score + scoresTable[eggCount].scoreAmount * 2
+				end
+				eggCount = eggCount + 1
+			end
+		end
+
+		--PLAYER TO JOCKEY COLLISION
+		if Eggs[i].jockeySpawned and player1:Collides(Jockeys[i]) then
+			Jockeys[i].collected = true
+			scoresTable[eggCount].doubleScore = false
+			Score = Score + scoresTable[eggCount].scoreAmount
+			scoresTable[eggCount].timer = 1.5
+			scoresTable[eggCount].lastX = Jockeys[i].lastX
+			scoresTable[eggCount].lastY = Jockeys[i].lastY
+			Jockeys[i].graveyard = true
+		end
+
+		--EGGS ON GROUND COLLISION
+		if Eggs[i]:groundCollide(groundPlatform) then
+				Eggs[i].bouncedOffFloor = true
+				Eggs[i].y = groundPlatform.y - Eggs[i].height
+				Eggs[i].dy = math.max(-Eggs[i].dy + .25, -.9)
+		end
+
+		--EGGS AND PLATFORM COLLISION
+		for m, platform in pairs(collidablePlatforms) do
+			if Eggs[i]:groundCollide(platform) then
+				Eggs[i].bouncedOffFloor = true
+				Eggs[i].y = platform.y - Eggs[i].height
+				Eggs[i].dy = math.max(-Eggs[i].dy + .25, -.9)
+			end
+			if Eggs[i]:leftCollide(platform) then
+				Eggs[i].x = platform.x + platform.width
+				Eggs[i].dx = math.abs(Eggs[i].dx)
+			end
+			if Eggs[i]:rightCollide(platform) then
+				Eggs[i].x = platform.x - Eggs[i].width
+				Eggs[i].dx = -1 * Eggs[i].dx
+			end
+		end
+	end
+	
+--[[ ---Old player to egg collision
 	for l, vulture in pairs(Vultures) do
 		if player1:Collides(vulture.egg) and not vulture.egg.invulnerable and not vulture.egg.collected then --do we need to add if not egg hatched here that would move egg to graveyard upon hatching then we need jockey to inherit x y?
 			if math.abs(player1.dx) < .3 then
@@ -463,6 +567,11 @@ function PlayState:update(dt)
 	end
 
 --]]
+	for i = 1, 3 do
+		Vultures[i]:update
+		Eggs[i]:update
+		Jockeys[i]:update
+	end
 	monster:update(dt)
 end
 
@@ -491,6 +600,7 @@ function PlayState:render()
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	love.graphics.print(tostring(lives), 138, VIRTUAL_HEIGHT - 28)
 
+--[[Old Object render logic
 	for k, vulture in pairs(Vultures) do
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		vulture:render()
@@ -501,6 +611,21 @@ function PlayState:render()
 
 		if vulture.egg.jockeySpawned then
 			vulture.egg.jockey:render()
+		end
+	end
+--]]
+	--RENDER OBJECTS
+	for i = 1, 3 do
+		if not Vultures[i].graveyard then
+			Vultures[i]:render
+		end
+
+		if not Eggs[i].graveyard then
+			Eggs[i]:render
+		end
+
+		if not Jockeys[i].graveyard then
+			Jockeys[i]:render	
 		end
 	end
 	
@@ -522,7 +647,7 @@ function PlayState:render()
 
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
+	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
 	--love.graphics.print('jockeyCollide[2]: ' .. tostring(player1:Collides(Vultures[2].egg.jockey)), 5, 25)
 	--love.graphics.print('jockeyCollide[3]: ' .. tostring(player1:Collides(Vultures[3].egg.jockey)), 5, 35)
 	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:bottomCollides(player1)), 5, 45)

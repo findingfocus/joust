@@ -123,6 +123,8 @@ function Pterodactyl:update(dt)
 	else -- If exploded
 		self.x = -25
 		self.y = -25
+		self.dx = 0
+		self.dy = 0
 
 		if self.explodedTimer > 0 then
 			self.explodedTimer = self.explodedTimer - dt
