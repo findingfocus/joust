@@ -70,7 +70,7 @@ function PlayState:update(dt)
 
 ---[[VultureCount
 	vultureCount = 0
-	for i, vulture in pairs(Vultures) do
+	for k, vulture in pairs(Vultures) do
 		if not vulture.exploded then
 			vultureCount = vultureCount + 1
 		end
@@ -126,14 +126,14 @@ function PlayState:update(dt)
 			vultureSpawnTimer = 6
 			vultureSpawnPointIndex = math.random(4)
 			Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 2)
-			Vultures[2] = Vulture2
+			--Vultures[2] = Vulture2
 			Vulture2.graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
 			vultureSpawnTimer = 0
 			vultureSpawnPointIndex = math.random(4)
 			Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 3)
-			Vultures[3] = Vulture3
+			--Vultures[3] = Vulture3
 			Vulture3.graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
@@ -247,7 +247,7 @@ function PlayState:update(dt)
 					player1.exploded = true
 					player1.graveyard = true
 					Vultures[i].dy = Vultures[i].dy * -1
-					Vultures[i].y = player1.y - Vultures[i].height
+					--Vultures[i].y = player1.y - Vultures[i].height
 				elseif player1:enemyBottomCollides(Vultures[i]) then
 					Vultures[i].exploded = true
 					Vultures[i].graveyard = true
@@ -257,7 +257,7 @@ function PlayState:update(dt)
 					pteroTimer = vultureCount * 20 - 20
 					Vultures[i].firstFrameExploded = true
 					player1.dy = player1.dy * -1
-					player1.y = Vultures[i].y - player1.height
+					--player1.y = Vultures[i].y - player1.height
 					Score = Score + Vultures[i].pointTier
 				elseif player1:enemyLeftCollides(Vultures[i]) then
 					if player1.facingRight and Vultures[i].facingRight then
@@ -334,6 +334,18 @@ function PlayState:update(dt)
 		end
 	end				
 --]]
+	
+	--[[
+	--JOCKEY SPAWN
+	for i = 1, 3 do
+		if not Eggs[i].graveyard and Eggs[i].hatched then
+			Eggs[i].graveyard = true
+			Jockeys[i].graveyard = false
+			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY)
+		end
+	end
+	--]]
+
 ---[[PLAYER TO OBJECT COLLISIONS
 	for i = 1, 3 do
 		if player1:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then
@@ -373,7 +385,7 @@ function PlayState:update(dt)
 		end
 
 		--PLAYER TO JOCKEY COLLISION
-		if Eggs[i].jockeySpawned and player1:Collides(Jockeys[i]) then
+		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
 			Jockeys[i].collected = true
 			scoresTable[eggCount].doubleScore = false
 			Score = Score + scoresTable[eggCount].scoreAmount
@@ -567,12 +579,15 @@ function PlayState:update(dt)
 	end
 
 --]]
+
+---[[
 	for i = 1, 3 do
-		Vultures[i]:update
-		Eggs[i]:update
-		Jockeys[i]:update
+		Vultures[i]:update(dt)
+		Eggs[i]:update(dt)
+		Jockeys[i]:update(dt)
 	end
 	monster:update(dt)
+--]]
 end
 
 function PlayState:render()
@@ -617,15 +632,15 @@ function PlayState:render()
 	--RENDER OBJECTS
 	for i = 1, 3 do
 		if not Vultures[i].graveyard then
-			Vultures[i]:render
+			Vultures[i]:render()
 		end
 
 		if not Eggs[i].graveyard then
-			Eggs[i]:render
+			Eggs[i]:render()
 		end
 
 		if not Jockeys[i].graveyard then
-			Jockeys[i]:render	
+			Jockeys[i]:render()	
 		end
 	end
 	
@@ -647,7 +662,10 @@ function PlayState:render()
 
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
+	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
+	love.graphics.print('Eggs[1].x: ' .. tostring(Eggs[1].x), 5, 15)
+	love.graphics.print('Eggs[1].graveyard: ' .. tostring(Eggs[1].graveyard), 5, 25)
+	love.graphics.print('VulturelastX: ' .. tostring(Vultures[1].lastX), 5, 35)
 	--love.graphics.print('jockeyCollide[2]: ' .. tostring(player1:Collides(Vultures[2].egg.jockey)), 5, 25)
 	--love.graphics.print('jockeyCollide[3]: ' .. tostring(player1:Collides(Vultures[3].egg.jockey)), 5, 35)
 	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:bottomCollides(player1)), 5, 45)
