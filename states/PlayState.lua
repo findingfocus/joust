@@ -251,8 +251,8 @@ function PlayState:update(dt)
 				elseif player1:enemyBottomCollides(Vultures[i]) then
 					Vultures[i].exploded = true
 					Vultures[i].graveyard = true
-					Eggs[i].graveyard = false
 					Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+					Eggs[i].graveyard = false
 					Eggs[i].invulnerable = true
 					pteroTimer = vultureCount * 20 - 20
 					Vultures[i].firstFrameExploded = true
@@ -266,8 +266,8 @@ function PlayState:update(dt)
 					elseif not player1.facingRight and not Vultures[i].facingRight then
 						Vultures[i].exploded = true
 						Vultures[i].graveyard = true
-						Eggs[i].graveyard = false
 						Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+						Eggs[i].graveyard = false
 						Eggs[i].invulnerable = true
 						pteroTimer = vultureCount * 20 - 20
 						Vultures[i].firstFrameExploded = true
@@ -286,8 +286,8 @@ function PlayState:update(dt)
 						elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
 							Vultures[i].exploded = true
 							Vultures[i].graveyard = true
-							Eggs[i].graveyard = false
 							Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+							Eggs[i].graveyard = false
 							Eggs[i].invulnerable = true
 							pteroTimer = vultureCount * 20 - 20
 							Vultures[i].firstFrameExploded = true
@@ -298,8 +298,8 @@ function PlayState:update(dt)
 					if player1.facingRight and Vultures[i].facingRight then
 						Vultures[i].exploded = true
 						Vultures[i].graveyard = true
-						Eggs[i].graveyard = false
 						Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+						Eggs[i].graveyard = false
 						Eggs[i].invulnerable = true
 						pteroTimer = vultureCount * 20 - 20
 						Vultures[i].firstFrameExploded = true
@@ -316,8 +316,8 @@ function PlayState:update(dt)
 							pteroTimer = vultureCount * 20 - 20
 							Vultures[i].exploded = true
 							Vultures[i].graveyard = true
-							Eggs[i].graveyard = false
 							Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+							Eggs[i].graveyard = false
 							Eggs[i].invulnerable = true
 							Vultures[i].firstFrameExploded = true
 							Score = Score + Vultures[i].pointTier
@@ -334,7 +334,15 @@ function PlayState:update(dt)
 		end
 	end				
 --]]
-	
+	for i = 1, 3 do
+		if Eggs[i].invulnerable then
+			Eggs[i].eggInvulnerableTimer = Eggs[i].eggInvulnerableTimer - dt
+			if Eggs[i].eggInvulnerableTimer < 0 then
+				Eggs[i].invulnerable = false
+			end
+		end
+	end
+
 	--[[
 	--JOCKEY SPAWN
 	for i = 1, 3 do
@@ -663,9 +671,9 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	love.graphics.print('Eggs[1].x: ' .. tostring(Eggs[1].x), 5, 15)
-	love.graphics.print('Eggs[1].graveyard: ' .. tostring(Eggs[1].graveyard), 5, 25)
-	love.graphics.print('VulturelastX: ' .. tostring(Vultures[1].lastX), 5, 35)
+	love.graphics.print('Eggs[1].invulnerable: ' .. tostring(Eggs[1].invulnerable), 5, 15)
+	love.graphics.print('Eggs[1].collected: ' .. tostring(Eggs[1].collected), 5, 25)
+	--love.graphics.print('VulturelastX: ' .. tostring(Vultures[1].lastX), 5, 35)
 	--love.graphics.print('jockeyCollide[2]: ' .. tostring(player1:Collides(Vultures[2].egg.jockey)), 5, 25)
 	--love.graphics.print('jockeyCollide[3]: ' .. tostring(player1:Collides(Vultures[3].egg.jockey)), 5, 35)
 	--love.graphics.print('enemyLeftCollides: ' .. tostring(monster:bottomCollides(player1)), 5, 45)

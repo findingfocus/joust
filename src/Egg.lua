@@ -11,7 +11,7 @@ function Egg:init(lastX, lastY, dx, index)
 	self.atlas = eggAtlas
 	self.dx = dx
 	self.dy = 0
-	self.invulnerableTimer = 0
+	self.eggInvulnerableTimer = .7
 	self.bouncedOffFloor = false
 	self.invulnerable = false
 	self.collected = false
@@ -110,5 +110,6 @@ function Egg:update(dt)
 end
 
 function Egg:render()
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(self.atlas, self.eggSprite, self.x, self.y)
 end
