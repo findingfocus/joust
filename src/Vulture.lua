@@ -113,6 +113,12 @@ function Vulture:update(dt)
 		self.dx = 0
 		self.dy = 0
 	end
+
+	if not self.graveyard then
+		self.lastX = self.x
+		self.lastY = self.y
+		self.lastDX = self.dx
+	end
 	--SETS GROWING VIEWPORT UPON SPWNING
 	if self.spawning then
 		self.lastDX = self.dx
@@ -124,9 +130,6 @@ function Vulture:update(dt)
 		end
 		self.y = self.y - 0.5
 	elseif not self.exploded then -- IF NOT SPAWNING AND NOT EXPLODED
-			self.lastX = self.x
-			self.lastY = self.y
-			self.lastDX = self.dx
 			--COLLISION OF MAIN GROUND PLATFORM
 			if self:bottomCollides(groundPlatform) then
 				self.height = 24

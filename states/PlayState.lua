@@ -82,7 +82,7 @@ function PlayState:update(dt)
 			lowestEggScore = 250
 
 			--SCORE TABLE INITIALIZATION
-			for i = 1, 4 do
+			for i = 1, 3 do
 				table.insert(scoresTable, PrintScore(-20, -20, lowestEggScore))
 				lowestEggScore = lowestEggScore + 250 --Incremented by bounder score
 			end
@@ -152,10 +152,13 @@ function PlayState:update(dt)
 	end
 
 	--Reset Vultures
-	if love.keyboard.wasPressed('v') then
+	if love.keyboard.wasPressed('v') and not Vultures[3].spawning then
 		Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, 1)
-		Vulture2 = Vulture(VIRTUAL_WIDTH / 2 - 15, groundPlatform.y, 16, 24, groundPlatform.y, 2)
-		Vulture3 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, 3)
+		Vulture2 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, 2)
+		Vulture3 = Vulture(VIRTUAL_WIDTH / 2 + 30, groundPlatform.y, 16, 24, groundPlatform.y, 3)
+		Vulture1.graveyard = false
+		Vulture2.graveyard = false
+		Vulture3.graveyard = false
 		Vultures[1] = Vulture1
 		Vultures[2] = Vulture2
 		Vultures[3] = Vulture3
@@ -382,7 +385,9 @@ function PlayState:update(dt)
 					else
 						Score = Score + scoresTable[eggCount].scoreAmount
 					end
-					eggCount = eggCount + 1
+					if eggCount < 3 then
+						eggCount = eggCount + 1
+					end
 				end
 			--FAST COLLISION
 			elseif math.abs(player1.dx) >= .3 then
@@ -396,7 +401,10 @@ function PlayState:update(dt)
 				else
 					Score = Score + scoresTable[eggCount].scoreAmount
 				end
-				eggCount = eggCount + 1
+
+				if eggCount < 3 then
+					eggCount = eggCount + 1
+				end
 			end
 		end
 
@@ -410,11 +418,15 @@ function PlayState:update(dt)
 			end
 			--scoresTable[eggCount].doubleScore = false
 			--Score = Score + scoresTable[eggCount].scoreAmount
-			eggCount = eggCount + 1
+	
 			scoresTable[eggCount].timer = 1.5
 			scoresTable[eggCount].lastX = Jockeys[i].lastX
 			scoresTable[eggCount].lastY = Jockeys[i].lastY
 			Jockeys[i].graveyard = true
+
+			if eggCount < 3 then
+				eggCount = eggCount + 1
+			end
 		end
 
 		--EGGS ON GROUND COLLISION
@@ -691,7 +703,10 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	--love.graphics.print('scoresTable[1].double: ' .. tostring(scoresTable[1].doubleScore), 5, 15)
+	--love.graphics.print('Vulture[1].x: ' .. tostring(Vultures[1].x), 5, 15)
+	--love.graphics.print('Vulture[1].lastX: ' .. tostring(Vultures[1].lastX), 5, 25)
+	--love.graphics.print('ST[2]: ' .. tostring(scoresTable[2].scoreAmount), 5, 25)
+	--love.graphics.print('ST[3]: ' .. tostring(scoresTable[3].scoreAmount), 5, 35)
 	--love.graphics.print('scoresTable[2].double: ' .. tostring(scoresTable[2].doubleScore), 5, 25)
 	--love.graphics.print('scoresTable[3].double: ' .. tostring(scoresTable[3].doubleScore), 5, 35)
 	--love.graphics.print('Jockeys[1].x: ' .. tostring(Jockeys[1].x), 5, 25)
