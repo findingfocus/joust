@@ -17,15 +17,15 @@ function Jockey:update(dt)
 	if self.graveyard then
 		self.x = -20
 		self.y = -20
+	else
+		if not self.collected then
+			self.lastX = self.x
+			self.lastY = self.y
+		end
 	end
-
-	if not self.collected then
-		self.lastX = self.x
-		self.lastY = self.y
-	end
-
 end
 
 function Jockey:render()
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(self.image, self.x, self.y)
 end

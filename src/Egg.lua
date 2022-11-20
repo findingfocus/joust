@@ -106,6 +106,14 @@ function Egg:update(dt)
 				self.eggSprite:setViewport(10, 0, self.height, self.height)
 			end
 		end
+		
+		if self.invulnerable then	
+			self.eggInvulnerableTimer = self.eggInvulnerableTimer - dt
+				if self.eggInvulnerableTimer < 0 then
+					self.invulnerable = false
+				end
+		end
+
 	end
 end
 

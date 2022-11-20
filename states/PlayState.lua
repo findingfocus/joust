@@ -82,7 +82,7 @@ function PlayState:update(dt)
 			lowestEggScore = 250
 
 			--SCORE TABLE INITIALIZATION
-			for i = 1, 3 do
+			for i = 1, 4 do
 				table.insert(scoresTable, PrintScore(-20, -20, lowestEggScore))
 				lowestEggScore = lowestEggScore + 250 --Incremented by bounder score
 			end
@@ -118,6 +118,7 @@ function PlayState:update(dt)
 		if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
 			vultureSpawnTimer = 8
 			vultureSpawnPointIndex = math.random(4)
+			--Vulture1 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, 1)
 			Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 1)
 			Vultures[1] = Vulture1
 			Vulture1.graveyard = false
@@ -125,15 +126,17 @@ function PlayState:update(dt)
 		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
 			vultureSpawnTimer = 6
 			vultureSpawnPointIndex = math.random(4)
+			--Vulture2 = Vulture(VIRTUAL_WIDTH / 2 + 15, groundPlatform.y, 16, 24, groundPlatform.y, 2)
 			Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 2)
-			--Vultures[2] = Vulture2
+			Vultures[2] = Vulture2
 			Vulture2.graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
 			vultureSpawnTimer = 0
 			vultureSpawnPointIndex = math.random(4)
+			--Vulture3 = Vulture(VIRTUAL_WIDTH / 2 + 30, groundPlatform.y, 16, 24, groundPlatform.y, 3)
 			Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 3)
-			--Vultures[3] = Vulture3
+			Vultures[3] = Vulture3
 			Vulture3.graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
@@ -151,9 +154,11 @@ function PlayState:update(dt)
 	--Reset Vultures
 	if love.keyboard.wasPressed('v') then
 		Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, 1)
-		Vulture2 = Vulture(platform2.x + 20, platform2.y, 16, 24, platform2.y, 2)
+		Vulture2 = Vulture(VIRTUAL_WIDTH / 2 - 15, groundPlatform.y, 16, 24, groundPlatform.y, 2)
+		Vulture3 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, 3)
 		Vultures[1] = Vulture1
 		Vultures[2] = Vulture2
+		Vultures[3] = Vulture3
 	end
 
 	--PLAYER 1 OSTRICH DEATH AND RESPAWN
@@ -334,6 +339,8 @@ function PlayState:update(dt)
 		end
 	end				
 --]]
+
+--[[
 	for i = 1, 3 do
 		if Eggs[i].invulnerable then
 			Eggs[i].eggInvulnerableTimer = Eggs[i].eggInvulnerableTimer - dt
@@ -342,14 +349,17 @@ function PlayState:update(dt)
 			end
 		end
 	end
+--]]
 
-	--[[
+
+	---[[
 	--JOCKEY SPAWN
 	for i = 1, 3 do
-		if not Eggs[i].graveyard and Eggs[i].hatched then
-			Eggs[i].graveyard = true
-			Jockeys[i].graveyard = false
+		if Eggs[i].hatched then
 			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY)
+			Jockeys[i].graveyard = false
+			Eggs[i].graveyard = true
+			Eggs[i].hatched = false
 		end
 	end
 	--]]
@@ -367,11 +377,10 @@ function PlayState:update(dt)
 					scoresTable[eggCount].lastX = Eggs[i].lastX
 					scoresTable[eggCount].lastY = Eggs[i].lastY
 					scoresTable[eggCount].timer = 1.5
-					if Eggs[i].bouncedOffFloor then
-						scoresTable[eggCount].doubleScore = false
-						Score = Score + scoresTable[eggCount].scoreAmount
-					else
+					if scoresTable[eggCount].doubleScore then
 						Score = Score + scoresTable[eggCount].scoreAmount * 2
+					else
+						Score = Score + scoresTable[eggCount].scoreAmount
 					end
 					eggCount = eggCount + 1
 				end
@@ -382,11 +391,10 @@ function PlayState:update(dt)
 				scoresTable[eggCount].lastX = Eggs[i].lastX
 				scoresTable[eggCount].lastY = Eggs[i].lastY
 				scoresTable[eggCount].timer = 1.5
-				if Eggs[i].bouncedOffFloor then
-					Score = Score + scoresTable[eggCount].scoreAmount
-					scoresTable[eggCount].doubleScore = false
-				else
+				if scoresTable[eggCount].doubleScore then
 					Score = Score + scoresTable[eggCount].scoreAmount * 2
+				else
+					Score = Score + scoresTable[eggCount].scoreAmount
 				end
 				eggCount = eggCount + 1
 			end
@@ -395,8 +403,14 @@ function PlayState:update(dt)
 		--PLAYER TO JOCKEY COLLISION
 		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
 			Jockeys[i].collected = true
-			scoresTable[eggCount].doubleScore = false
-			Score = Score + scoresTable[eggCount].scoreAmount
+			if scoresTable[eggCount].doubleScore then
+				Score = Score + scoresTable[eggCount].scoreAmount * 2
+			else
+				Score = Score + scoresTable[eggCount].scoreAmount
+			end
+			--scoresTable[eggCount].doubleScore = false
+			--Score = Score + scoresTable[eggCount].scoreAmount
+			eggCount = eggCount + 1
 			scoresTable[eggCount].timer = 1.5
 			scoresTable[eggCount].lastX = Jockeys[i].lastX
 			scoresTable[eggCount].lastY = Jockeys[i].lastY
@@ -425,6 +439,12 @@ function PlayState:update(dt)
 				Eggs[i].x = platform.x - Eggs[i].width
 				Eggs[i].dx = -1 * Eggs[i].dx
 			end
+		end
+	end
+
+	for i = 1, 3 do
+		if Eggs[i].bouncedOffFloor and not Eggs[i].collected then
+			scoresTable[i].doubleScore = false
 		end
 	end
 	
@@ -643,7 +663,7 @@ function PlayState:render()
 			Vultures[i]:render()
 		end
 
-		if not Eggs[i].graveyard then
+		if not Eggs[i].graveyard and not Eggs[i].collected then
 			Eggs[i]:render()
 		end
 
@@ -671,8 +691,10 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	love.graphics.print('Eggs[1].invulnerable: ' .. tostring(Eggs[1].invulnerable), 5, 15)
-	love.graphics.print('Eggs[1].collected: ' .. tostring(Eggs[1].collected), 5, 25)
+	--love.graphics.print('scoresTable[1].double: ' .. tostring(scoresTable[1].doubleScore), 5, 15)
+	--love.graphics.print('scoresTable[2].double: ' .. tostring(scoresTable[2].doubleScore), 5, 25)
+	--love.graphics.print('scoresTable[3].double: ' .. tostring(scoresTable[3].doubleScore), 5, 35)
+	--love.graphics.print('Jockeys[1].x: ' .. tostring(Jockeys[1].x), 5, 25)
 	--love.graphics.print('VulturelastX: ' .. tostring(Vultures[1].lastX), 5, 35)
 	--love.graphics.print('jockeyCollide[2]: ' .. tostring(player1:Collides(Vultures[2].egg.jockey)), 5, 25)
 	--love.graphics.print('jockeyCollide[3]: ' .. tostring(player1:Collides(Vultures[3].egg.jockey)), 5, 35)
