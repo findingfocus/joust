@@ -24,7 +24,6 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.spawnHeight = 0
 	self.explosionTimer = 0
 	self.pointTier = 500
-	self.egg = Egg(-self.x, -self.y, self.dx)
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG
 	self.grounded = false
@@ -178,17 +177,12 @@ function Vulture:update(dt)
 					end
 				end
 
-				--RIGHT COLLIDES SETS POSITIVE DX
-
-				---[[
 				if self:rightCollides(platform) then
 					if self.dx > 0 then
 						self.dx = self.dx * -1
 					end
 				end	
-				--]]
-
-
+	
 				if self.justCollided then
 					self.collideTimer = self.collideTimer + dt
 					if self.collideTimer > COLLIDETIMERTHRESHOLD then
@@ -197,9 +191,9 @@ function Vulture:update(dt)
 					end
 				end
 			end
---]]
+	--]]
 
----[[
+
 			if not self:checkGrounded(self.ground) then
 				self.grounded = false
 				self.ground = Platform('name', 1, 1, 1, 1)
@@ -301,8 +295,7 @@ function Vulture:update(dt)
 				self.vultureSprite:setViewport(self.xoffset, 0, self.width, self.height)
 			end
 
-			--VULTURE AERIAL ANIMATION
-
+				--VULTURE AERIAL ANIMATION
 				if not self.grounded then
 					self.vultureSprite:setViewport((self.width * 5) + 6, 0, self.width, self.height)
 
@@ -313,13 +306,10 @@ function Vulture:update(dt)
 
     else -- IF EXPLODED
     	self.explosionTimer = self.explosionTimer + dt
-	end
-
-	if self.egg.invulnerable then
-		self.egg.invulnerableTimer = self.egg.invulnerableTimer + dt
-		if self.egg.invulnerableTimer > .4 then
-			self.egg.invulnerable = false
-		end
+    	if self.explosionTimer > .2 then
+    		self.exploded = false
+    		self.explosionTimer = 0
+    	end
 	end
 end
 
@@ -345,7 +335,8 @@ function Vulture:render()
 			end
 		end
 	elseif self.exploded then
-				--Render explosion sprites
+		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+		--Render explosion sprites
 		if self.explosionTimer <= .05 then
 			love.graphics.draw(explosion1, self.lastX, self.lastY)
 			--render explosionSprite1

@@ -14,6 +14,7 @@ require '/src/SpawnZonePoint'
 require '/src/PrintScore'
 require '/src/Pterodactyl'
 require '/src/Jockey'
+require '/src/Taxi'
 
 require '/src/StateMachine'
 require '/src/BaseState'

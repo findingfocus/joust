@@ -525,7 +525,7 @@ function PlayState:render()
 
 ---[[RENDER OBJECT TABLES
 	for i = 1, 3 do
-		if not Vultures[i].graveyard then
+		if not Vultures[i].graveyard or Vultures[i].explosionTimer ~= 0 then
 			Vultures[i]:render()
 		end
 
@@ -558,7 +558,7 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	--love.graphics.print('Vulture[1].x: ' .. tostring(Vultures[1].x), 5, 15)
+	--love.graphics.print('Vulture[1].lastX: ' .. tostring(Vultures[1].lastX), 5, 15)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

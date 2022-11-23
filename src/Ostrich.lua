@@ -134,8 +134,7 @@ function Ostrich:enemyRightCollides(enemy)
 	end
 end
 
-
-lastInput = {"right"}
+--lastInput = {"right"}
 
 function Ostrich:update(dt)
 	if self.graveyard then
@@ -144,6 +143,8 @@ function Ostrich:update(dt)
 		self.dx = 0
 		self.dy = 0
 	end
+
+---[[TEMPORARY SAFETY SPRITE SWITCHING
 	self.safetyTime = self.safetyTime - dt
 
 	if self.safetyTime < 0 then
@@ -156,7 +157,6 @@ function Ostrich:update(dt)
 		end
 	end
 
----[[TEMPORARY SAFETY SPRITE SWITCHING
 	if self.temporarySafety then
 		if self.spawnFrameCount > 2 then
 			self.spawnFrameCount = 0
@@ -175,9 +175,7 @@ function Ostrich:update(dt)
 			self.spawnFrameCount = self.spawnFrameCount + 1
 		end
 	end
---]]
-
-
+	--]]
 
 ---[[SPAWNING LOGIC
 	if self.spawning then
@@ -206,7 +204,7 @@ function Ostrich:update(dt)
 			self.grounded = true
 			self.y = self.platformSpawnY - self.height
 		end
---]]
+	--]]
 	else -- IF NOT SPAWNING
 		if not self.exploded then
 			self.lastX = self.x
@@ -493,7 +491,7 @@ function Ostrich:update(dt)
 					self.dy = -.3
 				end
 			end
---]]
+	--]]
 			if self.dx == 0 then
 				sounds['skid']:stop()
 				self.skid = false
@@ -556,8 +554,9 @@ function Ostrich:update(dt)
 						end
 					end
 				end
---]]
-			--PLAYER SKID ANIMATION
+	--]]
+
+---[[PLAYER SKID ANIMATION
 			if self.skid then
 				ostrichSprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
 			end
@@ -568,7 +567,7 @@ function Ostrich:update(dt)
 			end
 		end
 	end
-
+	--]]
 end
 
 function Ostrich:render()

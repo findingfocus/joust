@@ -11,7 +11,7 @@ function Egg:init(lastX, lastY, dx, index)
 	self.atlas = eggAtlas
 	self.dx = dx
 	self.dy = 0
-	self.eggInvulnerableTimer = .7
+	self.eggInvulnerableTimer = .5
 	self.bouncedOffFloor = false
 	self.invulnerable = false
 	self.collected = false
@@ -80,7 +80,8 @@ function Egg:update(dt)
 		if self.x < -self.width + 1 and not self.collected then
 			self.x = VIRTUAL_WIDTH - 1
 		end
-	---[[ OLD EGG HATCHING ANIMATION __WE LEFT OFF HERE MOVING THIS TO PLAYSTATE!!!!!!!!!!!!
+
+		--EGG HATCHING ANIMATION
 		if self.dx == 0 and not self.collected then
 			self.hatchCountdown = self.hatchCountdown - dt
 		end
