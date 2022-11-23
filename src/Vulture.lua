@@ -321,7 +321,9 @@ function Vulture:render()
 	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides(self)), 5, 10)
 --]]
 	if not self.exploded then
+		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		if self.spawning then
+
 			if self.facingRight then
 				love.graphics.draw(self.atlas, self.vultureSprite, math.floor(self.x), self.y, 0, 1, 1)
 			else

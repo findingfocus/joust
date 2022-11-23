@@ -498,6 +498,8 @@ function PlayState:update(dt)
 	lavaBubble2:update(dt)
 	player1:update(dt)
 	--]]
+
+	taxi1 = Taxi(VIRTUAL_WIDTH / 2, 20, 16, 24)
 end
 
 function PlayState:render()
@@ -547,6 +549,7 @@ function PlayState:render()
 	end
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	taxi1:render()
 	love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
 	love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
 	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
