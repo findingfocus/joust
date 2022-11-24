@@ -47,6 +47,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
+	taxi1 = Taxi(VIRTUAL_WIDTH / 2, 20, 16, 24)
 end
 
 function PlayState:update(dt)
@@ -499,7 +500,7 @@ function PlayState:update(dt)
 	player1:update(dt)
 	--]]
 
-	taxi1 = Taxi(VIRTUAL_WIDTH / 2, 20, 16, 24)
+	taxi1:update(dt)
 end
 
 function PlayState:render()
@@ -544,12 +545,13 @@ function PlayState:render()
 	lavaBubble1:render()
 	lavaBubble2:render()
 
+	taxi1:render()
+
 	for k, platform in pairs(collidablePlatforms) do 
 		platform:render()
 	end
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	taxi1:render()
 	love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
 	love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
 	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
@@ -561,7 +563,7 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	--love.graphics.print('Vulture[1].lastX: ' .. tostring(Vultures[1].lastX), 5, 15)
+	--love.graphics.print('taxianim: ' .. tostring(taxi1.animationTimer), 5, 15)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
