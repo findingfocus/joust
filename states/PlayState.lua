@@ -47,7 +47,16 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 100, 20, 16, 24)
+	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 50, 40, 16, 24)
+end
+
+function PlayState:checkGrounded(topObject, bottomObject)
+	if topObject.y == bottomObject.y - bottomObject.height then
+		return true
+
+	else
+		return false
+	end
 end
 
 function PlayState:update(dt)

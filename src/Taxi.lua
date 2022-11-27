@@ -44,13 +44,26 @@ function Taxi:leftCollides(collidable)
 end
 
 function Taxi:update(dt)
+
 	self.animationTimer = self.animationTimer - dt
 
-	self.dy = self.dy + GRAVITY * dt
+	for k, platform in pairs(collidablePlatforms) do
+		self.grounded = true
+		if not PlayState:checkGrounded(self, platform) or not PlayState:checkGrounded(self, groundPlatform) then
+			self.dy = self.dy + GRAVITY * dt
+		end
+	end
+
+	--self.dy = self.dy + GRAVITY * dt
 
 	self.y = self.y + self.dy
 
 	self.x = self.x + self.dx 
+
+
+	if self:bottomCollides(groundPlatform) then
+		self.y = groundPlatform.y - self.height
+	end
 
 	for k, platform in pairs(collidablePlatforms) do
 		if self:bottomCollides(platform) then
