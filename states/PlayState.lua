@@ -364,14 +364,8 @@ function PlayState:update(dt)
 ---[[PLAYER TO JOCKEY COLLISION
 		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
 			Jockeys[i].collected = true
-			if scoresTable[eggCount].doubleScore then
-				Score = Score + scoresTable[eggCount].scoreAmount * 2
-			else
-				Score = Score + scoresTable[eggCount].scoreAmount
-			end
-			--scoresTable[eggCount].doubleScore = false
-			--Score = Score + scoresTable[eggCount].scoreAmount
-	
+			scoresTable[eggCount].doubleScore = false
+			Score = Score + scoresTable[eggCount].scoreAmount
 			scoresTable[eggCount].timer = 1.5
 			scoresTable[eggCount].lastX = Jockeys[i].lastX
 			scoresTable[eggCount].lastY = Jockeys[i].lastY
