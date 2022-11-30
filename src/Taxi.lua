@@ -1,12 +1,15 @@
 Taxi = Class{}
 
-function Taxi:init(x, y, width, height)
+function Taxi:init(x, y, width, height, dx, index)
 	self.x = x
 	self.y = y
-	self.dx = .5
+	self.index = index
+	self.dx = dx * .5
 	self.dy = 0
 	self.frame = 1
 	self.animationTimer = .06
+	self.facingRight = true
+	self.graveyard = true
 	self.width = width
 	self.height = height
 	self.atlas = taxi1Atlas
@@ -44,45 +47,64 @@ function Taxi:leftCollides(collidable)
 end
 
 function Taxi:update(dt)
+	if not self.graveyard then
 
-	self.animationTimer = self.animationTimer - dt
-
-	for k, platform in pairs(collidablePlatforms) do
-		self.grounded = true
-		if not PlayState:checkGrounded(self, platform) or not PlayState:checkGrounded(self, groundPlatform) then
-			self.dy = self.dy + GRAVITY * dt
+		if self.dx > 0 then
+			self.facingRight = true
+		else
+			self.facingRight = false
 		end
-	end
 
-	--self.dy = self.dy + GRAVITY * dt
+		self.animationTimer = self.animationTimer - dt
 
-	self.y = self.y + self.dy
-
-	self.x = self.x + self.dx 
-
-
-	if self:bottomCollides(groundPlatform) then
-		self.y = groundPlatform.y - self.height
-	end
-
-	for k, platform in pairs(collidablePlatforms) do
-		if self:bottomCollides(platform) then
-			self.dy = 0
-			self.y = platform.y - self.height
+		for k, platform in pairs(collidablePlatforms) do
+			self.grounded = true
+			if not PlayState:checkGrounded(self, platform) or not PlayState:checkGrounded(self, groundPlatform) then
+				self.dy = self.dy + GRAVITY * dt
+			end
 		end
-	end
 
-	if self.animationTimer < 0 then
-		taxi1Sprite:setViewport(self.frame + (self.width * (self.frame - 1)), 0, self.width, self.height, self.atlas:getDimensions())
-		self.frame = self.frame + 1
-		if self.frame > 4 then
-			self.frame = 1
+		--self.dy = self.dy + GRAVITY * dt
+
+		self.y = self.y + self.dy
+
+		self.x = self.x + self.dx 
+
+
+		if self:bottomCollides(groundPlatform) then
+			self.y = groundPlatform.y - self.height
 		end
-		self.animationTimer = .06
+
+		for k, platform in pairs(collidablePlatforms) do
+			if self:bottomCollides(platform) then
+				self.dy = 0
+				self.y = platform.y - self.height
+			end
+		end
+
+		if self.animationTimer < 0 then
+			taxi1Sprite:setViewport(self.frame + (self.width * (self.frame - 1)), 0, self.width, self.height, self.atlas:getDimensions())
+			self.frame = self.frame + 1
+			if self.frame > 4 then
+				self.frame = 1
+			end
+			self.animationTimer = .06
+		end
+	else -- IF GRAVEYARD
+		self.x = -20
+		self.y = -20
+		self.dx = 0
+		self.dy = 0
 	end
 end
 
 function Taxi:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, 1, 1)
+
+	if self.facingRight then
+		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, 1, 1)
+	else
+		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, -1, 1, self.width)
+	end
+	
 end

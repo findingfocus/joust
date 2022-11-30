@@ -14,6 +14,7 @@ function PlayState:init()
 	Vultures = {}
 	Eggs = {}
 	Jockeys = {}
+	Taxis = {}
 	scoresTable = {}
 	wave = 1
 	lives = 8
@@ -47,7 +48,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 50, 40, 16, 24)
+	--taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 50, 40, 16, 24)
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -93,6 +94,7 @@ function PlayState:update(dt)
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, i)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-20, -20, 16, 24, i)
 			end
 
 			tablesPopulated = true
@@ -313,11 +315,18 @@ function PlayState:update(dt)
 	end				
 	--]]
 
----[[JOCKEY SPAWN
+---[[JOCKEY AND TAXI SPAWN
 	for i = 1, 3 do
 		if Eggs[i].hatched then
 			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY)
 			Jockeys[i].graveyard = false
+			if Jockeys[i].x <= VIRTUAL_WIDTH / 2 then --IF JOCKEY LEFT SIDE OF SCREEN
+				Taxis[i] = Taxi(VIRTUAL_WIDTH, Jockeys[i].y - 25, 16, 24, -1, i)
+			else --JOCKEY IS ON RIGHT SIDE OF SCREEN
+				Taxis[i] = Taxi(-16, Jockeys[i].y - 25, 16, 24, 1, i)
+			end
+			
+			Taxis[i].graveyard = false
 			Eggs[i].graveyard = true
 			Eggs[i].hatched = false
 		end
@@ -496,14 +505,16 @@ function PlayState:update(dt)
 		Vultures[i]:update(dt)
 		Eggs[i]:update(dt)
 		Jockeys[i]:update(dt)
+		Taxis[i]:update(dt)	
 	end
+
 	monster:update(dt)
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
 	player1:update(dt)
 	--]]
 
-	taxi1:update(dt)
+	--taxi1:update(dt)
 end
 
 function PlayState:render()
@@ -542,13 +553,17 @@ function PlayState:render()
 		if not Jockeys[i].graveyard then
 			Jockeys[i]:render()	
 		end
+
+		if not Taxis[i].graveyard then
+			Taxis[i]:render()
+		end
 	end
 	--]]
 	
 	lavaBubble1:render()
 	lavaBubble2:render()
 
-	taxi1:render()
+	--taxi1:render()
 
 	for k, platform in pairs(collidablePlatforms) do 
 		platform:render()
