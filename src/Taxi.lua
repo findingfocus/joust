@@ -27,7 +27,7 @@ function Taxi:bottomCollides(collidable)
 end
 
 function Taxi:rightCollides(collidable)
-	if (self.x + self.width > collidable.x and self.x + self.width < collidable.x + collidable.width) then
+	if (self.x + self.width > collidable.x + BUFFER and self.x + self.width < collidable.x + collidable.width - BUFFER) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			return true
 		end
@@ -37,7 +37,7 @@ function Taxi:rightCollides(collidable)
 end
 
 function Taxi:leftCollides(collidable)
-	if (self.x < collidable.x + collidable.width and self.x > collidable.x) then
+	if (self.x < collidable.x + collidable.width - BUFFER and self.x > collidable.x + BUFFER) then
 		if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
 			return true
 		end
@@ -48,6 +48,14 @@ end
 
 function Taxi:update(dt)
 	if not self.graveyard then
+
+		if self.x > VIRTUAL_WIDTH then
+			self.x = -self.width
+		end
+
+		if self.x < -self.width then
+			self.x = VIRTUAL_WIDTH
+		end
 
 		if self.dx > 0 then
 			self.facingRight = true
@@ -77,6 +85,7 @@ function Taxi:update(dt)
 
 
 		if self:bottomCollides(groundPlatform) then
+			self.dy = 0
 			self.y = groundPlatform.y - self.height
 		end
 
@@ -84,6 +93,16 @@ function Taxi:update(dt)
 			if self:bottomCollides(platform) then
 				self.dy = 0
 				self.y = platform.y - self.height
+			end
+
+			if self:leftCollides(platform) then
+				self.dx = math.abs(self.dx)
+				self.x = platform.x + platform.width
+			end
+
+			if self:rightCollides(platform) then
+				self.dx = math.abs(self.dx) * -1
+				self.x = platform.x - self.width
 			end
 		end
 
@@ -107,12 +126,12 @@ function Taxi:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	if self.facingRight then
-		love.graphics.print(tostring(self.index), self.x, self.y)
-		love.graphics.print(tostring(self.grounded), self.x + 10, self.y)
+		--love.graphics.print(tostring(self.index), self.x, self.y)
+		love.graphics.print(tostring(self.dy), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, 1, 1)
 	else
-		love.graphics.print(tostring(self.index), self.x, self.y)
-		love.graphics.print(tostring(self.grouded), self.x + 10, self.y)
+		--love.graphics.print(tostring(self.index), self.x, self.y)
+		love.graphics.print(tostring(self.dy), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, -1, 1, self.width)
 	end
 	
