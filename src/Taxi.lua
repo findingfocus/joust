@@ -10,10 +10,21 @@ function Taxi:init(x, y, width, height, dx, index)
 	self.animationTimer = .06
 	self.facingRight = true
 	self.graveyard = true
+	--self.grounded = false
 	self.width = width
 	self.height = height
 	self.atlas = taxi1Atlas
 	taxi1Sprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
+end
+
+function Taxi:checkGrounded(collidablePlatforms)
+	if self.y == collidablePlatforms.y - self.height then
+		if self.x < collidablePlatforms.x + collidablePlatforms.width - BUFFER and self.x + self.width > collidablePlatforms.x + BUFFER then
+			return true
+		end
+	else
+		return false
+	end
 end
 
 function Taxi:bottomCollides(collidable)
@@ -65,16 +76,18 @@ function Taxi:update(dt)
 
 		self.animationTimer = self.animationTimer - dt
 
-		for k, platform in pairs(collidablePlatforms) do
-			if PlayState:checkGrounded(self, platform) or PlayState:checkGrounded(self, groundPlatform)then
-				self.grounded = true
-			else
-				self.grounded = false
-			end
-		end
-
 		if not self.grounded then
 			self.dy = self.dy + GRAVITY * dt
+		end
+
+		for k, platform in pairs(collidablePlatforms) do
+			if self:checkGrounded(platform) or self:checkGrounded(groundPlatform)then
+				self.grounded = true
+				--self.height = 24
+			else
+				self.grounded = false
+				--self.height = 16
+			end
 		end
 
 		--self.dy = self.dy + GRAVITY * dt
@@ -107,6 +120,7 @@ function Taxi:update(dt)
 		end
 
 		if self.animationTimer < 0 then
+			--IF GROUNDED **ADD IF NOT GROUNDED
 			taxi1Sprite:setViewport(self.frame + (self.width * (self.frame - 1)), 0, self.width, self.height, self.atlas:getDimensions())
 			self.frame = self.frame + 1
 			if self.frame > 4 then
@@ -114,6 +128,7 @@ function Taxi:update(dt)
 			end
 			self.animationTimer = .06
 		end
+
 	else -- IF GRAVEYARD
 		self.x = -20
 		self.y = -20
@@ -127,11 +142,11 @@ function Taxi:render()
 
 	if self.facingRight then
 		--love.graphics.print(tostring(self.index), self.x, self.y)
-		love.graphics.print(tostring(self.dy), self.x, self.y)
+		love.graphics.print(tostring(self:checkGrounded(groundPlatform)), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, 1, 1)
 	else
 		--love.graphics.print(tostring(self.index), self.x, self.y)
-		love.graphics.print(tostring(self.dy), self.x, self.y)
+		love.graphics.print(tostring(self:checkGrounded(groundPlatform)), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, -1, 1, self.width)
 	end
 	
