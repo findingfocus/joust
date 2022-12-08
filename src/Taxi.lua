@@ -76,23 +76,6 @@ function Taxi:update(dt)
 		end
 
 		self.animationTimer = self.animationTimer - dt
---[[
-		for k, platform in pairs(collidablePlatforms) do
-			if self:checkGrounded(platform) then
-				self.grounded = true
-				--self.height = 24
-			else
-				self.grounded = false
-				--self.height = 16
-			end
-		end
-
-		if self:checkGrounded(groundPlatform) then
-			self.grounded = true
-		end
-		--]]
-
-		--self.dy = self.dy + GRAVITY * dt
 
 		self.y = self.y + self.dy
 
@@ -149,7 +132,6 @@ function Taxi:update(dt)
 			self.dy = self.dy + GRAVITY * dt
 		end
 
-
 		if self.animationTimer < 0 then
 			--IF GROUNDED **ADD IF NOT GROUNDED
 			taxi1Sprite:setViewport(self.frame + (self.width * (self.frame - 1)), 0, self.width, self.height, self.atlas:getDimensions())
@@ -173,11 +155,11 @@ function Taxi:render()
 
 	if self.facingRight then
 		--love.graphics.print(tostring(self.index), self.x, self.y)
-		love.graphics.print(tostring(self:checkGrounded(platform2)), self.x, self.y)
+		love.graphics.print(tostring(PlayState:checkGrounded(self, groundPlatform)), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, 1, 1)
 	else
 		--love.graphics.print(tostring(self.index), self.x, self.y)
-		love.graphics.print(tostring(self:checkGrounded(platform2)), self.x, self.y)
+		love.graphics.print(tostring(PlayState:checkGrounded(self, groundPlatform)), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, -1, 1, self.width)
 	end
 	
