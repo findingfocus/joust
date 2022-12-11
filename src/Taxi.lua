@@ -11,7 +11,7 @@ function Taxi:init(x, y, width, height, dx, index)
 	self.facingRight = true
 	self.graveyard = true
 	self.grounded = false
-	self.ground = Platform('name', 1, 1, 1, 1)
+	--self.ground = Platform('name', 1, 1, 1, 1)
 	self.width = width
 	self.height = height
 	self.atlas = taxi1Atlas
@@ -21,9 +21,11 @@ end
 function Taxi:checkGrounded(collidablePlatforms)
 	if self.y == collidablePlatforms.y - self.height then
 		if self.x < collidablePlatforms.x + collidablePlatforms.width - BUFFER and self.x + self.width > collidablePlatforms.x + BUFFER then
+			--self.grounded = true
 			return true
 		end
 	else
+		--self.grounded = false
 		return false
 	end
 end
@@ -81,23 +83,25 @@ function Taxi:update(dt)
 
 		self.x = self.x + self.dx 
 
+--[[
+		if self:checkGrounded(groundPlatform) then
+			self.ground = groundPlatform
+		end
+--]]
 
+---[[ TAXI AND PLATFORM COLLISION
 		if self:bottomCollides(groundPlatform) then
 			self.height = 24
 			self.y = groundPlatform.y - self.height
 			self.dy = 0
-			self.grounded = true
-		end
-
-		if self:checkGrounded(groundPlatform) then
-			self.ground = groundPlatform
+			--self.grounded = true
 		end
 
 		for k, platform in pairs(collidablePlatforms) do
 
 			if self:bottomCollides(platform) then
-				self.grounded = true
-				self.ground = platform
+				--self.grounded = true
+				--self.ground = platform
 				self.dy = 0
 				self.y = platform.y - self.height
 			end
@@ -111,22 +115,36 @@ function Taxi:update(dt)
 				self.dx = math.abs(self.dx) * -1
 				self.x = platform.x - self.width
 			end
-
+--[[
 			if self:checkGrounded(platform) then
 				self.ground = platform
 			end
+	--]]
 		end
+--]]
+
+		
+		for k, platform in pairs(collidablePlatforms) do 
+			if not self.grounded then
+				if self:checkGrounded(platform) then
+					self.grounded = true
+				end
+			end
+		end
+		
 
 		for k, platform in pairs(collidablePlatforms) do
 			if not self:checkGrounded(platform) and not self:checkGrounded(groundPlatform) then
-				self.grounded = false
+				--self.grounded = false
 			end
 		end
 
+--[[
 		if not self:checkGrounded(self.ground) then
 			self.grounded = false
 			self.ground = Platform('name', 1, 1, 1, 1)
 		end
+--]]
 
 		if not self.grounded then
 			self.dy = self.dy + GRAVITY * dt
@@ -155,11 +173,11 @@ function Taxi:render()
 
 	if self.facingRight then
 		--love.graphics.print(tostring(self.index), self.x, self.y)
-		love.graphics.print(tostring(PlayState:checkGrounded(self, groundPlatform)), self.x, self.y)
+		love.graphics.print(tostring(self:checkGrounded(platform2)), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, 1, 1)
 	else
 		--love.graphics.print(tostring(self.index), self.x, self.y)
-		love.graphics.print(tostring(PlayState:checkGrounded(self, groundPlatform)), self.x, self.y)
+		love.graphics.print(tostring(self:checkGrounded(platform2)), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, -1, 1, self.width)
 	end
 	
