@@ -97,6 +97,9 @@ function PlayState:update(dt)
 				Taxis[i] = Taxi(-20, -20, 16, 24, i)
 			end
 
+			Eggs[1] = Egg(20, 80, 0, 1)
+			Eggs[1].graveyard = false
+
 			tablesPopulated = true
 		end
 
@@ -515,6 +518,7 @@ function PlayState:update(dt)
 	--]]
 	taxi1.graveyard = false
 	taxi1:update(dt)
+	--Eggs[1]:update(dt)
 end
 
 function PlayState:render()
@@ -564,6 +568,7 @@ function PlayState:render()
 	lavaBubble2:render()
 
 	taxi1:render()
+	--Eggs[1]:render()
 
 	for k, platform in pairs(collidablePlatforms) do 
 		platform:render()

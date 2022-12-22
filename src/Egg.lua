@@ -20,7 +20,7 @@ function Egg:init(lastX, lastY, dx, index)
 	self.eggSprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
 	self.hatched = false
 	self.hatching = false
-	self.hatchCountdown = 3--15
+	self.hatchCountdown = 10--15
 	self.hatchAnim = 0
 	self.jockey = Jockey(-20, -20)
 end
