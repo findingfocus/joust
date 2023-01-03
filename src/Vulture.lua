@@ -6,7 +6,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.y = y
 	self.width = width
 	self.height = height
-	self.atlas = bounderAtlas
+	self.tier = 1
 	self.dy = 0
 	self.dx = -.7
 	self.fps = 1
@@ -42,6 +42,7 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.firstFrameExploded = false
 	self.graveyard = true
 	self.ground = Platform('name', 1, 1, 1, 1)
+	self.atlas = bounderAtlas
 	self.vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
 
@@ -106,6 +107,15 @@ function Vulture:leftCollides(collidable)
 end
 
 function Vulture:update(dt)	
+
+	if self.tier == 1 then
+		self.atlas = bounderAtlas
+	elseif self.tier == 2 then
+		self.atlas = hunterAtlas
+	else
+		self.atlas = shadowlordAtlas
+	end
+
 	if self.graveyard then
 		self.x = -20
 		self.y = -20

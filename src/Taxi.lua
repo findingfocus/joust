@@ -15,7 +15,8 @@ function Taxi:init(x, y, width, height, dx, index)
 	self.ground = Platform('name', 1, 1, 1, 1)
 	self.width = width
 	self.height = height
-	self.atlas = taxi1Atlas
+	self.tier = 1
+	self.atlas = hunterTaxiAtlas
 	taxi1Sprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
 end
 
@@ -60,6 +61,12 @@ function Taxi:leftCollides(collidable)
 end
 
 function Taxi:update(dt)
+	if self.tier == 1 then
+		self.atlas = hunterTaxiAtlas
+	else
+		self.atlas = shadowlordTaxiAtlas
+	end
+
 	if not self.graveyard then
 
 		if self.x > VIRTUAL_WIDTH then

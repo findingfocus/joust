@@ -125,7 +125,7 @@ function PlayState:update(dt)
 			vultureSpawnTimer = 8
 			vultureSpawnPointIndex = math.random(4)
 			Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 1)
-			Vultures[1] = Vulture1
+			--Vultures[1] = Vulture1
 			Vulture1.graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
