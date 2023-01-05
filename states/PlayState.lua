@@ -49,6 +49,7 @@ function PlayState:init()
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
 	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 40, platform2.y - 24 - 10, 16, 24, -1)
+	taxi1.graveyard = false
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -124,9 +125,9 @@ function PlayState:update(dt)
 		if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
 			vultureSpawnTimer = 8
 			vultureSpawnPointIndex = math.random(4)
-			Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 1)
+			--Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 1)
 			--Vultures[1] = Vulture1
-			Vulture1.graveyard = false
+			--Vulture1.graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
 			vultureSpawnTimer = 6
@@ -503,10 +504,30 @@ function PlayState:update(dt)
 	end
 	--]]
 
+	if taxi1:collides(Eggs[1]) then
+		taxi1.graveyard = true
+		if taxi1.facingRight then
+			Vultures[1] = Vulture(Eggs[1].lastX, Eggs[1].lastY - 8, 16, 16, Eggs[1].lastY - 8, 1)
+			Vultures[1].graveyard = false
+			Vultures[1].spawning = false
+			Vultures[1].tier = Vultures[1].tier + 1
+			Vultures[1].grounded = false
+			Vultures[1].facingRight = true
+		else
+			Vultures[1] = Vulture(Eggs[1].lastX, Eggs[1].lastY - 8, 16, 16, Eggs[1].lastY - 8, 1)
+			Vultures[1].graveyard = false
+			Vultures[1].spawning = false
+			Vultures[1].tier = Vultures[1].tier + 1
+			Vultures[1].grounded = false
+		end
+		--Eggs[1].graveyard = true
+	end
+
+
 ---[[OBJECT UPDATES
 	for i = 1, 3 do
-		Vultures[i]:update(dt)
 		Eggs[i]:update(dt)
+		Vultures[i]:update(dt)
 		Jockeys[i]:update(dt)
 		Taxis[i]:update(dt)	
 	end
@@ -515,10 +536,7 @@ function PlayState:update(dt)
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
 	player1:update(dt)
-	--]]
-	taxi1.graveyard = false
 	taxi1:update(dt)
-	--Eggs[1]:update(dt)
 end
 
 function PlayState:render()
@@ -585,8 +603,8 @@ function PlayState:render()
 
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	--love.graphics.print('taxianim: ' .. tostring(taxi1.animationTimer), 5, 15)
+	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
+	love.graphics.print('Eggs lastY: ' .. tostring(Vultures[1].graveyard), 5, 15)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

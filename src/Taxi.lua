@@ -20,6 +20,16 @@ function Taxi:init(x, y, width, height, dx, index)
 	taxi1Sprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
 end
 
+function Taxi:collides(collidable)
+	if self.x < collidable.x + collidable.width - BUFFER / 2 and self.x + self.width > collidable.x + BUFFER / 2 then
+		if self.y < collidable.y + collidable.height and self.y + self.height > collidable.y + BUFFER / 2 then
+			return true
+		end
+	else
+		return false
+	end
+end
+
 function Taxi:checkGrounded(collidablePlatforms)
 	if self.y == collidablePlatforms.y - self.height then
 		if self.x < collidablePlatforms.x + collidablePlatforms.width - BUFFER and self.x + self.width > collidablePlatforms.x + BUFFER then

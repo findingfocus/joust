@@ -38,7 +38,6 @@ function Vulture:init(x, y, width, height, platformSpawn, index)
 	self.spawning = true
 	self.exploded = false
 	self.justJumped = false
-	self.eggSpawn = false
 	self.firstFrameExploded = false
 	self.graveyard = true
 	self.ground = Platform('name', 1, 1, 1, 1)
@@ -218,11 +217,11 @@ function Vulture:update(dt)
 
 			self.y = self.y + self.dy
 			
-			--BOUNCING OFF TOP
 			if not self.graveyard then
 
 				self.x = self.x + self.dx
 
+				--BOUNCING OFF TOP
 				if self.y < 0 then
 					self.y = 0
 					self.dy = math.abs(self.dy) / 2
