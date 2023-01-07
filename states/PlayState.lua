@@ -48,7 +48,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 40, platform2.y - 24 - 10, 16, 24, -1)
+	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 40, platform2.y - 24 - 10, 16, 24, -1, 1)
 	taxi1.graveyard = false
 end
 
@@ -92,14 +92,14 @@ function PlayState:update(dt)
 		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
 		if not tablesPopulated then
 			for i = 1, 3 do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, i)
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-20, -20, 16, 24, i)
 			end
 
-			Eggs[1] = Egg(20, 80, 0, 1)
-			Eggs[1].graveyard = false
+			Jockeys[1] = Jockey(20, platform3.y, 1)
+			Jockeys[1].graveyard = false
 
 			tablesPopulated = true
 		end
@@ -132,16 +132,16 @@ function PlayState:update(dt)
 		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
 			vultureSpawnTimer = 6
 			vultureSpawnPointIndex = math.random(4)
-			Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 2)
+			--Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 2)
 			--Vultures[2] = Vulture2
-			Vulture2.graveyard = false
+			--Vulture2.graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
 			vultureSpawnTimer = 0
 			vultureSpawnPointIndex = math.random(4)
-			Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 3)
+			--Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 3)
 			--Vultures[3] = Vulture3
-			Vulture3.graveyard = false
+			--Vulture3.graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
 	end
@@ -158,9 +158,9 @@ function PlayState:update(dt)
 
 	--RESET VULTURES
 	if love.keyboard.wasPressed('v') and not Vultures[3].spawning then
-		Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, 1)
-		Vulture2 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, 2)
-		Vulture3 = Vulture(VIRTUAL_WIDTH / 2 + 30, groundPlatform.y, 16, 24, groundPlatform.y, 3)
+		Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 1)
+		Vulture2 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, -1, 2)
+		Vulture3 = Vulture(VIRTUAL_WIDTH / 2 + 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 3)
 		Vulture1.graveyard = false
 		Vulture2.graveyard = false
 		Vulture3.graveyard = false
@@ -502,25 +502,22 @@ function PlayState:update(dt)
 			player1.exploded = true
 		end
 	end
-	--]]
 
-	if taxi1:collides(Eggs[1]) then
+--TAXI TO JOCKEY COLLISION --INSTANTIATES HIGHER TIER VULTURE
+	if taxi1:collides(Jockeys[1]) then
 		taxi1.graveyard = true
+		Jockeys[1].graveyard = true
+
 		if taxi1.facingRight then
-			Vultures[1] = Vulture(Eggs[1].lastX, Eggs[1].lastY - 8, 16, 16, Eggs[1].lastY - 8, 1)
-			Vultures[1].graveyard = false
-			Vultures[1].spawning = false
-			Vultures[1].tier = Vultures[1].tier + 1
-			Vultures[1].grounded = false
-			Vultures[1].facingRight = true
+			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, 1, 1)
 		else
-			Vultures[1] = Vulture(Eggs[1].lastX, Eggs[1].lastY - 8, 16, 16, Eggs[1].lastY - 8, 1)
-			Vultures[1].graveyard = false
-			Vultures[1].spawning = false
-			Vultures[1].tier = Vultures[1].tier + 1
-			Vultures[1].grounded = false
+			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, -1, 1)
 		end
-		--Eggs[1].graveyard = true
+		
+		Vultures[1].graveyard = false
+		Vultures[1].spawning = false
+		Vultures[1].grounded = false
+		Vultures[1].tier = Vultures[1].tier + 1
 	end
 
 
@@ -586,7 +583,6 @@ function PlayState:render()
 	lavaBubble2:render()
 
 	taxi1:render()
-	--Eggs[1]:render()
 
 	for k, platform in pairs(collidablePlatforms) do 
 		platform:render()
@@ -604,7 +600,7 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	love.graphics.print('Eggs lastY: ' .. tostring(Vultures[1].graveyard), 5, 15)
+	--love.graphics.print('Vultures[1].x: ' .. tostring(Vultures[1].x), 5, 15)
 	
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
@@ -651,6 +647,4 @@ function PlayState:render()
 	for k, v in pairs(scoresTable) do
 		scoresTable[k]:render()
 	end
-
-	--tester:render()
 end

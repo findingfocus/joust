@@ -3,6 +3,8 @@ Taxi = Class{}
 function Taxi:init(x, y, width, height, dx, index)
 	self.x = x
 	self.y = y
+	self.lastX = 0
+	self.lastY = 0
 	self.index = index
 	self.dx = dx * .5
 	self.dy = 0
@@ -78,6 +80,8 @@ function Taxi:update(dt)
 	end
 
 	if not self.graveyard then
+		self.lastX = self.x
+		self.lastY = self.y
 
 		if self.x > VIRTUAL_WIDTH then
 			self.x = -self.width
@@ -167,8 +171,8 @@ function Taxi:update(dt)
 		end
 
 	else -- IF GRAVEYARD
-		self.x = -20
-		self.y = -20
+		self.x = -40
+		self.y = -40
 		self.dx = 0
 		self.dy = 0
 	end

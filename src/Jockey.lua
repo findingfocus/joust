@@ -17,7 +17,7 @@ function Jockey:update(dt)
 	if self.graveyard then
 		self.x = -20
 		self.y = -20
-	else
+	else -- IF NOT GRAVEYARD
 		if not self.collected then
 			self.lastX = self.x
 			self.lastY = self.y

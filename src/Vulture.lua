@@ -1,14 +1,16 @@
 Vulture = Class{}
 
-function Vulture:init(x, y, width, height, platformSpawn, index)
+function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.index = index
 	self.x = x
 	self.y = y
 	self.width = width
 	self.height = height
+	self.index = index
+	self.dx = dx
 	self.tier = 1
 	self.dy = 0
-	self.dx = -.7
+	self.dx = self.dx * 0.7
 	self.fps = 1
 	self.animationTimer = 2 / self.fps
 	self.jumpTimer = 1
