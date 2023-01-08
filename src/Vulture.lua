@@ -10,7 +10,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.dx = dx
 	self.tier = 1
 	self.dy = 0
-	self.dx = self.dx * 0.7
+	self.dx = dx
 	self.fps = 1
 	self.animationTimer = 2 / self.fps
 	self.jumpTimer = 1
@@ -124,12 +124,14 @@ function Vulture:update(dt)
 		self.dy = 0
 	end
 
+	--UPDATING LAST ALIVE POSITIONS
 	if not self.graveyard then
 		self.lastX = self.x
 		self.lastY = self.y
 		self.lastDX = self.dx
 	end
-	--SETS GROWING VIEWPORT UPON SPWNING
+
+	--SETS GROWING VIEWPORT UPON SPAWNING
 	if self.spawning then
 		self.lastDX = self.dx
 		self.spawnHeight = self.spawnHeight + 0.5
@@ -140,6 +142,7 @@ function Vulture:update(dt)
 		end
 		self.y = self.y - 0.5
 	elseif not self.exploded then -- IF NOT SPAWNING AND NOT EXPLODED
+
 			--COLLISION OF MAIN GROUND PLATFORM
 			if self:bottomCollides(groundPlatform) then
 				self.height = 24

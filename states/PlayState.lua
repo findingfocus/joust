@@ -50,6 +50,7 @@ function PlayState:init()
 	monster = Pterodactyl(-30, -30, 0)
 	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 40, platform2.y - 24 - 10, 16, 24, -1, 1)
 	taxi1.graveyard = false
+	self.timesEggHatched = {0, 0, 0}
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -323,6 +324,7 @@ function PlayState:update(dt)
 	for i = 1, 3 do
 		if Eggs[i].hatched then
 			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY)
+			self.timesEggHatched[i] = self.timesEggHatched[i] + 1
 			Jockeys[i].graveyard = false
 			if Jockeys[i].x <= VIRTUAL_WIDTH / 2 then --IF JOCKEY LEFT SIDE OF SCREEN
 				Taxis[i] = Taxi(VIRTUAL_WIDTH, Jockeys[i].y - 25, 16, 24, -1, i)
@@ -507,11 +509,21 @@ function PlayState:update(dt)
 	if taxi1:collides(Jockeys[1]) then
 		taxi1.graveyard = true
 		Jockeys[1].graveyard = true
-
+		--self.timesEggHatched[1] = 2
 		if taxi1.facingRight then
 			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, 1, 1)
+			if self.timesEggHatched[1] == 1 then --APPLY HUNTER VELOCITY
+				Vultures[1].dx = Vultures[1].dx * 1.5
+			elseif self.timesEggHatched[1] == 2 then
+				Vultures[1].dx = Vultures[1].dx * 2--APPLY SHADOWLORD VELOCITY
+			end
 		else
 			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, -1, 1)
+			if self.timesEggHatched[1] == 1 then --APPLY HUNTER VELOCITY
+				Vultures[1].dx = Vultures[1].dx * 1.5
+			elseif self.timesEggHatched[1] == 2 then
+				Vultures[1].dx = Vultures[1].dx * 2--APPLY SHADOWLORD VELOCITY
+			end
 		end
 		
 		Vultures[1].graveyard = false
