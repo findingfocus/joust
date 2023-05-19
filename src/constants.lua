@@ -1,7 +1,7 @@
 --1280 800 == Mac Laptop resolution
 ---[[
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 800
+WINDOW_WIDTH = 1168
+WINDOW_HEIGHT = 960
 --]]
 
 --toggle this one for 1:1 pixel output

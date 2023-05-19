@@ -30,7 +30,7 @@ function LavaBubble:update(dt)
 	if self.y < VIRTUAL_HEIGHT - LAVAHEIGHT - 2 then
 		self.y = VIRTUAL_HEIGHT - LAVAHEIGHT - 2
 		self.particleSpawn = false
-		self.bubbleSpawn = true	
+		self.bubbleSpawn = true
 	end
 
 	--Triggers popSpawn

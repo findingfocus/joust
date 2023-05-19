@@ -64,7 +64,7 @@ end
 
 function PlayState:update(dt)
 
-	if love.keyboard.wasPressed('h') then
+	if love.keyboard.wasPressed('i') then
 		helpToggle = not helpToggle
 	end
 
@@ -189,7 +189,7 @@ function PlayState:update(dt)
 	if vultureCount == 0 then --KILLS PTERO IF NO VULTURES ON SCREEN
 		monster = Pterodactyl(-30, -30, 0)
 	end
-	
+
 ---[[BUBBLE LOGIC
 	if lavaBubble1.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
 		leftSpawnPoint = {11, 35}
@@ -313,11 +313,11 @@ function PlayState:update(dt)
 					elseif not player1.facingRight and Vultures[i].facingRight then
 						player1.dx = player1.dx * -1
 						player1.x = Vultures[i].x - player1.width
-					end 
+					end
 				end
 			end
 		end
-	end				
+	end
 	--]]
 
 ---[[JOCKEY AND TAXI SPAWN
@@ -331,7 +331,7 @@ function PlayState:update(dt)
 			else --JOCKEY IS ON RIGHT SIDE OF SCREEN
 				Taxis[i] = Taxi(-16, Jockeys[i].y - 25, 16, 24, 1, i)
 			end
-			
+
 			Taxis[i].graveyard = false
 			Eggs[i].graveyard = true
 			Eggs[i].hatched = false
@@ -424,7 +424,7 @@ function PlayState:update(dt)
 		end
 	end
 	--]]
-	
+
 	for k, v in pairs(scoresTable) do
 		scoresTable[k]:update(dt)
 	end
@@ -446,7 +446,7 @@ function PlayState:update(dt)
 			monster.y = platform.y - monster.height
 			monster.dy = monster.dy * -1
 		end
-	end	
+	end
 
 	--PTERODACTYL AND VULTURE COLLISION
 	for i, vulture in pairs(Vultures) do
@@ -525,7 +525,7 @@ function PlayState:update(dt)
 				Vultures[1].dx = Vultures[1].dx * 2--APPLY SHADOWLORD VELOCITY
 			end
 		end
-		
+
 		Vultures[1].graveyard = false
 		Vultures[1].spawning = false
 		Vultures[1].grounded = false
@@ -538,7 +538,7 @@ function PlayState:update(dt)
 		Eggs[i]:update(dt)
 		Vultures[i]:update(dt)
 		Jockeys[i]:update(dt)
-		Taxis[i]:update(dt)	
+		Taxis[i]:update(dt)
 	end
 
 	monster:update(dt)
@@ -582,7 +582,7 @@ function PlayState:render()
 		end
 
 		if not Jockeys[i].graveyard then
-			Jockeys[i]:render()	
+			Jockeys[i]:render()
 		end
 
 		if not Taxis[i].graveyard then
@@ -590,13 +590,13 @@ function PlayState:render()
 		end
 	end
 	--]]
-	
+
 	lavaBubble1:render()
 	lavaBubble2:render()
 
 	taxi1:render()
 
-	for k, platform in pairs(collidablePlatforms) do 
+	for k, platform in pairs(collidablePlatforms) do
 		platform:render()
 	end
 
@@ -605,7 +605,7 @@ function PlayState:render()
 	love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
 	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
 	love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
-	
+
 
 	love.graphics.setFont(smallFont)
 
@@ -613,7 +613,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
 	--love.graphics.print('Vultures[1].x: ' .. tostring(Vultures[1].x), 5, 15)
-	
+
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(keyloggerPlate, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
@@ -621,7 +621,7 @@ function PlayState:render()
 	if love.keyboard.isDown('left') then
 		love.graphics.draw(keylogger1, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end
-	
+
 	if love.keyboard.isDown('a') then
 		love.graphics.draw(keylogger2, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
 	end

@@ -99,7 +99,7 @@ function Taxi:update(dt)
 
 		self.y = self.y + self.dy
 
-		self.x = self.x + self.dx 
+		self.x = self.x + self.dx
 
 		--ENSURES GROUND FIELD IS PLATFORM THAT WE ARE STANDING ON, NOT JUST PLATFORM WE BOTTOM COLLIDED WITH
 		if self:checkGrounded(groundPlatform) then
@@ -192,5 +192,5 @@ function Taxi:render()
 		--love.graphics.print(tostring(self.grounded), self.x, self.y)
 		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, -1, 1, self.width)
 	end
-	
+
 end

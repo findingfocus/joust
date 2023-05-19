@@ -35,7 +35,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.justStopped = false
 	self.justTurned = false
 	self.lastInputLocked = false
-	self.collideTimer = 0 
+	self.collideTimer = 0
 	self.justCollided = false
 	self.spawning = true
 	self.exploded = false
@@ -107,7 +107,7 @@ function Vulture:leftCollides(collidable)
 	return false
 end
 
-function Vulture:update(dt)	
+function Vulture:update(dt)
 
 	if self.tier == 1 then
 		self.atlas = bounderAtlas
@@ -195,8 +195,8 @@ function Vulture:update(dt)
 					if self.dx > 0 then
 						self.dx = self.dx * -1
 					end
-				end	
-	
+				end
+
 				if self.justCollided then
 					self.collideTimer = self.collideTimer + dt
 					if self.collideTimer > COLLIDETIMERTHRESHOLD then
@@ -221,7 +221,7 @@ function Vulture:update(dt)
 			end
 
 			self.y = self.y + self.dy
-			
+
 			if not self.graveyard then
 
 				self.x = self.x + self.dx
@@ -231,7 +231,7 @@ function Vulture:update(dt)
 					self.y = 0
 					self.dy = math.abs(self.dy) / 2
 				end
-			
+
 				--LOOPS player to left side of screen
 				if self.x > VIRTUAL_WIDTH - 1 then
 					self.x = -self.width + 1
@@ -245,7 +245,7 @@ function Vulture:update(dt)
 
 			if self.grounded then
 				self.height = 24
-				
+
 			--AERIAL HANDLING
 			elseif not self.grounded then
 				self.skid = false
@@ -296,7 +296,7 @@ function Vulture:update(dt)
 			end
 
 			--VULTURE WALKING ANIMATION
-			if self.dx ~= 0 and self.grounded then 
+			if self.dx ~= 0 and self.grounded then
 				self.animationTimer = self.animationTimer - dt
 				if self.animationTimer <= 0 then
 					self.animationTimer = 1 / self.fps
@@ -314,7 +314,7 @@ function Vulture:update(dt)
 					self.vultureSprite:setViewport((self.width * 5) + 6, 0, self.width, self.height)
 
 					if self.flapped then
-						self.vultureSprite:setViewport((self.width * 6) + 7, 0, self.width, self.height)				
+						self.vultureSprite:setViewport((self.width * 6) + 7, 0, self.width, self.height)
 					end
 				end
 
@@ -345,7 +345,7 @@ function Vulture:render()
 			end
 		else
 			if self.facingRight then
-				love.graphics.draw(self.atlas, self.vultureSprite, math.floor(self.x), self.y, 0, 1, 1) 
+				love.graphics.draw(self.atlas, self.vultureSprite, math.floor(self.x), self.y, 0, 1, 1)
 			else
 				love.graphics.draw(self.atlas, self.vultureSprite, math.floor(self.x), self.y, 0, -1, 1, self.width)
 			end

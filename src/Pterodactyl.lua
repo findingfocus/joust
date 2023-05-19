@@ -88,7 +88,7 @@ function Pterodactyl:update(dt)
 		--OVERWRITES DIRECTION, PLEASE ADJUST WHEN SPAWNING LOGIC IN PLACE
 		--self.facingRight = false
 
-	
+
 	---[[
 		if not self.graveyard then
 			if self.x > VIRTUAL_WIDTH then
@@ -110,7 +110,7 @@ function Pterodactyl:update(dt)
 				self.dy = math.abs(self.dy)
 			end
 		end
-	--]] 
+	--]]
 		self.animationTimer = self.animationTimer - dt
 
 		if self.animationTimer <= 0 then
@@ -134,7 +134,7 @@ end
 
 function Pterodactyl:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	
+
 	if not self.exploded then
 		if self.facingRight then
 			love.graphics.draw(self.atlas, self.pterodactylSprite, self.x, self.y)
