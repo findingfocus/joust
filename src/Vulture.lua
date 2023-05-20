@@ -43,6 +43,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.firstFrameExploded = false
 	self.graveyard = true
 	self.ground = Platform('name', 1, 1, 1, 1)
+    self.dxAssigned = false
 	self.atlas = bounderAtlas
 	self.vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 end
@@ -108,13 +109,20 @@ function Vulture:leftCollides(collidable)
 end
 
 function Vulture:update(dt)
-
 	if self.tier == 1 then
 		self.atlas = bounderAtlas
 	elseif self.tier == 2 then
 		self.atlas = hunterAtlas
+        if not self.dxAssigned then
+            self.dx = self.dx * 1.5
+            self.dxAssigned = true
+        end
 	else
-		self.atlas = shadowlordAtlas
+        self.atlas = shadowlordAtlas
+        if not self.dxAssigned then
+            self.dx = self.dx * 2
+            self.dxAssigned = true
+        end
 	end
 
 	if self.graveyard then
@@ -195,6 +203,9 @@ function Vulture:update(dt)
 					if self.dx > 0 then
 						self.dx = self.dx * -1
 					end
+                    if not self.justCollided then
+                        sounds['collide']:play()
+                    end
 				end
 
 				if self.justCollided then

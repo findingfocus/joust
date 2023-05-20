@@ -1,1 +1,4 @@
-__Remove justCollided and CollideTimer for Ostrich class, if it isnt doing anything
+X_Figure hunter ai dx
+X_Figure shadowLord dx
+__Figure hunter flapping
+__Figure shadowlord flapping

@@ -50,7 +50,6 @@ function PlayState:init()
 	monster = Pterodactyl(-30, -30, 0)
 	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 40, platform2.y - 24 - 10, 16, 24, -1, 1)
 	taxi1.graveyard = false
-	self.timesEggHatched = {0, 0, 0}
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -237,6 +236,7 @@ function PlayState:update(dt)
 				elseif player1:enemyBottomCollides(Vultures[i]) then
 					Vultures[i].exploded = true
 					Vultures[i].graveyard = true
+                    Vultures[i].dxAssigned = false
 					Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
 					Eggs[i].graveyard = false
 					Eggs[i].invulnerable = true
@@ -251,6 +251,7 @@ function PlayState:update(dt)
 					elseif not player1.facingRight and not Vultures[i].facingRight then
 						Vultures[i].exploded = true
 						Vultures[i].graveyard = true
+                        Vultures[i].dxAssigned = false
 						Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
 						Eggs[i].graveyard = false
 						Eggs[i].invulnerable = true
@@ -271,6 +272,7 @@ function PlayState:update(dt)
 						elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
 							Vultures[i].exploded = true
 							Vultures[i].graveyard = true
+                            Vultures[i].dxAssigned = false
 							Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
 							Eggs[i].graveyard = false
 							Eggs[i].invulnerable = true
@@ -283,6 +285,7 @@ function PlayState:update(dt)
 					if player1.facingRight and Vultures[i].facingRight then
 						Vultures[i].exploded = true
 						Vultures[i].graveyard = true
+                        Vultures[i].dxAssigned = false
 						Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
 						Eggs[i].graveyard = false
 						Eggs[i].invulnerable = true
@@ -301,6 +304,7 @@ function PlayState:update(dt)
 							pteroTimer = vultureCount * 20 - 20
 							Vultures[i].exploded = true
 							Vultures[i].graveyard = true
+                            Vultures[i].dxAssigned = false
 							Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
 							Eggs[i].graveyard = false
 							Eggs[i].invulnerable = true
@@ -324,7 +328,6 @@ function PlayState:update(dt)
 	for i = 1, 3 do
 		if Eggs[i].hatched then
 			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY)
-			self.timesEggHatched[i] = self.timesEggHatched[i] + 1
 			Jockeys[i].graveyard = false
 			if Jockeys[i].x <= VIRTUAL_WIDTH / 2 then --IF JOCKEY LEFT SIDE OF SCREEN
 				Taxis[i] = Taxi(VIRTUAL_WIDTH, Jockeys[i].y - 25, 16, 24, -1, i)
@@ -509,21 +512,11 @@ function PlayState:update(dt)
 	if taxi1:collides(Jockeys[1]) then
 		taxi1.graveyard = true
 		Jockeys[1].graveyard = true
-		--self.timesEggHatched[1] = 2
 		if taxi1.facingRight then
 			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, 1, 1)
-			if self.timesEggHatched[1] == 1 then --APPLY HUNTER VELOCITY
-				Vultures[1].dx = Vultures[1].dx * 1.5
-			elseif self.timesEggHatched[1] == 2 then
-				Vultures[1].dx = Vultures[1].dx * 2--APPLY SHADOWLORD VELOCITY
-			end
+            Vultures[1].tier = Vultures[1].tier + 1
 		else
 			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, -1, 1)
-			if self.timesEggHatched[1] == 1 then --APPLY HUNTER VELOCITY
-				Vultures[1].dx = Vultures[1].dx * 1.5
-			elseif self.timesEggHatched[1] == 2 then
-				Vultures[1].dx = Vultures[1].dx * 2--APPLY SHADOWLORD VELOCITY
-			end
 		end
 
 		Vultures[1].graveyard = false
@@ -612,7 +605,7 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	--love.graphics.print('Vultures[1].x: ' .. tostring(Vultures[1].x), 5, 15)
+	love.graphics.print('Vultures[1].dx: ' .. tostring(Vultures[1].dx), 5, 15)
 
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
