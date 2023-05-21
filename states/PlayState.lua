@@ -514,7 +514,6 @@ function PlayState:update(dt)
 		Jockeys[1].graveyard = true
 		if taxi1.facingRight then
 			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, 1, 1)
-            Vultures[1].tier = Vultures[1].tier + 1
 		else
 			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, -1, 1)
 		end

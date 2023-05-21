@@ -120,7 +120,7 @@ function Vulture:update(dt)
 	else
         self.atlas = shadowlordAtlas
         if not self.dxAssigned then
-            self.dx = self.dx * 2
+            self.dx = self.dx * 2.4
             self.dxAssigned = true
         end
 	end
@@ -287,7 +287,13 @@ function Vulture:update(dt)
 			if self.timeBetweenJumps < 0 then
 				love.math.setRandomSeed(self.index)
 				self.justJumped = true
-				self.timeBetweenJumps = math.random(.2, .3, .5, 1, 1, 2, 3, 3, 3, 3, 5)
+                if self.tier == 1 then
+                    self.timeBetweenJumps = math.random(.2, .3, .5, 1, 1, 2, 3, 3, 3, 3, 5)
+                elseif self.tier == 2 then
+                    self.timeBetweenJumps = math.random(.15, .25, .45, .8, .8, 1.8, 2.8, 3, 3, 3, 5)
+                elseif self.tier == 3 then
+                    self.timeBetweenJumps = math.random(.14, .22, .4, .3, .2, 1, 2.4, 3, 3, 3, 4, 4, 4, 5, 5,5)
+                end
 			end
 
 			if self.justJumped then
