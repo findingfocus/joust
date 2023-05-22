@@ -48,8 +48,8 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-	taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 40, platform2.y - 24 - 10, 16, 24, -1, 1)
-	taxi1.graveyard = false
+	--taxi1 = Taxi(VIRTUAL_WIDTH / 2 - 40, platform2.y - 24 - 10, 16, 24, -1, 1)
+	--taxi1.graveyard = false
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -92,14 +92,14 @@ function PlayState:update(dt)
 		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
 		if not tablesPopulated then
 			for i = 1, 3 do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i)
+				Vultures[i] = Vulture(-60, -60, 16, 24, -20, -1, i)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-20, -20, 16, 24, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
 			end
 
-			Jockeys[1] = Jockey(20, platform3.y, 1)
-			Jockeys[1].graveyard = false
+			--Jockeys[1] = Jockey(20, platform3.y, 1)
+			--Jockeys[1].graveyard = false
 
 			tablesPopulated = true
 		end
@@ -125,9 +125,9 @@ function PlayState:update(dt)
 		if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
 			vultureSpawnTimer = 8
 			vultureSpawnPointIndex = math.random(4)
-			--Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 1)
-			--Vultures[1] = Vulture1
-			--Vulture1.graveyard = false
+			Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 1)
+			Vultures[1] = Vulture1
+			Vulture1.graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
 			vultureSpawnTimer = 6
@@ -509,21 +509,24 @@ function PlayState:update(dt)
 	end
 
 --TAXI TO JOCKEY COLLISION --INSTANTIATES HIGHER TIER VULTURE
-	if taxi1:collides(Jockeys[1]) then
-		taxi1.graveyard = true
-		Jockeys[1].graveyard = true
-		if taxi1.facingRight then
-			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, 1, 1)
-		else
-			Vultures[1] = Vulture(taxi1.lastX, taxi1.lastY, 16, 16, taxi1.lastY - 8, -1, 1)
-		end
+--[
+    for i = 1, 3 do
+        if Taxis[i]:collides(Jockeys[i]) then
+            Taxis[i].graveyard = true
+            Jockeys[i].graveyard = true
+            if Taxis[i].facingRight then
+                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, 1, Vultures[i].index)
+            else
+                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, -1, Vultures[i].index)
+            end
 
-		Vultures[1].graveyard = false
-		Vultures[1].spawning = false
-		Vultures[1].grounded = false
-		Vultures[1].tier = Vultures[1].tier + 1
-	end
-
+            Vultures[i].graveyard = false
+            Vultures[i].spawning = false
+            Vultures[i].grounded = false
+            Vultures[i].tier = Vultures[i].tier + 1
+        end
+    end
+    --]]
 
 ---[[OBJECT UPDATES
 	for i = 1, 3 do
@@ -537,7 +540,7 @@ function PlayState:update(dt)
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
 	player1:update(dt)
-	taxi1:update(dt)
+--	taxi1:update(dt)
 end
 
 function PlayState:render()
@@ -586,7 +589,7 @@ function PlayState:render()
 	lavaBubble1:render()
 	lavaBubble2:render()
 
-	taxi1:render()
+--	taxi1:render()
 
 	for k, platform in pairs(collidablePlatforms) do
 		platform:render()
@@ -598,13 +601,6 @@ function PlayState:render()
 	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
 	love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
 
-
-	love.graphics.setFont(smallFont)
-
---DEBUG INFO
-	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
-	love.graphics.print('Vultures[1].dx: ' .. tostring(Vultures[1].dx), 5, 15)
 
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
@@ -651,4 +647,18 @@ function PlayState:render()
 	for k, v in pairs(scoresTable) do
 		scoresTable[k]:render()
 	end
+
+    love.graphics.setFont(smallFont)
+
+--DEBUG INFO
+	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
+	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
+    --[[
+	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
+	love.graphics.print('Taxi1.y: ' .. tostring(Taxis[1].y), 5, 25)
+	love.graphics.print('Jockey1.x: ' .. tostring(Jockeys[1].x), 5, 35)
+	love.graphics.print('Jockey1.y: ' .. tostring(Jockeys[1].y), 5, 45)
+	love.graphics.print('TcollideJ: ' .. tostring(Taxis[1]:collides(Jockeys[1])), 5, 55)
+    --]]
+
 end
