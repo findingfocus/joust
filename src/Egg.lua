@@ -20,7 +20,7 @@ function Egg:init(lastX, lastY, dx, index)
 	self.eggSprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
 	self.hatched = false
 	self.hatching = false
-	self.hatchCountdown = 10--15
+	self.hatchCountdown = 3--10
 	self.hatchAnim = 0
 	self.jockey = Jockey(-20, -20)
 end
@@ -63,9 +63,9 @@ function Egg:update(dt)
 
 		self.x = self.x + self.dx
 		if self.dx > 0 then
-			self.dx = math.max(0, self.dx - .003)
+			self.dx = math.max(0, self.dx - .006)
 		elseif self.dx < 0 then
-			self.dx = math.min(0, self.dx + .003)
+			self.dx = math.min(0, self.dx + .006)
 		end
 
 		self.dy = self.dy + .02

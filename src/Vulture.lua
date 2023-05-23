@@ -119,6 +119,7 @@ function Vulture:update(dt)
             self.dxAssigned = true
         end
 	else
+        self.tier = 3
         self.atlas = shadowlordAtlas
         if not self.dxAssigned then
             self.dx = self.dx * 2.4

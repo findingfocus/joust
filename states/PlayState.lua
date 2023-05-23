@@ -16,6 +16,7 @@ function PlayState:init()
 	Jockeys = {}
 	Taxis = {}
 	scoresTable = {}
+    timesEggHatched = {0, 0, 0}
 	wave = 1
 	lives = 8
 	eggCount = 1
@@ -327,6 +328,7 @@ function PlayState:update(dt)
 ---[[JOCKEY AND TAXI SPAWN
 	for i = 1, 3 do
 		if Eggs[i].hatched then
+            timesEggHatched[i] = timesEggHatched[i] + 1
 			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY)
 			Jockeys[i].graveyard = false
 			if Jockeys[i].x <= VIRTUAL_WIDTH / 2 then --IF JOCKEY LEFT SIDE OF SCREEN
@@ -523,7 +525,8 @@ function PlayState:update(dt)
             Vultures[i].graveyard = false
             Vultures[i].spawning = false
             Vultures[i].grounded = false
-            Vultures[i].tier = Vultures[i].tier + 2
+            --Vultures[i].tier = Vultures[i].tier + 1
+            Vultures[i].tier = timesEggHatched[i] + 1
         end
     end
     --]]
@@ -661,9 +664,9 @@ function PlayState:render()
 	love.graphics.print('TcollideJ: ' .. tostring(Taxis[1]:collides(Jockeys[1])), 5, 55)
     --]]
     ---[[
-	love.graphics.print('Vulture1.tier: ' .. tostring(Vultures[1].tier), 5, 15)
-	love.graphics.print('Vulture2.tier: ' .. tostring(Vultures[2].tier), 5, 25)
-	love.graphics.print('Vulture3.tier: ' .. tostring(Vultures[3].tier), 5, 35)
+	love.graphics.print('Vulture1: ' .. tostring(timesEggHatched[1]), 5, 15)
+	love.graphics.print('Vulture2: ' .. tostring(timesEggHatched[2]), 5, 25)
+	love.graphics.print('Vulture3: ' .. tostring(timesEggHatched[3]), 5, 35)
 --]]
 
 end
