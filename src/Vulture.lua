@@ -109,6 +109,7 @@ function Vulture:leftCollides(collidable)
 end
 
 function Vulture:update(dt)
+    ---[[
 	if self.tier == 1 then
 		self.atlas = bounderAtlas
 	elseif self.tier == 2 then
@@ -124,6 +125,7 @@ function Vulture:update(dt)
             self.dxAssigned = true
         end
 	end
+    --]]
 
 	if self.graveyard then
 		self.x = -20
@@ -285,7 +287,7 @@ function Vulture:update(dt)
 			self.timeBetweenJumps = self.timeBetweenJumps - dt
 
 			if self.timeBetweenJumps < 0 then
-				--love.math.setRandomSeed(self.index)
+				love.math.setRandomSeed(self.index)
 				self.justJumped = true
                 if self.tier == 1 then
                     self.timeBetweenJumps = math.random(.2, .3, .5, 1, 1, 2, 3, 3, 3, 3, 5)

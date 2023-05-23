@@ -92,7 +92,7 @@ function PlayState:update(dt)
 		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
 		if not tablesPopulated then
 			for i = 1, 3 do
-				Vultures[i] = Vulture(-60, -60, 16, 24, -20, -1, i)
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
@@ -125,23 +125,23 @@ function PlayState:update(dt)
 		if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
 			vultureSpawnTimer = 8
 			vultureSpawnPointIndex = math.random(4)
-			Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 1)
+			Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
 			Vultures[1] = Vulture1
-			Vulture1.graveyard = false
+			Vultures[1].graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
 			vultureSpawnTimer = 6
 			vultureSpawnPointIndex = math.random(4)
-			--Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 2)
-			--Vultures[2] = Vulture2
-			--Vulture2.graveyard = false
+			Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2)
+			Vultures[2] = Vulture2
+			Vultures[2].graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
 			vultureSpawnTimer = 0
 			vultureSpawnPointIndex = math.random(4)
-			--Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, 3)
-			--Vultures[3] = Vulture3
-			--Vulture3.graveyard = false
+			Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3)
+			Vultures[3] = Vulture3
+			Vultures[3].graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
 	end
@@ -509,7 +509,7 @@ function PlayState:update(dt)
 	end
 
 --TAXI TO JOCKEY COLLISION --INSTANTIATES HIGHER TIER VULTURE
---[
+---[[
     for i = 1, 3 do
         if Taxis[i]:collides(Jockeys[i]) then
             Taxis[i].graveyard = true
@@ -523,7 +523,7 @@ function PlayState:update(dt)
             Vultures[i].graveyard = false
             Vultures[i].spawning = false
             Vultures[i].grounded = false
-            Vultures[i].tier = Vultures[i].tier + 1
+            Vultures[i].tier = Vultures[i].tier + 2
         end
     end
     --]]
@@ -660,5 +660,10 @@ function PlayState:render()
 	love.graphics.print('Jockey1.y: ' .. tostring(Jockeys[1].y), 5, 45)
 	love.graphics.print('TcollideJ: ' .. tostring(Taxis[1]:collides(Jockeys[1])), 5, 55)
     --]]
+    ---[[
+	love.graphics.print('Vulture1.tier: ' .. tostring(Vultures[1].tier), 5, 15)
+	love.graphics.print('Vulture2.tier: ' .. tostring(Vultures[2].tier), 5, 25)
+	love.graphics.print('Vulture3.tier: ' .. tostring(Vultures[3].tier), 5, 35)
+--]]
 
 end
