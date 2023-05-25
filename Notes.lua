@@ -1,5 +1,10 @@
 X_Figure hunter ai dx
 X_Figure shadowLord dx
-__Figure hunter flapping
-__Figure shadowlord flapping
-__Destanstantiate Taxi if egg collected
+X_Figure hunter flapping
+X_Figure shadowlord flapping
+X_Destanstantiate Taxi if egg collected
+__Add collide sound restriction if vulture just collided
+__Add jumping to taxi class
+__Add jumping to taxi class only if taxi.y > jockey.y
+__Add blue jockey if bounder is killed
+__Check original game for what jockey is spawned when shadowlord is killed and egg is popped

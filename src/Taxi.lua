@@ -13,7 +13,6 @@ function Taxi:init(x, y, width, height, dx, index)
 	self.facingRight = true
 	self.graveyard = true
 	self.grounded = false
-	running = 0
 	self.ground = Platform('name', 1, 1, 1, 1)
 	self.width = width
 	self.height = height

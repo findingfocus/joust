@@ -390,7 +390,7 @@ function PlayState:update(dt)
 			scoresTable[eggCount].lastX = Jockeys[i].lastX
 			scoresTable[eggCount].lastY = Jockeys[i].lastY
 			Jockeys[i].graveyard = true
-
+            Taxis[i].graveyard = true
 			if eggCount < 3 then
 				eggCount = eggCount + 1
 			end
