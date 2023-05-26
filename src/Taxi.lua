@@ -10,6 +10,10 @@ function Taxi:init(x, y, width, height, dx, index)
 	self.dy = 0
 	self.frame = 1
 	self.animationTimer = .06
+    self.needsToJump = false
+    self.flapped = false
+    self.jumpTimer = .5
+    self.flapCounter = 0
 	self.facingRight = true
 	self.graveyard = true
 	self.grounded = false
@@ -153,6 +157,29 @@ function Taxi:update(dt)
 			self.dy = self.dy + GRAVITY * dt
 		end
 
+        self.jumpTimer = self.jumpTimer - dt
+
+        if self.jumpTimer <= 0 then
+            self.needsToJump = true
+            self.jumpTimer = .5
+        end
+
+        if self.needsToJump then
+            self.flapped = true
+            self.dy = -.75
+            self.flapCounter = .1
+            self.needsToJump = false
+        end
+
+        if self.flapped then
+            self.flapCounter = self.flapCounter - dt
+        end
+
+        if self.flapCounter <= 0 then
+            self.flapped = false
+            self.flapCounter = 0
+        end
+
 		self.animationTimer = self.animationTimer - dt
 
 		if self.animationTimer < 0 then
@@ -165,8 +192,10 @@ function Taxi:update(dt)
 			self.animationTimer = .06
 		end
 
-		if not self.grounded then
+		if not self.grounded and not self.flapped then
 			taxi1Sprite:setViewport(6 + (self.width * 5), 0, self.width, 16, self.atlas:getDimensions())
+        elseif not self.grounded and self.flapped then
+			taxi1Sprite:setViewport(6 + (self.width * 6), 0, self.width, 16, self.atlas:getDimensions())
 		end
 
 	else -- IF GRAVEYARD
