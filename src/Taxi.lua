@@ -12,7 +12,6 @@ function Taxi:init(x, y, width, height, dx, index)
 	self.animationTimer = .06
     self.needsToJump = false
     self.flapped = false
-    self.jumpTimer = .5
     self.flapCounter = 0
 	self.facingRight = true
 	self.graveyard = true
@@ -53,6 +52,16 @@ function Taxi:bottomCollides(collidable)
 	end
 
 	return false
+end
+
+function Taxi:topCollides(collidable)
+    if (self.x < collidable.x + collidable.width - BUFFER and self.x + self.width > collidable.x + BUFFER) then
+        if (self.y < collidable.y + collidable.height and self.y + self.height > collidable.y) then
+            return true
+        end
+    end
+
+    return false
 end
 
 function Taxi:rightCollides(collidable)
@@ -104,6 +113,11 @@ function Taxi:update(dt)
 
 		self.x = self.x + self.dx
 
+        if self.y < 0 then
+            self.dy = 0
+            self.y = 0
+        end
+
 		--ENSURES GROUND FIELD IS PLATFORM THAT WE ARE STANDING ON, NOT JUST PLATFORM WE BOTTOM COLLIDED WITH
 		if self:checkGrounded(groundPlatform) then
 			self.ground = groundPlatform
@@ -145,6 +159,12 @@ function Taxi:update(dt)
 				self.dx = math.abs(self.dx) * -1
 				self.x = platform.x - self.width
 			end
+
+            if self:topCollides(platform) then
+               self.flapped = false
+               self.dy = 0
+               self.y = platform.y + platform.height
+            end
 		end
 
 		--ACTIVATING GRAVITY
@@ -157,16 +177,13 @@ function Taxi:update(dt)
 			self.dy = self.dy + GRAVITY * dt
 		end
 
-        self.jumpTimer = self.jumpTimer - dt
-
-        if self.jumpTimer <= 0 then
+        if self.y > Jockeys[self.index].y then
             self.needsToJump = true
-            self.jumpTimer = .5
         end
 
         if self.needsToJump then
             self.flapped = true
-            self.dy = -.75
+            self.dy = -.6
             self.flapCounter = .1
             self.needsToJump = false
         end
