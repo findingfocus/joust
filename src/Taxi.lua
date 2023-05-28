@@ -6,7 +6,7 @@ function Taxi:init(x, y, width, height, dx, index)
 	self.lastX = 0
 	self.lastY = 0
 	self.index = index
-	self.dx = dx * .5
+	self.dx = dx * 1.2
 	self.dy = 0
 	self.frame = 1
 	self.animationTimer = .06

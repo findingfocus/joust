@@ -24,6 +24,7 @@ function love.load()
 	hunterTaxiAtlas = love.graphics.newImage('src/pics/hunterTaxiAtlas.png')
 	shadowlordTaxiAtlas = love.graphics.newImage('src/pics/shadowlordTaxiAtlas.png')
 	whiteJockey = love.graphics.newImage('src/pics/whiteJockey.png')
+	blueJockey = love.graphics.newImage('src/pics/blueJockey.png')
 
 	temporarySafetyAtlas = love.graphics.newImage('src/pics/temporarySafetyAtlas.png')
 	platformLeft = love.graphics.newImage('src/pics/platformLeft.png')

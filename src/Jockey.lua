@@ -22,10 +22,13 @@ function Jockey:update(dt)
 			self.lastX = self.x
 			self.lastY = self.y
 		end
+        if timesEggHatched[self.index] > 1 then
+            self.image = blueJockey
+        end
 	end
 end
 
 function Jockey:render()
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.draw(self.image, self.x, self.y)
+    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+    love.graphics.draw(self.image, self.x, self.y)
 end

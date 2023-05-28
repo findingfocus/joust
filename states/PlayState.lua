@@ -329,7 +329,7 @@ function PlayState:update(dt)
 	for i = 1, 3 do
 		if Eggs[i].hatched then
             timesEggHatched[i] = timesEggHatched[i] + 1
-			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY)
+			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY, i)
 			Jockeys[i].graveyard = false
 			if Jockeys[i].x <= VIRTUAL_WIDTH / 2 then --IF JOCKEY LEFT SIDE OF SCREEN
 				Taxis[i] = Taxi(VIRTUAL_WIDTH, Jockeys[i].y - 25, 16, 24, -1, i)
@@ -663,7 +663,7 @@ function PlayState:render()
 	love.graphics.print('Jockey1.y: ' .. tostring(Jockeys[1].y), 5, 45)
 	love.graphics.print('TcollideJ: ' .. tostring(Taxis[1]:collides(Jockeys[1])), 5, 55)
     --]]
-    ---[[
+    --[[
 	love.graphics.print('Vulture1: ' .. tostring(timesEggHatched[1]), 5, 15)
 	love.graphics.print('Vulture2: ' .. tostring(timesEggHatched[2]), 5, 25)
 	love.graphics.print('Vulture3: ' .. tostring(timesEggHatched[3]), 5, 35)
