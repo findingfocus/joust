@@ -192,22 +192,27 @@ function Vulture:update(dt)
 
 				--LEFT COLLIDES SETS POSITIVE DX
 				if self:leftCollides(platform) then
-					if self.dx > .1 or self.dx < -.1 then
-						if self.collideTimer == 0 then
-							self.x = platform.x + platform.width
-							self.dx = math.abs(self.dx)
-							self.justCollided = true
-							sounds['collide']:play()
-						end
-					end
+                    if not self.justCollided then
+                        sounds['collide']:play()
+                    end
+                    if self.collideTimer == 0 then
+                        self.x = platform.x + platform.width
+                        self.dx = math.abs(self.dx)
+                        self.justCollided = true
+                    end
 				end
 
 				if self:rightCollides(platform) then
+                    if not self.justCollided then
+                        sounds['collide']:play()
+                    end
 					if self.dx > 0 then
 						self.dx = self.dx * -1
 					end
-                    if not self.justCollided then
-                        sounds['collide']:play()
+                    if self.collideTimer == 0 then
+                        self.x = platform.x - self.width
+                        self.dx = math.abs(self.dx)
+                        self.justCollided = true
                     end
 				end
 
