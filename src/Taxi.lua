@@ -183,7 +183,7 @@ function Taxi:update(dt)
 
         if self.needsToJump then
             self.flapped = true
-            self.dy = -.6
+            self.dy = -.45
             self.flapCounter = .1
             self.needsToJump = false
         end

@@ -63,14 +63,18 @@ function PlayState:checkGrounded(topObject, bottomObject)
 end
 
 function PlayState:update(dt)
+    if wave == 1 then
+        enemyObjects = 3
+        --POPULATE APPROPRIATE ENEMY GLOBAL TABLES
+    end
 
 	if love.keyboard.wasPressed('i') then
 		helpToggle = not helpToggle
 	end
 
 ---[[VULTURE COUNT
-	vultureCount = 0
 	for k, vulture in pairs(Vultures) do
+        vultureCount = 0
 		if not vulture.exploded then
 			vultureCount = vultureCount + 1
 		end
