@@ -24,10 +24,10 @@ function PlayState:init()
 	vultureSpawnPointIndex = 0
 	vultureSpawnTimer = 10
 	lowestEggScore = 0
+    enemyObjects = 0
 	wave1ScorePopulate = false
 	helpToggle = false
 	gameOver = false
-	refresh = true
 	tablesPopulated = false
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
@@ -63,11 +63,6 @@ function PlayState:checkGrounded(topObject, bottomObject)
 end
 
 function PlayState:update(dt)
-    if wave == 1 then
-        enemyObjects = 3
-        --POPULATE APPROPRIATE ENEMY GLOBAL TABLES
-    end
-
 	if love.keyboard.wasPressed('i') then
 		helpToggle = not helpToggle
 	end
@@ -83,11 +78,12 @@ function PlayState:update(dt)
 
 ---[[WAVE LOGIC
 	if wave == 1 then
+        enemyObjects = 3
 		if not wave1ScorePopulate then
 			lowestEggScore = 250
 
 			--SCORE TABLE INITIALIZATION
-			for i = 1, 3 do
+			for i = 1, enemyObjects do
 				table.insert(scoresTable, PrintScore(-20, -20, lowestEggScore))
 				lowestEggScore = lowestEggScore + 250 --Incremented by bounder score
 			end
@@ -96,7 +92,7 @@ function PlayState:update(dt)
 
 		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
 		if not tablesPopulated then
-			for i = 1, 3 do
+			for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
@@ -149,8 +145,18 @@ function PlayState:update(dt)
 			Vultures[3].graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
+
+        if Eggs[1].collected then --FIND MORE ELEGANT SOLUTION
+            if Eggs[2].collected then
+                if Eggs[3].collected then
+                   wave = 2
+                end
+            end
+        end
+
 	end
 --]]
+
 
 ---[[RESETS
 	--RESET PLAYER
@@ -231,7 +237,7 @@ function PlayState:update(dt)
 	--]]
 
 ---[[PLAYER TO ENEMY COLLISIONS
-	for i = 1, 3 do --Be sure to change 3 to variable for wave objects
+	for i = 1, enemyObjects do --Be sure to change 3 to variable for wave objects
 		if not player1.temporarySafety then
 			if Vultures[i].spawning == false then
 				if player1:enemyTopCollides(Vultures[i]) then
@@ -330,7 +336,7 @@ function PlayState:update(dt)
 	--]]
 
 ---[[JOCKEY AND TAXI SPAWN
-	for i = 1, 3 do
+	for i = 1, enemyObjects do
 		if Eggs[i].hatched then
             timesEggHatched[i] = timesEggHatched[i] + 1
 			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY, i)
@@ -349,7 +355,7 @@ function PlayState:update(dt)
 	--]]
 
 ---[[PLAYER TO OBJECT COLLISIONS
-	for i = 1, 3 do
+	for i = 1, enemyObjects do
 		if player1:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER TO EGG COLLISIONS
 			if math.abs(player1.dx) < .3 then --SLOW COLLISION
 				if player1.x + (player1.width / 2) < Eggs[i].x + 4.2 and player1.x + (player1.width / 2) > Eggs[i].x + 3.8 then
@@ -394,6 +400,7 @@ function PlayState:update(dt)
 			scoresTable[eggCount].lastX = Jockeys[i].lastX
 			scoresTable[eggCount].lastY = Jockeys[i].lastY
 			Jockeys[i].graveyard = true
+            Eggs[i].collected = true
             Taxis[i].graveyard = true
 			if eggCount < 3 then
 				eggCount = eggCount + 1
@@ -427,7 +434,7 @@ function PlayState:update(dt)
 		end
 	end
 
-	for i = 1, 3 do
+	for i = 1, enemyObjects do
 		if Eggs[i].bouncedOffFloor and not Eggs[i].collected then
 			scoresTable[i].doubleScore = false
 		end
@@ -516,7 +523,7 @@ function PlayState:update(dt)
 
 --TAXI TO JOCKEY COLLISION --INSTANTIATES HIGHER TIER VULTURE
 ---[[
-    for i = 1, 3 do
+    for i = 1, enemyObjects do
         if Taxis[i]:collides(Jockeys[i]) then
             Taxis[i].graveyard = true
             Jockeys[i].graveyard = true
@@ -536,7 +543,7 @@ function PlayState:update(dt)
     --]]
 
 ---[[OBJECT UPDATES
-	for i = 1, 3 do
+	for i = 1, enemyObjects do
 		Eggs[i]:update(dt)
 		Vultures[i]:update(dt)
 		Jockeys[i]:update(dt)
@@ -574,7 +581,7 @@ function PlayState:render()
 	love.graphics.print(tostring(lives), 138, VIRTUAL_HEIGHT - 28)
 
 ---[[RENDER OBJECT TABLES
-	for i = 1, 3 do
+	for i = 1, enemyObjects do
 		if not Vultures[i].graveyard or Vultures[i].explosionTimer ~= 0 then
 			Vultures[i]:render()
 		end
@@ -659,7 +666,7 @@ function PlayState:render()
 
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	--love.graphics.print('[1]', Vultures[1].x, Vultures[1].y - 8)
+	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
     --[[
 	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
 	love.graphics.print('Taxi1.y: ' .. tostring(Taxis[1].y), 5, 25)
