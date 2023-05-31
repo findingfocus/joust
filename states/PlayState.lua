@@ -667,6 +667,9 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
+	love.graphics.print('double: ' .. tostring(scoresTable[1].doubleScore), Eggs[1].x, Eggs[1].y - 15)
+	love.graphics.print('double: ' .. tostring(scoresTable[2].doubleScore), Eggs[2].x, Eggs[2].y - 15)
+	love.graphics.print('double: ' .. tostring(scoresTable[3].doubleScore), Eggs[3].x, Eggs[3].y - 15)
     --[[
 	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
 	love.graphics.print('Taxi1.y: ' .. tostring(Taxis[1].y), 5, 25)

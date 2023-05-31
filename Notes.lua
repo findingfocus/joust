@@ -16,3 +16,4 @@ __Add wave 2 spawns
 __raise lava level after wave 1
 __Research how scores are calculated in original
 __Come up with better way to check if all enemyObjects.hatched == true
+__Reset doubleScore if vulture tier upgraded
