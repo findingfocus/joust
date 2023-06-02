@@ -17,3 +17,19 @@ __raise lava level after wave 1
 __Research how scores are calculated in original
 __Come up with better way to check if all enemyObjects.hatched == true
 __Reset doubleScore if vulture tier upgraded
+
+
+SCORE UPDATE
+Unseating Bounder   500
+Unseating Hunter    750
+Unseating Shadowlord    1500
+Killing Pterodactyl 1000
+First Egg   250
+Second Egg  750
+Third Egg   750
+Fourth+ Egg 1000
+Egg bonus in air    500
+SUCCESSFUL WAVE 3000
+
+**Losing mount resets Egg to base Value
+
