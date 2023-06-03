@@ -5,7 +5,7 @@ function PrintScore:init(lastX, lastY, scoreAmount)
 	self.lastX = lastX
 	self.lastY = lastY
 	self.scoreAmount = scoreAmount
-	self.doubleScore = true
+	self.midairBonus = true
 end
 
 function PrintScore:update(dt)
@@ -23,9 +23,9 @@ function PrintScore:render()
 		love.graphics.setFont(smallerFont)
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		love.graphics.print(tostring(self.scoreAmount), self.lastX, self.lastY)
-		if self.doubleScore == true then
+		if self.midairBonus == true then
 			love.graphics.setColor(255/255, 255/255, 77/255, 255/255)
-			love.graphics.print(tostring(self.scoreAmount), self.lastX, self.lastY - 8)
+			love.graphics.print(tostring(500), self.lastX, self.lastY - 8)
 		end
 	end
 end

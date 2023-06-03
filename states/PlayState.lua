@@ -366,8 +366,8 @@ function PlayState:update(dt)
 					scoresTable[eggCount].lastX = Eggs[i].lastX
 					scoresTable[eggCount].lastY = Eggs[i].lastY
 					scoresTable[eggCount].timer = 1.5
-					if scoresTable[eggCount].doubleScore then
-						Score = Score + scoresTable[eggCount].scoreAmount * 2
+					if scoresTable[eggCount].midairBonus then
+						Score = Score + scoresTable[eggCount].scoreAmount + 500
 					else
 						Score = Score + scoresTable[eggCount].scoreAmount
 					end
@@ -382,8 +382,8 @@ function PlayState:update(dt)
 				scoresTable[eggCount].lastX = Eggs[i].lastX
 				scoresTable[eggCount].lastY = Eggs[i].lastY
 				scoresTable[eggCount].timer = 1.5
-				if scoresTable[eggCount].doubleScore then
-					Score = Score + scoresTable[eggCount].scoreAmount * 2
+				if scoresTable[eggCount].midairBonus then
+					Score = Score + scoresTable[eggCount].scoreAmount + 500
 				else
 					Score = Score + scoresTable[eggCount].scoreAmount
 				end
@@ -397,7 +397,7 @@ function PlayState:update(dt)
 ---[[PLAYER TO JOCKEY COLLISION
 		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
 			Jockeys[i].collected = true
-			scoresTable[eggCount].doubleScore = false
+			scoresTable[eggCount].midairBonus = false
 			Score = Score + scoresTable[eggCount].scoreAmount
 			scoresTable[eggCount].timer = 1.5
 			scoresTable[eggCount].lastX = Jockeys[i].lastX
@@ -439,7 +439,7 @@ function PlayState:update(dt)
 
 	for i = 1, enemyObjects do
 		if Eggs[i].bouncedOffFloor and not Eggs[i].collected then
-			scoresTable[i].doubleScore = false
+			scoresTable[i].midairBonus = false
 		end
 	end
 	--]]
@@ -673,9 +673,6 @@ function PlayState:render()
 --DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
-	love.graphics.print('double: ' .. tostring(scoresTable[1].doubleScore), Eggs[1].x, Eggs[1].y - 15)
-	love.graphics.print('double: ' .. tostring(scoresTable[2].doubleScore), Eggs[2].x, Eggs[2].y - 15)
-	love.graphics.print('double: ' .. tostring(scoresTable[3].doubleScore), Eggs[3].x, Eggs[3].y - 15)
     love.graphics.print('eggsCaught: ' .. tostring(eggsCaught), 10, 20)
     --[[
 	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
