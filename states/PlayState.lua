@@ -16,6 +16,7 @@ function PlayState:init()
 	Jockeys = {}
 	Taxis = {}
 	scoresTable = {}
+    eggsCaught = 0
     timesEggHatched = {0, 0, 0}
 	wave = 1
 	lives = 8
@@ -359,6 +360,7 @@ function PlayState:update(dt)
 		if player1:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER TO EGG COLLISIONS
 			if math.abs(player1.dx) < .3 then --SLOW COLLISION
 				if player1.x + (player1.width / 2) < Eggs[i].x + 4.2 and player1.x + (player1.width / 2) > Eggs[i].x + 3.8 then
+                    eggsCaught = eggsCaught + 1
 					Eggs[i].graveyard = true
 					Eggs[i].collected = true
 					scoresTable[eggCount].lastX = Eggs[i].lastX
@@ -374,6 +376,7 @@ function PlayState:update(dt)
 					end
 				end
 			elseif math.abs(player1.dx) >= .3 then --FAST COLLISION
+                eggsCaught = eggsCaught + 1
 				Eggs[i].graveyard = true
 				Eggs[i].collected = true
 				scoresTable[eggCount].lastX = Eggs[i].lastX
@@ -541,6 +544,9 @@ function PlayState:update(dt)
         end
     end
     --]]
+    if player1.exploded then
+        eggsCaught = 0
+    end
 
 ---[[OBJECT UPDATES
 	for i = 1, enemyObjects do
@@ -670,6 +676,7 @@ function PlayState:render()
 	love.graphics.print('double: ' .. tostring(scoresTable[1].doubleScore), Eggs[1].x, Eggs[1].y - 15)
 	love.graphics.print('double: ' .. tostring(scoresTable[2].doubleScore), Eggs[2].x, Eggs[2].y - 15)
 	love.graphics.print('double: ' .. tostring(scoresTable[3].doubleScore), Eggs[3].x, Eggs[3].y - 15)
+    love.graphics.print('eggsCaught: ' .. tostring(eggsCaught), 10, 20)
     --[[
 	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
 	love.graphics.print('Taxi1.y: ' .. tostring(Taxis[1].y), 5, 25)

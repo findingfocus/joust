@@ -25,7 +25,7 @@ Unseating Hunter    750
 Unseating Shadowlord    1500
 Killing Pterodactyl 1000
 First Egg   250
-Second Egg  750
+Second Egg  500
 Third Egg   750
 Fourth+ Egg 1000
 Egg bonus in air    500
