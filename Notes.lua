@@ -20,6 +20,7 @@ __Reset midairBonus if vulture tier upgraded
 __Add scoreamount to global table upon egg collection based on eggsCaught
 __Check for appropriate scores upon vulture unseating
 __Ensure midairBonus remains false upon egg hatch
+__Ensure midair bonus increments score, not just renders the bonus
 
 
 SCORE UPDATE

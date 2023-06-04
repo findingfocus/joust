@@ -85,7 +85,7 @@ function PlayState:update(dt)
 
 			--SCORE TABLE INITIALIZATION
 			for i = 1, enemyObjects do
-				table.insert(scoresTable, PrintScore(-20, -20, lowestEggScore))
+				table.insert(scoresTable, PrintScore(-20, -20, lowestEggScore, true, i))
 				lowestEggScore = lowestEggScore + 250 --Incremented by bounder score
 			end
 			wave1ScorePopulate = true
@@ -179,6 +179,12 @@ function PlayState:update(dt)
 		Vultures[1] = Vulture1
 		Vultures[2] = Vulture2
 		Vultures[3] = Vulture3
+        Eggs[1].midairBonus = true
+        Eggs[2].midairBonus = true
+        Eggs[3].midairBonus = true
+        scoresTable[1].bonus = true
+        scoresTable[2].bonus = true
+        scoresTable[3].bonus = true
 	end
 --]]
 
@@ -366,7 +372,7 @@ function PlayState:update(dt)
 					scoresTable[eggCount].lastX = Eggs[i].lastX
 					scoresTable[eggCount].lastY = Eggs[i].lastY
 					scoresTable[eggCount].timer = 1.5
-					if scoresTable[eggCount].midairBonus then
+					if scoresTable[eggCount].bonus then
 						Score = Score + scoresTable[eggCount].scoreAmount + 500
 					else
 						Score = Score + scoresTable[eggCount].scoreAmount
@@ -382,7 +388,7 @@ function PlayState:update(dt)
 				scoresTable[eggCount].lastX = Eggs[i].lastX
 				scoresTable[eggCount].lastY = Eggs[i].lastY
 				scoresTable[eggCount].timer = 1.5
-				if scoresTable[eggCount].midairBonus then
+				if scoresTable[eggCount].bonus then
 					Score = Score + scoresTable[eggCount].scoreAmount + 500
 				else
 					Score = Score + scoresTable[eggCount].scoreAmount
@@ -397,7 +403,7 @@ function PlayState:update(dt)
 ---[[PLAYER TO JOCKEY COLLISION
 		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
 			Jockeys[i].collected = true
-			scoresTable[eggCount].midairBonus = false
+			scoresTable[eggCount].bonus = false
 			Score = Score + scoresTable[eggCount].scoreAmount
 			scoresTable[eggCount].timer = 1.5
 			scoresTable[eggCount].lastX = Jockeys[i].lastX
@@ -439,7 +445,8 @@ function PlayState:update(dt)
 
 	for i = 1, enemyObjects do
 		if Eggs[i].bouncedOffFloor and not Eggs[i].collected then
-			scoresTable[i].midairBonus = false
+			Eggs[i].midairBonus = false
+            scoresTable[i].bonus = false
 		end
 	end
 	--]]
@@ -674,6 +681,9 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
     love.graphics.print('eggsCaught: ' .. tostring(eggsCaught), 10, 20)
+    love.graphics.print('Bonus[1]: ' .. tostring(Eggs[1].midairBonus), 10, 30)
+    love.graphics.print('Bonus[2]: ' .. tostring(Eggs[2].midairBonus), 10, 40)
+    love.graphics.print('Bonus[3]: ' .. tostring(Eggs[3].midairBonus), 10, 50)
     --[[
 	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
 	love.graphics.print('Taxi1.y: ' .. tostring(Taxis[1].y), 5, 25)

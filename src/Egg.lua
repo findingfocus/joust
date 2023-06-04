@@ -11,10 +11,11 @@ function Egg:init(lastX, lastY, dx, index)
 	self.atlas = eggAtlas
 	self.dx = dx
 	self.dy = 0
-	self.eggInvulnerableTimer = .5
+	self.eggInvulnerableTimer = .1--.5
 	self.bouncedOffFloor = false
 	self.invulnerable = false
 	self.collected = false
+    self.midairBonus = true
 	self.jockeySpawned = false
 	self.graveyard = true
 	self.eggSprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())

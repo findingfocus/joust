@@ -354,10 +354,10 @@ end
 
 
 function Vulture:render()
---[[
+---[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.setFont(smallFont)
-	love.graphics.print('TopCollision: ' .. tostring(player1:enemyTopCollides(self)), 5, 10)
+	love.graphics.print(tostring(self.index), self.x, self.y - 10)
 --]]
 	if not self.exploded then
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

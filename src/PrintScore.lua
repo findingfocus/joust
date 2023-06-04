@@ -1,11 +1,12 @@
 PrintScore = Class{}
 
-function PrintScore:init(lastX, lastY, scoreAmount)
+function PrintScore:init(lastX, lastY, scoreAmount, midair, index)
 	self.timer = 0
 	self.lastX = lastX
 	self.lastY = lastY
 	self.scoreAmount = scoreAmount
-	self.midairBonus = true
+	self.bonus = midair
+    self.index = index
 end
 
 function PrintScore:update(dt)
@@ -23,7 +24,7 @@ function PrintScore:render()
 		love.graphics.setFont(smallerFont)
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		love.graphics.print(tostring(self.scoreAmount), self.lastX, self.lastY)
-		if self.midairBonus == true then
+		if self.bonus == true then
 			love.graphics.setColor(255/255, 255/255, 77/255, 255/255)
 			love.graphics.print(tostring(500), self.lastX, self.lastY - 8)
 		end
