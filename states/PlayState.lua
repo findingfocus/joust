@@ -24,7 +24,6 @@ function PlayState:init()
 	spawnPointIndex = 0
 	vultureSpawnPointIndex = 0
 	vultureSpawnTimer = 10
-	lowestEggScore = 0
     enemyObjects = 0
 	wave1ScorePopulate = false
 	helpToggle = false
@@ -81,12 +80,9 @@ function PlayState:update(dt)
 	if wave == 1 then
         enemyObjects = 3
 		if not wave1ScorePopulate then
-			lowestEggScore = 250
-
 			--SCORE TABLE INITIALIZATION
 			for i = 1, enemyObjects do
-				table.insert(scoresTable, PrintScore(-20, -20, lowestEggScore, true, i))
-				lowestEggScore = lowestEggScore + 250 --Incremented by bounder score
+				table.insert(scoresTable, PrintScore(-20, -20, 250, true, i))
 			end
 			wave1ScorePopulate = true
 		end
@@ -369,33 +365,26 @@ function PlayState:update(dt)
                     eggsCaught = eggsCaught + 1
 					Eggs[i].graveyard = true
 					Eggs[i].collected = true
-					scoresTable[eggCount].lastX = Eggs[i].lastX
-					scoresTable[eggCount].lastY = Eggs[i].lastY
-					scoresTable[eggCount].timer = 1.5
-					if scoresTable[eggCount].bonus then
-						Score = Score + scoresTable[eggCount].scoreAmount + 500
+					scoresTable[eggsCaught].lastX = Eggs[i].lastX
+					scoresTable[eggsCaught].lastY = Eggs[i].lastY
+					scoresTable[eggsCaught].timer = 1.5
+					if scoresTable[eggsCaught].bonus then
+						Score = Score + scoresTable[eggsCaught].scoreAmount + 500
 					else
-						Score = Score + scoresTable[eggCount].scoreAmount
-					end
-					if eggCount < 3 then
-						eggCount = eggCount + 1
+						Score = Score + scoresTable[eggsCaught].scoreAmount
 					end
 				end
 			elseif math.abs(player1.dx) >= .3 then --FAST COLLISION
                 eggsCaught = eggsCaught + 1
 				Eggs[i].graveyard = true
 				Eggs[i].collected = true
-				scoresTable[eggCount].lastX = Eggs[i].lastX
-				scoresTable[eggCount].lastY = Eggs[i].lastY
-				scoresTable[eggCount].timer = 1.5
-				if scoresTable[eggCount].bonus then
-					Score = Score + scoresTable[eggCount].scoreAmount + 500
+				scoresTable[eggsCaught].lastX = Eggs[i].lastX
+				scoresTable[eggsCaught].lastY = Eggs[i].lastY
+				scoresTable[eggsCaught].timer = 1.5
+				if scoresTable[eggsCaught].bonus then
+					Score = Score + scoresTable[eggsCaught].scoreAmount + 500
 				else
-					Score = Score + scoresTable[eggCount].scoreAmount
-				end
-
-				if eggCount < 3 then --PREVENTS EGGCOUNT FROM INDEXING MORE THAN AVAILABLE OBJECTS, CHANGE FROM 3 TO WAVE OBJECTS VARIABLE
-					eggCount = eggCount + 1
+					Score = Score + scoresTable[eggsCaught].scoreAmount
 				end
 			end
 		end
@@ -403,17 +392,14 @@ function PlayState:update(dt)
 ---[[PLAYER TO JOCKEY COLLISION
 		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
 			Jockeys[i].collected = true
-			scoresTable[eggCount].bonus = false
-			Score = Score + scoresTable[eggCount].scoreAmount
-			scoresTable[eggCount].timer = 1.5
-			scoresTable[eggCount].lastX = Jockeys[i].lastX
-			scoresTable[eggCount].lastY = Jockeys[i].lastY
+			scoresTable[eggsCaught].bonus = false
+			Score = Score + scoresTable[eggsCaught].scoreAmount
+			scoresTable[eggsCaught].timer = 1.5
+			scoresTable[eggsCaught].lastX = Jockeys[i].lastX
+			scoresTable[eggsCaught].lastY = Jockeys[i].lastY
 			Jockeys[i].graveyard = true
             Eggs[i].collected = true
             Taxis[i].graveyard = true
-			if eggCount < 3 then
-				eggCount = eggCount + 1
-			end
 		end
 	--]]
 
@@ -681,9 +667,12 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
     love.graphics.print('eggsCaught: ' .. tostring(eggsCaught), 10, 20)
-    love.graphics.print('Bonus[1]: ' .. tostring(Eggs[1].midairBonus), 10, 30)
-    love.graphics.print('Bonus[2]: ' .. tostring(Eggs[2].midairBonus), 10, 40)
-    love.graphics.print('Bonus[3]: ' .. tostring(Eggs[3].midairBonus), 10, 50)
+    love.graphics.print('midairBonus[1]: ' .. tostring(Eggs[1].midairBonus), 10, 30)
+    love.graphics.print('.bonus[1]: ' .. tostring(scoresTable[1].bonus), 10, 40)
+    love.graphics.print('midairBonus[2]: ' .. tostring(Eggs[2].midairBonus), 10, 50)
+    love.graphics.print('.bonus[2]: ' .. tostring(scoresTable[2].bonus), 10, 60)
+    love.graphics.print('midairBonus[3]: ' .. tostring(Eggs[3].midairBonus), 10, 70)
+    love.graphics.print('.bonus[3]: ' .. tostring(scoresTable[3].bonus), 10, 80)
     --[[
 	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
 	love.graphics.print('Taxi1.y: ' .. tostring(Taxis[1].y), 5, 25)
