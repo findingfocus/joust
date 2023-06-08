@@ -20,7 +20,6 @@ function PlayState:init()
     timesEggHatched = {0, 0, 0}
 	wave = 1
 	lives = 8
-	eggCount = 1
 	spawnPointIndex = 0
 	vultureSpawnPointIndex = 0
 	vultureSpawnTimer = 10
@@ -82,7 +81,7 @@ function PlayState:update(dt)
 		if not wave1ScorePopulate then
 			--SCORE TABLE INITIALIZATION
 			for i = 1, enemyObjects do
-				table.insert(scoresTable, PrintScore(-20, -20, 250, true, i))
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
 			end
 			wave1ScorePopulate = true
 		end
@@ -365,38 +364,49 @@ function PlayState:update(dt)
                     eggsCaught = eggsCaught + 1
 					Eggs[i].graveyard = true
 					Eggs[i].collected = true
-					scoresTable[eggsCaught].lastX = Eggs[i].lastX
-					scoresTable[eggsCaught].lastY = Eggs[i].lastY
-					scoresTable[eggsCaught].timer = 1.5
-					if scoresTable[eggsCaught].bonus then
-						Score = Score + scoresTable[eggsCaught].scoreAmount + 500
-					else
-						Score = Score + scoresTable[eggsCaught].scoreAmount
-					end
+					scoresTable[i].lastX = Eggs[i].lastX
+					scoresTable[i].lastY = Eggs[i].lastY
+					scoresTable[i].timer = 1.5
+					if scoresTable[i].bonus then
+                        Score = Score + 500
+                    end
+                    if eggsCaught > 3 then
+                        scoresTable[i].scoreAmount = 1000
+                        Score = Score + scoresTable[i].scoreAmount
+                    else
+                        scoresTable[i].scoreAmount = eggsCaught * 250
+                        Score = Score + scoresTable[i].scoreAmount
+                    end
 				end
 			elseif math.abs(player1.dx) >= .3 then --FAST COLLISION
                 eggsCaught = eggsCaught + 1
 				Eggs[i].graveyard = true
 				Eggs[i].collected = true
-				scoresTable[eggsCaught].lastX = Eggs[i].lastX
-				scoresTable[eggsCaught].lastY = Eggs[i].lastY
-				scoresTable[eggsCaught].timer = 1.5
-				if scoresTable[eggsCaught].bonus then
-					Score = Score + scoresTable[eggsCaught].scoreAmount + 500
-				else
-					Score = Score + scoresTable[eggsCaught].scoreAmount
-				end
+				scoresTable[i].lastX = Eggs[i].lastX
+				scoresTable[i].lastY = Eggs[i].lastY
+				scoresTable[i].timer = 1.5
+                if scoresTable[i].bonus then
+                    Score = Score + 500
+                end
+                if eggsCaught > 3 then
+                    scoresTable[i].scoreAmount = 1000
+                    Score = Score + scoresTable[i].scoreAmount
+                else
+                    scoresTable[i].scoreAmount = eggsCaught * 250
+                    Score = Score + scoresTable[i].scoreAmount
+                end
 			end
 		end
 
 ---[[PLAYER TO JOCKEY COLLISION
 		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
 			Jockeys[i].collected = true
-			scoresTable[eggsCaught].bonus = false
-			Score = Score + scoresTable[eggsCaught].scoreAmount
-			scoresTable[eggsCaught].timer = 1.5
-			scoresTable[eggsCaught].lastX = Jockeys[i].lastX
-			scoresTable[eggsCaught].lastY = Jockeys[i].lastY
+			scoresTable[i].bonus = false
+            scoresTable[i].scoreAmount = 250
+			Score = Score + scoresTable[i].scoreAmount
+			scoresTable[i].timer = 1.5
+			scoresTable[i].lastX = Jockeys[i].lastX
+			scoresTable[i].lastY = Jockeys[i].lastY
 			Jockeys[i].graveyard = true
             Eggs[i].collected = true
             Taxis[i].graveyard = true
@@ -664,6 +674,7 @@ function PlayState:render()
     love.graphics.setFont(smallFont)
 
 --DEBUG INFO
+--[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
     love.graphics.print('eggsCaught: ' .. tostring(eggsCaught), 10, 20)
@@ -673,6 +684,7 @@ function PlayState:render()
     love.graphics.print('.bonus[2]: ' .. tostring(scoresTable[2].bonus), 10, 60)
     love.graphics.print('midairBonus[3]: ' .. tostring(Eggs[3].midairBonus), 10, 70)
     love.graphics.print('.bonus[3]: ' .. tostring(scoresTable[3].bonus), 10, 80)
+    -]]
     --[[
 	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
 	love.graphics.print('Taxi1.y: ' .. tostring(Taxis[1].y), 5, 25)
