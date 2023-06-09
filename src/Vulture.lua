@@ -25,7 +25,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.platformSpawnY = platformSpawn
 	self.spawnHeight = 0
 	self.explosionTimer = 0
-	self.pointTier = 500
+	self.pointTier = 0
 	self.justStoppedTimer = INPUTLAG
 	self.justTurnedTimer = INPUTLAG
 	self.grounded = false
@@ -112,14 +112,17 @@ function Vulture:update(dt)
     ---[[
 	if self.tier == 1 then
 		self.atlas = bounderAtlas
+        self.pointTier = 500
 	elseif self.tier == 2 then
 		self.atlas = hunterAtlas
+        self.pointTier = 750
         if not self.dxAssigned then
             self.dx = self.dx * 1.5
             self.dxAssigned = true
         end
 	else
         self.tier = 3
+        self.pointTier = 1500
         self.atlas = shadowlordAtlas
         if not self.dxAssigned then
             self.dx = self.dx * 2.4

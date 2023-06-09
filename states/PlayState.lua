@@ -174,6 +174,9 @@ function PlayState:update(dt)
 		Vultures[1] = Vulture1
 		Vultures[2] = Vulture2
 		Vultures[3] = Vulture3
+        Vultures[1].tier = 3
+        Vultures[2].tier = 3
+        Vultures[3].tier = 3
         Eggs[1].midairBonus = true
         Eggs[2].midairBonus = true
         Eggs[3].midairBonus = true
@@ -544,6 +547,9 @@ function PlayState:update(dt)
             Vultures[i].grounded = false
             --Vultures[i].tier = Vultures[i].tier + 1
             Vultures[i].tier = timesEggHatched[i] + 1
+            Eggs[i].midairBonus = true
+            Eggs[i].bouncedOffFloor = false
+            scoresTable[i].bonus = true
         end
     end
     --]]

@@ -11,7 +11,7 @@ function Egg:init(lastX, lastY, dx, index)
 	self.atlas = eggAtlas
 	self.dx = dx
 	self.dy = 0
-	self.eggInvulnerableTimer = .5--.5
+	self.eggInvulnerableTimer = .05--.5
 	self.bouncedOffFloor = false
 	self.invulnerable = false
 	self.collected = false
