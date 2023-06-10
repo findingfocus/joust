@@ -16,7 +16,7 @@ __Add wave 2 text
 __Add wave 2 spawns
 __raise lava level after wave 1
 __Come up with better way to check if all enemyObjects.hatched == true
-__Reset midairBonus if vulture tier upgraded
+X_Reset midairBonus if vulture tier upgraded
 X_Add scoreamount to global table upon egg collection based on eggsCaught
 X_Check for appropriate scores upon vulture unseating
 __Ensure midairBonus remains false upon egg hatch

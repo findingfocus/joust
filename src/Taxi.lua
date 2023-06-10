@@ -178,7 +178,7 @@ function Taxi:update(dt)
 		end
 
         if self.y > Jockeys[self.index].y then
-            self.needsToJump = true
+            --self.needsToJump = true
         end
 
         if self.needsToJump then
