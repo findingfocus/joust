@@ -21,7 +21,7 @@ function Taxi:init(x, y, width, height, dx, index)
 	self.height = height
 	self.tier = 1
 	self.atlas = hunterTaxiAtlas
-	taxi1Sprite = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
+	self.quad = love.graphics.newQuad(1, 0, self.width, self.height, self.atlas:getDimensions())
 end
 
 function Taxi:collides(collidable)
@@ -136,7 +136,7 @@ function Taxi:update(dt)
 			self.height = 24
 			self.ground = groundPlatform
 			self.y = groundPlatform.y - self.height
-			taxi1Sprite:setViewport(1, 0, self.width, 24, self.atlas:getDimensions())
+			self.quad:setViewport(1, 0, self.width, 24, self.atlas:getDimensions())
 		end
 
 		for k, platform in pairs(collidablePlatforms) do
@@ -147,7 +147,7 @@ function Taxi:update(dt)
 				self.height = 24
 				self.ground = platform
 				self.y = platform.y - self.height
-				taxi1Sprite:setViewport(1, 0, self.width, 24, self.atlas:getDimensions())
+				self.quad:setViewport(1, 0, self.width, 24, self.atlas:getDimensions())
 			end
 
 			if self:leftCollides(platform) then
@@ -201,18 +201,18 @@ function Taxi:update(dt)
 
 		if self.animationTimer < 0 then
 			--GROUNDED ANIMATION
-			taxi1Sprite:setViewport(self.frame + (self.width * (self.frame - 1)), 0, self.width, 24, self.atlas:getDimensions())
-			self.frame = self.frame + 1
-			if self.frame > 4 then
-				self.frame = 1
-			end
-			self.animationTimer = .06
+            self.quad:setViewport(self.frame + (self.width * (self.frame - 1)), 0, self.width, 24, self.atlas:getDimensions())
+            self.frame = self.frame + 1
+            if self.frame > 4 then
+                self.frame = 1
+            end
+            self.animationTimer = .06
 		end
 
 		if not self.grounded and not self.flapped then
-			taxi1Sprite:setViewport(6 + (self.width * 5), 0, self.width, 16, self.atlas:getDimensions())
+			self.quad:setViewport(6 + (self.width * 5), 0, self.width, 16, self.atlas:getDimensions())
         elseif not self.grounded and self.flapped then
-			taxi1Sprite:setViewport(6 + (self.width * 6), 0, self.width, 16, self.atlas:getDimensions())
+			self.quad:setViewport(6 + (self.width * 6), 0, self.width, 16, self.atlas:getDimensions())
 		end
 
 	else -- IF GRAVEYARD
@@ -230,12 +230,12 @@ function Taxi:render()
 		--love.graphics.print(tostring(self.index), self.x, self.y)
 		--love.graphics.print(tostring(self:checkGrounded(platform2)), self.x, self.y)
 		--love.graphics.print(tostring(self.grounded), self.x, self.y)
-		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, 1, 1)
+		love.graphics.draw(self.atlas, self.quad, self.x, self.y, 0, 1, 1)
 	else
 		--love.graphics.print(tostring(self.index), self.x, self.y)
 		--love.graphics.print(tostring(self:checkGrounded(platform2)), self.x, self.y)
 		--love.graphics.print(tostring(self.grounded), self.x, self.y)
-		love.graphics.draw(self.atlas, taxi1Sprite, self.x, self.y, 0, -1, 1, self.width)
+		love.graphics.draw(self.atlas, self.quad, self.x, self.y, 0, -1, 1, self.width)
 	end
 
 end
