@@ -27,8 +27,8 @@ function LavaBubble:update(dt)
 	end
 
 	--Triggers bubble spawn once particle at top of lava
-	if self.y < VIRTUAL_HEIGHT - LAVAHEIGHT - 2 then
-		self.y = VIRTUAL_HEIGHT - LAVAHEIGHT - 2
+	if self.y < VIRTUAL_HEIGHT - LAVAHEIGHT - 2 - lavaRise then
+		self.y = VIRTUAL_HEIGHT - LAVAHEIGHT - 2 - lavaRise
 		self.particleSpawn = false
 		self.bubbleSpawn = true
 	end

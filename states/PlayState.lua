@@ -24,6 +24,7 @@ function PlayState:init()
 	vultureSpawnPointIndex = 0
 	vultureSpawnTimer = 10
     enemyObjects = 0
+    lavaRise = 0
 	wave1ScorePopulate = false
 	helpToggle = false
 	gameOver = false
@@ -154,8 +155,13 @@ function PlayState:update(dt)
                 end
             end
         end
-
 	end
+
+    if wave == 2 then
+        if lavaRise < 3 then
+            lavaRise = lavaRise + dt
+        end
+    end
 --]]
 
 
@@ -584,14 +590,14 @@ function PlayState:render()
 	love.graphics.setColor(133/255, 70/255, 15/255, 255/255)
 	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - 36, VIRTUAL_WIDTH, 4)
 
+	--lava stand-in
+	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise, VIRTUAL_WIDTH, LAVAHEIGHT + 100)
+
 	--ground bottom stand-in
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.rectangle('fill', 53, VIRTUAL_HEIGHT - 36, 186, 32)
 	love.graphics.draw(groundBottom, 53, VIRTUAL_HEIGHT - 36)
-
-	--lava stand-in
-	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT, VIRTUAL_WIDTH, LAVAHEIGHT)
 
 	player1:render()
 	monster:render()

@@ -12,15 +12,16 @@ X_Check original game for what jockey is spawned when shadowlord is killed and e
 X_Need to ensure taxi picks up jockey on middle platform in tricky spot
 X_Research how scores are calculated in original
 X_Sometimes two taxis get animation locked in with one another??
-__Add wave 2 text
-__Add wave 2 spawns
-__raise lava level after wave 1
-__Come up with better way to check if all enemyObjects.hatched == true
 X_Reset midairBonus if vulture tier upgraded
 X_Add scoreamount to global table upon egg collection based on eggsCaught
 X_Check for appropriate scores upon vulture unseating
-__Ensure midairBonus remains false upon egg hatch
-__Ensure midair bonus increments score, not just renders the bonus
+X_Ensure midairBonus remains false upon egg hatch
+X_Ensure midair bonus increments score, not just renders the bonus
+X_raise lava level after wave 1
+X_raise bubble pops with lava level
+__Add wave 2 text
+__Add wave 2 spawns
+__Come up with better way to check if all enemyObjects.hatched == true
 
 
 SCORE UPDATE
