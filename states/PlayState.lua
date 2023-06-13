@@ -60,6 +60,16 @@ function PlayState:checkGrounded(topObject, bottomObject)
 	end
 end
 
+function waveAdvance(enemies)
+    for i = 1, enemies do
+        if not Eggs[i].collected then
+            return false
+        end
+    end
+    wave = wave + 1
+    return true
+end
+
 function PlayState:update(dt)
 	if love.keyboard.wasPressed('i') then
 		helpToggle = not helpToggle
@@ -147,14 +157,7 @@ function PlayState:update(dt)
 			Vultures[3].graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
-
-        if Eggs[1].collected then --FIND MORE ELEGANT SOLUTION
-            if Eggs[2].collected then
-                if Eggs[3].collected then
-                   wave = 2
-                end
-            end
-        end
+        waveAdvance(enemyObjects)
 	end
 
     if wave == 2 then
@@ -690,6 +693,8 @@ function PlayState:render()
 
     love.graphics.setFont(smallFont)
 
+	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
+	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
 --DEBUG INFO
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
