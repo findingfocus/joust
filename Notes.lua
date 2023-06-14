@@ -20,6 +20,8 @@ X_Ensure midair bonus increments score, not just renders the bonus
 X_raise lava level after wave 1
 X_raise bubble pops with lava level
 __Add wave 2 text
+__Put Ptero inits into update function not in wave function
+__Factor Vulture spawns into a function that scales with enemyObjects
 __Add wave 2 spawns
 __Come up with better way to check if all enemyObjects.hatched == true
 

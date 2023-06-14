@@ -25,6 +25,7 @@ function PlayState:init()
 	vultureSpawnTimer = 10
     enemyObjects = 0
     lavaRise = 0
+    waveTimer = 3
 	wave1ScorePopulate = false
 	helpToggle = false
 	gameOver = false
@@ -67,10 +68,15 @@ function waveAdvance(enemies)
         end
     end
     wave = wave + 1
+    waveTimer = 3
     return true
 end
 
 function PlayState:update(dt)
+    if waveTimer > 0 then
+        waveTimer = waveTimer - dt
+    end
+
 	if love.keyboard.wasPressed('i') then
 		helpToggle = not helpToggle
 	end
@@ -693,8 +699,12 @@ function PlayState:render()
 
     love.graphics.setFont(smallFont)
 
-	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
+    if waveTimer > 0 then
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.printf('WAVE ' .. tostring(wave), 0, VIRTUAL_HEIGHT / 2 - 3, VIRTUAL_WIDTH, "center")
+        love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
+    end
+
 --DEBUG INFO
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
