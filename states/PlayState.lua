@@ -61,6 +61,14 @@ function PlayState:checkGrounded(topObject, bottomObject)
 	end
 end
 
+function vultureSpawnTimerPopulate(waveNumber)
+    if waveNumber == 1 then
+        vultureSpawnTimer = 3 + 7
+    elseif waveNumber == 2 then
+        vultureSpawnTimer = 4 + 7
+    end
+end
+
 function waveAdvance(enemies)
     for i = 1, enemies do
         if not Eggs[i].collected then
@@ -69,7 +77,33 @@ function waveAdvance(enemies)
     end
     wave = wave + 1
     waveTimer = 3
+    vultureSpawnTimerPopulate(wave)
     return true
+end
+
+function spawnEnemies(enemyAmount)
+    if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
+        vultureSpawnTimer = 8
+        vultureSpawnPointIndex = math.random(4)
+        Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
+        Vultures[1] = Vulture1
+        Vultures[1].graveyard = false
+        pteroTimer = pteroTimer + 20
+    elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
+        vultureSpawnTimer = 6
+        vultureSpawnPointIndex = math.random(4)
+        Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2)
+        Vultures[2] = Vulture2
+        Vultures[2].graveyard = false
+        pteroTimer = pteroTimer + 20
+    elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
+        vultureSpawnTimer = 0
+        vultureSpawnPointIndex = math.random(4)
+        Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3)
+        Vultures[3] = Vulture3
+        Vultures[3].graveyard = false
+        pteroTimer = pteroTimer + 20
+    end
 end
 
 function PlayState:update(dt)
@@ -134,6 +168,7 @@ function PlayState:update(dt)
 			pteroTimer = 0
 		end
 
+
 		--SPAWNING VULTURES
 		if vultureSpawnTimer > 0 then
 			vultureSpawnTimer = vultureSpawnTimer - dt
@@ -163,6 +198,7 @@ function PlayState:update(dt)
 			Vultures[3].graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
+        spawnEnemies(enemyObjects)
         waveAdvance(enemyObjects)
 	end
 
