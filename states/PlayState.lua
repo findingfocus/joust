@@ -22,7 +22,7 @@ function PlayState:init()
 	lives = 8
 	spawnPointIndex = 0
 	vultureSpawnPointIndex = 0
-	vultureSpawnTimer = 10
+	vultureSpawnTimer = 0
     enemyObjects = 0
     lavaRise = 0
     waveTimer = 3
@@ -81,12 +81,27 @@ function waveAdvance(enemies)
     return true
 end
 
-function spawnEnemies(enemyAmount)
+function spawnEnemies(enemyAmount, dt)
+    --SPAWNING VULTURES
+    vultureSpawnTimer = vultureSpawnTimer + dt
+
+    for i = 1, enemyAmount do
+        --enemyAmount = 6
+        --1,2,3,4,5,6
+        if vultureSpawnTimer < i then
+            Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
+            Vultures[i].graveyard = false
+            pteroTimer = pteroTimer + 20
+            vultureSpawnTimer = vultureSpawnTimer + 1
+        end
+
+    end
+
+
     if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
         vultureSpawnTimer = 8
         vultureSpawnPointIndex = math.random(4)
-        Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
-        Vultures[1] = Vulture1
+        Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
         Vultures[1].graveyard = false
         pteroTimer = pteroTimer + 20
     elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
@@ -179,26 +194,23 @@ function PlayState:update(dt)
 		if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
 			vultureSpawnTimer = 8
 			vultureSpawnPointIndex = math.random(4)
-			Vulture1 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
-			Vultures[1] = Vulture1
+			Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
 			Vultures[1].graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
 			vultureSpawnTimer = 6
 			vultureSpawnPointIndex = math.random(4)
-			Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2)
-			Vultures[2] = Vulture2
+			Vultures[2] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2)
 			Vultures[2].graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
 			vultureSpawnTimer = 0
 			vultureSpawnPointIndex = math.random(4)
-			Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3)
-			Vultures[3] = Vulture3
+			Vultures[3] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3)
 			Vultures[3].graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
-        spawnEnemies(enemyObjects)
+        --spawnEnemies(enemyObjects)
         waveAdvance(enemyObjects)
 	end
 
