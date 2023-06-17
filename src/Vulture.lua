@@ -38,6 +38,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.collideTimer = 0
 	self.justCollided = false
 	self.spawning = true
+    self.timeUntilSpawn = spawnDelay
 	self.exploded = false
 	self.justJumped = false
 	self.firstFrameExploded = false
@@ -144,6 +145,16 @@ function Vulture:update(dt)
 		self.lastY = self.y
 		self.lastDX = self.dx
 	end
+
+    --SPAWN DELAY
+    if self.timeUntilSpawn > 0 then
+        self.timeUntilSpawn = self.timeUntilSpawn - dt
+    end
+
+    if self.timeUntilSpawn < 0 then
+        self.spawning = true
+        self.timeUntilSpawn = 0
+    end
 
 	--SETS GROWING VIEWPORT UPON SPAWNING
 	if self.spawning then

@@ -22,7 +22,7 @@ function PlayState:init()
 	lives = 8
 	spawnPointIndex = 0
 	vultureSpawnPointIndex = 0
-	vultureSpawnTimer = 0
+	vultureSpawnTimer = 10
     enemyObjects = 0
     lavaRise = 0
     waveTimer = 3
@@ -83,7 +83,7 @@ end
 
 function spawnEnemies(enemyAmount, dt)
     --SPAWNING VULTURES
-    vultureSpawnTimer = vultureSpawnTimer + dt
+    vultureSpawnTimer = vultureSpawnTimer - dt
 
     for i = 1, enemyAmount do
         --enemyAmount = 6

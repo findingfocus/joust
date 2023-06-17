@@ -24,6 +24,9 @@ __Put Ptero inits into update function not in wave function
 __Factor Vulture spawns into a function that scales with enemyObjects
 __Add wave 2 spawns
 __Come up with better way to check if all enemyObjects.hatched == true
+__Change spawnTimer to increment?
+__Add timeUntilSpawn to vulture class
+__Add timeUntilSpawn into Vulture class as parameter
 
 
 SCORE UPDATE
