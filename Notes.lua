@@ -27,6 +27,8 @@ __Come up with better way to check if all enemyObjects.hatched == true
 __Change spawnTimer to increment?
 __Add timeUntilSpawn to vulture class
 __Add timeUntilSpawn into Vulture class as parameter
+__Configure vulture class so that SpawnDelay doesnt screw up the vulture spawn render
+
 
 
 SCORE UPDATE
