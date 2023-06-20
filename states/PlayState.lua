@@ -22,7 +22,7 @@ function PlayState:init()
 	lives = 8
 	spawnPointIndex = 0
 	vultureSpawnPointIndex = 0
-	vultureSpawnTimer = 10
+	vultureSpawnTimer = 12
     enemyObjects = 0
     lavaRise = 0
     waveTimer = 3
@@ -753,6 +753,9 @@ function PlayState:render()
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
 
+	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
+	love.graphics.print('spawning:  ' .. tostring(Vultures[1].spawning), 10, 10)
+    love.graphics.print('eggsCaught: ' .. tostring(eggsCaught), 10, 20)
 --DEBUG INFO
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
