@@ -89,7 +89,7 @@ function spawnEnemies(enemyAmount, dt)
         --enemyAmount = 6
         --1,2,3,4,5,6
         if vultureSpawnTimer < i then
-            Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1, 0)
+            Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
             Vultures[i].graveyard = false
             pteroTimer = pteroTimer + 20
             vultureSpawnTimer = vultureSpawnTimer + 1
@@ -101,20 +101,20 @@ function spawnEnemies(enemyAmount, dt)
     if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
         vultureSpawnTimer = 8
         vultureSpawnPointIndex = math.random(4)
-        Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1, 0)
+        Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
         Vultures[1].graveyard = false
         pteroTimer = pteroTimer + 20
     elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
         vultureSpawnTimer = 6
         vultureSpawnPointIndex = math.random(4)
-        Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2, 0)
+        Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2)
         Vultures[2] = Vulture2
         Vultures[2].graveyard = false
         pteroTimer = pteroTimer + 20
     elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
         vultureSpawnTimer = 0
         vultureSpawnPointIndex = math.random(4)
-        Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3, 0)
+        Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3)
         Vultures[3] = Vulture3
         Vultures[3].graveyard = false
         pteroTimer = pteroTimer + 20
@@ -153,7 +153,7 @@ function PlayState:update(dt)
 		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
 		if not tablesPopulated then
 			for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
@@ -194,19 +194,19 @@ function PlayState:update(dt)
 		if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
 			vultureSpawnTimer = 8
 			vultureSpawnPointIndex = math.random(4)
-			Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1, 8)
+			Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1)
 			Vultures[1].graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
 			vultureSpawnTimer = 6
 			vultureSpawnPointIndex = math.random(4)
-			Vultures[2] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2, 9)
+			Vultures[2] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2)
 			Vultures[2].graveyard = false
 			pteroTimer = pteroTimer + 20
 		elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
 			vultureSpawnTimer = 0
 			vultureSpawnPointIndex = math.random(4)
-			Vultures[3] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3, 10)
+			Vultures[3] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3)
 			Vultures[3].graveyard = false
 			pteroTimer = pteroTimer + 20
 		end
@@ -233,9 +233,9 @@ function PlayState:update(dt)
 
 	--RESET VULTURES
 	if love.keyboard.wasPressed('v') and not Vultures[3].spawning then
-		Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 1, 0)
-		Vulture2 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, -1, 2, 0)
-		Vulture3 = Vulture(VIRTUAL_WIDTH / 2 + 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 3, 0)
+		Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 1)
+		Vulture2 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, -1, 2)
+		Vulture3 = Vulture(VIRTUAL_WIDTH / 2 + 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 3)
 		Vulture1.graveyard = false
 		Vulture2.graveyard = false
 		Vulture3.graveyard = false
@@ -605,9 +605,9 @@ function PlayState:update(dt)
             Taxis[i].graveyard = true
             Jockeys[i].graveyard = true
             if Taxis[i].facingRight then
-                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, 1, Vultures[i].index, 0)
+                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, 1, Vultures[i].index)
             else
-                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, -1, Vultures[i].index, 0)
+                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, -1, Vultures[i].index)
             end
 
             Vultures[i].graveyard = false

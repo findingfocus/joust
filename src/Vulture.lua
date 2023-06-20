@@ -1,6 +1,6 @@
 Vulture = Class{}
 
-function Vulture:init(x, y, width, height, platformSpawn, dx, index, spawnDelay)
+function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.index = index
 	self.x = x
 	self.y = y
@@ -38,7 +38,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index, spawnDelay)
 	self.collideTimer = 0
 	self.justCollided = false
 	self.spawning = true
-    self.timeUntilSpawn = spawnDelay 
+    self.timeUntilSpawn = spawnDelay
 	self.exploded = false
 	self.justJumped = false
 	self.firstFrameExploded = false
