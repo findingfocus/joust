@@ -19,15 +19,14 @@ X_Ensure midairBonus remains false upon egg hatch
 X_Ensure midair bonus increments score, not just renders the bonus
 X_raise lava level after wave 1
 X_raise bubble pops with lava level
+X_Add spawnDelay into Vulture class as parameter
 __Add wave 2 text
 __Put Ptero inits into update function not in wave function
 __Factor Vulture spawns into a function that scales with enemyObjects
 __Add wave 2 spawns
 __Come up with better way to check if all enemyObjects.hatched == true
-__Change spawnTimer to increment?
-__Add timeUntilSpawn to vulture class
-__Add timeUntilSpawn into Vulture class as parameter
 __Configure vulture class so that SpawnDelay doesnt screw up the vulture spawn render
+__Ensure vulture inherits x and y parameter once out of graveyard
 
 
 

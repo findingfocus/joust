@@ -1,6 +1,6 @@
 Vulture = Class{}
 
-function Vulture:init(x, y, width, height, platformSpawn, dx, index)
+function Vulture:init(x, y, width, height, platformSpawn, dx, index, spawnDelay)
 	self.index = index
 	self.x = x
 	self.y = y
@@ -23,6 +23,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.xoffset = self.width
 	self.timeBetweenJumps = 0
 	self.platformSpawnY = platformSpawn
+    self.spawnDelay = spawnDelay
 	self.spawnHeight = 0
 	self.explosionTimer = 0
 	self.pointTier = 0
@@ -37,7 +38,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index)
 	self.lastInputLocked = false
 	self.collideTimer = 0
 	self.justCollided = false
-	self.spawning = true
+	self.spawning = false
     self.timeUntilSpawn = 0
 	self.exploded = false
 	self.justJumped = false
@@ -111,6 +112,17 @@ end
 
 function Vulture:update(dt)
     ---[[
+    if self.spawnDelay > 0 then
+        self.spawnDelay = self.spawnDelay - dt
+    elseif self.spawnDelay < 0 then
+        self.spawnDelay = 0
+    end
+
+    if self.spawnDelay == 0 then
+        self.graveyard = false
+        self.spawning = true
+    end
+
 	if self.tier == 1 then
 		self.atlas = bounderAtlas
         self.pointTier = 500
@@ -141,29 +153,19 @@ function Vulture:update(dt)
 
 	--UPDATING LAST ALIVE POSITIONS
 	if not self.graveyard then
-		self.lastX = self.x
 		self.lastY = self.y
+        self.lastX = self.x
 		self.lastDX = self.dx
 	end
 
-    --SPAWN DELAY
-    if self.timeUntilSpawn > 0 then
-        self.timeUntilSpawn = self.timeUntilSpawn - dt
-    end
-
-    if self.timeUntilSpawn < 0 then
-        --self.spawning = true
-        self.timeUntilSpawn = 0
-    end
-
 	--SETS GROWING VIEWPORT UPON SPAWNING
-	if self.spawning then
+	if self.spawning and not self.graveyard then
 		self.lastDX = self.dx
 		self.spawnHeight = self.spawnHeight + 0.5
 		self.vultureSprite:setViewport(1, 0, self.width, self.spawnHeight, self.atlas:getDimensions())
 		if self.y < self.platformSpawnY - self.height then
 			self.y = self.platformSpawnY - self.height
-			self.spawning = false
+			--self.spawning = false
 		end
 		self.y = self.y - 0.5
 	elseif not self.exploded then -- IF NOT SPAWNING AND NOT EXPLODED
