@@ -162,11 +162,10 @@ function PlayState:update(dt)
                 Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1, 1)
                 pteroTimer = pteroTimer + 20
                 vultureSpawnPointIndex = math.random(4)
-                Vultures[2] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2, 1)
+                Vultures[2] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2, 2)
                 pteroTimer = pteroTimer + 20
-                vultureSpawnTimer = 0
                 vultureSpawnPointIndex = math.random(4)
-                Vultures[3] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3, 1)
+                Vultures[3] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3, 3)
                 pteroTimer = pteroTimer + 20
 			end
 --[[
@@ -180,7 +179,6 @@ function PlayState:update(dt)
 			--Jockeys[1] = Jockey(20, platform3.y, 1)
 			--Jockeys[1].graveyard = false
 
-			tablesPopulated = true
 		end
 
 		--PTERODACTYL SPAWN
@@ -741,7 +739,8 @@ function PlayState:render()
 	love.graphics.print('spawning:  ' .. tostring(Vultures[1].spawning), 10, 10)
     love.graphics.print('spawnDelay: ' .. tostring(Vultures[1].spawnDelay), 10, 20)
     love.graphics.print('x. ' .. tostring(Vultures[1].x), 10, 30)
-    love.graphics.print('gy: ' .. tostring(Vultures[1].graveyard), 10, 40)
+    love.graphics.print('y. ' .. tostring(Vultures[1].y), 10, 40)
+    love.graphics.print('gy: ' .. tostring(Vultures[1].graveyard), 10, 50)
 --DEBUG INFO
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)

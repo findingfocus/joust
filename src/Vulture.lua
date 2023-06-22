@@ -4,13 +4,15 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index, spawnDelay)
 	self.index = index
 	self.x = x
 	self.y = y
+    self.spawningX = x
+    self.spawningY = y
 	self.width = width
 	self.height = height
 	self.index = index
-	self.dx = dx
-	self.tier = 1
+	self.dx = 0
 	self.dy = 0
-	self.dx = dx
+    self.spawningDX = dx
+	self.tier = 1
 	self.fps = 1
 	self.animationTimer = 2 / self.fps
 	self.jumpTimer = 1
@@ -115,12 +117,16 @@ function Vulture:update(dt)
     if self.spawnDelay > 0 then
         self.spawnDelay = self.spawnDelay - dt
     elseif self.spawnDelay < 0 then
-        self.spawnDelay = 0
+        --self.spawnDelay = 0
     end
 
-    if self.spawnDelay == 0 then
+    if self.spawnDelay < 0 then
         self.graveyard = false
+        self.x = self.spawningX
+        self.y = self.spawningY
+        self.dx = self.spawningDX
         self.spawning = true
+        self.spawnDelay = 0
     end
 
 	if self.tier == 1 then
@@ -159,13 +165,13 @@ function Vulture:update(dt)
 	end
 
 	--SETS GROWING VIEWPORT UPON SPAWNING
-	if self.spawning and not self.graveyard then
+	if self.spawning then
 		self.lastDX = self.dx
 		self.spawnHeight = self.spawnHeight + 0.5
 		self.vultureSprite:setViewport(1, 0, self.width, self.spawnHeight, self.atlas:getDimensions())
 		if self.y < self.platformSpawnY - self.height then
 			self.y = self.platformSpawnY - self.height
-			--self.spawning = false
+			self.spawning = false
 		end
 		self.y = self.y - 0.5
 	elseif not self.exploded then -- IF NOT SPAWNING AND NOT EXPLODED
@@ -255,11 +261,10 @@ function Vulture:update(dt)
 				self.dy =  self.dy + GRAVITY * dt
 			end
 
-			self.y = self.y + self.dy
-
 			if not self.graveyard then
 
 				self.x = self.x + self.dx
+                self.y = self.y + self.dy
 
 				--BOUNCING OFF TOP
 				if self.y < 0 then
