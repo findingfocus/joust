@@ -117,7 +117,7 @@ function Vulture:update(dt)
     if self.spawnDelay > 0 then
         self.spawnDelay = self.spawnDelay - dt
     elseif self.spawnDelay < 0 then
-        --self.spawnDelay = 0
+        self.spawnDelay = 0
     end
 
     if self.spawnDelay < 0 then

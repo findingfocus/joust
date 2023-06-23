@@ -22,7 +22,6 @@ function PlayState:init()
 	lives = 8
 	spawnPointIndex = 0
 	vultureSpawnPointIndex = 0
-	vultureSpawnTimer = 0
     enemyObjects = 0
     lavaRise = 0
     waveTimer = 3
@@ -61,14 +60,6 @@ function PlayState:checkGrounded(topObject, bottomObject)
 	end
 end
 
-function vultureSpawnTimerPopulate(waveNumber)
-    if waveNumber == 1 then
-        vultureSpawnTimer = 3 + 7
-    elseif waveNumber == 2 then
-        vultureSpawnTimer = 4 + 7
-    end
-end
-
 function waveAdvance(enemies)
     for i = 1, enemies do
         if not Eggs[i].collected then
@@ -77,46 +68,13 @@ function waveAdvance(enemies)
     end
     wave = wave + 1
     waveTimer = 3
-    vultureSpawnTimerPopulate(wave)
     return true
 end
 
-function spawnEnemies(enemyAmount, dt)
-    --SPAWNING VULTURES
-    vultureSpawnTimer = vultureSpawnTimer - dt
-
+function spawnEnemies(enemyAmount)
     for i = 1, enemyAmount do
-        --enemyAmount = 6
-        --1,2,3,4,5,6
-        if vultureSpawnTimer < i then
-            Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1, 1)
-            Vultures[i].graveyard = false
-            pteroTimer = pteroTimer + 20
-            vultureSpawnTimer = vultureSpawnTimer + 1
-        end
-
-    end
-
-
-    if vultureSpawnTimer < 9 and vultureSpawnTimer > 8 then
-        vultureSpawnTimer = 8
         vultureSpawnPointIndex = math.random(4)
-        Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1, 3)
-        Vultures[1].graveyard = false
-        pteroTimer = pteroTimer + 20
-    elseif vultureSpawnTimer < 7 and vultureSpawnTimer > 6 then
-        vultureSpawnTimer = 6
-        vultureSpawnPointIndex = math.random(4)
-        Vulture2 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2, 1)
-        Vultures[2] = Vulture2
-        Vultures[2].graveyard = false
-        pteroTimer = pteroTimer + 20
-    elseif vultureSpawnTimer < 5 and vultureSpawnTimer > 4 then
-        vultureSpawnTimer = 0
-        vultureSpawnPointIndex = math.random(4)
-        Vulture3 = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3, 1)
-        Vultures[3] = Vulture3
-        Vultures[3].graveyard = false
+        Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, i, i)
         pteroTimer = pteroTimer + 20
     end
 end
@@ -157,17 +115,9 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                vultureSpawnPointIndex = math.random(4)
-                --PUT THESE AFTER DUMMY INITIALIZATION, BUT MAKE IT INHERIT X PARAMETERS UPON BEING TAKEN OUT OF GRAVEYARD
-                Vultures[1] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 1, 1)
-                pteroTimer = pteroTimer + 20
-                vultureSpawnPointIndex = math.random(4)
-                Vultures[2] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 2, 2)
-                pteroTimer = pteroTimer + 20
-                vultureSpawnPointIndex = math.random(4)
-                Vultures[3] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, 3, 3)
-                pteroTimer = pteroTimer + 20
+                tablesPopulated = true
 			end
+            spawnEnemies(enemyObjects)
 --[[
             Taxis[1] = Taxi(50, 90, 16, 24, 1, 1)
             Taxis[1].graveyard = false
@@ -192,7 +142,6 @@ function PlayState:update(dt)
 			pteroTimer = 0
 		end
 
-        --spawnEnemies(enemyObjects)
         waveAdvance(enemyObjects)
 	end
 
@@ -734,13 +683,14 @@ function PlayState:render()
         love.graphics.printf('WAVE ' .. tostring(wave), 0, VIRTUAL_HEIGHT / 2 - 3, VIRTUAL_WIDTH, "center")
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
-
+--[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('spawning:  ' .. tostring(Vultures[1].spawning), 10, 10)
     love.graphics.print('spawnDelay: ' .. tostring(Vultures[1].spawnDelay), 10, 20)
     love.graphics.print('x. ' .. tostring(Vultures[1].x), 10, 30)
     love.graphics.print('y. ' .. tostring(Vultures[1].y), 10, 40)
     love.graphics.print('gy: ' .. tostring(Vultures[1].graveyard), 10, 50)
+    --]]
 --DEBUG INFO
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
