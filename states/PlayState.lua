@@ -17,7 +17,7 @@ function PlayState:init()
 	Taxis = {}
 	scoresTable = {}
     eggsCaught = 0
-    timesEggHatched = {0, 0, 0}
+    timesEggHatched = {0, 0, 0, 0}
 	wave = 1
 	lives = 8
 	spawnPointIndex = 0
@@ -25,7 +25,6 @@ function PlayState:init()
     enemyObjects = 0
     lavaRise = 0
     waveTimer = 3
-	wave1ScorePopulate = false
 	helpToggle = false
 	gameOver = false
 	tablesPopulated = false
@@ -68,6 +67,7 @@ function waveAdvance(enemies)
     end
     wave = wave + 1
     waveTimer = 3
+    tablesPopulated = false
     return true
 end
 
@@ -100,13 +100,6 @@ function PlayState:update(dt)
 ---[[WAVE LOGIC
 	if wave == 1 then
         enemyObjects = 3
-		if not wave1ScorePopulate then
-			--SCORE TABLE INITIALIZATION
-			for i = 1, enemyObjects do
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-			end
-			wave1ScorePopulate = true
-		end
 
 		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
 		if not tablesPopulated then
@@ -115,21 +108,11 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                spawnEnemies(enemyObjects)
                 tablesPopulated = true
 			end
-            spawnEnemies(enemyObjects)
---[[
-            Taxis[1] = Taxi(50, 90, 16, 24, 1, 1)
-            Taxis[1].graveyard = false
-            Taxis[1].flapped = false
-            Taxis[2] = Taxi(0, 0, 16, 24, 1, 1)
-            Taxis[2].graveyard = false
-            Taxis[2].flapped = false
-            --]]
-			--Jockeys[1] = Jockey(20, platform3.y, 1)
-			--Jockeys[1].graveyard = false
-
-		end
+        end
 
 		--PTERODACTYL SPAWN
 		if pteroTimer > 0 then
@@ -146,12 +129,24 @@ function PlayState:update(dt)
 	end
 
     if wave == 2 then
+        enemyObjects = 4
         if lavaRise < 3 then
             lavaRise = lavaRise + dt
         end
+		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
+		if not tablesPopulated then
+			for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                spawnEnemies(enemyObjects)
+                tablesPopulated = true
+			end
+        end
     end
 --]]
-
 
 ---[[RESETS
 	--RESET PLAYER
@@ -683,6 +678,9 @@ function PlayState:render()
         love.graphics.printf('WAVE ' .. tostring(wave), 0, VIRTUAL_HEIGHT / 2 - 3, VIRTUAL_WIDTH, "center")
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
+
+	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
+	love.graphics.print('wave:  ' .. tostring(wave), 10, 10)
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('spawning:  ' .. tostring(Vultures[1].spawning), 10, 10)
