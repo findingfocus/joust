@@ -17,6 +17,7 @@ function PlayState:init()
 	Taxis = {}
 	scoresTable = {}
     eggsCaught = 0
+    test = 10
     timesEggHatched = {0, 0, 0, 0}
 	wave = 1
 	lives = 8
@@ -80,6 +81,18 @@ function spawnEnemies(enemyAmount)
 end
 
 function PlayState:update(dt)
+
+    --PTERODACTYL SPAWN
+    if pteroTimer > 0 then
+        pteroTimer = pteroTimer - dt
+    end
+
+    if pteroTimer < 0 then
+        monster = Pterodactyl(PteroSpawnPoints[randomPteroIndex].x, PteroSpawnPoints[randomPteroIndex].y, PteroSpawnPoints[randomPteroIndex].dx)
+        monster.graveyard = false
+        pteroTimer = 0
+    end
+
     if waveTimer > 0 then
         waveTimer = waveTimer - dt
     end
@@ -88,14 +101,6 @@ function PlayState:update(dt)
 		helpToggle = not helpToggle
 	end
 
----[[VULTURE COUNT
-	for k, vulture in pairs(Vultures) do
-        vultureCount = 0
-		if not vulture.exploded then
-			vultureCount = vultureCount + 1
-		end
-	end
---]]
 
 ---[[WAVE LOGIC
 	if wave == 1 then
@@ -114,16 +119,6 @@ function PlayState:update(dt)
 			end
         end
 
-		--PTERODACTYL SPAWN
-		if pteroTimer > 0 then
-			pteroTimer = pteroTimer - dt
-		end
-
-		if pteroTimer < 0 then
-			monster = Pterodactyl(PteroSpawnPoints[randomPteroIndex].x, PteroSpawnPoints[randomPteroIndex].y, PteroSpawnPoints[randomPteroIndex].dx)
-			monster.graveyard = false
-			pteroTimer = 0
-		end
 
         waveAdvance(enemyObjects)
 	end
@@ -146,6 +141,14 @@ function PlayState:update(dt)
 			end
         end
     end
+---[[VULTURE COUNT FIX THIS!!!!!!!!!!!!!!!!!!!!!!!
+    for i = 1, 3 do
+        test = 0
+        if not Vultures[i].graveyard then
+           test = test + 1
+        end
+    end
+--]]
 --]]
 
 ---[[RESETS
@@ -564,6 +567,7 @@ function PlayState:update(dt)
 	lavaBubble2:update(dt)
 	player1:update(dt)
 	--taxi1:update(dt)
+
 end
 
 function PlayState:render()
@@ -680,7 +684,9 @@ function PlayState:render()
     end
 
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('wave:  ' .. tostring(wave), 10, 10)
+	love.graphics.print('pteroTimer: ' .. tostring(pteroTimer), 10, 10)
+	love.graphics.print('vultureCount: ' .. tostring(vultureCount), 10, 20)
+	love.graphics.print('test: ' .. tostring(test), 10, 30)
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('spawning:  ' .. tostring(Vultures[1].spawning), 10, 10)
