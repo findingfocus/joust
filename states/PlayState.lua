@@ -17,7 +17,6 @@ function PlayState:init()
 	Taxis = {}
 	scoresTable = {}
     eggsCaught = 0
-    test = 10
     timesEggHatched = {0, 0, 0, 0}
 	wave = 1
 	lives = 8
@@ -81,7 +80,6 @@ function spawnEnemies(enemyAmount)
 end
 
 function PlayState:update(dt)
-
     --PTERODACTYL SPAWN
     if pteroTimer > 0 then
         pteroTimer = pteroTimer - dt
@@ -141,13 +139,7 @@ function PlayState:update(dt)
 			end
         end
     end
----[[VULTURE COUNT FIX THIS!!!!!!!!!!!!!!!!!!!!!!!
-    for i = 1, 3 do
-        test = 0
-        if not Vultures[i].graveyard then
-           test = test + 1
-        end
-    end
+
 --]]
 --]]
 
@@ -228,9 +220,9 @@ function PlayState:update(dt)
 					vulture.dx = vulture.dx * -1
 					others.dx = others.dx * -1
 					if vulture.x < others.x then
-						others.x = vulture.x + vulture.width + 1
+						others.x = vulture.x + vulture.width + 2
 					else
-						others.x = vulture.x - others.width - 1
+						others.x = vulture.x - others.width - 2
 					end
 				end
 			end
@@ -534,9 +526,13 @@ function PlayState:update(dt)
             Taxis[i].graveyard = true
             Jockeys[i].graveyard = true
             if Taxis[i].facingRight then
-                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, 1, Vultures[i].index, 1)
+                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, 1, Vultures[i].index, 0)
+                Vultures[i].graveyard = false
+                Vultures[i].dx = Vultures[i].spawningDX
             else
-                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, -1, Vultures[i].index, 1)
+                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, -1, Vultures[i].index, 0)
+                Vultures[i].graveyard = false
+                Vultures[i].dx = Vultures[i].spawningDX
             end
 
             Vultures[i].graveyard = false
@@ -568,6 +564,14 @@ function PlayState:update(dt)
 	player1:update(dt)
 	--taxi1:update(dt)
 
+---[[VULTURE COUNT
+    vultureCount = 0
+
+    for i = 1, enemyObjects do
+        if not Vultures[i].graveyard then
+           vultureCount = vultureCount + 1
+        end
+    end
 end
 
 function PlayState:render()
@@ -686,7 +690,9 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('pteroTimer: ' .. tostring(pteroTimer), 10, 10)
 	love.graphics.print('vultureCount: ' .. tostring(vultureCount), 10, 20)
-	love.graphics.print('test: ' .. tostring(test), 10, 30)
+	love.graphics.print('1.gy: ' .. tostring(Vultures[1].graveyard), 10, 30)
+	love.graphics.print('2.gy: ' .. tostring(Vultures[2].graveyard), 10, 40)
+	love.graphics.print('3.gy: ' .. tostring(Vultures[3].graveyard), 10, 50)
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('spawning:  ' .. tostring(Vultures[1].spawning), 10, 10)
