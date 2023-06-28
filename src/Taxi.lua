@@ -170,7 +170,7 @@ function Taxi:update(dt)
 		--ACTIVATING GRAVITY
 		if not self:checkGrounded(self.ground) then
 			self.grounded = false
-			self.height = 16
+			self.height = 18 --changed from 16 to try and fix the egg capture for middle platform tricky spot
 		end
 
 		if not self.grounded then
@@ -178,7 +178,7 @@ function Taxi:update(dt)
 		end
 
         if self.y > Jockeys[self.index].y then
-            --self.needsToJump = true
+            self.needsToJump = true
         end
 
         if self.needsToJump then

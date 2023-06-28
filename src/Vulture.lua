@@ -375,7 +375,7 @@ end
 
 
 function Vulture:render()
----[[
+--[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.setFont(smallFont)
 	love.graphics.print(tostring(self.index), self.x, self.y - 10)

@@ -25,6 +25,9 @@ function PlayState:init()
     enemyObjects = 0
     lavaRise = 0
     waveTimer = 3
+    groundX = 0
+    groundY = VIRTUAL_HEIGHT - 36
+    groundWidth = VIRTUAL_WIDTH
 	helpToggle = false
 	gameOver = false
 	tablesPopulated = false
@@ -572,6 +575,9 @@ function PlayState:update(dt)
            vultureCount = vultureCount + 1
         end
     end
+
+--    groundX = groundX + .1
+--    groundWidth = groundWidth - .2
 end
 
 function PlayState:render()
@@ -579,7 +585,7 @@ function PlayState:render()
 
 	--draw ground top level **to be made retractable
 	love.graphics.setColor(133/255, 70/255, 15/255, 255/255)
-	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - 36, VIRTUAL_WIDTH, 4)
+	love.graphics.rectangle('fill', groundX, groundY, groundWidth, 4)
 
 	--lava stand-in
 	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
@@ -687,12 +693,6 @@ function PlayState:render()
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
 
-	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('pteroTimer: ' .. tostring(pteroTimer), 10, 10)
-	love.graphics.print('vultureCount: ' .. tostring(vultureCount), 10, 20)
-	love.graphics.print('1.gy: ' .. tostring(Vultures[1].graveyard), 10, 30)
-	love.graphics.print('2.gy: ' .. tostring(Vultures[2].graveyard), 10, 40)
-	love.graphics.print('3.gy: ' .. tostring(Vultures[3].graveyard), 10, 50)
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('spawning:  ' .. tostring(Vultures[1].spawning), 10, 10)

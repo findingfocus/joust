@@ -25,11 +25,13 @@ X_Ensure vulture inherits x and y parameter once out of graveyard
 X_Factor Vulture spawns into a function that scales with enemyObjects
 X_Add wave 2 spawns
 X_Add wave 2 text
+X_Fix wonky Vulture to Vulture collision
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __Populate timesEggHatched with 0s based on enemyObjects in global populates
-__Fix wonky Vulture to Vulture collision
+__Retract ground platorm for wave 3+
+__Ensure Correct Placement of platforms and ground with original game
 
 
 SCORE UPDATE
