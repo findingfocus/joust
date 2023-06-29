@@ -26,6 +26,7 @@ function love.load()
 	whiteJockey = love.graphics.newImage('src/pics/whiteJockey.png')
 	blueJockey = love.graphics.newImage('src/pics/blueJockey.png')
 
+	backgroundRef = love.graphics.newImage('src/pics/backgroundRef.png')
 	temporarySafetyAtlas = love.graphics.newImage('src/pics/temporarySafetyAtlas.png')
 	platformLeft = love.graphics.newImage('src/pics/platformLeft.png')
 	platformRight = love.graphics.newImage('src/pics/platformRight.png')

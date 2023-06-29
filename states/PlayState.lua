@@ -1,13 +1,13 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	platform1 = Platform('platform1R', 262, 55, 69, 7)
-	platform1L = Platform('platform1L', -30, 55, 69, 7)
-	platform2 = Platform('platform2', 76, 65, 110, 7)
-	platform3 = Platform('platform3', 212, 114, 61, 7)
-	platform4 = Platform('platform4', 262, 122, 79, 7)
-	platform4L = Platform('platform4L', -30, 122, 79, 7)
-	platform5 = Platform('platform5', 96, 150, 79, 7)
+	platform1 = Platform('platform1R', 262, 71, 69, 7)
+	platform1L = Platform('platform1L', -30, 71, 69, 7)
+	platform2 = Platform('platform2', 76, 78, 110, 7)
+	platform3 = Platform('platform3', 212, 121, 61, 7)
+	platform4 = Platform('platform4', 262, 130, 79, 7)
+	platform4L = Platform('platform4L', -30, 130, 79, 7)
+	platform5 = Platform('platform5', 96, 147, 79, 7)
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
@@ -27,6 +27,9 @@ function PlayState:init()
     waveTimer = 3
     groundX = 0
     groundY = VIRTUAL_HEIGHT - 36
+    backgroundTransparency = 100
+    tUp = true
+    tDown = false
     groundWidth = VIRTUAL_WIDTH
 	helpToggle = false
 	gameOver = false
@@ -83,6 +86,23 @@ function spawnEnemies(enemyAmount)
 end
 
 function PlayState:update(dt)
+    if tUp then
+        backgroundTransparency = backgroundTransparency + .5
+        if backgroundTransparency >= 210 then
+            backgroundTransparency = 210
+            tUp = false
+            tDown = true
+        end
+    end
+
+    if tDown then
+        backgroundTransparency = backgroundTransparency - .5
+        if backgroundTransparency <= 120 then
+            backgroundTransparency = 120
+            tDown = false
+            tUp = true
+        end
+    end
     --PTERODACTYL SPAWN
     if pteroTimer > 0 then
         pteroTimer = pteroTimer - dt
@@ -692,6 +712,10 @@ function PlayState:render()
         love.graphics.printf('WAVE ' .. tostring(wave), 0, VIRTUAL_HEIGHT / 2 - 3, VIRTUAL_WIDTH, "center")
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
+--[[
+    love.graphics.setColor(255/255, 255/255, 255/255, backgroundTransparency/255)
+    love.graphics.draw(backgroundRef, 0, 0)
+    --]]
 
 --[[
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
