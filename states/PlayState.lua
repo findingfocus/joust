@@ -4,10 +4,10 @@ function PlayState:init()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)
 	platform1L = Platform('platform1L', -35, 68, 69, 7)
 	platform2 = Platform('platform2', 70, 77, 94, 7)
-	platform3 = Platform('platform3', 193, 120, 50, 7)
-	platform4 = Platform('platform4', 262, 130, 79, 7)
-	platform4L = Platform('platform4L', -30, 130, 79, 7)
-	platform5 = Platform('platform5', 96, 147, 79, 7)
+	platform3 = Platform('platform3', 192, 120, 50, 7)
+	platform4 = Platform('platform4', 233, 129, 79, 7)
+	platform4L = Platform('platform4L', -35, 129, 79, 7)
+	platform5 = Platform('platform5', 86, 146, 70, 7)
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
@@ -614,14 +614,14 @@ function PlayState:render()
 	--ground bottom stand-in
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	--love.graphics.rectangle('fill', 53, VIRTUAL_HEIGHT - 36, 186, 32)
-	love.graphics.draw(groundBottom, 53, VIRTUAL_HEIGHT - 36)
+	love.graphics.draw(groundBottom, 38, VIRTUAL_HEIGHT - 36)
 
 	player1:render()
 	monster:render()
 
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
-	love.graphics.print(tostring(lives), 138, VIRTUAL_HEIGHT - 28)
+	love.graphics.print(tostring(lives), 123, VIRTUAL_HEIGHT - 28)
 
 ---[[RENDER OBJECT TABLES
 	for i = 1, enemyObjects do
@@ -698,12 +698,17 @@ function PlayState:render()
 	--SCORE
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
-	love.graphics.print(string.format("%06d", Score), 67, VIRTUAL_HEIGHT - 28)
+	love.graphics.print(string.format("%06d", Score), 53, VIRTUAL_HEIGHT - 28)
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	for k, v in pairs(scoresTable) do
 		scoresTable[k]:render()
 	end
+
+    --[[
+    love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
+    love.graphics.draw(centerReference, 0, 0)
+    --]]
 
     love.graphics.setFont(smallFont)
 
