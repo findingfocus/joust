@@ -19,5 +19,6 @@ function Platform:render()
 	love.graphics.setColor(219/255, 164/255, 0/255, 255/255)
 	love.graphics.draw(platformLeft, self.leftHalf, self.x, self.y)
 	love.graphics.draw(platformRight, self.rightHalf, self.x + (self.width - platformRight:getWidth()) + PLATFORMOFFSET, self.y)
+--	love.graphics.draw(platformRight, self.rightHalf, self.x + (self.width - platformRight:getWidth()) + PLATFORMOFFSET, self.y)
 	--love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end

@@ -1,10 +1,10 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
-	platform1 = Platform('platform1R', 262, 71, 69, 7)
-	platform1L = Platform('platform1L', -30, 71, 69, 7)
-	platform2 = Platform('platform2', 76, 78, 110, 7)
-	platform3 = Platform('platform3', 212, 121, 61, 7)
+	platform1 = Platform('platform1R', 233, 68, 69, 7)
+	platform1L = Platform('platform1L', -35, 68, 69, 7)
+	platform2 = Platform('platform2', 70, 77, 94, 7)
+	platform3 = Platform('platform3', 193, 120, 50, 7)
 	platform4 = Platform('platform4', 262, 130, 79, 7)
 	platform4L = Platform('platform4L', -30, 130, 79, 7)
 	platform5 = Platform('platform5', 96, 147, 79, 7)
@@ -88,8 +88,8 @@ end
 function PlayState:update(dt)
     if tUp then
         backgroundTransparency = backgroundTransparency + .5
-        if backgroundTransparency >= 210 then
-            backgroundTransparency = 210
+        if backgroundTransparency >= 220 then
+            backgroundTransparency = 220
             tUp = false
             tDown = true
         end
@@ -97,8 +97,8 @@ function PlayState:update(dt)
 
     if tDown then
         backgroundTransparency = backgroundTransparency - .5
-        if backgroundTransparency <= 120 then
-            backgroundTransparency = 120
+        if backgroundTransparency <= 100 then
+            backgroundTransparency = 100
             tDown = false
             tUp = true
         end

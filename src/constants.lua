@@ -1,6 +1,6 @@
 --1280 800 == Mac Laptop resolution
 ---[[
-WINDOW_WIDTH = 1168
+WINDOW_WIDTH = 1040
 WINDOW_HEIGHT = 960
 --]]
 
@@ -11,7 +11,7 @@ WINDOW_HEIGHT = 240
 --]]
 
 --292X240 is original joust dimensions
-VIRTUAL_WIDTH = 292
+VIRTUAL_WIDTH = 260
 VIRTUAL_HEIGHT = 240
 
 GRAVITY = 1
