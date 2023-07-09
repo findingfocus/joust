@@ -219,7 +219,7 @@ function PlayState:update(dt)
 
 ---[[BUBBLE LOGIC
 	if lavaBubble1.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
-		leftSpawnPoint = {11, 35}
+		leftSpawnPoint = {9, 29}
 		leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
 		leftSpawnRandom = {1, 2, 5, 5, 7}
 		leftSpawnRandom = leftSpawnRandom[math.random(#leftSpawnRandom)]
@@ -227,7 +227,7 @@ function PlayState:update(dt)
 	end
 
 	if lavaBubble2.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
-		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 45}
+		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 30}
 		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
 		rightSpawnRandom = {1, 2, 5, 5, 7}
 		rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
@@ -595,9 +595,10 @@ function PlayState:update(dt)
            vultureCount = vultureCount + 1
         end
     end
-
---    groundX = groundX + .1
---    groundWidth = groundWidth - .2
+--[[
+    groundX = groundX + .1
+    groundWidth = groundWidth - .2
+    --]]
 end
 
 function PlayState:render()
