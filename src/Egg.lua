@@ -11,7 +11,7 @@ function Egg:init(lastX, lastY, dx, index)
 	self.atlas = eggAtlas
 	self.dx = dx
 	self.dy = 0
-	self.eggInvulnerableTimer = .5--.5
+	self.eggInvulnerableTimer = .05--.5
 	self.bouncedOffFloor = false
 	self.invulnerable = false
 	self.collected = false
@@ -122,4 +122,9 @@ end
 function Egg:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(self.atlas, self.eggSprite, self.x, self.y)
+    if self.bouncedOffFloor then
+        love.graphics.print('bouncedTrue', self.x + 5, self.y)
+    else
+        love.graphics.print('bouncedFalse', self.x + 5, self.y)
+    end
 end

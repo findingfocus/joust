@@ -2,8 +2,8 @@ Ostrich = Class{}
 
 function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.x = x
-	self.y = platformSpawnY
-	self.width = width
+    self.y = platformSpawnY
+    self.width = width
 	self.height = height
 	self.atlas = playerAtlas
 	self.temporarySafetyAtlas = temporarySafetyAtlas

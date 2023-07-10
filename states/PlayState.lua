@@ -595,9 +595,13 @@ function PlayState:update(dt)
            vultureCount = vultureCount + 1
         end
     end
---[[
-    groundX = groundX + .1
-    groundWidth = groundWidth - .2
+---[[
+    if groundPlatform.width > 168 then
+        groundPlatform.x = groundPlatform.x + .1
+        groundPlatform.width  = groundPlatform.width - .2
+    else
+        groundPlatform.width = 168
+    end
     --]]
 end
 
@@ -606,7 +610,7 @@ function PlayState:render()
 
 	--draw ground top level **to be made retractable
 	love.graphics.setColor(133/255, 70/255, 15/255, 255/255)
-	love.graphics.rectangle('fill', groundX, groundY, groundWidth, 4)
+	love.graphics.rectangle('fill', groundPlatform.x, groundPlatform.y, groundPlatform.width, 4)
 
 	--lava stand-in
 	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
@@ -718,9 +722,9 @@ function PlayState:render()
         love.graphics.printf('WAVE ' .. tostring(wave), 0, VIRTUAL_HEIGHT / 2 - 3, VIRTUAL_WIDTH, "center")
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
---[[
-    love.graphics.setColor(255/255, 255/255, 255/255, backgroundTransparency/255)
-    love.graphics.draw(backgroundRef, 0, 0)
+---[[
+    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+    love.graphics.print('gP.width: ' .. tostring(groundPlatform.width), 25, 25)
     --]]
 
 --[[
