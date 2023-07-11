@@ -368,7 +368,17 @@ function PlayState:update(dt)
 			Eggs[i].graveyard = true
 			Eggs[i].hatched = false
 		end
+
+        if Eggs[i].y > VIRTUAL_HEIGHT then
+           Eggs[i].graveyard = true
+           Eggs[i].collected = true
+        end
 	end
+
+    if player1.y > VIRTUAL_HEIGHT - 25 then
+        player1.exploded = true
+    end
+
 	--]]
 
 ---[[PLAYER TO OBJECT COLLISIONS
@@ -596,11 +606,11 @@ function PlayState:update(dt)
         end
     end
 ---[[
-    if groundPlatform.width > 168 then
+    if groundPlatform.width > 182 then
         groundPlatform.x = groundPlatform.x + .1
         groundPlatform.width  = groundPlatform.width - .2
     else
-        groundPlatform.width = 168
+        groundPlatform.width = 182
     end
     --]]
 end
