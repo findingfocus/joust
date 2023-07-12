@@ -369,13 +369,13 @@ function PlayState:update(dt)
 			Eggs[i].hatched = false
 		end
 
-        if Eggs[i].y > VIRTUAL_HEIGHT then
+        if Eggs[i].y > VIRTUAL_HEIGHT - LAVAHEIGHT - 3 - Eggs[i].height then
            Eggs[i].graveyard = true
            Eggs[i].collected = true
         end
 	end
 
-    if player1.y > VIRTUAL_HEIGHT - 25 then
+    if player1.y > VIRTUAL_HEIGHT - 25 - 3 then --the plus 3 is for the wave 3 lava level
         player1.exploded = true
     end
 
