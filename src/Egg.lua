@@ -122,9 +122,11 @@ end
 function Egg:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(self.atlas, self.eggSprite, self.x, self.y)
+    --[[
     if self.bouncedOffFloor then
         love.graphics.print('bouncedTrue', self.x + 5, self.y)
     else
         love.graphics.print('bouncedFalse', self.x + 5, self.y)
     end
+    --]]
 end

@@ -146,7 +146,7 @@ function PlayState:update(dt)
 
     if wave == 2 then
         enemyObjects = 4
-        if lavaRise < 3 then
+        if lavaRise < 5 then
             lavaRise = lavaRise + dt
         end
 		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
@@ -160,6 +160,26 @@ function PlayState:update(dt)
                 spawnEnemies(enemyObjects)
                 tablesPopulated = true
 			end
+        end
+        waveAdvance(enemyObjects)
+    end
+
+    if wave == 3 then
+        enemyObjects = 5
+        if lavaRise < 10 then
+            lavaRise = lavaRise + dt
+        end
+
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                spawnEnemies(enemyObjects)
+                tablesPopulated = true
+            end
         end
     end
 
@@ -732,7 +752,7 @@ function PlayState:render()
         love.graphics.printf('WAVE ' .. tostring(wave), 0, VIRTUAL_HEIGHT / 2 - 3, VIRTUAL_WIDTH, "center")
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
----[[
+--[[
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     love.graphics.print('gP.width: ' .. tostring(groundPlatform.width), 25, 25)
     --]]
