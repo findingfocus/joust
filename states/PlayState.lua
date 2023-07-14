@@ -297,6 +297,9 @@ function PlayState:update(dt)
 						player1.exploded = true
 						player1.graveyard = true
 					elseif not player1.facingRight and not Vultures[i].facingRight then
+                        player1.x = Vultures[i].x + Vultures[i].width
+                        player1.dx = math.abs(player1.dx) / 2
+                       --[[
 						Vultures[i].exploded = true
 						Vultures[i].graveyard = true
                         Vultures[i].dxAssigned = false
@@ -306,6 +309,7 @@ function PlayState:update(dt)
 						pteroTimer = vultureCount * 20 - 20
 						Vultures[i].firstFrameExploded = true
 						Score = Score + Vultures[i].pointTier
+                        --]]
 					elseif player1.facingRight and not Vultures[i].facingRight then
 						player1.dx = player1.dx * -1
 						player1.x = Vultures[i].x + Vultures[i].width
@@ -331,6 +335,9 @@ function PlayState:update(dt)
 					end
 				elseif player1:enemyRightCollides(Vultures[i]) then
 					if player1.facingRight and Vultures[i].facingRight then
+                        player1.x = Vultures[i].x - player1.width
+                        player1.dx = (math.abs(player1.dx) * -1) / 2
+                        --[[
 						Vultures[i].exploded = true
 						Vultures[i].graveyard = true
                         Vultures[i].dxAssigned = false
@@ -340,6 +347,7 @@ function PlayState:update(dt)
 						pteroTimer = vultureCount * 20 - 20
 						Vultures[i].firstFrameExploded = true
 						Score = Score + Vultures[i].pointTier
+                        --]]
 					elseif not player1.facingRight and not Vultures[i].facingRight then
 						player1.exploded = true
 						player1.graveyard = true
