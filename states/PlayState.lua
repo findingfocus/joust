@@ -37,6 +37,7 @@ function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
+    floorRetracted = false
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	vultureCount = 0
 	pteroTimer = 0
@@ -54,6 +55,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
+    wave = 3
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -82,6 +84,16 @@ function spawnEnemies(enemyAmount)
         vultureSpawnPointIndex = math.random(4)
         Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, i, i)
         pteroTimer = pteroTimer + 20
+    end
+end
+
+function floorRetract()
+    if groundPlatform.width > 182 then
+        groundPlatform.x = groundPlatform.x + .1
+        groundPlatform.width  = groundPlatform.width - .2
+    else
+        floorRetracted = true
+        groundPlatform.width = 182
     end
 end
 
@@ -165,6 +177,9 @@ function PlayState:update(dt)
     end
 
     if wave == 3 then
+        if not floorRetracted then
+            floorRetract()
+        end
         enemyObjects = 5
         if lavaRise < 10 then
             lavaRise = lavaRise + dt
@@ -397,13 +412,13 @@ function PlayState:update(dt)
 			Eggs[i].hatched = false
 		end
 
-        if Eggs[i].y > VIRTUAL_HEIGHT - LAVAHEIGHT - 3 - Eggs[i].height then
+        if Eggs[i].y > VIRTUAL_HEIGHT - LAVAHEIGHT - 6 - Eggs[i].height then --EGGS EXPLODING IN LAVA
            Eggs[i].graveyard = true
            Eggs[i].collected = true
         end
 	end
 
-    if player1.y > VIRTUAL_HEIGHT - 25 - 3 then --the plus 3 is for the wave 3 lava level
+    if player1.y > VIRTUAL_HEIGHT - 25 - 10 then --PLAYER EXPLODING IN LAVA
         player1.exploded = true
     end
 
@@ -633,7 +648,7 @@ function PlayState:update(dt)
            vultureCount = vultureCount + 1
         end
     end
----[[
+--[[ Floor retract outside of function
     if groundPlatform.width > 182 then
         groundPlatform.x = groundPlatform.x + .1
         groundPlatform.width  = groundPlatform.width - .2

@@ -37,6 +37,9 @@ __Potentially take out ability to kill vultures from behind
 __Ensure player and eggs die at correct lavaheight if they touch lava
 __Get proper wave text delay and vulture spawn time.
 __Add successful wave clear to score
+__Add corrected side collision for player and retracted groundPlatform
+__Side collision of eggs to retracted platfrom
+__Check ptero timer for correct functioning through waves
 
 
 SCORE UPDATE
