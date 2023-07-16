@@ -184,9 +184,26 @@ function Vulture:update(dt)
 				self.grounded = true
 			end
 
+            if self:leftCollides(groundPlatform) then
+                self.x = groundPlatform.x + groundPlatform.width
+                self.dx = math.abs(self.dx)
+            end
+            if self:rightCollides(groundPlatform) then
+                self.x = groundPlatform.x - self.width
+                self.dx = self.dx * -1
+            end
+
 			if self:checkGrounded(groundPlatform) then
 				self.ground = groundPlatform
 			end
+
+
+            --LAVA COLLISION
+
+            if self.y > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - self.height  then
+                self.exploded = true
+                self.graveyard = true
+            end
 ---[[PLATFORM COLLISIONS
 			--CYCLE THROUGH PLATFORMS
 			for index, platform in pairs(collidablePlatforms) do

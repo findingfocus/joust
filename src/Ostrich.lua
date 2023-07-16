@@ -267,6 +267,17 @@ function Ostrich:update(dt)
 					end
 				end
 
+                --GROUNDPLATFORM COLLISION
+                if self:leftCollides(groundPlatform) then
+                    self.x = groundPlatform.x + groundPlatform.width
+                    self.dx = math.abs(self.dx)
+                end
+
+                if self:rightCollides(groundPlatform) then
+                    self.x = groundPlatform.x - self.width
+                    self.dx = self.dx * -1
+                end
+
 				if self.justCollided then
 					self.collideTimer = self.collideTimer + dt
 					if self.collideTimer > COLLIDETIMERTHRESHOLD then

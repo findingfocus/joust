@@ -412,7 +412,7 @@ function PlayState:update(dt)
 			Eggs[i].hatched = false
 		end
 
-        if Eggs[i].y > VIRTUAL_HEIGHT - LAVAHEIGHT - 6 - Eggs[i].height then --EGGS EXPLODING IN LAVA
+        if Eggs[i].y > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - Eggs[i].height then --EGGS EXPLODING IN LAVA
            Eggs[i].graveyard = true
            Eggs[i].collected = true
         end
@@ -505,6 +505,16 @@ function PlayState:update(dt)
 				Eggs[i].dx = -1 * Eggs[i].dx
 			end
 		end
+
+        if Eggs[i]:rightCollide(groundPlatform) then
+           Eggs[i].x = groundPlatform.x - Eggs[i].width
+           Eggs[i].dx =  Eggs[i].dx * -1
+        end
+
+        if Eggs[i]:leftCollide(groundPlatform) then
+           Eggs[i].x = groundPlatform.x + groundPlatform.width
+           Eggs[i].dx = math.abs(Eggs[i].dx)
+        end
 	end
 
 	for i = 1, enemyObjects do

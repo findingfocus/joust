@@ -33,12 +33,13 @@ __Populate timesEggHatched with 0s based on enemyObjects in global populates
 __Retract ground platorm for wave 3+
 __Ensure Correct Placement of platforms and ground with original game
 __Add platform retract only on wave 3
-__Potentially take out ability to kill vultures from behind
-__Ensure player and eggs die at correct lavaheight if they touch lava
+X_Potentially take out ability to kill vultures from behind
+X_Ensure player and eggs die at correct lavaheight if they touch lava
 __Get proper wave text delay and vulture spawn time.
 __Add successful wave clear to score
-__Add corrected side collision for player and retracted groundPlatform
-__Side collision of eggs to retracted platfrom
+X_Add corrected side collision for player and retracted groundPlatform
+X_Side collision of eggs to retracted platfrom
+X_Side collision for vultures and groundPlatform
 __Check ptero timer for correct functioning through waves
 
 
