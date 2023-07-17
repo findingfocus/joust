@@ -342,6 +342,10 @@ function Vulture:update(dt)
                 end
 			end
 
+            if self.y > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - self.height - 5 then
+				self.justJumped = true
+            end
+
 			if self.justJumped then
 				self.flapped = true
 				self.dy = -.25

@@ -17,7 +17,7 @@ function PlayState:init()
 	Taxis = {}
 	scoresTable = {}
     eggsCaught = 0
-    timesEggHatched = {0, 0, 0, 0}
+    timesEggHatched = {} -- {0, 0, 0, 0}
 	wave = 1
 	lives = 8
 	spawnPointIndex = 0
@@ -55,7 +55,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 3
+    --wave = 3
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -88,12 +88,12 @@ function spawnEnemies(enemyAmount)
 end
 
 function floorRetract()
-    if groundPlatform.width > 182 then
+    if groundPlatform.width > 183 then
         groundPlatform.x = groundPlatform.x + .1
         groundPlatform.width  = groundPlatform.width - .2
     else
         floorRetracted = true
-        groundPlatform.width = 182
+        groundPlatform.width = 183
     end
 end
 
@@ -146,6 +146,7 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 spawnEnemies(enemyObjects)
                 tablesPopulated = true
@@ -168,6 +169,7 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 spawnEnemies(enemyObjects)
                 tablesPopulated = true
@@ -191,6 +193,7 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 spawnEnemies(enemyObjects)
                 tablesPopulated = true

@@ -32,7 +32,7 @@ __Ensure Vultures have midair bonus in wave 2
 __Populate timesEggHatched with 0s based on enemyObjects in global populates
 __Retract ground platorm for wave 3+
 __Ensure Correct Placement of platforms and ground with original game
-__Add platform retract only on wave 3
+X_Add platform retract only on wave 3
 X_Potentially take out ability to kill vultures from behind
 X_Ensure player and eggs die at correct lavaheight if they touch lava
 __Get proper wave text delay and vulture spawn time.
@@ -41,6 +41,10 @@ X_Add corrected side collision for player and retracted groundPlatform
 X_Side collision of eggs to retracted platfrom
 X_Side collision for vultures and groundPlatform
 __Check ptero timer for correct functioning through waves
+__Add low height vulture jump so they dont die in lava
+__Dummy initialization function implement
+__Modify taxis ai to jump more often
+__Add flames burning away groundPlatform
 
 
 SCORE UPDATE
