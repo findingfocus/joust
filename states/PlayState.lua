@@ -7,7 +7,7 @@ function PlayState:init()
 	platform3 = Platform('platform3', 192, 120, 50, 7)
 	platform4 = Platform('platform4', 233, 129, 79, 7)
 	platform4L = Platform('platform4L', -35, 129, 79, 7)
-	platform5 = Platform('platform5', 86, 146, 70, 7)
+	platform5 = Platform('platform5', 86, 146, 69, 7)
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
@@ -148,12 +148,10 @@ function PlayState:update(dt)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
                 timesEggHatched[i] = 0
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                spawnEnemies(enemyObjects)
                 tablesPopulated = true
-			end
+            end
+            spawnEnemies(enemyObjects)
         end
-
-
         waveAdvance(enemyObjects)
 	end
 
@@ -171,9 +169,9 @@ function PlayState:update(dt)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
                 timesEggHatched[i] = 0
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                spawnEnemies(enemyObjects)
                 tablesPopulated = true
 			end
+            spawnEnemies(enemyObjects)
         end
         waveAdvance(enemyObjects)
     end
@@ -195,9 +193,9 @@ function PlayState:update(dt)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
                 timesEggHatched[i] = 0
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                spawnEnemies(enemyObjects)
                 tablesPopulated = true
             end
+            spawnEnemies(enemyObjects)
         end
     end
 
@@ -375,7 +373,7 @@ function PlayState:update(dt)
 							Vultures[i].dx = Vultures[i].dx * -1
 							Vultures[i].x = player1.x + player1.width
 						elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
-							pteroTimer = vultureCount * 20 - 20
+                            pteroTimer = vultureCount * 20 - 20
 							Vultures[i].exploded = true
 							Vultures[i].graveyard = true
                             Vultures[i].dxAssigned = false
@@ -632,6 +630,7 @@ function PlayState:update(dt)
             Eggs[i].midairBonus = true
             Eggs[i].bouncedOffFloor = false
             scoresTable[i].bonus = true
+            pteroTimer = pteroTimer + 20
         end
     end
     --]]
@@ -772,6 +771,9 @@ function PlayState:render()
 	love.graphics.print(string.format("%06d", Score), 53, VIRTUAL_HEIGHT - 28)
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
+    --DEBUG
+    love.graphics.print('pteroTimer: ' .. tostring(math.floor(pteroTimer)), 5, 5)
+    love.graphics.print('vultureCount: ' .. tostring(vultureCount), 5, 15)
 	for k, v in pairs(scoresTable) do
 		scoresTable[k]:render()
 	end
