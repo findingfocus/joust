@@ -42,6 +42,7 @@ __Ensure Vultures have midair bonus in wave 2
 __Populate timesEggHatched with 0s based on enemyObjects in global populates
 __Get proper wave text delay and vulture spawn time.
 __Dummy initialization function implement
+__Only render plaftorm fire if platform is retracting
 
 __Add successful wave clear to score
 __Add flames burning away groundPlatform

@@ -55,7 +55,9 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    --wave = 3
+    wave = 3
+    fireAnimation = .2
+    fireSprite = 1
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -98,6 +100,15 @@ function floorRetract()
 end
 
 function PlayState:update(dt)
+    fireAnimation = fireAnimation - dt
+    if fireAnimation < 0 then
+        fireAnimation = .2
+        fireSprite = fireSprite + 1
+        if fireSprite > 3 then
+            fireSprite = 1
+        end
+    end
+
     if tUp then
         backgroundTransparency = backgroundTransparency + .5
         if backgroundTransparency >= 220 then
@@ -827,5 +838,16 @@ function PlayState:render()
 	love.graphics.print('Vulture2: ' .. tostring(timesEggHatched[2]), 5, 25)
 	love.graphics.print('Vulture3: ' .. tostring(timesEggHatched[3]), 5, 35)
 --]]
-
+   if not floorRetracted then
+       if fireSprite == 1 then
+           love.graphics.draw(fire1, groundPlatform.x, groundPlatform.y - 16)
+           love.graphics.draw(fire1, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+       elseif fireSprite == 2 then
+           love.graphics.draw(fire2, groundPlatform.x, groundPlatform.y - 16)
+           love.graphics.draw(fire2, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+       elseif fireSprite == 3 then
+           love.graphics.draw(fire3, groundPlatform.x, groundPlatform.y - 16)
+           love.graphics.draw(fire3, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+       end
+    end
 end
