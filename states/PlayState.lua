@@ -55,7 +55,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    --wave = 3
+    wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -672,14 +672,6 @@ function PlayState:update(dt)
            vultureCount = vultureCount + 1
         end
     end
---[[ Floor retract outside of function
-    if groundPlatform.width > 182 then
-        groundPlatform.x = groundPlatform.x + .1
-        groundPlatform.width  = groundPlatform.width - .2
-    else
-        groundPlatform.width = 182
-    end
-    --]]
 end
 
 function PlayState:render()
@@ -727,8 +719,6 @@ function PlayState:render()
 
 	lavaBubble1:render()
 	lavaBubble2:render()
-
-	--taxi1:render()
 
 	for k, platform in pairs(collidablePlatforms) do
 		platform:render()
@@ -783,17 +773,9 @@ function PlayState:render()
 	love.graphics.print(string.format("%06d", Score), 53, VIRTUAL_HEIGHT - 28)
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
-    --DEBUG
-    love.graphics.print('pteroTimer: ' .. tostring(math.floor(pteroTimer)), 5, 5)
-    love.graphics.print('vultureCount: ' .. tostring(vultureCount), 5, 15)
 	for k, v in pairs(scoresTable) do
 		scoresTable[k]:render()
 	end
-
-    --[[
-    love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
-    love.graphics.draw(centerReference, 0, 0)
-    --]]
 
     love.graphics.setFont(smallFont)
 
@@ -802,21 +784,26 @@ function PlayState:render()
         love.graphics.printf('WAVE ' .. tostring(wave), 0, VIRTUAL_HEIGHT / 2 - 3, VIRTUAL_WIDTH, "center")
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
---[[
-    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-    love.graphics.print('gP.width: ' .. tostring(groundPlatform.width), 25, 25)
+
+   if not floorRetracted then
+       if fireSprite == 1 and groundPlatform.width < VIRTUAL_WIDTH + (player1.width * 2) then
+           love.graphics.draw(fire1, groundPlatform.x, groundPlatform.y - 16)
+           love.graphics.draw(fire1, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+       elseif fireSprite == 2 and groundPlatform.width < VIRTUAL_WIDTH + (player1.width * 2) then
+           love.graphics.draw(fire2, groundPlatform.x, groundPlatform.y - 16)
+           love.graphics.draw(fire2, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+       elseif fireSprite == 3 and groundPlatform.width < VIRTUAL_WIDTH + (player1.width * 2) then
+           love.graphics.draw(fire3, groundPlatform.x, groundPlatform.y - 16)
+           love.graphics.draw(fire3, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+       end
+    end
+
+    --[[
+    love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
+    love.graphics.draw(centerReference, 0, 0)
     --]]
 
---[[
-	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('spawning:  ' .. tostring(Vultures[1].spawning), 10, 10)
-    love.graphics.print('spawnDelay: ' .. tostring(Vultures[1].spawnDelay), 10, 20)
-    love.graphics.print('x. ' .. tostring(Vultures[1].x), 10, 30)
-    love.graphics.print('y. ' .. tostring(Vultures[1].y), 10, 40)
-    love.graphics.print('gy: ' .. tostring(Vultures[1].graveyard), 10, 50)
-    --]]
---DEBUG INFO
---[[
+--[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
     love.graphics.print('eggsCaught: ' .. tostring(eggsCaught), 10, 20)
@@ -839,16 +826,4 @@ function PlayState:render()
 	love.graphics.print('Vulture2: ' .. tostring(timesEggHatched[2]), 5, 25)
 	love.graphics.print('Vulture3: ' .. tostring(timesEggHatched[3]), 5, 35)
 --]]
-   if not floorRetracted then
-       if fireSprite == 1 then
-           love.graphics.draw(fire1, groundPlatform.x, groundPlatform.y - 16)
-           love.graphics.draw(fire1, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
-       elseif fireSprite == 2 then
-           love.graphics.draw(fire2, groundPlatform.x, groundPlatform.y - 16)
-           love.graphics.draw(fire2, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
-       elseif fireSprite == 3 then
-           love.graphics.draw(fire3, groundPlatform.x, groundPlatform.y - 16)
-           love.graphics.draw(fire3, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
-       end
-    end
 end
