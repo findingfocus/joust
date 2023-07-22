@@ -38,13 +38,14 @@ X_Ensure player and eggs die at correct lavaheight if they touch lava
 X_Add low height vulture jump so they dont die in lava
 X_Add successful wave clear to score
 X_Add flames burning away groundPlatform
+X_Only render plaftorm fire if platform is retracting
+X_Populate timesEggHatched with 0s based on enemyObjects in global populates
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
-__Populate timesEggHatched with 0s based on enemyObjects in global populates
 __Get proper wave text delay and vulture spawn time.
 __Dummy initialization function implement
-__Only render plaftorm fire if platform is retracting
+__Add left and right arrow key functionality as well as the h l controls for  development purposes
 
 
 SCORE UPDATE
