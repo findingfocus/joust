@@ -151,7 +151,7 @@ function Ostrich:update(dt)
 		self.temporarySafety = false
 	end
 
-	if love.keyboard.isDown('h') or love.keyboard.isDown('l') or love.keyboard.isDown('a') then
+	if love.keyboard.isDown('h') or love.keyboard.isDown('l') or love.keyboard.isDown('a') or love.keyboard.isDown('left') or love.keyboard.isDown('right') then
 		if not self.spawning then
 			self.temporarySafety = false
 		end
@@ -324,17 +324,17 @@ function Ostrich:update(dt)
 
 ---[[INPUT HANDLING
 			--MULTIPLE DIRECTION INPUT HANDLING
-			if love.keyboard.isDown('h') and not love.keyboard.isDown('l') then
+			if (love.keyboard.isDown('h') or love.keyboard.isDown('left')) and not (love.keyboard.isDown('l') or love.keyboard.isDown('right')) then
 				self.rightPriority = false
 				lastInput = {}
 				table.insert(lastInput, "left")
 
-			elseif love.keyboard.isDown('l') and not love.keyboard.isDown('h') then
+			elseif (love.keyboard.isDown('l') or love.keyboard.isDown('h')) and not (love.keyboard.isDown('h') or love.keyboard.isDown('left')) then
 				self.rightPriority = true
 				lastInput = {}
 				table.insert(lastInput, "right")
 
-			elseif love.keyboard.isDown('l') and love.keyboard.isDown('h') and not self.lastInputLocked then
+			elseif (love.keyboard.isDown('l') or love.keyboard.isDown('right')) and (love.keyboard.isDown('h') or love.keyboard.isDown('h')) and not self.lastInputLocked then
 				--assign only one value until a key is released
 				if lastInput[1] == "left" then
 					lastInput = {}
