@@ -55,7 +55,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-   -- wave = 3
+ -- wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -63,7 +63,6 @@ end
 function PlayState:checkGrounded(topObject, bottomObject)
 	if topObject.y == bottomObject.y - bottomObject.height then
 		return true
-
 	else
 		return false
 	end
@@ -78,6 +77,7 @@ function waveAdvance(enemies)
     wave = wave + 1
     Score = Score + 3000
     waveTimer = 3
+    eggsCaught = 0
     tablesPopulated = false
     return true
 end
@@ -127,6 +127,7 @@ function PlayState:update(dt)
             tUp = true
         end
     end
+
     --PTERODACTYL SPAWN
     if pteroTimer > 0 then
         pteroTimer = pteroTimer - dt
@@ -145,7 +146,6 @@ function PlayState:update(dt)
 	if love.keyboard.wasPressed('i') then
 		helpToggle = not helpToggle
 	end
-
 
 ---[[WAVE LOGIC
 	if wave == 1 then
