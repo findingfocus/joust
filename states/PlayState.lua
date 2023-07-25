@@ -55,7 +55,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
- -- wave = 3
+    wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -787,14 +787,14 @@ function PlayState:render()
 
    if not floorRetracted then
        if fireSprite == 1 and groundPlatform.width < VIRTUAL_WIDTH + (player1.width * 2) then
-           love.graphics.draw(fire1, groundPlatform.x, groundPlatform.y - 16)
-           love.graphics.draw(fire1, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+           love.graphics.draw(fire1, groundPlatform.x - 4, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+           love.graphics.draw(fire1, groundPlatform.x + groundPlatform.width - 7 + 4, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
        elseif fireSprite == 2 and groundPlatform.width < VIRTUAL_WIDTH + (player1.width * 2) then
-           love.graphics.draw(fire2, groundPlatform.x, groundPlatform.y - 16)
-           love.graphics.draw(fire2, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+           love.graphics.draw(fire2, groundPlatform.x - 4, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+           love.graphics.draw(fire2, groundPlatform.x + groundPlatform.width - 7 + 4, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
        elseif fireSprite == 3 and groundPlatform.width < VIRTUAL_WIDTH + (player1.width * 2) then
-           love.graphics.draw(fire3, groundPlatform.x, groundPlatform.y - 16)
-           love.graphics.draw(fire3, groundPlatform.x + groundPlatform.width - 7, groundPlatform.y - 16)
+           love.graphics.draw(fire3, groundPlatform.x - 4, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+           love.graphics.draw(fire3, groundPlatform.x + groundPlatform.width - 7 + 4,  VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
        end
     end
 
