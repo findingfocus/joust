@@ -209,8 +209,24 @@ function PlayState:update(dt)
             end
             spawnEnemies(enemyObjects)
         end
+        waveAdvance(enemyObjects)
     end
 
+    if wave == 4 then
+        enemyObjects = 5
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects)
+        end
+    end
 --]]
 --]]
 
