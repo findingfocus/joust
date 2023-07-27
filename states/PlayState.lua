@@ -814,6 +814,19 @@ function PlayState:render()
        end
     end
 
+    if wave >= 3 and floorRetracted then
+        if fireSprite == 1 then
+            love.graphics.draw(fire1, 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+            love.graphics.draw(fire1, VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+        elseif fireSprite == 2 then
+            love.graphics.draw(fire2, 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+            love.graphics.draw(fire2, VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+        elseif fireSprite == 3 then
+            love.graphics.draw(fire3, 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+            love.graphics.draw(fire3, VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+        end
+    end
+
     --[[
     love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
     love.graphics.draw(centerReference, 0, 0)
