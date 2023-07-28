@@ -55,7 +55,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 3
+    --wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -193,7 +193,7 @@ function PlayState:update(dt)
             floorRetract()
         end
         enemyObjects = 5
-        if lavaRise < 10 then
+        if lavaRise < 11 then
             lavaRise = lavaRise + dt
         end
 
