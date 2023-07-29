@@ -85,7 +85,7 @@ end
 function spawnEnemies(enemyAmount)
     for i = 1, enemyAmount do
         vultureSpawnPointIndex = math.random(4)
-        Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, i, i)
+        Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, i, i + 2)
         pteroTimer = pteroTimer + 20
     end
 end
@@ -343,17 +343,6 @@ function PlayState:update(dt)
 					elseif not player1.facingRight and not Vultures[i].facingRight then
                         player1.x = Vultures[i].x + Vultures[i].width
                         player1.dx = math.abs(player1.dx) / 2
-                       --[[
-						Vultures[i].exploded = true
-						Vultures[i].graveyard = true
-                        Vultures[i].dxAssigned = false
-						Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
-						Eggs[i].graveyard = false
-						Eggs[i].invulnerable = true
-						pteroTimer = vultureCount * 20 - 20
-						Vultures[i].firstFrameExploded = true
-						Score = Score + Vultures[i].pointTier
-                        --]]
 					elseif player1.facingRight and not Vultures[i].facingRight then
 						player1.dx = player1.dx * -1
 						player1.x = Vultures[i].x + Vultures[i].width
@@ -381,18 +370,7 @@ function PlayState:update(dt)
 					if player1.facingRight and Vultures[i].facingRight then
                         player1.x = Vultures[i].x - player1.width
                         player1.dx = (math.abs(player1.dx) * -1) / 2
-                        --[[
-						Vultures[i].exploded = true
-						Vultures[i].graveyard = true
-                        Vultures[i].dxAssigned = false
-						Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
-						Eggs[i].graveyard = false
-						Eggs[i].invulnerable = true
-						pteroTimer = vultureCount * 20 - 20
-						Vultures[i].firstFrameExploded = true
-						Score = Score + Vultures[i].pointTier
-                        --]]
-					elseif not player1.facingRight and not Vultures[i].facingRight then
+                   elseif not player1.facingRight and not Vultures[i].facingRight then
 						player1.exploded = true
 						player1.graveyard = true
 					elseif player1.facingRight and not Vultures[i].facingRight then
