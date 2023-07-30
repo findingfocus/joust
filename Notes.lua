@@ -40,15 +40,17 @@ X_Add successful wave clear to score
 X_Add flames burning away groundPlatform
 X_Only render plaftorm fire if platform is retracting
 X_Populate timesEggHatched with 0s based on enemyObjects in global populates
+X_Lava to be just above the burned away platform
+X_Get proper wave text delay and vulture spawn time.
+X_Add left and right arrow key functionality as well as the h l controls for  development purposes
+X_Match Lava Heights from famicom version
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
-__Get proper wave text delay and vulture spawn time.
 __Dummy initialization function implement
-__Add left and right arrow key functionality as well as the h l controls for  development purposes
-__Match Lava Heights from famicom version
 __Egg wave, egg on plaform1L, two on platform 2, 1 in tricky corner,1 on 5, two on ground
-__Lava to be just above the burned away platform
+__Check original to see what happens to uncaught eggs on egg wave
+__Add portal sound on vulture spawn (player spawn?)
 
 
 SCORE UPDATE

@@ -226,6 +226,17 @@ function PlayState:update(dt)
             end
             spawnEnemies(enemyObjects)
         end
+        waveAdvance(enemyObjects)
+    end
+
+    if wave == 5 then
+        enemyObjects = 7
+        for egg in pairs(enemyObjects) do
+            --Do we need to initial dummy objects,
+            --Do we included timesEggHatched
+            --What are the scoring points on this wave?
+            --Do the eggs hatch?
+        end
     end
 --]]
 --]]
