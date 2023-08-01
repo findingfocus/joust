@@ -34,6 +34,7 @@ function PlayState:init()
 	helpToggle = false
 	gameOver = false
 	tablesPopulated = false
+    leftFireCollided = true
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
@@ -55,7 +56,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 1
+    wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -851,6 +852,10 @@ function PlayState:render()
         elseif fireSprite == 3 then
             love.graphics.draw(fire3, 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
             love.graphics.draw(fire3, VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+        end
+        if leftFireCollided then
+            love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+            love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
         end
     end
 
