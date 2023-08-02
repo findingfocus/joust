@@ -35,6 +35,7 @@ function PlayState:init()
 	gameOver = false
 	tablesPopulated = false
     leftFireCollided = true
+    rightFireCollided = true
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
@@ -856,6 +857,10 @@ function PlayState:render()
         if leftFireCollided then
             love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
             love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
+        end
+        if rightFireCollided then
+            love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+            love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
         end
     end
 
