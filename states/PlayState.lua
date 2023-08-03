@@ -34,8 +34,8 @@ function PlayState:init()
 	helpToggle = false
 	gameOver = false
 	tablesPopulated = false
-    leftFireCollided = true
-    rightFireCollided = true
+    leftFireCollided = false
+    rightFireCollided = false
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
@@ -60,6 +60,36 @@ function PlayState:init()
     wave = 3
     fireAnimation = .2
     fireSprite = 1
+end
+
+function leftTrollCollide(collidable)
+    if collidable.x < 32 and collidable.x + collidable.width > 16 then
+        if collidable.y < VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise and collidable.y + collidable.height > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16 then
+            return true
+        end
+    else
+        return false
+    end
+end
+
+function rightTrollCollide(collidable)
+    if collidable.x < VIRTUAL_WIDTH - 12 and collidable.x + collidable.width > VIRTUAL_WIDTH - 20 then
+        if collidable.y < VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise and collidable.y + collidable.height > VIRTUAL_HEIGHT -LAVAHEIGHT - lavaRise - 16 then
+            return true
+        end
+    else
+        return false
+    end
+end
+
+
+if leftFireCollided then
+    love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+    love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
+end
+if rightFireCollided then
+    love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
 end
 
 function PlayState:checkGrounded(topObject, bottomObject)
@@ -716,6 +746,17 @@ function PlayState:update(dt)
         if not Vultures[i].graveyard then
            vultureCount = vultureCount + 1
         end
+    end
+
+    if leftTrollCollide(player1) then
+        leftFireCollided = true
+    else
+        leftFireCollided = false
+    end
+    if rightTrollCollide(player1) then
+        rightFireCollided = true
+    else
+        rightFireCollided = false
     end
 end
 
