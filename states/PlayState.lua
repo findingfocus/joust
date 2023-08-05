@@ -62,9 +62,9 @@ function PlayState:init()
     fireSprite = 1
 end
 
-function leftTrollCollide(collidable)
-    if collidable.x < 32 and collidable.x + collidable.width > 16 then
-        if collidable.y < VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise and collidable.y + collidable.height > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16 then
+function leftTrollCollide(player)
+    if player.x < 28 and player.x + player.width > 20 then
+        if player.y < VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise and player.y + player.height > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 12 then
             return true
         end
     else
@@ -72,9 +72,9 @@ function leftTrollCollide(collidable)
     end
 end
 
-function rightTrollCollide(collidable)
-    if collidable.x < VIRTUAL_WIDTH - 12 and collidable.x + collidable.width > VIRTUAL_WIDTH - 20 then
-        if collidable.y < VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise and collidable.y + collidable.height > VIRTUAL_HEIGHT -LAVAHEIGHT - lavaRise - 16 then
+function rightTrollCollide(player)
+    if player.x < VIRTUAL_WIDTH - 16 and player.x + player.width > VIRTUAL_WIDTH - 16 then
+        if player.y < VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise and player.y + player.height > VIRTUAL_HEIGHT -LAVAHEIGHT - lavaRise - 12 then
             return true
         end
     else
