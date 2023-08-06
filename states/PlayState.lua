@@ -82,7 +82,6 @@ function rightTrollCollide(player)
     end
 end
 
-
 if leftFireCollided then
     love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
     love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
@@ -750,6 +749,8 @@ function PlayState:update(dt)
 
     if leftTrollCollide(player1) then
         leftFireCollided = true
+        player1.x = 12
+        player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
     else
         leftFireCollided = false
     end
