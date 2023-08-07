@@ -755,7 +755,9 @@ function PlayState:update(dt)
         leftFireCollided = false
     end
     if rightTrollCollide(player1) then
-        rightFireCollided = true
+       rightFireCollided = true
+       player1.x = VIRTUAL_WIDTH - 24
+       player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
     else
         rightFireCollided = false
     end
