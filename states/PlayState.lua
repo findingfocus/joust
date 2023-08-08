@@ -25,6 +25,7 @@ function PlayState:init()
     enemyObjects = 0
     lavaRise = 0
     waveTimer = 3
+    grabTimer = 0
     groundX = 0
     groundY = VIRTUAL_HEIGHT - 36
     backgroundTransparency = 100
@@ -751,6 +752,7 @@ function PlayState:update(dt)
         leftFireCollided = true
         player1.x = 12
         player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
+        player1.grabbed = true
     else
         leftFireCollided = false
     end
@@ -758,8 +760,19 @@ function PlayState:update(dt)
        rightFireCollided = true
        player1.x = VIRTUAL_WIDTH - 24
        player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
+       player1.grabbed = true
     else
         rightFireCollided = false
+    end
+
+    if player1.grabbed then
+        grabTimer = grabTimer + dt
+        if grabTimer > 3 then
+            grabTimer = 0
+            player1.grabbed = false
+            player1.y = player1.y - 10
+            player1.dy = -.5
+        end
     end
 end
 

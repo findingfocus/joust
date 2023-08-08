@@ -8,6 +8,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.atlas = playerAtlas
 	self.temporarySafetyAtlas = temporarySafetyAtlas
 	self.platformSpawnY = platformSpawnY
+    self.grabbed = false
 	self.lastX = 0
 	self.lastY = 0
 	self.dy = 0
