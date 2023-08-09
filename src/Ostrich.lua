@@ -23,6 +23,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY)
 	self.spawnHeight = 0
 	self.safetyTime = 5
 	self.spawnFrameCount = 0
+    self.escapeJump = 0
 	self.temporarySafety = true
 	self.xoffset = 1
 	self.justStoppedTimer = INPUTLAG

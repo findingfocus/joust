@@ -767,11 +767,22 @@ function PlayState:update(dt)
 
     if player1.grabbed then
         grabTimer = grabTimer + dt
-        if grabTimer > 3 then
+        if grabTimer > 5 then
             grabTimer = 0
             player1.grabbed = false
             player1.y = player1.y - 10
             player1.dy = -.5
+            player1.escapeJump = 0
+        end
+        if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('a') then
+            player1.escapeJump = player1.escapeJump + 1
+        end
+        if player1.escapeJump > 5 then
+            grabTimer = 0
+            player1.grabbed = false
+            player1.y = player1.y - 10
+            player1.dy = -.5
+            player1.escapeJump = 0
         end
     end
 end
@@ -925,7 +936,12 @@ function PlayState:render()
     love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
     love.graphics.draw(centerReference, 0, 0)
     --]]
+ 
 
+    --[[
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	love.graphics.print('escapeJump: ' .. tostring(player1.escapeJump), 10, 10)
+    --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
