@@ -752,15 +752,19 @@ function PlayState:update(dt)
         leftFireCollided = true
         player1.x = 12
         player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
+        player1.dy = 0
+        player1.dx = 0
         player1.grabbed = true
     else
         leftFireCollided = false
     end
     if rightTrollCollide(player1) then
-       rightFireCollided = true
-       player1.x = VIRTUAL_WIDTH - 24
-       player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
-       player1.grabbed = true
+        rightFireCollided = true
+        player1.x = VIRTUAL_WIDTH - 24
+        player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
+        player1.dy = 0
+        player1.dx = 0
+        player1.grabbed = true
     else
         rightFireCollided = false
     end
@@ -936,7 +940,7 @@ function PlayState:render()
     love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
     love.graphics.draw(centerReference, 0, 0)
     --]]
- 
+
 
     --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
