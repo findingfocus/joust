@@ -45,13 +45,17 @@ X_Get proper wave text delay and vulture spawn time.
 X_Add left and right arrow key functionality as well as the h l controls for  development purposes
 X_Match Lava Heights from famicom version
 X_Egg wave, egg on plaform1L, two on platform 2, 1 in tricky corner,1 on 5, two on ground
+X_Ensure Eggs in wave 5 don't hatch into Vulture
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
-__Ensure Eggs in wave 5 don't hatch into Vulture
 __Move game over to be in low-center position
 __Add portal sound on vulture spawn (player spawn?)
+__Add crazy troll grab accurate to game...
+__Add lavatroll animation
+__Wave 6 disappears main center platform 2 ?
+
 
 
 SCORE UPDATE

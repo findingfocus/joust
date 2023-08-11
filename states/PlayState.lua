@@ -29,6 +29,7 @@ function PlayState:init()
     groundX = 0
     groundY = VIRTUAL_HEIGHT - 36
     backgroundTransparency = 100
+    wave5Timer = 0
     tUp = true
     tDown = false
     groundWidth = VIRTUAL_WIDTH
@@ -58,7 +59,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 3
+    wave = 5
     fireAnimation = .2
     fireSprite = 1
 end
@@ -263,6 +264,7 @@ function PlayState:update(dt)
 
     if wave == 5 then
         enemyObjects = 7
+        wave5Timer = wave5Timer + dt
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -307,6 +309,16 @@ function PlayState:update(dt)
             tablesPopulated = true
         end
 
+        if wave5Timer > 18 then
+            wave = wave + 1
+            waveTimer = 3
+            eggsCaught = 0
+            for i = 1, enemyObjects do
+				Eggs[i] = Egg(-10, -10, 0, i)
+                Eggs[i].collected = true
+            end
+            wave5Timer = 0
+        end
     end
 --]]
 --]]
@@ -942,9 +954,9 @@ function PlayState:render()
     --]]
 
 
-    --[[
+    ---[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('escapeJump: ' .. tostring(player1.escapeJump), 10, 10)
+	love.graphics.print('wave5Timer: ' .. tostring(wave5Timer), 10, 10)
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
