@@ -310,15 +310,34 @@ function PlayState:update(dt)
         end
 
         if wave5Timer > 18 then
-            wave = wave + 1
+            wave = 6
             waveTimer = 3
             eggsCaught = 0
+            tablesPopulated = false
             for i = 1, enemyObjects do
 				Eggs[i] = Egg(-10, -10, 0, i)
                 Eggs[i].collected = true
             end
             wave5Timer = 0
         end
+    end
+
+    if wave == 6 then
+        enemyObjects = 7
+        --Add platform 2 retraction
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects)
+        end
+        waveAdvance(enemyObjects)
     end
 --]]
 --]]
