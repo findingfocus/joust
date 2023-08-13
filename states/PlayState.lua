@@ -19,7 +19,7 @@ function PlayState:init()
     eggsCaught = 0
     timesEggHatched = {} -- {0, 0, 0, 0}
 	wave = 1
-	lives = 8
+	lives = 5
 	spawnPointIndex = 0
 	vultureSpawnPointIndex = 0
     enemyObjects = 0
@@ -59,7 +59,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 5
+    wave = 1
     fireAnimation = .2
     fireSprite = 1
 end
@@ -900,9 +900,9 @@ function PlayState:render()
 		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
 		love.graphics.setFont(smallFont)
 		love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
-		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center', 0, 1, 1, -1, -1)
+		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2 + 55, VIRTUAL_WIDTH, 'center', 0, 1, 1, -1, -1)
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
+		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2 + 55, VIRTUAL_WIDTH, 'center')
 	end
 
 	if helpToggle and not gameOver then
@@ -973,7 +973,7 @@ function PlayState:render()
     --]]
 
 
-    ---[[
+    --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('wave5Timer: ' .. tostring(wave5Timer), 10, 10)
     --]]
