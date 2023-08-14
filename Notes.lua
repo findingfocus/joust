@@ -56,6 +56,9 @@ __Add portal sound on vulture spawn (player spawn?)
 __Add crazy troll grab accurate to game...
 __Add lavatroll animation
 __Wave 6 disappears main center platform 2 ?
+__Reconfigure LavaTroll to be more game accurate?
+__lowerbound collision for trollTracking
+
 
 Unseating Bounder   500
 Unseating Hunter    750
