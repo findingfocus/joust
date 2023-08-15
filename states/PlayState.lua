@@ -30,6 +30,10 @@ function PlayState:init()
     groundY = VIRTUAL_HEIGHT - 36
     backgroundTransparency = 100
     wave5Timer = 0
+    shearX = 0
+    shearY = 0
+    shearUp = true
+    shearDown = false
     tUp = true
     tDown = false
     groundWidth = VIRTUAL_WIDTH
@@ -134,6 +138,28 @@ function floorRetract()
 end
 
 function PlayState:update(dt)
+    if shearUp then
+        shearX = shearX + dt * 2
+        shearY = shearY + dt * 2
+    end
+
+    if shearX > 4 then
+        shearX = 4
+        shearY = 4
+        shearUp = false
+        shearDown = true
+    end
+
+    if shearDown then
+        shearX = shearX - dt * 2
+        shearY = shearY - dt * 2
+    end
+
+    if shearX < 0 then
+        shearUp = true
+        shearDown = false
+        shearX = 0.1
+    end
     fireAnimation = fireAnimation - dt
     if fireAnimation < 0 then
         fireAnimation = .2
@@ -966,6 +992,9 @@ function PlayState:render()
             love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
         end
     end
+
+    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+    love.graphics.draw(groundBottom, 40, 40, 0, .5, .5, 0, 0, shearX, shearY)
 
     --[[
     love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
