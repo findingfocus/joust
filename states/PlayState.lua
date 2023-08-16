@@ -30,10 +30,8 @@ function PlayState:init()
     groundY = VIRTUAL_HEIGHT - 36
     backgroundTransparency = 100
     wave5Timer = 0
-    shearX = 0
-    shearY = 0
-    shearUp = true
-    shearDown = false
+    leftFireTimer = 0
+    rightFireTimer = 0
     tUp = true
     tDown = false
     groundWidth = VIRTUAL_WIDTH
@@ -63,7 +61,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 1
+    wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -138,28 +136,6 @@ function floorRetract()
 end
 
 function PlayState:update(dt)
-    if shearUp then
-        shearX = shearX + dt * 2
-        shearY = shearY + dt * 2
-    end
-
-    if shearX > 4 then
-        shearX = 4
-        shearY = 4
-        shearUp = false
-        shearDown = true
-    end
-
-    if shearDown then
-        shearX = shearX - dt * 2
-        shearY = shearY - dt * 2
-    end
-
-    if shearX < 0 then
-        shearUp = true
-        shearDown = false
-        shearX = 0.1
-    end
     fireAnimation = fireAnimation - dt
     if fireAnimation < 0 then
         fireAnimation = .2
@@ -807,23 +783,31 @@ function PlayState:update(dt)
 
     if leftTrollCollide(player1) then
         leftFireCollided = true
-        player1.x = 12
-        player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
-        player1.dy = 0
-        player1.dx = 0
-        player1.grabbed = true
+        leftFireTimer = leftFireTimer + dt * 4
+        if leftFireTimer > 3 then
+            player1.x = 12
+            player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
+            player1.dy = 0
+            player1.dx = 0
+            player1.grabbed = true
+        end
     else
         leftFireCollided = false
+        leftFireTimer = 0
     end
     if rightTrollCollide(player1) then
         rightFireCollided = true
-        player1.x = VIRTUAL_WIDTH - 24
-        player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
-        player1.dy = 0
-        player1.dx = 0
-        player1.grabbed = true
+        rightFireTimer = rightFireTimer + dt * 4
+        if rightFireTimer > 3 then
+            player1.x = VIRTUAL_WIDTH - 24
+            player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
+            player1.dy = 0
+            player1.dx = 0
+            player1.grabbed = true
+        end
     else
         rightFireCollided = false
+        rightFireTimer = 0
     end
 
     if player1.grabbed then
@@ -993,18 +977,16 @@ function PlayState:render()
         end
     end
 
-    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-    love.graphics.draw(groundBottom, 40, 40, 0, .5, .5, 0, 0, shearX, shearY)
-
     --[[
     love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
     love.graphics.draw(centerReference, 0, 0)
     --]]
 
 
-    --[[
+    ---[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('wave5Timer: ' .. tostring(wave5Timer), 10, 10)
+	love.graphics.print('leftFireTimer: ' .. tostring(leftFireTimer), 10, 10)
+	love.graphics.print('rightFireTimer: ' .. tostring(rightFireTimer), 10, 20)
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
