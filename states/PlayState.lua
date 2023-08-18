@@ -4,6 +4,9 @@ function PlayState:init()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)
 	platform1L = Platform('platform1L', -35, 68, 69, 7)
 	platform2 = Platform('platform2', 70, 77, 94, 7)
+    wipeX = 117
+    wipeY = 77
+    wipeWidth = 0
 	platform3 = Platform('platform3', 192, 120, 50, 7)
 	platform4 = Platform('platform4', 233, 129, 79, 7)
 	platform4L = Platform('platform4L', -35, 129, 79, 7)
@@ -136,6 +139,9 @@ function floorRetract()
 end
 
 function PlayState:update(dt)
+    wipeX = wipeX - dt * 2
+    wipeWidth = wipeWidth + dt * 4
+
     fireAnimation = fireAnimation - dt
     if fireAnimation < 0 then
         fireAnimation = .2
@@ -882,6 +888,11 @@ function PlayState:render()
 		platform:render()
 	end
 
+   ---[[WIPING AWAY PLATFORM 3
+    love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+    love.graphics.rectangle('fill', wipeX, wipeY, wipeWidth, 7)
+    --]]
+
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
 	love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
@@ -983,7 +994,7 @@ function PlayState:render()
     --]]
 
 
-    ---[[
+    --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('leftFireTimer: ' .. tostring(leftFireTimer), 10, 10)
 	love.graphics.print('rightFireTimer: ' .. tostring(rightFireTimer), 10, 20)
