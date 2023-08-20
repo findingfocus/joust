@@ -6,6 +6,8 @@ function PlayState:init()
 	platform2 = Platform('platform2', 70, 77, 94, 7)
     leftWipeX = 70
     leftWipeY = 77
+    rightWipeX = 164
+    rightWipeWidth = 0
     leftWipeWidth = 0
 	platform3 = Platform('platform3', 192, 120, 50, 7)
 	platform4 = Platform('platform4', 233, 129, 79, 7)
@@ -139,8 +141,12 @@ function floorRetract()
 end
 
 function PlayState:update(dt)
-    leftWipeWidth = leftWipeWidth + dt * 32
-    --REMOVE PLATFORM 3 leftWipeX altogether??
+    if leftWipeWidth < 47 then
+        leftWipeWidth = leftWipeWidth + dt * 32
+    end
+
+    rightWipeX = rightWipeX - dt * 32
+    rightWipeWidth = rightWipeWidth + dt * 64
 
     fireAnimation = fireAnimation - dt
     if fireAnimation < 0 then
@@ -897,6 +903,7 @@ function PlayState:render()
    ---[[WIPING AWAY PLATFORM 3
     love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
     love.graphics.rectangle('fill', leftWipeX, leftWipeY, leftWipeWidth, 7)
+    love.graphics.rectangle('fill', rightWipeX, leftWipeY, rightWipeWidth, 7)
     --]]
 
 --[[KEYLOGGER
@@ -993,10 +1000,9 @@ function PlayState:render()
     --]]
 
 
-    --[[
+   ---[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('leftFireTimer: ' .. tostring(leftFireTimer), 10, 10)
-	love.graphics.print('rightFireTimer: ' .. tostring(rightFireTimer), 10, 20)
+	love.graphics.print('leftWipeWidth: ' .. tostring(leftWipeWidth), 10, 10)
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
