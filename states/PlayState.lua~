@@ -1000,7 +1000,7 @@ function PlayState:render()
     --]]
 
 
-   --[[
+   ---[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('leftWipeWidth: ' .. tostring(leftWipeWidth), 10, 10)
     --]]

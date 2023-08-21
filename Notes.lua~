@@ -54,11 +54,12 @@ __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
 __Add lavatroll animation
-X_Wave 6 disappears main center platform 2 ?
-__Ensure platform 2 disappears from collidablePlatforms table once it is retracted
+__Wave 6 disappears main center platform 2 ?
 
 
-Unseating Bounder   500 Unseating Hunter    750 Unseating Shadowlord    1500
+Unseating Bounder   500
+Unseating Hunter    750
+Unseating Shadowlord    1500
 Killing Pterodactyl 1000
 First Egg   250
 Second Egg  500
