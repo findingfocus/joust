@@ -145,8 +145,10 @@ function PlayState:update(dt)
         leftWipeWidth = leftWipeWidth + dt * 32
     end
 
-    rightWipeX = rightWipeX - dt * 32
-    rightWipeWidth = rightWipeWidth + dt * 64
+    if rightWipeX > 117 then
+        rightWipeX = rightWipeX - dt * 32
+        rightWipeWidth = rightWipeWidth + dt * 64
+    end
 
     fireAnimation = fireAnimation - dt
     if fireAnimation < 0 then
@@ -1002,7 +1004,7 @@ function PlayState:render()
 
    --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('leftWipeWidth: ' .. tostring(leftWipeWidth), 10, 10)
+	love.graphics.print('rightWipeWidth: ' .. tostring(rightWipeWidth), 10, 10)
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
