@@ -16,6 +16,7 @@ function PlayState:init()
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
+    platform2Removed = false
 	Vultures = {}
 	Eggs = {}
 	Jockeys = {}
@@ -55,8 +56,8 @@ function PlayState:init()
 	SpawnZonePoints = {}
 	SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y)
 	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
-	SpawnZonePoints[3] = SpawnZonePoint(platform2.x + 20, platform2.y)
-	SpawnZonePoints[4] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
+	SpawnZonePoints[3] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
+	SpawnZonePoints[4] = SpawnZonePoint(platform2.x + 20, platform2.y)
 	PteroSpawnPoints = {}
 	PteroSpawnPoints[1] = SpawnZonePoint(-24, 12, 1.8)
 	PteroSpawnPoints[2] = SpawnZonePoint(VIRTUAL_WIDTH, 12, -1.8)
@@ -66,7 +67,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 3
+    wave = 6
     fireAnimation = .2
     fireSprite = 1
 end
@@ -122,9 +123,9 @@ function waveAdvance(enemies)
     return true
 end
 
-function spawnEnemies(enemyAmount)
+function spawnEnemies(enemyAmount, zoneAmount)
     for i = 1, enemyAmount do
-        vultureSpawnPointIndex = math.random(4)
+        vultureSpawnPointIndex = math.random(zoneAmount)
         Vultures[i] = Vulture(SpawnZonePoints[vultureSpawnPointIndex].x, SpawnZonePoints[vultureSpawnPointIndex].y, 16, 24, SpawnZonePoints[vultureSpawnPointIndex].y, -1, i, i + 2)
         pteroTimer = pteroTimer + 20
     end
@@ -143,11 +144,21 @@ end
 function PlayState:update(dt)
     if leftWipeWidth < 47 then
         leftWipeWidth = leftWipeWidth + dt * 32
+    else
+        platform2Removed = true
+        leftWipeWidth = 47
     end
 
     if rightWipeX > 117 then
         rightWipeX = rightWipeX - dt * 32
         rightWipeWidth = rightWipeWidth + dt * 64
+    else
+        platform2Removed = true
+        rightWipeX = 117
+    end
+
+    if platform2Removed then
+        collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
     end
 
     fireAnimation = fireAnimation - dt
@@ -211,7 +222,7 @@ function PlayState:update(dt)
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 tablesPopulated = true
             end
-            spawnEnemies(enemyObjects)
+            spawnEnemies(enemyObjects, 4)
         end
         waveAdvance(enemyObjects)
 	end
@@ -232,7 +243,7 @@ function PlayState:update(dt)
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 tablesPopulated = true
 			end
-            spawnEnemies(enemyObjects)
+            spawnEnemies(enemyObjects, 4)
         end
         waveAdvance(enemyObjects)
     end
@@ -256,7 +267,7 @@ function PlayState:update(dt)
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 tablesPopulated = true
             end
-            spawnEnemies(enemyObjects)
+            spawnEnemies(enemyObjects, 4)
         end
         waveAdvance(enemyObjects)
     end
@@ -273,7 +284,7 @@ function PlayState:update(dt)
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 tablesPopulated = true
             end
-            spawnEnemies(enemyObjects)
+            spawnEnemies(enemyObjects, 4)
         end
         waveAdvance(enemyObjects)
     end
@@ -351,7 +362,7 @@ function PlayState:update(dt)
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 tablesPopulated = true
             end
-            spawnEnemies(enemyObjects)
+            spawnEnemies(enemyObjects, 3)
         end
         waveAdvance(enemyObjects)
     end
@@ -897,15 +908,19 @@ function PlayState:render()
 	end
 
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
+    if not platform2Removed then
+        love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
+    end
 	love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
 	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
 	love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
 
    ---[[WIPING AWAY PLATFORM 3
-    love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
-    love.graphics.rectangle('fill', leftWipeX, leftWipeY, leftWipeWidth, 7)
-    love.graphics.rectangle('fill', rightWipeX, leftWipeY, rightWipeWidth, 7)
+    if not platform2Removed then
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.rectangle('fill', leftWipeX, leftWipeY, leftWipeWidth, 7)
+        love.graphics.rectangle('fill', rightWipeX, leftWipeY, rightWipeWidth, 7)
+    end
     --]]
 
 --[[KEYLOGGER
@@ -1002,9 +1017,11 @@ function PlayState:render()
     --]]
 
 
-   --[[
+   ---[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('rightWipeWidth: ' .. tostring(rightWipeWidth), 10, 10)
+	love.graphics.print('rightWipeX: ' .. tostring(rightWipeX), 10, 10)
+	love.graphics.print('platform2Removed: ' .. tostring(platform2Removed), 10, 20)
+	love.graphics.print('wave: ' .. tostring(wave), 10, 30)
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)

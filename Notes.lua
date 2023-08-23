@@ -48,14 +48,14 @@ X_Egg wave, egg on plaform1L, two on platform 2, 1 in tricky corner,1 on 5, two 
 X_Ensure Eggs in wave 5 don't hatch into Vulture
 X_Add wave 6 spawns
 X_Move game over to be in low-center position
+X_Wave 6 disappears main center platform 2 ?
+X_Ensure platform 2 disappears from collidablePlatforms table once it is retracted
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
 __Add lavatroll animation
-X_Wave 6 disappears main center platform 2 ?
-__Ensure platform 2 disappears from collidablePlatforms table once it is retracted
 
 
 Unseating Bounder   500 Unseating Hunter    750 Unseating Shadowlord    1500
