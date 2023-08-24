@@ -9,6 +9,7 @@ function PlayState:init()
     rightWipeX = 164
     rightWipeWidth = 0
     leftWipeWidth = 0
+    wipeTimer = 0
 	platform3 = Platform('platform3', 192, 120, 50, 7)
 	platform4 = Platform('platform4', 233, 129, 79, 7)
 	platform4L = Platform('platform4L', -35, 129, 79, 7)
@@ -142,19 +143,23 @@ function floorRetract()
 end
 
 function PlayState:update(dt)
-    if leftWipeWidth < 47 then
-        leftWipeWidth = leftWipeWidth + dt * 32
-    else
-        platform2Removed = true
-        leftWipeWidth = 47
-    end
+    wipeTimer = wipeTimer + dt
 
-    if rightWipeX > 117 then
-        rightWipeX = rightWipeX - dt * 32
-        rightWipeWidth = rightWipeWidth + dt * 64
-    else
-        platform2Removed = true
-        rightWipeX = 117
+    if wipeTimer > 8 then
+        if leftWipeWidth < 47 then
+            leftWipeWidth = leftWipeWidth + dt * 80
+        else
+            platform2Removed = true
+            leftWipeWidth = 47
+        end
+
+        if rightWipeX > 117 then
+            rightWipeX = rightWipeX - dt * 80
+            rightWipeWidth = rightWipeWidth + dt * 160
+        else
+            platform2Removed = true
+            rightWipeX = 117
+        end
     end
 
     if platform2Removed then
@@ -1022,6 +1027,7 @@ function PlayState:render()
 	love.graphics.print('rightWipeX: ' .. tostring(rightWipeX), 10, 10)
 	love.graphics.print('platform2Removed: ' .. tostring(platform2Removed), 10, 20)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 30)
+	love.graphics.print('player.y: ' .. tostring(player1.y), 10, 40)
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)

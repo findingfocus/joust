@@ -291,6 +291,8 @@ function Ostrich:update(dt)
 
 			if not self:checkGrounded(self.ground) then
 				self.grounded = false
+            elseif platform2Removed and self.y == 53 then
+                self.grounded = false
 			end
 
 			--APPLY GRAVITY WHEN IN AIR

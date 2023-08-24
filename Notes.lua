@@ -56,6 +56,7 @@ __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
 __Add lavatroll animation
+__REMOVE SPAWNZONEPOINT 2 ONCE PLATFORM2 is RETRACTED!!!!!
 
 
 Unseating Bounder   500 Unseating Hunter    750 Unseating Shadowlord    1500
