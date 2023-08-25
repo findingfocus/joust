@@ -145,7 +145,7 @@ end
 function PlayState:update(dt)
     wipeTimer = wipeTimer + dt
 
-    if wipeTimer > 8 then
+    if wipeTimer > 0 then
         if leftWipeWidth < 47 then
             leftWipeWidth = leftWipeWidth + dt * 80
         else
@@ -416,7 +416,11 @@ function PlayState:update(dt)
 			gameOver = true
 		else
 			lives = lives - 1
-			spawnPointIndex = math.random(4)
+            if platform2Removed then
+                spawnPointIndex = math.random(3)
+            else
+                spawnPointIndex = math.random(4)
+            end
 			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y)
 		end
 	end
