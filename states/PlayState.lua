@@ -68,7 +68,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 6
+    wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -143,24 +143,6 @@ function floorRetract()
 end
 
 function PlayState:update(dt)
-    wipeTimer = wipeTimer + dt
-
-    if wipeTimer > 0 then
-        if leftWipeWidth < 47 then
-            leftWipeWidth = leftWipeWidth + dt * 80
-        else
-            platform2Removed = true
-            leftWipeWidth = 47
-        end
-
-        if rightWipeX > 117 then
-            rightWipeX = rightWipeX - dt * 80
-            rightWipeWidth = rightWipeWidth + dt * 160
-        else
-            platform2Removed = true
-            rightWipeX = 117
-        end
-    end
 
     if platform2Removed then
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
@@ -356,7 +338,24 @@ function PlayState:update(dt)
 
     if wave == 6 then
         enemyObjects = 7
-        --Add platform 2 retraction
+        --PLATFORM 2 RETRACTION
+        wipeTimer = wipeTimer + dt
+        if wipeTimer > 0 then
+            if leftWipeWidth < 47 then
+                leftWipeWidth = leftWipeWidth + dt * 80
+            else
+                platform2Removed = true
+                leftWipeWidth = 47
+            end
+            if rightWipeX > 117 then
+                rightWipeX = rightWipeX - dt * 80
+                rightWipeWidth = rightWipeWidth + dt * 160
+            else
+                platform2Removed = true
+                rightWipeX = 117
+            end
+        end
+
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -857,8 +856,8 @@ function PlayState:update(dt)
             player1.escapeJump = player1.escapeJump + 1
         end
         if player1.escapeJump > 5 then
-            grabTimer = 0
             player1.grabbed = false
+            grabTimer = 0
             player1.y = player1.y - 10
             player1.dy = -.5
             player1.escapeJump = 0
@@ -1010,28 +1009,18 @@ function PlayState:render()
             love.graphics.draw(fire3, 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
             love.graphics.draw(fire3, VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
         end
-        if leftFireCollided then
-            love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-            love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
+        if leftFireCollided and player1.grabbed then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(troll4, 12, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
         end
-        if rightFireCollided then
-            love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-            love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
+        if rightFireCollided and player1.grabbed then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(troll4, VIRTUAL_WIDTH - 7, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 0, -1, 1)
         end
     end
-
-    --[[
-    love.graphics.setColor(255/255, 255/255, 255/255, 180/255)
-    love.graphics.draw(centerReference, 0, 0)
-    --]]
-
-
-   ---[[
+   --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('rightWipeX: ' .. tostring(rightWipeX), 10, 10)
-	love.graphics.print('platform2Removed: ' .. tostring(platform2Removed), 10, 20)
-	love.graphics.print('wave: ' .. tostring(wave), 10, 30)
-	love.graphics.print('player.y: ' .. tostring(player1.y), 10, 40)
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)

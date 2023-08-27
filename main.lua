@@ -48,6 +48,10 @@ function love.load()
 	fire1 = love.graphics.newImage('src/pics/fire1.png')
 	fire2 = love.graphics.newImage('src/pics/fire2.png')
 	fire3 = love.graphics.newImage('src/pics/fire3.png')
+    troll1 = love.graphics.newImage('src/pics/troll1.png')
+    troll2 = love.graphics.newImage('src/pics/troll2.png')
+    troll3 = love.graphics.newImage('src/pics/troll3.png')
+    troll4 = love.graphics.newImage('src/pics/troll4.png')
 
 	sounds = {
 		['beep'] = love.audio.newSource('music/beep.wav', 'static'),
