@@ -1009,18 +1009,39 @@ function PlayState:render()
             love.graphics.draw(fire3, 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
             love.graphics.draw(fire3, VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
         end
+
+        --TROLL HAND ANIMATION
         if leftFireCollided and player1.grabbed then
             love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
             love.graphics.draw(troll4, 12, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+        elseif leftFireCollided and leftFireTimer > 2 then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(troll3, 12, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+        elseif leftFireCollided and leftFireTimer > 1 then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(troll2, 12, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
+        elseif leftFireCollided and leftFireTimer > 0 then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(troll1, 12, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16)
         end
+
         if rightFireCollided and player1.grabbed then
             love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
             love.graphics.draw(troll4, VIRTUAL_WIDTH - 7, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 0, -1, 1)
+        elseif rightFireCollided and rightFireTimer > 2 then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(troll3, VIRTUAL_WIDTH - 7, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 0, -1, 1)
+        elseif rightFireCollided and rightFireTimer > 1 then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(troll2, VIRTUAL_WIDTH - 7, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 0, -1, 1)
+        elseif rightFireCollided and rightFireTimer > 0 then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(troll1, VIRTUAL_WIDTH - 7, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 0, -1, 1)
         end
     end
    --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('rightWipeX: ' .. tostring(rightWipeX), 10, 10)
+	love.graphics.print('leftFireTimer: ' .. tostring(leftFireTimer), 10, 10)
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
