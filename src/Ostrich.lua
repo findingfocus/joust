@@ -136,8 +136,6 @@ function Ostrich:enemyRightCollides(enemy)
 	end
 end
 
---lastInput = {"right"}
-
 function Ostrich:update(dt)
 	if self.graveyard then
 		self.x = -20
@@ -598,13 +596,10 @@ function Ostrich:render()
 			--Render explosion sprites
 			if self.explosionTimer <= .1 then
 				love.graphics.draw(explosion1, self.lastX, self.lastY)
-				--render explosionSprite1
 			elseif self.explosionTimer <= .2 then
 				love.graphics.draw(explosion2, self.lastX, self.lastY)
-				--render explosionSprite2
 			elseif self.explosionTimer <= .3 then
 				love.graphics.draw(explosion3, self.lastX, self.lastY)
-				--render explosionSprite3
 			end
 		end
 	end

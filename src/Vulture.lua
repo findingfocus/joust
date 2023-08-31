@@ -60,7 +60,6 @@ function Vulture:checkGrounded(collidablePlatforms)
 			return false
 		end
 	end
-
 	return false
 end
 
@@ -98,7 +97,6 @@ function Vulture:rightCollides(collidable)
 			return true
 		end
 	end
-
 	return false
 end
 
@@ -108,7 +106,6 @@ function Vulture:leftCollides(collidable)
 			return true
 		end
 	end
-
 	return false
 end
 
@@ -197,9 +194,7 @@ function Vulture:update(dt)
 				self.ground = groundPlatform
 			end
 
-
             --LAVA COLLISION
-
             if self.y > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - self.height  then
                 self.exploded = true
                 self.graveyard = true
@@ -263,15 +258,11 @@ function Vulture:update(dt)
 					end
 				end
 			end
-	--]]
-
-
+--]]
 			if not self:checkGrounded(self.ground) then
 				self.grounded = false
 				self.ground = Platform('name', 1, 1, 1, 1)
 			end
-			--]]
-
 
 			--APPLY GRAVITY WHEN IN AIR
 			if not self.grounded then
@@ -279,7 +270,6 @@ function Vulture:update(dt)
 			end
 
 			if not self.graveyard then
-
 				self.x = self.x + self.dx
                 self.y = self.y + self.dy
 
@@ -317,9 +307,7 @@ function Vulture:update(dt)
 
 
 		-- VULTURE ANIMATION CYCLE
-
 			self.fps = (math.abs(self.dx)) * .42 - (math.abs(self.dx) / 20 - .15)
-
 			self.animationTimer = self.animationTimer - self.fps
 
 			--STANDING STILL VIEWPORT
@@ -396,11 +384,6 @@ end
 
 
 function Vulture:render()
---[[
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.setFont(smallFont)
-	love.graphics.print(tostring(self.index), self.x, self.y - 10)
---]]
 	if not self.exploded then
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		if self.spawning then

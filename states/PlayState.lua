@@ -39,8 +39,6 @@ function PlayState:init()
     wave5Timer = 0
     leftFireTimer = 0
     rightFireTimer = 0
-    tUp = true
-    tDown = false
     groundWidth = VIRTUAL_WIDTH
 	helpToggle = false
 	gameOver = false
@@ -157,24 +155,6 @@ function PlayState:update(dt)
         end
     end
 
-    if tUp then
-        backgroundTransparency = backgroundTransparency + .5
-        if backgroundTransparency >= 220 then
-            backgroundTransparency = 220
-            tUp = false
-            tDown = true
-        end
-    end
-
-    if tDown then
-        backgroundTransparency = backgroundTransparency - .5
-        if backgroundTransparency <= 100 then
-            backgroundTransparency = 100
-            tDown = false
-            tUp = true
-        end
-    end
-
     --PTERODACTYL SPAWN
     if pteroTimer > 0 then
         pteroTimer = pteroTimer - dt
@@ -287,10 +267,6 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                --Do we need to initial dummy objects,
-                --Do we included timesEggHatched
-                --What are the scoring points on this wave?
-                --Do the eggs hatch?
             end
             Eggs[1].x = platform1L.x + platform1L.width - Eggs[1].width - 12
             Eggs[1].y = platform1L.y - Eggs[1].height
@@ -370,7 +346,6 @@ function PlayState:update(dt)
         end
         waveAdvance(enemyObjects)
     end
---]]
 --]]
 
 ---[[RESETS
@@ -774,11 +749,8 @@ function PlayState:update(dt)
                 Vultures[i].graveyard = false
                 Vultures[i].dx = Vultures[i].spawningDX
             end
-
             Vultures[i].graveyard = false
-            --Vultures[i].spawning = false
             Vultures[i].grounded = false
-            --Vultures[i].tier = Vultures[i].tier + 1
             Vultures[i].tier = timesEggHatched[i] + 1
             Eggs[i].midairBonus = true
             Eggs[i].bouncedOffFloor = false
@@ -803,7 +775,6 @@ function PlayState:update(dt)
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
 	player1:update(dt)
-	--taxi1:update(dt)
 
 ---[[VULTURE COUNT
     vultureCount = 0
@@ -1042,29 +1013,9 @@ function PlayState:render()
    --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
-    --RIGHT TROLL.X == 253
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
-    love.graphics.print('eggsCaught: ' .. tostring(eggsCaught), 10, 20)
-    love.graphics.print('midairBonus[1]: ' .. tostring(Eggs[1].midairBonus), 10, 30)
-    love.graphics.print('.bonus[1]: ' .. tostring(scoresTable[1].bonus), 10, 40)
-    love.graphics.print('midairBonus[2]: ' .. tostring(Eggs[2].midairBonus), 10, 50)
-    love.graphics.print('.bonus[2]: ' .. tostring(scoresTable[2].bonus), 10, 60)
-    love.graphics.print('midairBonus[3]: ' .. tostring(Eggs[3].midairBonus), 10, 70)
-    love.graphics.print('.bonus[3]: ' .. tostring(scoresTable[3].bonus), 10, 80)
-    -]]
-    --[[
-	love.graphics.print('Taxi1.x: ' .. tostring(Taxis[1].x), 5, 15)
-	love.graphics.print('Taxi1.y: ' .. tostring(Taxis[1].y), 5, 25)
-	love.graphics.print('Jockey1.x: ' .. tostring(Jockeys[1].x), 5, 35)
-	love.graphics.print('Jockey1.y: ' .. tostring(Jockeys[1].y), 5, 45)
-	love.graphics.print('TcollideJ: ' .. tostring(Taxis[1]:collides(Jockeys[1])), 5, 55)
-    --]]
-    --[[
-	love.graphics.print('Vulture1: ' .. tostring(timesEggHatched[1]), 5, 15)
-	love.graphics.print('Vulture2: ' .. tostring(timesEggHatched[2]), 5, 25)
-	love.graphics.print('Vulture3: ' .. tostring(timesEggHatched[3]), 5, 35)
 --]]
 end
