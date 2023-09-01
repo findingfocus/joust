@@ -4,12 +4,12 @@ function PlayState:init()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)
 	platform1L = Platform('platform1L', -35, 68, 69, 7)
 	platform2 = Platform('platform2', 70, 77, 94, 7)
-    leftWipeX = 70
-    leftWipeY = 77
-    rightWipeX = 164
-    rightWipeWidth = 0
-    leftWipeWidth = 0
-    wipeTimer = 0
+    platform2LeftWipeX = 70
+    platform2LeftWipeY = 77
+    platform2RightWipeX = 164
+    platform2RightWipeWidth = 0
+    platform2LeftWipeWidth = 0
+    platform2WipeTimer = 0
 	platform3 = Platform('platform3', 192, 120, 50, 7)
 	platform4 = Platform('platform4', 233, 129, 79, 7)
 	platform4L = Platform('platform4L', -35, 129, 79, 7)
@@ -66,7 +66,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 3
+    wave = 6
     fireAnimation = .2
     fireSprite = 1
 end
@@ -315,21 +315,19 @@ function PlayState:update(dt)
     if wave == 6 then
         enemyObjects = 7
         --PLATFORM 2 RETRACTION
-        wipeTimer = wipeTimer + dt
-        if wipeTimer > 0 then
-            if leftWipeWidth < 47 then
-                leftWipeWidth = leftWipeWidth + dt * 80
-            else
-                platform2Removed = true
-                leftWipeWidth = 47
+        if platform2WipeTimer < .6 then
+            if platform2LeftWipeWidth < 47 then
+                platform2LeftWipeWidth = (platform2LeftWipeWidth + dt * 80)
             end
-            if rightWipeX > 117 then
-                rightWipeX = rightWipeX - dt * 80
-                rightWipeWidth = rightWipeWidth + dt * 160
-            else
-                platform2Removed = true
-                rightWipeX = 117
+            if platform2RightWipeX > 117 then
+                platform2RightWipeX = (platform2RightWipeX - dt * 80)
+                platform2RightWipeWidth = (platform2RightWipeWidth + dt * 160)
             end
+            platform2WipeTimer = platform2WipeTimer + dt
+        else
+            platform2Removed = true
+            platform2LeftWipeWidth = 47
+            platform2RightWipeX = 117
         end
 
         if not tablesPopulated then
@@ -897,8 +895,8 @@ function PlayState:render()
    ---[[WIPING AWAY PLATFORM 3
     if not platform2Removed then
         love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
-        love.graphics.rectangle('fill', leftWipeX, leftWipeY, leftWipeWidth, 7)
-        love.graphics.rectangle('fill', rightWipeX, leftWipeY, rightWipeWidth, 7)
+        love.graphics.rectangle('fill', platform2LeftWipeX, platform2LeftWipeY, platform2LeftWipeWidth, 7)
+        love.graphics.rectangle('fill', platform2RightWipeX, platform2LeftWipeY, platform2RightWipeWidth, 7)
     end
     --]]
 
@@ -1014,8 +1012,8 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
---[[DEBUG INFO
+---[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
+	love.graphics.print('platform2RightWipeX: ' .. tostring(platform2RightWipeX), 10, 10)
 --]]
 end
