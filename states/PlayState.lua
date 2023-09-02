@@ -315,6 +315,8 @@ function PlayState:update(dt)
     if wave == 6 then
         enemyObjects = 7
         --PLATFORM 2 RETRACTION
+       platform2RightWipeWidth = platform2RightWipeWidth + dt * 80
+--[[
         if platform2WipeTimer < .6 then
             if platform2LeftWipeWidth < 47 then
                 platform2LeftWipeWidth = (platform2LeftWipeWidth + dt * 80)
@@ -329,7 +331,7 @@ function PlayState:update(dt)
             platform2LeftWipeWidth = 47
             platform2RightWipeX = 117
         end
-
+--]]
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -892,7 +894,9 @@ function PlayState:render()
 	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
 	love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
 
-   ---[[WIPING AWAY PLATFORM 3
+    love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
+    love.graphics.rectangle('fill', platform2LeftWipeX, platform2LeftWipeY, platform2RightWipeWidth, 7)
+   --[[WIPING AWAY PLATFORM 3
     if not platform2Removed then
         love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
         love.graphics.rectangle('fill', platform2LeftWipeX, platform2LeftWipeY, platform2LeftWipeWidth, 7)
@@ -1012,7 +1016,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
----[[DEBUG INFO
+--[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('platform2RightWipeX: ' .. tostring(platform2RightWipeX), 10, 10)
 --]]
