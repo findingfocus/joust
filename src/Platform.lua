@@ -9,6 +9,10 @@ function Platform:init(name, x, y, width, height)
 	self.leftHalf = love.graphics.newQuad(0, 0, width / 2, 7, platformLeft:getDimensions())
 	self.rightHalf = love.graphics.newQuad(0, 0, platformRight:getWidth(), platformRight:getHeight(), platformRight:getDimensions())
 	self.rightHalf:setViewport(PLATFORMOFFSET, 0, platformRight:getWidth() - PLATFORMOFFSET, platformRight:getHeight())
+    self.retracting = false
+    self.retractingLeftWidth = 0
+    self.retractingRightX = x + width
+    self.retractingRightWidth = 0
 end
 
 function Platform:update(dt)
@@ -23,6 +27,12 @@ function Platform:render()
     else
         love.graphics.draw(platformRight, self.rightHalf, self.x + (self.width - platformRight:getWidth()) + PLATFORMOFFSET, self.y)
     end
---	love.graphics.draw(platformRight, self.rightHalf, self.x + (self.width - platformRight:getWidth()) + PLATFORMOFFSET, self.y)
-	--love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+
+    if self.retracting then
+        love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
+        --love.graphics.rectangle('fill', platform2LeftWipeX, platform2LeftWipeY, platform2RightWipeWidth, 7)
+
+        love.graphics.rectangle('fill', self.x, self.y, self.retractingLeftWidth, 7)
+        love.graphics.rectangle('fill', self.retractingRightX, self.y, self.retractingRightWidth, 7)
+    end
 end

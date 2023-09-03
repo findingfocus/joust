@@ -140,6 +140,18 @@ function floorRetract()
     end
 end
 
+function platformRetract(platform)
+    platform.retracting = true
+    if platform.retractingLeftWidth < (platform.width / 2) then
+        platform.retractingLeftWidth = platform.retractingLeftWidth + 1
+    end
+
+    if platform.retractingRightX > (platform.x + (platform.width / 2)) then
+        platform.retractingRightX = platform.retractingRightX - 1
+        platform.retractingRightWidth = platform.retractingRightWidth + 1
+    end
+end
+
 function PlayState:update(dt)
 
     if platform2Removed then
@@ -315,23 +327,8 @@ function PlayState:update(dt)
     if wave == 6 then
         enemyObjects = 7
         --PLATFORM 2 RETRACTION
-       platform2RightWipeWidth = platform2RightWipeWidth + dt * 80
---[[
-        if platform2WipeTimer < .6 then
-            if platform2LeftWipeWidth < 47 then
-                platform2LeftWipeWidth = (platform2LeftWipeWidth + dt * 80)
-            end
-            if platform2RightWipeX > 117 then
-                platform2RightWipeX = (platform2RightWipeX - dt * 80)
-                platform2RightWipeWidth = (platform2RightWipeWidth + dt * 160)
-            end
-            platform2WipeTimer = platform2WipeTimer + dt
-        else
-            platform2Removed = true
-            platform2LeftWipeWidth = 47
-            platform2RightWipeX = 117
-        end
---]]
+       platformRetract(platform2)
+
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -894,8 +891,10 @@ function PlayState:render()
 	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
 	love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
 
+    --[[RETRACTING OLD
     love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
     love.graphics.rectangle('fill', platform2LeftWipeX, platform2LeftWipeY, platform2RightWipeWidth, 7)
+    --]]
    --[[WIPING AWAY PLATFORM 3
     if not platform2Removed then
         love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
