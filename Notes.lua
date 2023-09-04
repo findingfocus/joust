@@ -58,6 +58,7 @@ __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
+__How do we wipe away spawn zone point upon platform Retraction considering the render order?
 --I am deciding not to add trollGrab for vultures, because I want to move on to another project
 
 

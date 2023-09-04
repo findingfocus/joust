@@ -144,11 +144,17 @@ function platformRetract(platform)
     platform.retracting = true
     if platform.retractingLeftWidth < (platform.width / 2) then
         platform.retractingLeftWidth = platform.retractingLeftWidth + 1
+    else
+        platform.retractingLeftWidth = (platform.width / 2)
+        --platform.retracting = false
     end
 
     if platform.retractingRightX > (platform.x + (platform.width / 2)) then
         platform.retractingRightX = platform.retractingRightX - 1
         platform.retractingRightWidth = platform.retractingRightWidth + 1
+    else
+        platform.retractingRightX = (platform.x + (platform.width / 2))
+        --platform.retracting = false
     end
 end
 
@@ -880,16 +886,27 @@ function PlayState:render()
 	lavaBubble2:render()
 
 	for k, platform in pairs(collidablePlatforms) do
-		platform:render()
+        if platform.retracting then
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            if not platform2Removed then
+                love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
+            end
+            ---[[
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
+            love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
+            love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
+            --]]
+            platform:render()
+        else
+            platform:render()
+            love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+            love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
+            love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
+            love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
+        end
 	end
 
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-    if not platform2Removed then
-        love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
-    end
-	love.graphics.draw(platformSpawn, platform3.x + 15, platform3.y)
-	love.graphics.draw(platformSpawn, platform4L.x + platform4.width - 33, platform4L.y)
-	love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
 
     --[[RETRACTING OLD
     love.graphics.setColor(0/255, 255/255, 0/255, 255/255)

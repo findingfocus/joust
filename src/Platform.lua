@@ -24,14 +24,17 @@ function Platform:render()
 	love.graphics.draw(platformLeft, self.leftHalf, self.x, self.y)
     if self.name == 'platform3' then
         love.graphics.draw(platform3Sprite, self.x, self.y)
+    elseif self.name == 'platform2' then
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.draw(platformRight, self.rightHalf, self.x + (self.width - platformRight:getWidth()) + PLATFORMOFFSET, self.y)
+        love.graphics.draw(platformSpawn, self.x + 15, self.y)
     else
+        --ADD RIGHT SIDE FOR EVERY OTHER MAIN PLATFORM WITH SPAWNZONE POINT
         love.graphics.draw(platformRight, self.rightHalf, self.x + (self.width - platformRight:getWidth()) + PLATFORMOFFSET, self.y)
     end
 
     if self.retracting then
         love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
-        --love.graphics.rectangle('fill', platform2LeftWipeX, platform2LeftWipeY, platform2RightWipeWidth, 7)
-
         love.graphics.rectangle('fill', self.x, self.y, self.retractingLeftWidth, 7)
         love.graphics.rectangle('fill', self.retractingRightX, self.y, self.retractingRightWidth, 7)
     end
