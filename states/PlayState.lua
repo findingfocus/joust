@@ -146,7 +146,7 @@ function platformRetract(platform)
         platform.retractingLeftWidth = platform.retractingLeftWidth + 1
     else
         platform.retractingLeftWidth = (platform.width / 2)
-        --platform.retracting = false
+        platform2Removed = true --CHANGE THIS TO A .removed MEMBER IN PLATFORM CLASS AND SET PLAYER SPAWNPOINT WITHOUT platform2Removed VARIABLE
     end
 
     if platform.retractingRightX > (platform.x + (platform.width / 2)) then
@@ -154,7 +154,7 @@ function platformRetract(platform)
         platform.retractingRightWidth = platform.retractingRightWidth + 1
     else
         platform.retractingRightX = (platform.x + (platform.width / 2))
-        --platform.retracting = false
+        platform2Removed = true --CHANGE THIS TO A .removed MEMBER IN PLATFORM CLASS AND SET PLAYER SPAWNPOINT WITHOUT platform2Removed VARIABLE
     end
 end
 
@@ -1034,6 +1034,6 @@ function PlayState:render()
     --]]
 --[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('platform2RightWipeX: ' .. tostring(platform2RightWipeX), 10, 10)
+	love.graphics.print('platform2Removed: ' .. tostring(platform2Removed), 10, 10)
 --]]
 end

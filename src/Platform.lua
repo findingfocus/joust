@@ -34,7 +34,7 @@ function Platform:render()
     end
 
     if self.retracting then
-        love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
         love.graphics.rectangle('fill', self.x, self.y, self.retractingLeftWidth, 7)
         love.graphics.rectangle('fill', self.retractingRightX, self.y, self.retractingRightWidth, 7)
     end
