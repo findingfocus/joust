@@ -66,7 +66,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 6
+    wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -333,8 +333,27 @@ function PlayState:update(dt)
     if wave == 6 then
         enemyObjects = 7
         --PLATFORM 2 RETRACTION
-       platformRetract(platform2)
+        platformRetract(platform2)
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 3)
+        end
+        waveAdvance(enemyObjects)
+    end
 
+    if wave == 7 then
+        enemyObjects = 7
+        --PLATFORM 1 and 1L RETRACTION
+        platformRetract(platform1)
+        platformRetract(platform1L)
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)

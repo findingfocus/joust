@@ -25,8 +25,9 @@ function Platform:render()
     if self.name == 'platform3' then
         love.graphics.draw(platform3Sprite, self.x, self.y)
     elseif self.name == 'platform2' then
-        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.setColor(219/255, 164/255, 0/255, 255/255)
         love.graphics.draw(platformRight, self.rightHalf, self.x + (self.width - platformRight:getWidth()) + PLATFORMOFFSET, self.y)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.draw(platformSpawn, self.x + 15, self.y)
     else
         --ADD RIGHT SIDE FOR EVERY OTHER MAIN PLATFORM WITH SPAWNZONE POINT
