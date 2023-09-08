@@ -1,33 +1,48 @@
 TitleScreenState = Class{__includes = BaseState}
 
 function TitleScreenState:init()
-
+	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
+	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
+    lavaRise = 0
 end
 
 local highlighted = 1
 
 function TitleScreenState:update(dt)
+---[[BUBBLE LOGIC
+	if lavaBubble1.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
+		leftSpawnPoint = {9, 29}
+		leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
+		leftSpawnRandom = {1, 2, 5, 5, 7}
+		leftSpawnRandom = leftSpawnRandom[math.random(#leftSpawnRandom)]
+		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT, leftSpawnRandom)
+	end
 
---[[
-	sounds['titleMusic']:setLooping(true)
-	sounds['titleMusic']:play()
---]]
-
-	if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('down') then
+	if lavaBubble2.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
+		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 30}
+		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
+		rightSpawnRandom = {1, 2, 5, 5, 7}
+		rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
+		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
+	end
+	if love.keyboard.wasPressed('left') or love.keyboard.wasPressed('right') then
 		highlighted = highlighted == 1 and 2 or 1
 		sounds['beep']:play()
 	end
 
+	lavaBubble1:update(dt)
+	lavaBubble2:update(dt)
+
+
+
 	if love.keyboard.wasPressed('h') then
-		--sounds['titleMusic']:stop()
-		gStateMachine:change('helpState')
+		--gStateMachine:change('helpState')
 	end
 
 	if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
 		if highlighted == 1 then
-			--sounds['titleMusic']:stop()
-			sounds['select']:play()
-			gStateMachine:change('playState')
+            sounds['select']:play()
+            gStateMachine:change('playState')
 		else
 			love.event.quit()
 		end
@@ -36,7 +51,7 @@ end
 
 
 function TitleScreenState:render()
-	love.graphics.clear(150/255, 150/255, 150/255, 255/255)
+	love.graphics.clear(0/255, 0/255, 0/255, 255/255)
 
 --[[
 	love.graphics.setFont(smallFont)
@@ -45,24 +60,45 @@ function TitleScreenState:render()
 	love.graphics.setFont(mediumFont)
 	love.graphics.printf('JOUST medium', 0, (VIRTUAL_HEIGHT / 3) * 2 - 60, VIRTUAL_WIDTH, 'center')
 --]]
-	love.graphics.setFont(largeFont)
-	love.graphics.printf('JOUST', 0, (VIRTUAL_HEIGHT / 3) - 120 , VIRTUAL_WIDTH, 'center')
-	
+
 	if highlighted == 1 then
-		love.graphics.setColor(80/255, 220/255, 255/255, 255/255)
+        love.graphics.setFont(smallFont)
+		love.graphics.setColor(5/255, 158/255, 235/255, 255/255)
+        love.graphics.printf('ONE PLAYER', 0, VIRTUAL_HEIGHT / 2 + 30, VIRTUAL_WIDTH, 'center')
+		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.printf('ONE PLAYER', 0, VIRTUAL_HEIGHT / 2 + 30, VIRTUAL_WIDTH, 'center', 0, 1, 1, 1, 1)
+
 	end
-	love.graphics.setFont(mediumFont)
-	love.graphics.printf('PLAY', 0, VIRTUAL_HEIGHT / 2 + 120, VIRTUAL_WIDTH, 'center')
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	if highlighted == 2 then
-		love.graphics.setColor(80/255, 220/255, 255/255, 255/255)
-	end
-	love.graphics.setFont(mediumFont)
-	love.graphics.printf('EXIT', 0, VIRTUAL_HEIGHT / 2 + 190, VIRTUAL_WIDTH, 'center')
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.setFont(smallFont)
+		love.graphics.setColor(5/255, 158/255, 235/255, 255/255)
+        love.graphics.printf('TWO PLAYERS', 0, VIRTUAL_HEIGHT / 2 + 30, VIRTUAL_WIDTH, 'center')
+		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.printf('TWO PLAYERS', 0, VIRTUAL_HEIGHT / 2 + 30, VIRTUAL_WIDTH, 'center', 0, 1, 1, 1, 1)
+
+    end
 
 	love.graphics.setFont(smallFont)
 	love.graphics.printf('Press "H" For Help', 0, VIRTUAL_HEIGHT / 2 + 320, VIRTUAL_WIDTH, 'center')
+	love.graphics.setFont(largeFont)
+    love.graphics.setColor(163/255, 3/255, 19/255, 255/255)
+	love.graphics.printf('JOUST', 2, VIRTUAL_HEIGHT / 2 - 14, VIRTUAL_WIDTH, 'center')
+    love.graphics.setColor(240/255, 234/255, 51/255, 255/255)
+	love.graphics.printf('JOUST', 0, VIRTUAL_HEIGHT / 2 - 16, VIRTUAL_WIDTH, 'center')
 
+
+
+    --LAVA
+	love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+	love.graphics.rectangle('fill', 0, VIRTUAL_HEIGHT - LAVAHEIGHT, VIRTUAL_WIDTH, LAVAHEIGHT + 100)
+
+    --GROUND PLATFORM
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	--love.graphics.rectangle('fill', 53, VIRTUAL_HEIGHT - 36, 186, 32)
+	love.graphics.draw(groundBottom, 38, VIRTUAL_HEIGHT - 36)
+    love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+    love.graphics.rectangle('fill', 100, 210, 20, 10)
+	lavaBubble1:render()
+	lavaBubble2:render()
 end

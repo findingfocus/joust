@@ -53,6 +53,7 @@ function LavaBubble:update(dt)
 end
 
 function LavaBubble:render()
+	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	if self.particleSpawn then
 		love.graphics.draw(particle, self.x, self.y)
 	elseif self.bubbleSpawn then

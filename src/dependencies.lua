@@ -21,5 +21,7 @@ require '/src/BaseState'
 
 require '/states/TitleScreenState'
 require '/states/PlayState'
+require '/states/ModeSelectState'
 require '/states/FailState'
 require '/states/WinState'
+

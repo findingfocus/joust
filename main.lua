@@ -75,10 +75,13 @@ function love.load()
 
 	gStateMachine = StateMachine {
 		['titleState'] = function() return TitleScreenState() end,
-		['playState'] = function() return PlayState() end
+		['playState'] = function() return PlayState() end,
+        ['modeSelectState'] = function() return ModeSelectState() end
 	}
 
-	gStateMachine:change('playState')
+    --gStateMachine:change('playState')
+	--gStateMachine:change('modeSelectState')
+	gStateMachine:change('titleState')
 
 	love.keyboard.keysPressed = {}
 	love.keyboard.keysReleased = {}
