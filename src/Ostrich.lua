@@ -1,11 +1,15 @@
 Ostrich = Class{}
 
-function Ostrich:init(x, y, width, height, platformSpawnY)
+function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber)
 	self.x = x
     self.y = platformSpawnY
     self.width = width
 	self.height = height
-	self.atlas = playerAtlas
+    if playerNumber == 1 then
+        self.atlas = playerAtlas
+    elseif playerNumber == 2 then
+        self.atlas = player2Atlas
+    end
 	self.temporarySafetyAtlas = temporarySafetyAtlas
 	self.platformSpawnY = platformSpawnY
     self.grabbed = false

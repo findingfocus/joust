@@ -45,9 +45,14 @@ function PlayState:init()
 	tablesPopulated = false
     leftFireCollided = false
     rightFireCollided = false
-	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET)
+	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 1)
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
+    if not singlePlayerMode then
+        player2 = Ostrich(VIRTUAL_WIDTH / 3 + 25, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 2)
+        player2.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player2.height
+        player2.temporarySafety = false
+    end
     floorRetracted = false
 	groundPlatform = Platform('groundPlatform', -player1.width, VIRTUAL_HEIGHT - GROUND_OFFSET, VIRTUAL_WIDTH + (player1.width * 2), 36)
 	vultureCount = 0
@@ -373,7 +378,7 @@ function PlayState:update(dt)
 ---[[RESETS
 	--RESET PLAYER
 	if love.keyboard.wasPressed('r') then
-		player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y)
+		player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y, 1)
 		sounds['leftStep']:stop()
 		sounds['rightStep']:stop()
 		sounds['skid']:stop()
@@ -417,7 +422,7 @@ function PlayState:update(dt)
             else
                 spawnPointIndex = math.random(4)
             end
-			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y)
+			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1)
 		end
 	end
 
@@ -797,6 +802,9 @@ function PlayState:update(dt)
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
 	player1:update(dt)
+    if not singlePlayerMode then
+        player2:update(dt)
+    end
 
 ---[[VULTURE COUNT
     vultureCount = 0
@@ -875,6 +883,10 @@ function PlayState:render()
 	love.graphics.draw(groundBottom, 38, VIRTUAL_HEIGHT - 36)
 
 	player1:render()
+    if not singlePlayerMode then
+        player2:render()
+    end
+
 	monster:render()
 
 	love.graphics.setFont(smallFont)
@@ -1051,8 +1063,8 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
---[[DEBUG INFO
+---[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('platform2Removed: ' .. tostring(platform2Removed), 10, 10)
+	love.graphics.print('onePlayer: ' .. tostring(singlePlayerMode), 10, 10)
 --]]
 end
