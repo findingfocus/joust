@@ -1063,8 +1063,9 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
----[[DEBUG INFO
+--[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('onePlayer: ' .. tostring(singlePlayerMode), 10, 10)
+	love.graphics.print('Player1.x: ' .. tostring(player1.x), 10, 10)
+	love.graphics.print('Player1.BeginSpawn ' .. tostring(player1.beginningSpawn), 10, 20)
 --]]
 end

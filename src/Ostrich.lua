@@ -47,6 +47,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber)
 	self.ground = Platform('name', 1, 1, 1, 1)
 	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas:getDimensions())
+    self.beginningSpawn = false
 end
 
 function Ostrich:checkGrounded(collidablePlatforms)
@@ -530,7 +531,6 @@ function Ostrich:update(dt)
 			--STANDING STILL VIEWPORT
 			if self.dx == 0 and self.grounded then
 				self.frame = 1
-				ostrichSprite:setViewport(1, 0, self.width, self.height)
 			end
 
 			--PLAYER WALKING ANIMATION
@@ -617,4 +617,9 @@ function Ostrich:render()
 			end
 		end
 	end
+
+    if not self.beginningSpawn then
+        ostrichSprite:setViewport(1, 0, self.width, self.height)
+        self.beginningSpawn = true
+    end
 end
