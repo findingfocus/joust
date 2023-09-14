@@ -193,7 +193,7 @@ function PlayState:update(dt)
         waveTimer = waveTimer - dt
     end
 
-	if love.keyboard.wasPressed('i') then
+	if love.keyboard.wasPressed('h') then
 		helpToggle = not helpToggle
 	end
 
@@ -853,7 +853,7 @@ function PlayState:update(dt)
             player1.dy = -.5
             player1.escapeJump = 0
         end
-        if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('a') then
+        if love.keyboard.wasPressed('i') then
             player1.escapeJump = player1.escapeJump + 1
         end
         if player1.escapeJump > 5 then
@@ -1066,6 +1066,6 @@ function PlayState:render()
 ---[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('Player1.x: ' .. tostring(player1.x), 10, 10)
-	love.graphics.print('Player1.grounded ' .. tostring(player1.grounded), 10, 20)
+--	love.graphics.print('space: ' .. tostring(love.keyboard.wasPressed('space')), 10, 20)
 --]]
 end
