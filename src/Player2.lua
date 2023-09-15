@@ -38,7 +38,7 @@ if love.keyboard.isDown('right') then
 		PLAYER_SPEED = self.dx + 300
 	end
 
-	if love.keyboard.wasPressed('space') and grounded then
+	if love.keyboard.wasPressed('x') and grounded then
 		self.dy = -30
 	end
 	--]]
