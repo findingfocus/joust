@@ -45,11 +45,11 @@ function PlayState:init()
 	tablesPopulated = false
     leftFireCollided = false
     rightFireCollided = false
-	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 1, 'left', 'right', 'a')
+	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 1, 'o', 'p', 'i')
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
     if not singlePlayerMode then
-        player2 = Ostrich(VIRTUAL_WIDTH / 3 + 25, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 2)
+        player2 = Ostrich(VIRTUAL_WIDTH / 3 + 25, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 2, 'x', 'c', 'z')
         player2.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player2.height
         player2.temporarySafety = false
     end
@@ -378,7 +378,7 @@ function PlayState:update(dt)
 ---[[RESETS
 	--RESET PLAYER
 	if love.keyboard.wasPressed('r') then
-		player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y, 1, 'left', 'right', 'x')
+		player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y, 1, 'o', 'p', 'i')
 		sounds['leftStep']:stop()
 		sounds['rightStep']:stop()
 		sounds['skid']:stop()
@@ -422,7 +422,7 @@ function PlayState:update(dt)
             else
                 spawnPointIndex = math.random(4)
             end
-			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'left', 'right', 'a')
+			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
 		end
 	end
 
