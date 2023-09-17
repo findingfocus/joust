@@ -8,6 +8,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber, leftInp
     self.leftInput = leftInput
     self.rightInput = rightInput
     self.jumpInput = jumpInput
+    self.playerNumber = playerNumber
     if playerNumber == 1 then
         self.atlas = playerAtlas
     elseif playerNumber == 2 then
@@ -48,7 +49,8 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber, leftInp
 	self.exploded = false
 	self.justCollided = false
 	self.ground = Platform('name', 1, 1, 1, 1)
-	ostrichSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+	ostrich1Sprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+    ostrich2Sprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
 	spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas:getDimensions())
     self.beginningSpawn = false
     lastInput = 'right'
@@ -555,18 +557,30 @@ function Ostrich:update(dt)
 				if self.frame > self.totalFrames then self.frame = 1 end
 
 				self.xoffset = self.frame + (self.width * (self.frame - 1))
-				ostrichSprite:setViewport(self.xoffset, 0, self.width, self.height)
+                if self.playerNumber == 1 then
+                    ostrich1Sprite:setViewport(self.xoffset, 0, self.width, self.height)
+                else
+                    ostrich2Sprite:setViewport(self.xoffset, 0, self.width, self.height)
+                end
 
 			--PLAYER AERIAL ANIMATION
 				if not self.grounded then
-					ostrichSprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
+                    if self.playerNumber == 1 then
+                        ostrich1Sprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
+                    else
+                        ostrich2Sprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
+                    end
 					if love.keyboard.wasPressed(self.jumpInput) then
 						self.jumpTimer = 0
 						self.flapped = true
 					end
 
 					if self.flapped then
-						ostrichSprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)
+                        if self.playerNumber == 1 then
+                            ostrich1Sprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)
+                        else
+                            ostrich2Sprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)
+                        end
 						self.jumpTimer = self.jumpTimer + dt
 						if self.jumpTimer > .1 then
 							self.flapped = false
@@ -577,7 +591,11 @@ function Ostrich:update(dt)
 
 ---[[PLAYER SKID ANIMATION
 			if self.skid then
-				ostrichSprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
+                if self.playerNumber == 1 then
+                    ostrich1Sprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
+                else
+                    ostrich2Sprite:setViewport((self.width * 4) + 4, 0, self.width, self.height)
+                end
 			end
 
 		elseif self.exploded then
@@ -595,9 +613,17 @@ function Ostrich:render()
 	if not self.spawning then
 		if not self.exploded then
 			if self.facingRight and not self.temporarySafety then
-				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, 1, 1)
+                if self.playerNumber == 1 then
+                    love.graphics.draw(self.atlas, ostrich1Sprite, self.x, self.y, 0, 1, 1)
+                else
+                    love.graphics.draw(self.atlas, ostrich2Sprite, self.x, self.y, 0, 1, 1)
+                end
 			elseif not self.temporarySafety then
-				love.graphics.draw(self.atlas, ostrichSprite, self.x, self.y, 0, -1, 1, self.width)
+                if self.playerNumber == 1 then
+                    love.graphics.draw(self.atlas, ostrich1Sprite, self.x, self.y, 0, -1, 1, self.width)
+                else
+                    love.graphics.draw(self.atlas, ostrich2Sprite, self.x, self.y, 0, -1, 1, self.width)
+                end
 			end
 		elseif self.exploded then
 			--Render explosion sprites
@@ -622,7 +648,11 @@ function Ostrich:render()
 	end
 
     if not self.beginningSpawn then --FIXES FRAME 1 RENDER BUG
-        ostrichSprite:setViewport(1, 0, self.width, self.height)
+        if self.playerNumber == 1 then
+            ostrich1Sprite:setViewport(1, 0, self.width, self.height)
+        else
+            ostrich2Sprite:setViewport(1, 0, self.width, self.height)
+        end
         self.beginningSpawn = true
     end
 end
