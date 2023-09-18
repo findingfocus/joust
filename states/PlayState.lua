@@ -574,9 +574,16 @@ function PlayState:update(dt)
         end
 	end
 
-    if player1.y > VIRTUAL_HEIGHT - 25 - 10 then --PLAYER EXPLODING IN LAVA
+    if player1.y > VIRTUAL_HEIGHT - LAVAHEIGHT - player1.height - lavaRise then --PLAYER EXPLODING IN LAVA
         player1.exploded = true
     end
+---[[
+    if not singlePlayerMode then
+        if player2.y > VIRTUAL_HEIGHT - 25 - 10 then
+            player2.exploded = true
+        end
+    end
+    --]]
 
 	--]]
 

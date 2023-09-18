@@ -64,6 +64,7 @@ __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Add player 2 score and lives count in twoplayer mode
 __Add player1 to player2 collision
 __Add player2 collision with lava, and all platforms
+__Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
 --I am deciding not to add trollGrab for vultures, because I want to move on to another project
 
 
