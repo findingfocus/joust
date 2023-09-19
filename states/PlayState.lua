@@ -407,7 +407,6 @@ function PlayState:update(dt)
 	end
 --]]
 
-	if player1.exploded and player1.explosionTimer > .35 then --PLAYER 1 DEATH AND RESPAWN
 		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
 		monster.graveyard = true
 		monster = Pterodactyl(-30, -30, 0)
@@ -465,6 +464,29 @@ function PlayState:update(dt)
 		end
 	end
 	--]]
+
+    --[[PLAYER TO PLAYER COLLISION
+    --PLAYER 1 RIGHT COLLIDES
+    if player1:rightCollides(player2) then
+        --player2 resets position to left side of player 1
+        --player2 bounces left
+    end
+    --PLAYER 1 LEFT COLLIDES
+    if player1:leftCollides(player2) then
+        --player2 resets position to right side of player 1
+        --player2 bounces right
+    end
+    --PLAYER 1 TOP COLLIDES
+    if player1:topCollides(player2) then
+       --player2 resets to bottom of player1
+       --player2 bounces downward slightly
+    end
+    --PLAYER 1 BOTTOM COLLIDES
+    if player1:bottomCollides(player2) then
+        --player2 resets to top of player1
+        --player2 bounces upward slightly
+    end
+    --]]
 
 ---[[PLAYER TO ENEMY COLLISIONS
 	for i = 1, enemyObjects do --Be sure to change 3 to variable for wave objects
@@ -574,11 +596,11 @@ function PlayState:update(dt)
         end
 	end
 
-    if player1.y > VIRTUAL_HEIGHT - LAVAHEIGHT - player1.height - lavaRise then --PLAYER EXPLODING IN LAVA
+    if player1.y > VIRTUAL_HEIGHT - LAVAHEIGHT - player1.height - lavaRise then --PLAYER 1 EXPLODING IN LAVA
         player1.exploded = true
     end
 ---[[
-    if not singlePlayerMode then
+    if not singlePlayerMode then --PLAYER 2 EXPLODING IN LAVA
         if player2.y > VIRTUAL_HEIGHT - 25 - 10 then
             player2.exploded = true
         end
