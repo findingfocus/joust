@@ -96,14 +96,6 @@ function rightTrollCollide(player)
     end
 end
 
-if leftFireCollided then
-    love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-    love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
-end
-if rightFireCollided then
-    love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
-end
 
 function PlayState:checkGrounded(topObject, bottomObject)
 	if topObject.y == bottomObject.y - bottomObject.height then
@@ -164,6 +156,14 @@ function platformRetract(platform)
 end
 
 function PlayState:update(dt)
+    if leftFireCollided then
+        love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+        love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
+    end
+    if rightFireCollided then
+        love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+        love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
+    end
 
     if platform2Removed then
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
@@ -200,7 +200,6 @@ function PlayState:update(dt)
 ---[[WAVE LOGIC
 	if wave == 1 then
         enemyObjects = 3
-
 		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
 		if not tablesPopulated then
 			for i = 1, enemyObjects do
@@ -406,7 +405,7 @@ function PlayState:update(dt)
         scoresTable[3].bonus = true
 	end
 --]]
-
+    if player1.exploded and player1.explosionTimer > .35 then
 		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
 		monster.graveyard = true
 		monster = Pterodactyl(-30, -30, 0)
