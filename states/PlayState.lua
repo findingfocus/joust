@@ -423,6 +423,8 @@ function PlayState:update(dt)
 			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
 		end
 	end
+    
+    --ADD PLAYER 2 RESPAWN
 
 	if vultureCount == 0 then --KILLS PTERO IF NO VULTURES ON SCREEN
 		monster = Pterodactyl(-30, -30, 0)
@@ -463,27 +465,35 @@ function PlayState:update(dt)
 		end
 	end
 	--]]
-
-    --[[PLAYER TO PLAYER COLLISION
-    --PLAYER 1 RIGHT COLLIDES
-    if player1:rightCollides(player2) then
-        --player2 resets position to left side of player 1
+    ---[[PLAYER TO PLAYER COLLISION
+    if not singlePlayerMode then
+        --PLAYER 1 RIGHT COLLIDES
+        if player1:rightCollides(player2) then
+            if player2.dx == 0 then --PLAYER1 BOUNCES OFF STATIONARY PLAYER 2
+                player1.x = player2.x - player1.width
+                player1.dx = math.abs(player1.dx) * -1
+            else
+                player2.x = player1.x + player1.width
+                player2.dx = math.abs(player2.dx)
+                player1.dx = math.abs(player1.dx) * -1
+            end
+        end
         --player2 bounces left
-    end
-    --PLAYER 1 LEFT COLLIDES
-    if player1:leftCollides(player2) then
-        --player2 resets position to right side of player 1
-        --player2 bounces right
-    end
-    --PLAYER 1 TOP COLLIDES
-    if player1:topCollides(player2) then
-       --player2 resets to bottom of player1
-       --player2 bounces downward slightly
-    end
-    --PLAYER 1 BOTTOM COLLIDES
-    if player1:bottomCollides(player2) then
-        --player2 resets to top of player1
-        --player2 bounces upward slightly
+        --PLAYER 1 LEFT COLLIDES
+        if player1:leftCollides(player2) then
+            --player2 resets position to right side of player 1
+            --player2 bounces right
+        end
+        --PLAYER 1 TOP COLLIDES
+        if player1:topCollides(player2) then
+            --player2 resets to bottom of player1
+            --player2 bounces downward slightly
+        end
+        --PLAYER 1 BOTTOM COLLIDES
+        if player1:bottomCollides(player2) then
+            --player2 resets to top of player1
+            --player2 bounces upward slightly
+        end
     end
     --]]
 
