@@ -481,8 +481,14 @@ function PlayState:update(dt)
         --player2 bounces left
         --PLAYER 1 LEFT COLLIDES
         if player1:leftCollides(player2) then
-            --player2 resets position to right side of player 1
-            --player2 bounces right
+            if player2.dx == 0 then
+                player1.x = player2.x + player2.width
+                player1.dx = math.abs(player1.dx)
+            else
+                player2.x = player1.x - player2.width
+                player2.dx = math.abs(player2.dx) * -1
+                player1.dx = math.abs(player1.dx)
+            end
         end
         --PLAYER 1 TOP COLLIDES
         if player1:topCollides(player2) then
