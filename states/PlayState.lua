@@ -71,7 +71,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 3
+    wave = 4
     fireAnimation = .2
     fireSprite = 1
 end
@@ -273,7 +273,7 @@ function PlayState:update(dt)
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 tablesPopulated = true
             end
-            spawnEnemies(enemyObjects, 4)
+            --spawnEnemies(enemyObjects, 4)
         end
         waveAdvance(enemyObjects)
     end
@@ -467,6 +467,13 @@ function PlayState:update(dt)
 	--]]
     ---[[PLAYER TO PLAYER COLLISION
     if not singlePlayerMode then
+        --PLAYER 1 TOP COLLIDES
+        if player1:topCollides(player2) then
+            player2.y = player1.y - player2.height
+            if player1.dy ~= 0 then
+                player1.dx = .4
+            end
+        end
         --PLAYER 1 RIGHT COLLIDES
         if player1:rightCollides(player2) then
             if player2.dx == 0 then --PLAYER1 BOUNCES OFF STATIONARY PLAYER 2
@@ -490,13 +497,9 @@ function PlayState:update(dt)
                 player1.dx = math.abs(player1.dx)
             end
         end
-        --PLAYER 1 TOP COLLIDES
-        if player1:topCollides(player2) then
-            --player2 resets to bottom of player1
-            --player2 bounces downward slightly
-        end
         --PLAYER 1 BOTTOM COLLIDES
         if player1:bottomCollides(player2) then
+            player2.y = player1.y - player2.height
             --player2 resets to top of player1
             --player2 bounces upward slightly
         end
@@ -1109,6 +1112,6 @@ function PlayState:render()
     --]]
 ---[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('Player1.x: ' .. tostring(player1.x), 10, 10)
+	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
 --]]
 end
