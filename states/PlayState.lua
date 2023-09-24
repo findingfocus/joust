@@ -469,10 +469,17 @@ function PlayState:update(dt)
     if not singlePlayerMode then
         --PLAYER 1 TOP COLLIDES
         if player1:topCollides(player2) then
-            player2.y = player1.y - player2.height
             if player1.dy ~= 0 then
-                player1.dx = .4
+                player1.dy = .4
             end
+            player2.y = player1.y - player2.height
+        end
+        --PLAYER 1 BOTTOM COLLIDES
+        if player1:bottomCollides(player2) then
+            if player1.dy ~= 0 then
+                player1.dy = -.4
+            end
+            player2.y = player1.y + player2.height
         end
         --PLAYER 1 RIGHT COLLIDES
         if player1:rightCollides(player2) then
@@ -485,7 +492,6 @@ function PlayState:update(dt)
                 player1.dx = math.abs(player1.dx) * -1
             end
         end
-        --player2 bounces left
         --PLAYER 1 LEFT COLLIDES
         if player1:leftCollides(player2) then
             if player2.dx == 0 then
@@ -496,12 +502,6 @@ function PlayState:update(dt)
                 player2.dx = math.abs(player2.dx) * -1
                 player1.dx = math.abs(player1.dx)
             end
-        end
-        --PLAYER 1 BOTTOM COLLIDES
-        if player1:bottomCollides(player2) then
-            player2.y = player1.y - player2.height
-            --player2 resets to top of player1
-            --player2 bounces upward slightly
         end
     end
     --]]
