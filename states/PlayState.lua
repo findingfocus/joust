@@ -467,20 +467,31 @@ function PlayState:update(dt)
 	--]]
     ---[[PLAYER TO PLAYER COLLISION
     if not singlePlayerMode then
+        --PLAYER 2 BOTTOM COLLIDES
+        if player2:bottomCollides(player1) then
+            if player2.dy ~= 0 then
+                player2.dy = -.4
+            end
+            player1.dy = 0
+            player1.y = player2.y + player2.height
+        end
         --PLAYER 1 TOP COLLIDES
         if player1:topCollides(player2) then
             if player1.dy ~= 0 then
                 player1.dy = .4
             end
-            player2.y = player1.y - player2.height
+            player1.y = player2.y + player2.height
         end
+
         --PLAYER 1 BOTTOM COLLIDES
         if player1:bottomCollides(player2) then
             if player1.dy ~= 0 then
                 player1.dy = -.4
             end
-            player2.y = player1.y + player2.height
+            player2.dy = 0
+            player2.y = player1.y + player1.height
         end
+
         --PLAYER 1 RIGHT COLLIDES
         if player1:rightCollides(player2) then
             if player2.dx == 0 then --PLAYER1 BOUNCES OFF STATIONARY PLAYER 2
