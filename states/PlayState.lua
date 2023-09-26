@@ -10,6 +10,8 @@ function PlayState:init()
     platform2RightWipeWidth = 0
     platform2LeftWipeWidth = 0
     platform2WipeTimer = 0
+    Score = 0
+    Score2 = 0
 	platform3 = Platform('platform3', 192, 120, 50, 7)
 	platform4 = Platform('platform4', 233, 129, 79, 7)
 	platform4L = Platform('platform4L', -35, 129, 79, 7)
@@ -113,6 +115,9 @@ function waveAdvance(enemies)
     end
     wave = wave + 1
     Score = Score + 3000
+    if not singlePlayerMode then
+        Score2 = Score2 + 3000
+    end
     waveTimer = 3
     eggsCaught = 0
     tablesPopulated = false
@@ -262,7 +267,8 @@ function PlayState:update(dt)
     end
 
     if wave == 4 then
-        enemyObjects = 5
+        enemyObjects = 1
+        --5
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -1049,6 +1055,9 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	love.graphics.print(string.format("%06d", Score), 53, VIRTUAL_HEIGHT - 28)
+    if not singlePlayerMode then
+        love.graphics.print(string.format("%06d", Score2), 142, VIRTUAL_HEIGHT - 28)
+    end
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
 	for k, v in pairs(scoresTable) do
