@@ -814,6 +814,32 @@ function PlayState:update(dt)
 			end
 		end
 	end
+    --PLAYER2 TO PTERO COLLISION
+	if not player2.temporarySafety and not monster.facingRight then
+		if player2.facingRight then
+			if monster:leftCollides(player2) then
+				if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
+					monster.exploded = true
+					monster.graveyard = true
+				elseif monster:leftCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+					player2.exploded = true
+				end
+			end
+		end
+
+	elseif not player2.temporarySafety and monster.facingRight then
+		if not player2.facingRight then
+			if monster:rightCollides(player2) then
+				if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
+					monster.exploded = true
+					monster.graveyard = true
+				elseif monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+					player2.exploded = true
+				end
+			end
+		end
+	end
+
 
 	if player1.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
 		if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
@@ -822,6 +848,17 @@ function PlayState:update(dt)
 	elseif not player1.facingRight and not monster.facingRight then
 		if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
 			player1.exploded = true
+		end
+	end
+
+    --PLAYER2 DEATH BY PTERO
+	if player2.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
+		if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+			player2.exploded = true
+		end
+	elseif not player2.facingRight and not monster.facingRight then
+		if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+			player2.exploded = true
 		end
 	end
 
