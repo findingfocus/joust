@@ -29,6 +29,7 @@ function PlayState:init()
     timesEggHatched = {} -- {0, 0, 0, 0}
 	wave = 1
 	lives = 5
+    player2Lives = 5
 	spawnPointIndex = 0
 	vultureSpawnPointIndex = 0
     enemyObjects = 0
@@ -73,7 +74,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 4
+    wave = 3
     fireAnimation = .2
     fireSprite = 1
 end
@@ -411,6 +412,8 @@ function PlayState:update(dt)
         scoresTable[3].bonus = true
 	end
 --]]
+
+    --PLAYER 1 RESPAWN
     if player1.exploded and player1.explosionTimer > .35 then
 		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
 		monster.graveyard = true
@@ -429,8 +432,26 @@ function PlayState:update(dt)
 			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
 		end
 	end
-    
-    --ADD PLAYER 2 RESPAWN
+
+    --PLAYER 2 RESPAWN
+    if player2.exploded and player2.explosionTimer > .35 then
+		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
+		--monster.graveyard = true
+		--monster = Pterodactyl(-30, -30, 0)
+		pteroTimer = vultureCount * 20
+		if player2Lives == 1 then
+			player2Lives = player2Lives - 1
+			gameOver = true
+		else
+			player2Lives = player2Lives - 1
+            if platform2Removed then
+                spawnPointIndex = math.random(3)
+            else
+                spawnPointIndex = math.random(4)
+            end
+			player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
+		end
+	end
 
 	if vultureCount == 0 then --KILLS PTERO IF NO VULTURES ON SCREEN
 		monster = Pterodactyl(-30, -30, 0)
