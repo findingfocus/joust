@@ -705,6 +705,44 @@ function PlayState:update(dt)
                     Score = Score + scoresTable[i].scoreAmount
                 end
 			end
+        elseif player2:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER 2 TO EGG COLLISIONS
+			if math.abs(player2.dx) < .3 then --SLOW COLLISION
+				if player2.x + (player2.width / 2) < Eggs[i].x + 4.2 and player2.x + (player2.width / 2) > Eggs[i].x + 3.8 then
+                    eggsCaught = eggsCaught + 1
+					Eggs[i].graveyard = true
+					Eggs[i].collected = true
+					scoresTable[i].lastX = Eggs[i].lastX
+					scoresTable[i].lastY = Eggs[i].lastY
+					scoresTable[i].timer = 1.5
+					if scoresTable[i].bonus then
+                        Score2 = Score2 + 500
+                    end
+                    if eggsCaught > 3 then
+                        scoresTable[i].scoreAmount = 1000
+                        Score2 = Score2 + scoresTable[i].scoreAmount
+                    else
+                        scoresTable[i].scoreAmount = eggsCaught * 250
+                        Score2 = Score2 + scoresTable[i].scoreAmount
+                    end
+				end
+			elseif math.abs(player2.dx) >= .3 then --FAST COLLISION
+                eggsCaught = eggsCaught + 1
+				Eggs[i].graveyard = true
+				Eggs[i].collected = true
+				scoresTable[i].lastX = Eggs[i].lastX
+				scoresTable[i].lastY = Eggs[i].lastY
+				scoresTable[i].timer = 1.5
+                if scoresTable[i].bonus then
+                    Score2 = Score2 + 500
+                end
+                if eggsCaught > 3 then
+                    scoresTable[i].scoreAmount = 1000
+                    Score2 = Score2 + scoresTable[i].scoreAmount
+                else
+                    scoresTable[i].scoreAmount = eggsCaught * 250
+                    Score2 = Score2 + scoresTable[i].scoreAmount
+                end
+			end
 		end
 
 ---[[PLAYER TO JOCKEY COLLISION

@@ -56,6 +56,8 @@ X_Change trollGrab.x to track player for frames 1-3
 X_How do we wipe away spawn zone point upon platform Retraction considering the render order?
 X_DecoupleSprite viewports for twoPlayers
 X_Add player2 collision to ptero
+X_player2 collision with eggs
+X_Player2 respawns
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
@@ -68,8 +70,8 @@ __Add player2 collision with lava, and all platforms
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
 __Need to remove platforms from collidable platforms on wave 7
 __player2 collision with vultures
-__player2 collision with eggs
-__Player2 respawns
+__Player 2 temporary safety sprite
+__Player 2 to jockey collision
 --I am deciding not to add trollGrab for vultures, because I want to move on to another project
 
 
