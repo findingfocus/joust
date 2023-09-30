@@ -4,7 +4,7 @@ function TitleScreenState:init()
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
     lavaRise = 0
-    singlePlayerMode = true
+    twoPlayerMode = false
 end
 
 local highlighted = 1
@@ -41,11 +41,11 @@ function TitleScreenState:update(dt)
 	if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
 		if highlighted == 1 then
             sounds['select']:play()
-            singlePlayerMode = true
+            twoPlayerMode = false
             gStateMachine:change('playState')
 		else
             sounds['select']:play()
-            singlePlayerMode = false
+            twoPlayerMode = true
             gStateMachine:change('playState')
 		end
 	end

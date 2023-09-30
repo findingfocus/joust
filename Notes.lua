@@ -58,15 +58,16 @@ X_DecoupleSprite viewports for twoPlayers
 X_Add player2 collision to ptero
 X_player2 collision with eggs
 X_Player2 respawns
+X_Add player1 to player2 collision
+X_Add player2 collision with lava, and all platforms
+X_Add player 2 score
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
-__Add player 2 score and lives count in twoplayer mode
-__Add player1 to player2 collision
-__Add player2 collision with lava, and all platforms
+__add life count in twoplayer mode
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
 __Need to remove platforms from collidable platforms on wave 7
 __player2 collision with vultures

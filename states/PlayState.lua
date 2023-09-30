@@ -51,7 +51,7 @@ function PlayState:init()
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 1, 'o', 'p', 'i')
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
-    if not singlePlayerMode then
+    if twoPlayerMode then
         player2 = Ostrich(VIRTUAL_WIDTH / 3 + 25, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 2, 'x', 'c', 'z')
         player2.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player2.height
         player2.temporarySafety = false
@@ -74,7 +74,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 3
+    wave = 1
     fireAnimation = .2
     fireSprite = 1
 end
@@ -116,7 +116,7 @@ function waveAdvance(enemies)
     end
     wave = wave + 1
     Score = Score + 3000
-    if not singlePlayerMode then
+    if twoPlayerMode then
         Score2 = Score2 + 3000
     end
     waveTimer = 3
@@ -268,8 +268,7 @@ function PlayState:update(dt)
     end
 
     if wave == 4 then
-        enemyObjects = 1
-        --5
+        enemyObjects = 5
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -280,7 +279,7 @@ function PlayState:update(dt)
 				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                 tablesPopulated = true
             end
-            --spawnEnemies(enemyObjects, 4)
+            spawnEnemies(enemyObjects, 4)
         end
         waveAdvance(enemyObjects)
     end
@@ -433,25 +432,28 @@ function PlayState:update(dt)
 		end
 	end
 
-    --PLAYER 2 RESPAWN
-    if player2.exploded and player2.explosionTimer > .35 then
-		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
-		--monster.graveyard = true
-		--monster = Pterodactyl(-30, -30, 0)
-		pteroTimer = vultureCount * 20
-		if player2Lives == 1 then
-			player2Lives = player2Lives - 1
-			gameOver = true
-		else
-			player2Lives = player2Lives - 1
-            if platform2Removed then
-                spawnPointIndex = math.random(3)
+
+    if twoPlayerMode then
+        --PLAYER 2 RESPAWN
+        if player2.exploded and player2.explosionTimer > .35 then
+            --SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
+            --monster.graveyard = true
+            --monster = Pterodactyl(-30, -30, 0)
+            pteroTimer = vultureCount * 20
+            if player2Lives == 1 then
+                player2Lives = player2Lives - 1
+                gameOver = true
             else
-                spawnPointIndex = math.random(4)
+                player2Lives = player2Lives - 1
+                if platform2Removed then
+                    spawnPointIndex = math.random(3)
+                else
+                    spawnPointIndex = math.random(4)
+                end
+                player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
             end
-			player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
-		end
-	end
+        end
+    end
 
 	if vultureCount == 0 then --KILLS PTERO IF NO VULTURES ON SCREEN
 		monster = Pterodactyl(-30, -30, 0)
@@ -493,7 +495,7 @@ function PlayState:update(dt)
 	end
 	--]]
     ---[[PLAYER TO PLAYER COLLISION
-    if not singlePlayerMode then
+    if twoPlayerMode then
         --PLAYER 2 BOTTOM COLLIDES
         if player2:bottomCollides(player1) then
             if player2.dy ~= 0 then
@@ -656,7 +658,7 @@ function PlayState:update(dt)
         player1.exploded = true
     end
 ---[[
-    if not singlePlayerMode then --PLAYER 2 EXPLODING IN LAVA
+    if twoPlayerMode then --PLAYER 2 EXPLODING IN LAVA
         if player2.y > VIRTUAL_HEIGHT - 25 - 10 then
             player2.exploded = true
         end
@@ -705,16 +707,35 @@ function PlayState:update(dt)
                     Score = Score + scoresTable[i].scoreAmount
                 end
 			end
-        elseif player2:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER 2 TO EGG COLLISIONS
-			if math.abs(player2.dx) < .3 then --SLOW COLLISION
-				if player2.x + (player2.width / 2) < Eggs[i].x + 4.2 and player2.x + (player2.width / 2) > Eggs[i].x + 3.8 then
+        elseif twoPlayerMode then
+            if player2:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER 2 TO EGG COLLISIONS
+                if math.abs(player2.dx) < .3 then --SLOW COLLISION
+                    if player2.x + (player2.width / 2) < Eggs[i].x + 4.2 and player2.x + (player2.width / 2) > Eggs[i].x + 3.8 then
+                        eggsCaught = eggsCaught + 1
+                        Eggs[i].graveyard = true
+                        Eggs[i].collected = true
+                        scoresTable[i].lastX = Eggs[i].lastX
+                        scoresTable[i].lastY = Eggs[i].lastY
+                        scoresTable[i].timer = 1.5
+                        if scoresTable[i].bonus then
+                            Score2 = Score2 + 500
+                        end
+                        if eggsCaught > 3 then
+                            scoresTable[i].scoreAmount = 1000
+                            Score2 = Score2 + scoresTable[i].scoreAmount
+                        else
+                            scoresTable[i].scoreAmount = eggsCaught * 250
+                            Score2 = Score2 + scoresTable[i].scoreAmount
+                        end
+                    end
+                elseif math.abs(player2.dx) >= .3 then --FAST COLLISION
                     eggsCaught = eggsCaught + 1
-					Eggs[i].graveyard = true
-					Eggs[i].collected = true
-					scoresTable[i].lastX = Eggs[i].lastX
-					scoresTable[i].lastY = Eggs[i].lastY
-					scoresTable[i].timer = 1.5
-					if scoresTable[i].bonus then
+                    Eggs[i].graveyard = true
+                    Eggs[i].collected = true
+                    scoresTable[i].lastX = Eggs[i].lastX
+                    scoresTable[i].lastY = Eggs[i].lastY
+                    scoresTable[i].timer = 1.5
+                    if scoresTable[i].bonus then
                         Score2 = Score2 + 500
                     end
                     if eggsCaught > 3 then
@@ -724,25 +745,8 @@ function PlayState:update(dt)
                         scoresTable[i].scoreAmount = eggsCaught * 250
                         Score2 = Score2 + scoresTable[i].scoreAmount
                     end
-				end
-			elseif math.abs(player2.dx) >= .3 then --FAST COLLISION
-                eggsCaught = eggsCaught + 1
-				Eggs[i].graveyard = true
-				Eggs[i].collected = true
-				scoresTable[i].lastX = Eggs[i].lastX
-				scoresTable[i].lastY = Eggs[i].lastY
-				scoresTable[i].timer = 1.5
-                if scoresTable[i].bonus then
-                    Score2 = Score2 + 500
                 end
-                if eggsCaught > 3 then
-                    scoresTable[i].scoreAmount = 1000
-                    Score2 = Score2 + scoresTable[i].scoreAmount
-                else
-                    scoresTable[i].scoreAmount = eggsCaught * 250
-                    Score2 = Score2 + scoresTable[i].scoreAmount
-                end
-			end
+            end
 		end
 
 ---[[PLAYER TO JOCKEY COLLISION
@@ -873,30 +877,33 @@ function PlayState:update(dt)
 			end
 		end
 	end
-    --PLAYER2 TO PTERO COLLISION
-	if not player2.temporarySafety and not monster.facingRight then
-		if player2.facingRight then
-			if monster:leftCollides(player2) then
-				if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
-					monster.exploded = true
-					monster.graveyard = true
-				elseif monster:leftCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
-					player2.exploded = true
-				end
-			end
-		end
 
-	elseif not player2.temporarySafety and monster.facingRight then
-		if not player2.facingRight then
-			if monster:rightCollides(player2) then
-				if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
-					monster.exploded = true
-					monster.graveyard = true
-				elseif monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
-					player2.exploded = true
-				end
-			end
-		end
+    if twoPlayerMode then
+        --PLAYER2 TO PTERO COLLISION
+        if not player2.temporarySafety and not monster.facingRight then
+            if player2.facingRight then
+                if monster:leftCollides(player2) then
+                    if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
+                        monster.exploded = true
+                        monster.graveyard = true
+                    elseif monster:leftCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+                        player2.exploded = true
+                    end
+                end
+            end
+
+        elseif not player2.temporarySafety and monster.facingRight then
+            if not player2.facingRight then
+                if monster:rightCollides(player2) then
+                    if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
+                        monster.exploded = true
+                        monster.graveyard = true
+                    elseif monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+                        player2.exploded = true
+                    end
+                end
+            end
+        end
 	end
 
 
@@ -910,16 +917,18 @@ function PlayState:update(dt)
 		end
 	end
 
-    --PLAYER2 DEATH BY PTERO
-	if player2.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
-		if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
-			player2.exploded = true
-		end
-	elseif not player2.facingRight and not monster.facingRight then
-		if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
-			player2.exploded = true
-		end
-	end
+    if twoPlayerMode then
+        --PLAYER2 DEATH BY PTERO
+        if player2.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
+            if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+                player2.exploded = true
+            end
+        elseif not player2.facingRight and not monster.facingRight then
+            if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+                player2.exploded = true
+            end
+        end
+    end
 
 --TAXI TO JOCKEY COLLISION --INSTANTIATES HIGHER TIER VULTURE
 ---[[
@@ -962,7 +971,7 @@ function PlayState:update(dt)
 	lavaBubble1:update(dt)
 	lavaBubble2:update(dt)
 	player1:update(dt)
-    if not singlePlayerMode then
+    if twoPlayerMode then
         player2:update(dt)
     end
 
@@ -1043,7 +1052,7 @@ function PlayState:render()
 	love.graphics.draw(groundBottom, 38, VIRTUAL_HEIGHT - 36)
 
 	player1:render()
-    if not singlePlayerMode then
+    if twoPlayerMode then
         player2:render()
     end
 
@@ -1151,7 +1160,7 @@ function PlayState:render()
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
 	love.graphics.print(string.format("%06d", Score), 53, VIRTUAL_HEIGHT - 28)
-    if not singlePlayerMode then
+    if twoPlayerMode then
         love.graphics.print(string.format("%06d", Score2), 142, VIRTUAL_HEIGHT - 28)
     end
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
@@ -1226,7 +1235,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
----[[DEBUG INFO
+--[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
 --]]
