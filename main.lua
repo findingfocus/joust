@@ -29,6 +29,7 @@ function love.load()
 
 	backgroundRef = love.graphics.newImage('src/pics/backgroundRef.png')
 	temporarySafetyAtlas = love.graphics.newImage('src/pics/temporarySafetyAtlas.png')
+	temporarySafetyAtlas2 = love.graphics.newImage('src/pics/temporarySafetyAtlas2.png')
 	platformLeft = love.graphics.newImage('src/pics/platformLeft.png')
 	platformRight = love.graphics.newImage('src/pics/platformRight.png')
     platform3Sprite = love.graphics.newImage('src/pics/platform3.png')

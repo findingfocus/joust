@@ -640,9 +640,17 @@ function Ostrich:render()
 	if self.temporarySafety then --IF SPAWNING
 		if not self.exploded then
 			if self.facingRight then
-				love.graphics.draw(self.temporarySafetyAtlas, spawningSprite, self.x, self.y, 0, 1, 1)
+                if self.playerNumber == 1 then
+                    love.graphics.draw(self.temporarySafetyAtlas, spawningSprite, self.x, self.y, 0, 1, 1)
+                else
+                    love.graphics.draw(self.temporarySafetyAtlas2, spawningSprite, self.x, self.y, 0, 1, 1)
+                end
 			else
-				love.graphics.draw(self.temporarySafetyAtlas, spawningSprite, self.x, self.y, 0, -1, 1, self.width)
+                if self.playerNumber == 1 then
+                    love.graphics.draw(self.temporarySafetyAtlas, spawningSprite, self.x, self.y, 0, -1, 1, self.width)
+                else
+                    love.graphics.draw(self.temporarySafetyAtlas2, spawningSprite, self.x, self.y, 0, -1, 1, self.width)
+                end
 			end
 		end
 	end
