@@ -14,7 +14,11 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber, leftInp
     elseif playerNumber == 2 then
         self.atlas = player2Atlas
     end
-	self.temporarySafetyAtlas = temporarySafetyAtlas
+    if self.playerNumber == 1 then
+        self.temporarySafetyAtlas = temporarySafetyAtlas
+    elseif self.playerNumber == 2 then
+        self.temporarySafetyAtlas2 = temporarySafetyAtlas2
+    end
 	self.platformSpawnY = platformSpawnY
     self.grabbed = false
 	self.lastX = 0
@@ -51,7 +55,11 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber, leftInp
 	self.ground = Platform('name', 1, 1, 1, 1)
 	ostrich1Sprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
     ostrich2Sprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
-	spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas:getDimensions())
+    if self.playerNumber == 1 then
+        spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas:getDimensions())
+    elseif self.playerNumber == 2 then
+        spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas2:getDimensions())
+    end
     self.beginningSpawn = false
     lastInput = 'right'
 end

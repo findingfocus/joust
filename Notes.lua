@@ -71,9 +71,7 @@ __add life count in twoplayer mode
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
 __Need to remove platforms from collidable platforms on wave 7
 __player2 collision with vultures
-__Player 2 temporary safety sprite
 __Player 2 to jockey collision
---I am deciding not to add trollGrab for vultures, because I want to move on to another project
 
 
 Unseating Bounder   500 Unseating Hunter    750 Unseating Shadowlord    1500
