@@ -547,7 +547,7 @@ function PlayState:update(dt)
     --]]
 
 ---[[PLAYER TO ENEMY COLLISIONS
-	for i = 1, enemyObjects do --Be sure to change 3 to variable for wave objects
+	for i = 1, enemyObjects do
 		if not player1.temporarySafety then
 			if Vultures[i].spawning == false then
 				if player1:enemyTopCollides(Vultures[i]) then
@@ -627,6 +627,89 @@ function PlayState:update(dt)
 					end
 				end
 			end
+        end
+
+        if twoPlayerMode then
+            if not player2.temporarySafety then
+                if Vultures[i].spawning == false then
+                    if player2:enemyTopCollides(Vultures[i]) then
+                        player2.exploded = true
+                        player2.graveyard = true
+                        Vultures[i].dy = Vultures[i].dy * -1
+                    elseif player2:enemyBottomCollides(Vultures[i]) then
+                        Vultures[i].exploded = true
+                        Vultures[i].graveyard = true
+                        Vultures[i].dxAssigned = false
+                        Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+                        Eggs[i].graveyard = false
+                        Eggs[i].invulnerable = true
+                        pteroTimer = vultureCount * 20 - 20
+                        Vultures[i].firstFrameExploded = true
+                        player2.dy = player2.dy * -1
+                        Score = Score + Vultures[i].pointTier
+                    elseif player2:enemyLeftCollides(Vultures[i]) then
+                        if player2.facingRight and Vultures[i].facingRight then
+                            player2.exploded = true
+                            player2.graveyard = true
+                        elseif not player2.facingRight and not Vultures[i].facingRight then
+                            player2.x = Vultures[i].x + Vultures[i].width
+                            player2.dx = math.abs(player2.dx) / 2
+                        elseif player2.facingRight and not Vultures[i].facingRight then
+                            player2.dx = player2.dx * -1
+                            player2.x = Vultures[i].x + Vultures[i].width
+                        elseif not player2.facingRight and Vultures[i].facingRight then
+                            if player2.y == Vultures[i].y then
+                                player2.dx = player2.dx * -1
+                                Vultures[i].dx = Vultures[i].dx * -1
+                                Vultures[i].x = player2.x - Vultures[i].width
+                            elseif player2.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
+                                player2.exploded = true
+                                player2.graveyard = true
+                            elseif player2.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
+                                Vultures[i].exploded = true
+                                Vultures[i].graveyard = true
+                                Vultures[i].dxAssigned = false
+                                Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+                                Eggs[i].graveyard = false
+                                Eggs[i].invulnerable = true
+                                pteroTimer = vultureCount * 20 - 20
+                                Vultures[i].firstFrameExploded = true
+                                Score = Score + Vultures[i].pointTier
+                            end
+                        end
+                    elseif player2:enemyRightCollides(Vultures[i]) then
+                        if player2.facingRight and Vultures[i].facingRight then
+                            player2.x = Vultures[i].x - player2.width
+                            player2.dx = (math.abs(player2.dx) * -1) / 2
+                        elseif not player2.facingRight and not Vultures[i].facingRight then
+                            player2.exploded = true
+                            player2.graveyard = true
+                        elseif player2.facingRight and not Vultures[i].facingRight then
+                            if player2.y == Vultures[i].y then
+                                player2.dx = player2.dx * -1
+                                Vultures[i].dx = Vultures[i].dx * -1
+                                Vultures[i].x = player2.x + player2.width
+                            elseif player2.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
+                                pteroTimer = vultureCount * 20 - 20
+                                Vultures[i].exploded = true
+                                Vultures[i].graveyard = true
+                                Vultures[i].dxAssigned = false
+                                Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+                                Eggs[i].graveyard = false
+                                Eggs[i].invulnerable = true
+                                Vultures[i].firstFrameExploded = true
+                                Score = Score + Vultures[i].pointTier
+                            elseif player2.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
+                                player2.exploded = true
+                                player2.graveyard = true
+                            end
+                        elseif not player2.facingRight and Vultures[i].facingRight then
+                            player2.dx = player2.dx * -1
+                            player2.x = Vultures[i].x - player2.width
+                        end
+                    end
+                end
+            end
 		end
 	end
 	--]]
@@ -762,6 +845,21 @@ function PlayState:update(dt)
             Eggs[i].collected = true
             Taxis[i].graveyard = true
 		end
+
+        if twoPlayerMode then
+            if not Jockeys[i].graveyard and player2:Collides(Jockeys[i]) then
+                Jockeys[i].collected = true
+                scoresTable[i].bonus = false
+                scoresTable[i].scoreAmount = 250
+                Score = Score + scoresTable[i].scoreAmount
+                scoresTable[i].timer = 1.5
+                scoresTable[i].lastX = Jockeys[i].lastX
+                scoresTable[i].lastY = Jockeys[i].lastY
+                Jockeys[i].graveyard = true
+                Eggs[i].collected = true
+                Taxis[i].graveyard = true
+            end
+        end
 	--]]
 
 ---[[EGGS TO FLOOR COLLISION
@@ -957,6 +1055,12 @@ function PlayState:update(dt)
     --]]
     if player1.exploded then
         eggsCaught = 0
+    end
+
+    if twoPlayerMode then
+        if player2.exploded then
+            eggsCaught = 0
+        end
     end
 
 ---[[OBJECT UPDATES
