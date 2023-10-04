@@ -1266,6 +1266,10 @@ function PlayState:render()
 	love.graphics.print(string.format("%06d", Score), 53, VIRTUAL_HEIGHT - 28)
     if twoPlayerMode then
         love.graphics.print(string.format("%06d", Score2), 142, VIRTUAL_HEIGHT - 28)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.draw(lifeCount, VIRTUAL_WIDTH - 68, VIRTUAL_HEIGHT - 29)
+        love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
+        love.graphics.print(tostring(player2Lives), VIRTUAL_WIDTH - 58, VIRTUAL_HEIGHT - 28)
     end
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
