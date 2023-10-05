@@ -175,6 +175,7 @@ function PlayState:update(dt)
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
     end
 
+    --LAVA FIRE ANIMATION
     fireAnimation = fireAnimation - dt
     if fireAnimation < 0 then
         fireAnimation = .2
@@ -433,12 +434,9 @@ function PlayState:update(dt)
 	end
 
 
+    --PLAYER 2 RESPAWN
     if twoPlayerMode then
-        --PLAYER 2 RESPAWN
         if player2.exploded and player2.explosionTimer > .35 then
-            --SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
-            --monster.graveyard = true
-            --monster = Pterodactyl(-30, -30, 0)
             pteroTimer = vultureCount * 20
             if player2Lives == 1 then
                 player2Lives = player2Lives - 1
@@ -629,6 +627,7 @@ function PlayState:update(dt)
 			end
         end
 
+        --PLAYER 2 ENEMY COLLISIONS
         if twoPlayerMode then
             if not player2.temporarySafety then
                 if Vultures[i].spawning == false then
@@ -741,7 +740,8 @@ function PlayState:update(dt)
         player1.exploded = true
     end
 ---[[
-    if twoPlayerMode then --PLAYER 2 EXPLODING IN LAVA
+    --PLAYER 2 EXPLODING IN LAVA
+    if twoPlayerMode then
         if player2.y > VIRTUAL_HEIGHT - 25 - 10 then
             player2.exploded = true
         end
@@ -832,7 +832,7 @@ function PlayState:update(dt)
             end
 		end
 
----[[PLAYER TO JOCKEY COLLISION
+        ---[[PLAYER TO JOCKEY COLLISION
 		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
 			Jockeys[i].collected = true
 			scoresTable[i].bonus = false
@@ -846,6 +846,7 @@ function PlayState:update(dt)
             Taxis[i].graveyard = true
 		end
 
+        --PLAYER 2 TO JOCKEY COLLISION
         if twoPlayerMode then
             if not Jockeys[i].graveyard and player2:Collides(Jockeys[i]) then
                 Jockeys[i].collected = true
@@ -976,8 +977,8 @@ function PlayState:update(dt)
 		end
 	end
 
+    --PLAYER2 TO PTERO COLLISION
     if twoPlayerMode then
-        --PLAYER2 TO PTERO COLLISION
         if not player2.temporarySafety and not monster.facingRight then
             if player2.facingRight then
                 if monster:leftCollides(player2) then
@@ -1210,19 +1211,6 @@ function PlayState:render()
             love.graphics.draw(platformSpawn, VIRTUAL_WIDTH / 2 - 35, groundPlatform.y)
         end
 	end
-
-
-    --[[RETRACTING OLD
-    love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
-    love.graphics.rectangle('fill', platform2LeftWipeX, platform2LeftWipeY, platform2RightWipeWidth, 7)
-    --]]
-   --[[WIPING AWAY PLATFORM 3
-    if not platform2Removed then
-        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
-        love.graphics.rectangle('fill', platform2LeftWipeX, platform2LeftWipeY, platform2LeftWipeWidth, 7)
-        love.graphics.rectangle('fill', platform2RightWipeX, platform2LeftWipeY, platform2RightWipeWidth, 7)
-    end
-    --]]
 
 --[[KEYLOGGER
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)

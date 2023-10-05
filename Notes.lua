@@ -63,14 +63,13 @@ X_Add player2 collision with lava, and all platforms
 X_player2 collision with vultures
 X_Player 2 to jockey collision
 X_Add player 2 score
-__Add lifeCount
+X_add life count in twoplayer mode
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
-__add life count in twoplayer mode
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
 __Need to remove platforms from collidable platforms on wave 7
 
