@@ -64,7 +64,8 @@ X_player2 collision with vultures
 X_Player 2 to jockey collision
 X_Add player 2 score
 X_add life count in twoplayer mode
-__Wave 8 5 bounder, two hunter
+X_Wave 8 5 bounder, two hunter
+__Wave 9 5 bounder, two hunter with platform
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
