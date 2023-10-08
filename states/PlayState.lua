@@ -159,6 +159,8 @@ function platformRetract(platform)
         platform.retractingRightX = (platform.x + (platform.width / 2))
         platform2Removed = true --CHANGE THIS TO A .removed MEMBER IN PLATFORM CLASS AND SET PLAYER SPAWNPOINT WITHOUT platform2Removed VARIABLE
     end
+
+    --UPDATE COLLIDABLE PLATFORMS BASED ON .REMOVED IN PLATFORM CLASS
 end
 
 function PlayState:update(dt)
@@ -171,6 +173,7 @@ function PlayState:update(dt)
         love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
     end
 
+    --CHANGE THIS IN PLATFORM RETRACT FUNCTION
     if platform2Removed then
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
     end
@@ -1233,7 +1236,7 @@ function PlayState:render()
 	for k, platform in pairs(collidablePlatforms) do
         if platform.retracting then
             love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-            if not platform2Removed then
+            if not platform2Removed then --RENDERDS PLATFORM SPAWN ONLY IF PLATFORM 2 HASNT BEEN RETRACTED YET
                 love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
             end
             ---[[
