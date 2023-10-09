@@ -149,6 +149,7 @@ function platformRetract(platform)
         platform.retractingLeftWidth = platform.retractingLeftWidth + 1
     else
         platform.retractingLeftWidth = (platform.width / 2)
+        platform.retracted = true
         platform2Removed = true --CHANGE THIS TO A .removed MEMBER IN PLATFORM CLASS AND SET PLAYER SPAWNPOINT WITHOUT platform2Removed VARIABLE
     end
 
@@ -157,6 +158,7 @@ function platformRetract(platform)
         platform.retractingRightWidth = platform.retractingRightWidth + 1
     else
         platform.retractingRightX = (platform.x + (platform.width / 2))
+        platform.retracted = true
         platform2Removed = true --CHANGE THIS TO A .removed MEMBER IN PLATFORM CLASS AND SET PLAYER SPAWNPOINT WITHOUT platform2Removed VARIABLE
     end
 
@@ -177,6 +179,14 @@ function PlayState:update(dt)
     if platform2Removed then
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
     end
+
+    --UPDATE COLLIDABLE PLATFORMS BASED ON RETRACTED STATUS
+    for i, platform in pairs(collidablePlatforms) do
+        if not platform.retracted then
+           table.insert(collidablePlatforms, platform)
+        end
+    end
+
 
     --LAVA FIRE ANIMATION
     fireAnimation = fireAnimation - dt

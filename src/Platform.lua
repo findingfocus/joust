@@ -10,6 +10,7 @@ function Platform:init(name, x, y, width, height)
 	self.rightHalf = love.graphics.newQuad(0, 0, platformRight:getWidth(), platformRight:getHeight(), platformRight:getDimensions())
 	self.rightHalf:setViewport(PLATFORMOFFSET, 0, platformRight:getWidth() - PLATFORMOFFSET, platformRight:getHeight())
     self.retracting = false
+    self.retracted = false
     self.retractingLeftWidth = 0
     self.retractingRightX = x + width
     self.retractingRightWidth = 0
