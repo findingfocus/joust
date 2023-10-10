@@ -179,6 +179,8 @@ function PlayState:update(dt)
     if platform2Removed then
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
     end
+--[[
+    collidablePlatforms = {} --FLUSHES COLLIDABLE PLATFORMS
 
     --UPDATE COLLIDABLE PLATFORMS BASED ON RETRACTED STATUS
     for i, platform in pairs(collidablePlatforms) do
@@ -186,6 +188,7 @@ function PlayState:update(dt)
            table.insert(collidablePlatforms, platform)
         end
     end
+--]]
 
 
     --LAVA FIRE ANIMATION
@@ -1388,4 +1391,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
 --]]
+    for i, platform in pairs(collidablePlatforms) do
+        love.graphics.print(tostring(platform.name), 0, i * 8)
+    end
 end
