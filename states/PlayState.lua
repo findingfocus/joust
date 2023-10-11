@@ -74,7 +74,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 9
+    wave = 7
     fireAnimation = .2
     fireSprite = 1
 end
@@ -150,7 +150,6 @@ function platformRetract(platform)
     else
         platform.retractingLeftWidth = (platform.width / 2)
         platform.retracted = true
-        platform2Removed = true --CHANGE THIS TO A .removed MEMBER IN PLATFORM CLASS AND SET PLAYER SPAWNPOINT WITHOUT platform2Removed VARIABLE
     end
 
     if platform.retractingRightX > (platform.x + (platform.width / 2)) then
@@ -159,10 +158,7 @@ function platformRetract(platform)
     else
         platform.retractingRightX = (platform.x + (platform.width / 2))
         platform.retracted = true
-        platform2Removed = true --CHANGE THIS TO A .removed MEMBER IN PLATFORM CLASS AND SET PLAYER SPAWNPOINT WITHOUT platform2Removed VARIABLE
     end
-
-    --UPDATE COLLIDABLE PLATFORMS BASED ON .REMOVED IN PLATFORM CLASS
 end
 
 function PlayState:update(dt)
@@ -174,13 +170,18 @@ function PlayState:update(dt)
         love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
         love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
     end
-
+---[[
     --CHANGE THIS IN PLATFORM RETRACT FUNCTION
-    if platform2Removed then
+    if platform2.retracted then --POTENTIALLY USE TABLE.REMOVE UPON RETRACTION FOR CLEANER IMPLEMENTATION
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
+    elseif platform1.retracted and platform1L.retracted then
+        collidablePlatforms = {platform3, platform4, platform4L, platform5}
+    elseif platform5.retracted then
+        collidablePlatforms = {platform3, platform4, platform4L}
     end
+    --]]
 --[[
-    collidablePlatforms = {} --FLUSHES COLLIDABLE PLATFORMS
+    --collidablePlatforms = {} --FLUSHES COLLIDABLE PLATFORMS
 
     --UPDATE COLLIDABLE PLATFORMS BASED ON RETRACTED STATUS
     for i, platform in pairs(collidablePlatforms) do
@@ -381,6 +382,7 @@ function PlayState:update(dt)
         --PLATFORM 1 and 1L RETRACTION
         platformRetract(platform1)
         platformRetract(platform1L)
+        --platformRetract(platform2)
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -418,6 +420,7 @@ function PlayState:update(dt)
     if wave == 9 then
         enemyObjects = 7
         --DISAPPEAR PLATFORM 5 AND REMOVE FROM COLLIDABLE PLATFORMS
+        platformRetract(platform5)
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -432,7 +435,6 @@ function PlayState:update(dt)
             Vultures[6].tier = 2
             Vultures[7].tier = 2
         end
-        platformRetract(platform5)
         waveAdvance(enemyObjects)
     end
 --]]
@@ -480,7 +482,7 @@ function PlayState:update(dt)
 			gameOver = true
 		else
 			lives = lives - 1
-            if platform2Removed then
+            if platform2.retracted then
                 spawnPointIndex = math.random(3)
             else
                 spawnPointIndex = math.random(4)
@@ -499,7 +501,7 @@ function PlayState:update(dt)
                 gameOver = true
             else
                 player2Lives = player2Lives - 1
-                if platform2Removed then
+                if platform2.retracted then
                     spawnPointIndex = math.random(3)
                 else
                     spawnPointIndex = math.random(4)
@@ -1249,7 +1251,7 @@ function PlayState:render()
 	for k, platform in pairs(collidablePlatforms) do
         if platform.retracting then
             love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-            if not platform2Removed then --RENDERDS PLATFORM SPAWN ONLY IF PLATFORM 2 HASNT BEEN RETRACTED YET
+            if not platform2.retracted then --RENDERS PLATFORM SPAWN ONLY IF PLATFORM 2 HASNT BEEN RETRACTED YET
                 love.graphics.draw(platformSpawn, platform2.x + 15, platform2.y)
             end
             ---[[
@@ -1387,9 +1389,9 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
---[[DEBUG INFO
+---[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('wave: ' .. tostring(wave), 10, 10)
+	love.graphics.print('platform2.retracted: ' .. tostring(platform2.retracted), 10, VIRTUAL_HEIGHT - 10)
 --]]
     for i, platform in pairs(collidablePlatforms) do
         love.graphics.print(tostring(platform.name), 0, i * 8)
