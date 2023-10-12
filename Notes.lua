@@ -65,7 +65,13 @@ X_Player 2 to jockey collision
 X_Add player 2 score
 X_add life count in twoplayer mode
 X_Wave 8 5 bounder, two hunter
-__Wave 9 5 bounder, two hunter with platform
+X_Wave 9 5 bounder, two hunter with platform
+X_Need to remove platforms from collidable platforms on wave 7
+X_Update collidable platforms upon platformRetract
+__Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
+__Up to wave 20 population
+__Add leaderboard with HighScores
+__Take in user Initials for scores
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
@@ -73,7 +79,6 @@ __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
-__Need to remove platforms from collidable platforms on wave 7
 
 
 Unseating Bounder   500 Unseating Hunter    750 Unseating Shadowlord    1500

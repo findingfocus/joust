@@ -74,7 +74,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 7
+    wave = 9
     fireAnimation = .2
     fireSprite = 1
 end
@@ -159,6 +159,14 @@ function platformRetract(platform)
         platform.retractingRightX = (platform.x + (platform.width / 2))
         platform.retracted = true
     end
+
+    if platform2.retracted and not platform5.retracted then
+        collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
+    elseif platform1.retracted and platform1L.retracted then
+        collidablePlatforms = {platform3, platform4, platform4L, platform5}
+    elseif platform5.retracted then
+        collidablePlatforms = {platform3, platform4, platform4L}
+    end
 end
 
 function PlayState:update(dt)
@@ -170,27 +178,6 @@ function PlayState:update(dt)
         love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
         love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
     end
----[[
-    --CHANGE THIS IN PLATFORM RETRACT FUNCTION
-    if platform2.retracted then --POTENTIALLY USE TABLE.REMOVE UPON RETRACTION FOR CLEANER IMPLEMENTATION
-        collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
-    elseif platform1.retracted and platform1L.retracted then
-        collidablePlatforms = {platform3, platform4, platform4L, platform5}
-    elseif platform5.retracted then
-        collidablePlatforms = {platform3, platform4, platform4L}
-    end
-    --]]
---[[
-    --collidablePlatforms = {} --FLUSHES COLLIDABLE PLATFORMS
-
-    --UPDATE COLLIDABLE PLATFORMS BASED ON RETRACTED STATUS
-    for i, platform in pairs(collidablePlatforms) do
-        if not platform.retracted then
-           table.insert(collidablePlatforms, platform)
-        end
-    end
---]]
-
 
     --LAVA FIRE ANIMATION
     fireAnimation = fireAnimation - dt
@@ -361,7 +348,9 @@ function PlayState:update(dt)
     if wave == 6 then
         enemyObjects = 7
         --PLATFORM 2 RETRACTION
-        platformRetract(platform2)
+        if not platform2.retracted then
+            platformRetract(platform2)
+        end
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -380,8 +369,12 @@ function PlayState:update(dt)
     if wave == 7 then
         enemyObjects = 7
         --PLATFORM 1 and 1L RETRACTION
-        platformRetract(platform1)
-        platformRetract(platform1L)
+        if not platform1.retracted then
+            platformRetract(platform1)
+        end
+        if not platform1L.retracted then
+            platformRetract(platform1L)
+        end
         --platformRetract(platform2)
         if not tablesPopulated then
             for i = 1, enemyObjects do
@@ -419,8 +412,11 @@ function PlayState:update(dt)
 
     if wave == 9 then
         enemyObjects = 7
+        --platform2.retracted = true
         --DISAPPEAR PLATFORM 5 AND REMOVE FROM COLLIDABLE PLATFORMS
-        platformRetract(platform5)
+        if not platform5.retracted then
+            platformRetract(platform5)
+        end
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -1392,6 +1388,7 @@ function PlayState:render()
 ---[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('platform2.retracted: ' .. tostring(platform2.retracted), 10, VIRTUAL_HEIGHT - 10)
+	love.graphics.print('overdraft: ' .. tostring(overdraft), 10, VIRTUAL_HEIGHT - 20)
 --]]
     for i, platform in pairs(collidablePlatforms) do
         love.graphics.print(tostring(platform.name), 0, i * 8)
