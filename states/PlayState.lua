@@ -75,7 +75,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 10
+    wave = 11
     fireAnimation = .2
     fireSprite = 1
 end
@@ -164,7 +164,11 @@ function platformRetract(platform)
     if platform2.retracted and not platform5.retracted then
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
     elseif platform1.retracted and platform1L.retracted then
-        collidablePlatforms = {platform3, platform4, platform4L, platform5}
+        if wave == 11 then
+            collidablePlatforms = {platform2, platform3, platform4, platform4L, platform5}
+        else
+            collidablePlatforms = {platform3, platform4, platform4L, platform5}
+        end
     elseif platform5.retracted then
         collidablePlatforms = {platform3, platform4, platform4L}
     end
@@ -492,6 +496,31 @@ function PlayState:update(dt)
             end
             wave6Timer = 0
         end
+    end
+
+    if wave == 11 then
+        enemyObjects = 7
+        if not platform1.retracted then
+            platformRetract(platform1)
+        end
+        if not platform1L.retracted then
+            platformRetract(platform1L)
+        end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 3)
+            Vultures[6].tier = 2
+            Vultures[7].tier = 2
+        end
+        waveAdvance(enemyObjects)
     end
 --]]
 

@@ -69,6 +69,7 @@ X_Wave 9 5 bounder, two hunter with platform
 X_Need to remove platforms from collidable platforms on wave 7
 X_Update collidable platforms upon platformRetract
 __Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
+__Wave 11 spawns
 __Up to wave 20 population
 __Add leaderboard with HighScores
 __Take in user Initials for scores
