@@ -75,7 +75,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 11
+    wave = 12
     fireAnimation = .2
     fireSprite = 1
 end
@@ -160,18 +160,28 @@ function platformRetract(platform)
         platform.retractingRightX = (platform.x + (platform.width / 2))
         platform.retracted = true
     end
-
+    --REMOVE RETRACTED TABLE FROM COLLIDABLE TABLE PLATFORMS
+    for k, platform in pairs(collidablePlatforms) do
+        if platform.retracted then
+            table.remove(collidablePlatforms, k)
+        end
+    end
+    --[[
+    --NEED TO REHAUL collidablePlatform ASSIGNMENT
     if platform2.retracted and not platform5.retracted then
         collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
     elseif platform1.retracted and platform1L.retracted then
         if wave == 11 then
             collidablePlatforms = {platform2, platform3, platform4, platform4L, platform5}
+        elseif wave == 12 then
+            collidablePlatforms = {platform2, platform3, platform4, platform4L}
         else
             collidablePlatforms = {platform3, platform4, platform4L, platform5}
         end
-    elseif platform5.retracted then
+    elseif platform5.retracted and not wave == 12 then
         collidablePlatforms = {platform3, platform4, platform4L}
     end
+    --]]
 end
 
 function PlayState:update(dt)
@@ -380,7 +390,7 @@ function PlayState:update(dt)
         if not platform1L.retracted then
             platformRetract(platform1L)
         end
-        --platformRetract(platform2)
+        platformRetract(platform2)
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -505,6 +515,28 @@ function PlayState:update(dt)
         end
         if not platform1L.retracted then
             platformRetract(platform1L)
+        end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 3)
+            Vultures[6].tier = 2
+            Vultures[7].tier = 2
+        end
+        waveAdvance(enemyObjects)
+    end
+
+    if wave == 12 then
+        enemyObjects = 7
+        if not platform5.retracted then
+            platformRetract(platform5)
         end
         if not tablesPopulated then
             for i = 1, enemyObjects do
