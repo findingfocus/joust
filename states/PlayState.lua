@@ -75,7 +75,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 12
+    wave = 13
     fireAnimation = .2
     fireSprite = 1
 end
@@ -535,8 +535,39 @@ function PlayState:update(dt)
 
     if wave == 12 then
         enemyObjects = 7
+        ---[[
+        platform1.retracted = true
+        platform1L.retracted = true
+        --]]
         if not platform5.retracted then
             platformRetract(platform5)
+        end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 3)
+            Vultures[6].tier = 2
+            Vultures[7].tier = 2
+        end
+        waveAdvance(enemyObjects)
+    end
+
+    if wave == 13 then
+        enemyObjects = 7
+        ---[[
+        platform5.retracted = true
+        platform1.retracted = true
+        platform1L.retracted = true
+        --]]
+        if not platform2.retracted then
+            platformRetract(platform2)
         end
         if not tablesPopulated then
             for i = 1, enemyObjects do
@@ -1506,7 +1537,7 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
----[[DEBUG INFO
+--[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
 	love.graphics.print('platform2.retracted: ' .. tostring(platform2.retracted), 10, VIRTUAL_HEIGHT - 10)
 --]]

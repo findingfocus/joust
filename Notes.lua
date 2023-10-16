@@ -68,8 +68,8 @@ X_Wave 8 5 bounder, two hunter
 X_Wave 9 5 bounder, two hunter with platform
 X_Need to remove platforms from collidable platforms on wave 7
 X_Update collidable platforms upon platformRetract
+X_Wave 11 spawns
 __Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
-__Wave 11 spawns
 __Up to wave 20 population
 __Add leaderboard with HighScores
 __Take in user Initials for scores
@@ -78,6 +78,8 @@ __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
+__Add player to Vulture collision sound
+__Add player to Egg sound
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
 
