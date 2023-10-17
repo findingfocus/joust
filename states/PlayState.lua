@@ -75,7 +75,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 13
+    wave = 14
     fireAnimation = .2
     fireSprite = 1
 end
@@ -166,22 +166,6 @@ function platformRetract(platform)
             table.remove(collidablePlatforms, k)
         end
     end
-    --[[
-    --NEED TO REHAUL collidablePlatform ASSIGNMENT
-    if platform2.retracted and not platform5.retracted then
-        collidablePlatforms = {platform1, platform1L, platform3, platform4, platform4L, platform5}
-    elseif platform1.retracted and platform1L.retracted then
-        if wave == 11 then
-            collidablePlatforms = {platform2, platform3, platform4, platform4L, platform5}
-        elseif wave == 12 then
-            collidablePlatforms = {platform2, platform3, platform4, platform4L}
-        else
-            collidablePlatforms = {platform3, platform4, platform4L, platform5}
-        end
-    elseif platform5.retracted and not wave == 12 then
-        collidablePlatforms = {platform3, platform4, platform4L}
-    end
-    --]]
 end
 
 function PlayState:update(dt)
@@ -390,7 +374,7 @@ function PlayState:update(dt)
         if not platform1L.retracted then
             platformRetract(platform1L)
         end
-        platformRetract(platform2)
+        platform2.retracted = true
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -408,6 +392,7 @@ function PlayState:update(dt)
 
     if wave == 8 then
         enemyObjects = 7
+        platform2.retracted = true
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -427,6 +412,7 @@ function PlayState:update(dt)
 
     if wave == 9 then
         enemyObjects = 7
+        platform2.retracted = true
         if not platform5.retracted then
             platformRetract(platform5)
         end
@@ -569,6 +555,29 @@ function PlayState:update(dt)
         if not platform2.retracted then
             platformRetract(platform2)
         end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 3)
+            Vultures[6].tier = 2
+            Vultures[7].tier = 2
+        end
+        waveAdvance(enemyObjects)
+    end
+
+    if wave == 14 then
+        enemyObjects = 7
+        platform2.retracted = true
+        ---[[
+        collidablePlatforms = {platform3, platform4, platform4L}
+        --]]
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -1362,6 +1371,12 @@ function PlayState:render()
 	--love.graphics.rectangle('fill', 53, VIRTUAL_HEIGHT - 36, 186, 32)
 	love.graphics.draw(groundBottom, 38, VIRTUAL_HEIGHT - 36)
 
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+    love.graphics.setFont(smallFont)
+	for k, v in pairs(scoresTable) do
+		scoresTable[k]:render()
+	end
+
 	player1:render()
     if twoPlayerMode then
         player2:render()
@@ -1465,11 +1480,6 @@ function PlayState:render()
         love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
         love.graphics.print(tostring(player2Lives), VIRTUAL_WIDTH - 58, VIRTUAL_HEIGHT - 28)
     end
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-
-	for k, v in pairs(scoresTable) do
-		scoresTable[k]:render()
-	end
 
     love.graphics.setFont(smallFont)
 
