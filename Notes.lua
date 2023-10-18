@@ -70,6 +70,8 @@ X_Need to remove platforms from collidable platforms on wave 7
 X_Update collidable platforms upon platformRetract
 X_Wave 11 spawns
 __Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
+__Ensure Hunters are inheriting faster dx than bounder when instantiating
+__Add EGG WAVE text for EggWaves
 __Up to wave 20 population
 __Add leaderboard with HighScores
 __Take in user Initials for scores
