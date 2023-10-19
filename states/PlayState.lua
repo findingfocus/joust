@@ -76,7 +76,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 15
+    wave = 19
     fireAnimation = .2
     fireSprite = 1
 end
@@ -657,7 +657,89 @@ function PlayState:update(dt)
     end
     if wave == 16 then
         enemyObjects = 7
+        if not platform5.retracted then
+            platformRetract(platform5)
+        end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 4)
+            Vultures[4].tier = 2
+            Vultures[5].tier = 2
+            Vultures[6].tier = 2
+            Vultures[7].tier = 2
+        end
+        waveAdvance(enemyObjects)
+    end
+
+    if wave == 17 then
+        enemyObjects = 7
+        platform5.retracted = true
+        if not platform1.retracted then
+            platformRetract(platform1)
+        end
+        if not platform1L.retracted then
+            platformRetract(platform1L)
+        end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 4)
+            Vultures[4].tier = 2
+            Vultures[5].tier = 2
+            Vultures[6].tier = 2
+            Vultures[7].tier = 2
+        end
+        waveAdvance(enemyObjects)
+    end
+
+    if wave == 18 then
+        enemyObjects = 7
+        platform1.retracted = true
+        platform1L.retracted = true
+        platform5.retracted = true
+        if not platform2.retracted then
+            platformRetract(platform2)
+        end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 3)
+            Vultures[4].tier = 2
+            Vultures[5].tier = 2
+            Vultures[6].tier = 2
+            Vultures[7].tier = 2
+        end
+        waveAdvance(enemyObjects)
+    end
+    if wave == 19 then
+        enemyObjects = 7
+        platform1.retracted = true
+        platform1L.retracted = true
         platform2.retracted = true
+        platform5.retracted = true
+        collidablePlatforms = {platform3, platform4, platform4L}
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)

@@ -69,6 +69,8 @@ X_Wave 9 5 bounder, two hunter with platform
 X_Need to remove platforms from collidable platforms on wave 7
 X_Update collidable platforms upon platformRetract
 X_Wave 11 spawns
+__Add wave 20 eggs wave
+__Tweak player to vulture top collision to jump a little less high
 __Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
 __Ensure Hunters are inheriting faster dx than bounder when instantiating
 __Add EGG WAVE text for EggWaves
