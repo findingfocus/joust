@@ -35,7 +35,7 @@ function PlayState:init()
     enemyObjects = 0
     lavaRise = 0
     waveTimer = 3
-    eggWaveTextTimer = 0
+    eggWaveTextTimer = 3
     grabTimer = 0
     groundX = 0
     groundY = VIRTUAL_HEIGHT - 36
@@ -78,7 +78,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 5
+    wave = 15
     fireAnimation = .2
     fireSprite = 1
 end
@@ -294,8 +294,14 @@ function PlayState:update(dt)
     if wave == 5 then
         enemyObjects = 7
         wave5Timer = wave5Timer + dt
-        if eggWaveTextTimer < 3 then
-            eggWaveTextTimer = eggWaveTextTimer + dt
+        if eggWaveTextTimer == 3 then
+            eggWaveText = true
+        end
+        if eggWaveText then
+            eggWaveTextTimer = eggWaveTextTimer - dt
+            if eggWaveTextTimer < 0 then
+                eggWaveText = false
+            end
         end
         if not tablesPopulated then
             for i = 1, enemyObjects do
@@ -340,6 +346,7 @@ function PlayState:update(dt)
         if wave5Timer > 18 then
             wave = 6
             waveTimer = 3
+            eggWaveTextTimer = 3
             eggsCaught = 0
             tablesPopulated = false
             for i = 1, enemyObjects do
@@ -442,6 +449,15 @@ function PlayState:update(dt)
     if wave == 10 then
         enemyObjects = 7
         wave10Timer = wave10Timer + dt
+        if eggWaveTextTimer == 3 then
+            eggWaveText = true
+        end
+        if eggWaveText then
+            eggWaveTextTimer = eggWaveTextTimer - dt
+            if eggWaveTextTimer < 0 then
+                eggWaveText = false
+            end
+        end
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -490,6 +506,7 @@ function PlayState:update(dt)
         if wave10Timer > 18 then
             wave = 11
             waveTimer = 3
+            eggWaveTextTimer = 3
             eggsCaught = 0
             tablesPopulated = false
             for i = 1, enemyObjects do
@@ -603,6 +620,15 @@ function PlayState:update(dt)
     if wave == 15 then
         enemyObjects = 7
         wave15Timer = wave15Timer + dt
+        if eggWaveTextTimer == 3 then
+            eggWaveText = true
+        end
+        if eggWaveText then
+            eggWaveTextTimer = eggWaveTextTimer - dt
+            if eggWaveTextTimer < 0 then
+                eggWaveText = false
+            end
+        end
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -766,6 +792,15 @@ function PlayState:update(dt)
     if wave == 20 then
         enemyObjects = 7
         wave20Timer = wave20Timer + dt
+        if eggWaveTextTimer == 3 then
+            eggWaveText = true
+        end
+        if eggWaveText then
+            eggWaveTextTimer = eggWaveTextTimer - dt
+            if eggWaveTextTimer < 0 then
+                eggWaveText = false
+            end
+        end
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -815,6 +850,7 @@ function PlayState:update(dt)
             --wave = GAME OVER?
             wave = 21
             waveTimer = 3
+            eggWaveTextTimer = 3
             eggsCaught = 0
             tablesPopulated = false
             for i = 1, enemyObjects do
@@ -1719,7 +1755,7 @@ function PlayState:render()
         love.graphics.setColor(205/255, 205/255, 205/255, 255/255)
     end
 
-    if eggWaveTextTimer > 0 and eggWaveTextTimer < 3 then
+    if eggWaveText then
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.printf('EGG WAVE', 0, VIRTUAL_HEIGHT / 2 + 7, VIRTUAL_WIDTH, "center")
     end
@@ -1782,9 +1818,10 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
---[[DEBUG INFO
-	love.graphics.setColor(255/255, 255/255, 60/255, 255/255)
-	love.graphics.print('platform2.retracted: ' .. tostring(platform2.retracted), 10, VIRTUAL_HEIGHT - 10)
+---[[DEBUG INFO
+	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+	love.graphics.print('waveTimer: ' .. tostring(waveTimer), 10, VIRTUAL_HEIGHT - 10)
+	love.graphics.print('eggWaveTextTimer: ' .. tostring(eggWaveTextTimer), 10, VIRTUAL_HEIGHT - 20)
 --]]
     for i, platform in pairs(collidablePlatforms) do
         love.graphics.print(tostring(platform.name), 0, i * 8)
