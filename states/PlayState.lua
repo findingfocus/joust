@@ -78,7 +78,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 15
+    wave = 20
     fireAnimation = .2
     fireSprite = 1
 end
@@ -144,6 +144,18 @@ function floorRetract()
     else
         floorRetracted = true
         groundPlatform.width = 183
+    end
+end
+
+function eggWavePrint(dt)
+    if eggWaveTextTimer == 3 then
+        eggWaveText = true
+    end
+    if eggWaveText then
+        eggWaveTextTimer = eggWaveTextTimer - dt
+        if eggWaveTextTimer < 0 then
+            eggWaveText = false
+        end
     end
 end
 
@@ -294,15 +306,7 @@ function PlayState:update(dt)
     if wave == 5 then
         enemyObjects = 7
         wave5Timer = wave5Timer + dt
-        if eggWaveTextTimer == 3 then
-            eggWaveText = true
-        end
-        if eggWaveText then
-            eggWaveTextTimer = eggWaveTextTimer - dt
-            if eggWaveTextTimer < 0 then
-                eggWaveText = false
-            end
-        end
+        eggWavePrint(dt)
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -449,15 +453,7 @@ function PlayState:update(dt)
     if wave == 10 then
         enemyObjects = 7
         wave10Timer = wave10Timer + dt
-        if eggWaveTextTimer == 3 then
-            eggWaveText = true
-        end
-        if eggWaveText then
-            eggWaveTextTimer = eggWaveTextTimer - dt
-            if eggWaveTextTimer < 0 then
-                eggWaveText = false
-            end
-        end
+        eggWavePrint(dt)
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -620,6 +616,8 @@ function PlayState:update(dt)
     if wave == 15 then
         enemyObjects = 7
         wave15Timer = wave15Timer + dt
+        eggWavePrint(dt)
+        --[[
         if eggWaveTextTimer == 3 then
             eggWaveText = true
         end
@@ -629,6 +627,16 @@ function PlayState:update(dt)
                 eggWaveText = false
             end
         end
+        if eggWaveTextTimer == 3 then
+            eggWaveText = true
+        end
+        if eggWaveText then
+            eggWaveTextTimer = eggWaveTextTimer - dt
+            if eggWaveTextTimer < 0 then
+                eggWaveText = false
+            end
+        end
+        --]]
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -792,15 +800,7 @@ function PlayState:update(dt)
     if wave == 20 then
         enemyObjects = 7
         wave20Timer = wave20Timer + dt
-        if eggWaveTextTimer == 3 then
-            eggWaveText = true
-        end
-        if eggWaveText then
-            eggWaveTextTimer = eggWaveTextTimer - dt
-            if eggWaveTextTimer < 0 then
-                eggWaveText = false
-            end
-        end
+        eggWavePrint(dt)
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -1818,12 +1818,14 @@ function PlayState:render()
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
     --]]
----[[DEBUG INFO
+--[[DEBUG INFO
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('waveTimer: ' .. tostring(waveTimer), 10, VIRTUAL_HEIGHT - 10)
 	love.graphics.print('eggWaveTextTimer: ' .. tostring(eggWaveTextTimer), 10, VIRTUAL_HEIGHT - 20)
 --]]
+--[[
     for i, platform in pairs(collidablePlatforms) do
         love.graphics.print(tostring(platform.name), 0, i * 8)
     end
+    --]]
 end

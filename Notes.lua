@@ -71,11 +71,11 @@ X_Update collidable platforms upon platformRetract
 X_Wave 11 spawns
 X_Add wave 20 eggs wave
 X_Up to wave 20 population
+X_Add EGG WAVE text for EggWaves
 __Functionalize EggWave Text Timer
 __Tweak player to vulture top collision to jump a little less high
 __Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
 __Ensure Hunters are inheriting faster dx than bounder when instantiating
-__Add EGG WAVE text for EggWaves
 __Add leaderboard with HighScores
 __Take in user Initials for scores
 __Put Ptero inits into update function not in wave function
