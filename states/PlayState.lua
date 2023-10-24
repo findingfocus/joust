@@ -78,7 +78,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 20
+    wave = 22
     fireAnimation = .2
     fireSprite = 1
 end
@@ -847,7 +847,6 @@ function PlayState:update(dt)
         end
 
         if wave20Timer > 18 then
-            --wave = GAME OVER?
             wave = 21
             waveTimer = 3
             eggWaveTextTimer = 3
@@ -859,6 +858,57 @@ function PlayState:update(dt)
             end
             wave20Timer = 0
         end
+    end
+    if wave == 21 then
+        enemyObjects = 7
+        if not platform5.retracted then
+            platformRetract(platform5)
+        end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 4)
+            Vultures[3].tier = 2
+            Vultures[4].tier = 2
+            Vultures[5].tier = 2
+            Vultures[6].tier = 2
+            Vultures[7].tier = 3
+        end
+        waveAdvance(enemyObjects)
+    end
+    if wave == 22 then
+        enemyObjects = 7
+        if not platform1.retracted then
+            platformRetract(platform1)
+        end
+        if not platform1L.retracted then
+            platformRetract(platform1L)
+        end
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                timesEggHatched[i] = 0
+				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                tablesPopulated = true
+            end
+            spawnEnemies(enemyObjects, 4)
+            Vultures[3].tier = 2
+            Vultures[4].tier = 2
+            Vultures[5].tier = 2
+            Vultures[6].tier = 2
+            Vultures[7].tier = 3
+        end
+        waveAdvance(enemyObjects)
     end
 --]]
 
