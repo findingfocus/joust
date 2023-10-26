@@ -44,6 +44,7 @@ function PlayState:init()
     wave10Timer = 0
     wave15Timer = 0
     wave20Timer = 0
+    wave25Timer = 0
     leftFireTimer = 0
     rightFireTimer = 0
     groundWidth = VIRTUAL_WIDTH
@@ -78,7 +79,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 24
+    wave = 25
     fireAnimation = .2
     fireSprite = 1
 end
@@ -963,6 +964,68 @@ function PlayState:update(dt)
             Vultures[7].tier = 3
         end
         waveAdvance(enemyObjects)
+    end
+    if wave == 25 then
+        enemyObjects = 7
+        wave25Timer = wave25Timer + dt
+        eggWavePrint(dt)
+        if not tablesPopulated then
+            for i = 1, enemyObjects do
+                timesEggHatched[i] = 0
+                table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
+				Eggs[i] = Egg(-10, -10, 0, i)
+				Jockeys[i] = Jockey(-20, -20, i)
+				Taxis[i] = Taxi(-40, -40, 16, 24, i)
+            end
+            platform2.retracted = false
+            platform1.retracted = false
+            platform1L.retracted = false
+            platform5.retracted = false
+            collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
+            Eggs[1].x = platform1L.x + platform1L.width - Eggs[1].width - 12
+            Eggs[1].y = platform1L.y - Eggs[1].height
+            Eggs[1].graveyard = false
+            Eggs[1].hatchCountdown = 30
+            Eggs[2].x = platform2.x + 16
+            Eggs[2].y = platform2.y - Eggs[2].height
+            Eggs[2].graveyard = false
+            Eggs[2].hatchCountdown = 30
+            Eggs[3].x = platform2.x + platform2.width - 27
+            Eggs[3].y = platform2.y - Eggs[3].height
+            Eggs[3].graveyard = false
+            Eggs[3].hatchCountdown = 30
+            Eggs[4].x = platform4.x + 4
+            Eggs[4].y = platform4.y - Eggs[4].height
+            Eggs[4].graveyard = false
+            Eggs[4].hatchCountdown = 30
+            Eggs[5].x = platform5.x + 35
+            Eggs[5].y = platform5.y - Eggs[5].height
+            Eggs[5].graveyard = false
+            Eggs[5].hatchCountdown = 30
+            Eggs[6].x = 58
+            Eggs[6].y = groundPlatform.y - Eggs[6].height
+            Eggs[6].graveyard = false
+            Eggs[6].hatchCountdown = 30
+            Eggs[7].x = 145
+            Eggs[7].y = groundPlatform.y - Eggs[7].height
+            Eggs[7].graveyard = false
+            Eggs[7].hatchCountdown = 30
+            tablesPopulated = true
+        end
+
+        if wave25Timer > 18 then
+            wave = 26 --GAME OVER?
+            waveTimer = 3
+            eggWaveTextTimer = 3
+            eggsCaught = 0
+            tablesPopulated = false
+            for i = 1, enemyObjects do
+				Eggs[i] = Egg(-10, -10, 0, i)
+                Eggs[i].collected = true
+            end
+            wave25Timer = 0
+        end
     end
 --]]
 
