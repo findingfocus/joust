@@ -1,6 +1,6 @@
 FailState = Class{__includes = BaseState}
 
-function FailState:init() 
+function FailState:init()
 
 end
 

@@ -40,6 +40,7 @@ function PlayState:init()
     groundX = 0
     groundY = VIRTUAL_HEIGHT - 36
     backgroundTransparency = 100
+    eggWaveTransitionTimer = 0
     wave5Timer = 0
     wave10Timer = 0
     wave15Timer = 0
@@ -306,7 +307,7 @@ function PlayState:update(dt)
 
     if wave == 5 then
         enemyObjects = 7
-        wave5Timer = wave5Timer + dt
+        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
         eggWavePrint(dt)
         if not tablesPopulated then
             for i = 1, enemyObjects do
@@ -348,7 +349,7 @@ function PlayState:update(dt)
             tablesPopulated = true
         end
 
-        if wave5Timer > 18 then
+        if eggWaveTransitionTimer > 18 then
             wave = 6
             waveTimer = 3
             eggWaveTextTimer = 3
@@ -358,7 +359,7 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
                 Eggs[i].collected = true
             end
-            wave5Timer = 0
+            eggWaveTransitionTimer = 0
         end
     end
 
@@ -453,7 +454,7 @@ function PlayState:update(dt)
 
     if wave == 10 then
         enemyObjects = 7
-        wave10Timer = wave10Timer + dt
+        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
         eggWavePrint(dt)
         if not tablesPopulated then
             for i = 1, enemyObjects do
@@ -500,7 +501,7 @@ function PlayState:update(dt)
             tablesPopulated = true
         end
 
-        if wave10Timer > 18 then
+        if eggWaveTransitionTimer > 18 then
             wave = 11
             waveTimer = 3
             eggWaveTextTimer = 3
@@ -510,7 +511,7 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
                 Eggs[i].collected = true
             end
-            wave10Timer = 0
+            eggWaveTransitionTimer = 0
         end
     end
 
@@ -616,28 +617,8 @@ function PlayState:update(dt)
     end
     if wave == 15 then
         enemyObjects = 7
-        wave15Timer = wave15Timer + dt
+        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
         eggWavePrint(dt)
-        --[[
-        if eggWaveTextTimer == 3 then
-            eggWaveText = true
-        end
-        if eggWaveText then
-            eggWaveTextTimer = eggWaveTextTimer - dt
-            if eggWaveTextTimer < 0 then
-                eggWaveText = false
-            end
-        end
-        if eggWaveTextTimer == 3 then
-            eggWaveText = true
-        end
-        if eggWaveText then
-            eggWaveTextTimer = eggWaveTextTimer - dt
-            if eggWaveTextTimer < 0 then
-                eggWaveText = false
-            end
-        end
-        --]]
         if not tablesPopulated then
             for i = 1, enemyObjects do
                 timesEggHatched[i] = 0
@@ -683,7 +664,7 @@ function PlayState:update(dt)
             tablesPopulated = true
         end
 
-        if wave15Timer > 18 then
+        if eggWaveTransitionTimer > 18 then
             wave = 16
             waveTimer = 3
             eggsCaught = 0
@@ -692,7 +673,7 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
                 Eggs[i].collected = true
             end
-            wave15Timer = 0
+            eggWaveTransitionTimer = 0
         end
     end
     if wave == 16 then
@@ -800,7 +781,7 @@ function PlayState:update(dt)
     end
     if wave == 20 then
         enemyObjects = 7
-        wave20Timer = wave20Timer + dt
+        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
         eggWavePrint(dt)
         if not tablesPopulated then
             for i = 1, enemyObjects do
@@ -847,7 +828,7 @@ function PlayState:update(dt)
             tablesPopulated = true
         end
 
-        if wave20Timer > 18 then
+        if eggWaveTransitionTimer > 18 then
             wave = 21
             waveTimer = 3
             eggWaveTextTimer = 3
@@ -857,7 +838,7 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
                 Eggs[i].collected = true
             end
-            wave20Timer = 0
+            eggWaveTransitionTimer = 0
         end
     end
     if wave == 21 then
@@ -967,7 +948,7 @@ function PlayState:update(dt)
     end
     if wave == 25 then
         enemyObjects = 7
-        wave25Timer = wave25Timer + dt
+        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
         eggWavePrint(dt)
         if not tablesPopulated then
             for i = 1, enemyObjects do
@@ -1014,8 +995,8 @@ function PlayState:update(dt)
             tablesPopulated = true
         end
 
-        if wave25Timer > 18 then
-            wave = 26 --GAME OVER?
+        if eggWaveTransitionTimer > 1 then
+            gStateMachine:change('highScoreState')
             waveTimer = 3
             eggWaveTextTimer = 3
             eggsCaught = 0
@@ -1024,7 +1005,7 @@ function PlayState:update(dt)
 				Eggs[i] = Egg(-10, -10, 0, i)
                 Eggs[i].collected = true
             end
-            wave25Timer = 0
+            eggWaveTransitionTimer = 0
         end
     end
 --]]
