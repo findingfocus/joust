@@ -107,6 +107,7 @@ function HighScoreState:render()
     love.graphics.setFont(smallFont)
     love.graphics.printf('HELLO HIGHSCORE STATE!', 0, 0, VIRTUAL_WIDTH, 'center')
     --love.graphics.printf('flashing: ' .. tostring(flashing), 0, 20, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('CURRENT SCORE: ' .. tostring(highestScore), 0, VIRTUAL_HEIGHT / 2 + 10, VIRTUAL_WIDTH, 'center')
 
     if letter1InputChoice then
         love.graphics.printf('A', 8, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')

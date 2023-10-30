@@ -1,4 +1,5 @@
 PlayState = Class{__includes = BaseState}
+serialize = require '/src/ser'
 
 function PlayState:init()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)
@@ -83,6 +84,18 @@ function PlayState:init()
     wave = 25
     fireAnimation = .2
     fireSprite = 1
+end
+
+function saveHighScore()
+    saveData = {}
+    saveData.score1 = Score
+    love.filesystem.write('highScores.txt', serialize(saveData))
+end
+
+function loadHighScore()
+    saveData = love.filesystem.load('highScores.txt')()
+    highestScore = saveData.score1
+    return highestScore
 end
 
 function leftTrollCollide(player)
@@ -184,6 +197,7 @@ function platformRetract(platform)
         end
     end
 end
+
 
 function PlayState:update(dt)
     if leftFireCollided then
@@ -995,7 +1009,9 @@ function PlayState:update(dt)
             tablesPopulated = true
         end
 
-        if eggWaveTransitionTimer > 1 then
+        if eggWaveTransitionTimer > 4 then
+            saveHighScore()
+            loadHighScore()
             gStateMachine:change('highScoreState')
             waveTimer = 3
             eggWaveTextTimer = 3
