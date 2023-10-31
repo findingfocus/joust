@@ -88,14 +88,23 @@ end
 
 function saveHighScore()
     saveData = {}
-    saveData.score1 = Score
+    table.insert(saveData, HighScores(1, 1250))
+    table.insert(saveData, HighScores(2, 2250))
+    table.insert(saveData, HighScores(3, 3250))
+    table.insert(saveData, HighScores(4, 4250))
+    table.insert(saveData, HighScores(5, 5555))
+    table.insert(saveData, HighScores(6, 6250))
+    table.insert(saveData, HighScores(7, 7250))
+    table.insert(saveData, HighScores(8, 7250))
+    table.insert(saveData, HighScores(9, 8250))
+    table.insert(saveData, HighScores(10, 9250))
+    --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
 end
 
 function loadHighScore()
     saveData = love.filesystem.load('highScores.txt')()
-    highestScore = saveData.score1
-    return highestScore
+    return saveData
 end
 
 function leftTrollCollide(player)

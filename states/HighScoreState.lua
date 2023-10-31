@@ -107,7 +107,19 @@ function HighScoreState:render()
     love.graphics.setFont(smallFont)
     love.graphics.printf('HELLO HIGHSCORE STATE!', 0, 0, VIRTUAL_WIDTH, 'center')
     --love.graphics.printf('flashing: ' .. tostring(flashing), 0, 20, VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('CURRENT SCORE: ' .. tostring(highestScore), 0, VIRTUAL_HEIGHT / 2 + 10, VIRTUAL_WIDTH, 'center')
+    --PRINT TOP TEN SCORES
+    if scoreLocked then
+        love.graphics.printf(tostring(saveData[1].place ..  '       ' .. saveData[1].score), 0, 30, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[2].place ..  '       ' .. saveData[2].score), 0, 40, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[3].place ..  '       ' .. saveData[3].score), 0, 50, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[4].place ..  '       ' .. saveData[4].score), 0, 60, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[5].place ..  '       ' .. saveData[5].score), 0, 70, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[6].place ..  '       ' .. saveData[6].score), 0, 80, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[7].place ..  '       ' .. saveData[7].score), 0, 90, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[8].place ..  '       ' .. saveData[8].score), 0, 100, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[9].place ..  '       ' .. saveData[9].score), 0, 110, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf(tostring(saveData[10].place ..  '      ' .. saveData[10].score), 0, 120, VIRTUAL_WIDTH, 'center')
+    end
 
     if letter1InputChoice then
         love.graphics.printf('A', 8, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
@@ -138,6 +150,6 @@ function HighScoreState:render()
         love.graphics.printf(tostring(letters[letter3Index]), 16, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
     end
     if scoreLocked then
-        love.graphics.printf('CONGRATULATIONS, ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3] .. '!!!', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
+        --love.graphics.printf('CONGRATULATIONS, ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3] .. '!!!', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
     end
 end
