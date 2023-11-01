@@ -1,7 +1,8 @@
 HighScores = Class{}
 
-function HighScores:init(place, score)
+function HighScores:init(place, name, score)
     self.place = place
+    self.name = name
     self.score = score
 end
 

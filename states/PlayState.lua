@@ -88,16 +88,16 @@ end
 
 function saveHighScore()
     saveData = {}
-    table.insert(saveData, HighScores(1, 1250))
-    table.insert(saveData, HighScores(2, 2250))
-    table.insert(saveData, HighScores(3, 3250))
-    table.insert(saveData, HighScores(4, 4250))
-    table.insert(saveData, HighScores(5, 5555))
-    table.insert(saveData, HighScores(6, 6250))
-    table.insert(saveData, HighScores(7, 7250))
-    table.insert(saveData, HighScores(8, 7250))
-    table.insert(saveData, HighScores(9, 8250))
-    table.insert(saveData, HighScores(10, 9250))
+    table.insert(saveData, HighScores(1, {'A', 'A', 'A'}, 1250))
+    table.insert(saveData, HighScores(2, {'A', 'A', 'A'}, 2250))
+    table.insert(saveData, HighScores(3, {'A', 'A', 'A'}, 3250))
+    table.insert(saveData, HighScores(4, {'A', 'A', 'A'}, 4250))
+    table.insert(saveData, HighScores(5, {'A', 'A', 'A'}, 5555))
+    table.insert(saveData, HighScores(6, {'A', 'A', 'A'}, 6250))
+    table.insert(saveData, HighScores(7, {'A', 'A', 'A'}, 7250))
+    table.insert(saveData, HighScores(8, {'A', 'A', 'A'}, 7250))
+    table.insert(saveData, HighScores(9, {'A', 'A', 'A'},8250))
+    table.insert(saveData, HighScores(10, {'A', 'A', 'A'}, 9250))
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
 end
