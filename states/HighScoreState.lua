@@ -10,11 +10,27 @@ function HighScoreState:init()
     letter1InputChoice = true
     letter2InputChoice = false
     letter3InputChoice = false
-    scoreLocked = false
+    playerScoreLocked = false
     letter1Locked = 'A'
     flashTimer = .5
     sounds['beep']:setVolume(0.3)
     sounds['select']:setVolume(0.3)
+end
+
+function loadDummyScores()
+    saveData = {}
+    table.insert(saveData, HighScores(1, {'J', 'D', 'H'}, 9250))
+    table.insert(saveData, HighScores(2, {'J', 'D', 'H'},8250))
+    table.insert(saveData, HighScores(3, {'J', 'D', 'H'}, 7650))
+    table.insert(saveData, HighScores(4, {'J', 'D', 'H'}, 7250))
+    table.insert(saveData, HighScores(5, {'J', 'D', 'H'}, 6250))
+    table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 5555))
+    table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 4250))
+    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 3250))
+    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 2250))
+    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 1250))
+    --saveData.score1 = Score --USER SCORE
+    love.filesystem.write('highScores.txt', serialize(saveData))
 end
 
 function saveHighScore()
@@ -27,7 +43,7 @@ function saveHighScore()
     table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 6250))
     table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 7250))
     table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 7250))
-    table.insert(saveData, HighScores(9, {'J', 'D', 'H'},8250))
+    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 8250))
     table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 9250))
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
@@ -107,7 +123,7 @@ function HighScoreState:update(dt)
     end
 
     if love.keyboard.wasPressed('right') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        if not scoreLocked then
+        if not playerScoreLocked then
             sounds['select']:play()
             if letter1InputChoice then
                 scoreInitials[1] = letters[letter1Index]
@@ -120,7 +136,7 @@ function HighScoreState:update(dt)
             elseif letter3InputChoice then
                 scoreInitials[3] = letters[letter3Index]
                 letter3InputChoice = false
-                scoreLocked = true
+                playerScoreLocked = true
             end
         end
     end
@@ -132,7 +148,7 @@ function HighScoreState:render()
     love.graphics.printf('HELLO HIGHSCORE STATE!', 0, 0, VIRTUAL_WIDTH, 'center')
     --love.graphics.printf('flashing: ' .. tostring(flashing), 0, 20, VIRTUAL_WIDTH, 'center')
     --PRINT TOP TEN SCORES
-    if scoreLocked then
+    if playerScoreLocked then
         love.graphics.printf(tostring(saveData[1].place ..  ' ' .. saveData[1].name[1] .. saveData[1].name[2] .. saveData[1].name[3] .. '         ' .. saveData[1].score), 0, 30, VIRTUAL_WIDTH, 'center')
         love.graphics.printf(tostring(saveData[2].place ..  ' ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3] .. '         ' .. saveData[2].score), -3, 40, VIRTUAL_WIDTH, 'center')
         love.graphics.printf(tostring(saveData[3].place ..  ' ' .. saveData[3].name[1] .. saveData[3].name[2] .. saveData[3].name[3] .. '         ' .. saveData[3].score), 0, 50, VIRTUAL_WIDTH, 'center')
@@ -173,7 +189,7 @@ function HighScoreState:render()
         end
         love.graphics.printf(tostring(letters[letter3Index]), 16, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
     end
-    if scoreLocked then
+    if playerSCoreLocked then
         --love.graphics.printf('CONGRATULATIONS, ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3] .. '!!!', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
     end
 end
