@@ -76,6 +76,8 @@ X_Functionalize EggWave Text Timer
 X_Add leaderboard with HighScores
 X_Take in user Initials for scores
 X_Take out EggWave timers into one shared timer
+__Player1Spawn bug after dying,
+__Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
 __Tweak player to vulture top collision to jump a little less high
 __Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode

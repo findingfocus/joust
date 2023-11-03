@@ -81,7 +81,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 25
+    wave = 1
     fireAnimation = .2
     fireSprite = 1
 end
@@ -205,6 +205,37 @@ function platformRetract(platform)
             table.remove(collidablePlatforms, k)
         end
     end
+end
+
+function eggPlacement()
+    Eggs[1].x = platform1L.x + platform1L.width - Eggs[1].width - 12
+    Eggs[1].y = platform1L.y - Eggs[1].height
+    Eggs[1].graveyard = false
+    Eggs[1].hatchCountdown = 30
+    Eggs[2].x = platform2.x + 16
+    Eggs[2].y = platform2.y - Eggs[2].height
+    Eggs[2].graveyard = false
+    Eggs[2].hatchCountdown = 30
+    Eggs[3].x = platform2.x + platform2.width - 27
+    Eggs[3].y = platform2.y - Eggs[3].height
+    Eggs[3].graveyard = false
+    Eggs[3].hatchCountdown = 30
+    Eggs[4].x = platform4.x + 4
+    Eggs[4].y = platform4.y - Eggs[4].height
+    Eggs[4].graveyard = false
+    Eggs[4].hatchCountdown = 30
+    Eggs[5].x = platform5.x + 35
+    Eggs[5].y = platform5.y - Eggs[5].height
+    Eggs[5].graveyard = false
+    Eggs[5].hatchCountdown = 30
+    Eggs[6].x = 58
+    Eggs[6].y = groundPlatform.y - Eggs[6].height
+    Eggs[6].graveyard = false
+    Eggs[6].hatchCountdown = 30
+    Eggs[7].x = 145
+    Eggs[7].y = groundPlatform.y - Eggs[7].height
+    Eggs[7].graveyard = false
+    Eggs[7].hatchCountdown = 30
 end
 
 
@@ -341,34 +372,7 @@ function PlayState:update(dt)
 				Jockeys[i] = Jockey(-20, -20, i)
 				Taxis[i] = Taxi(-40, -40, 16, 24, i)
             end
-            Eggs[1].x = platform1L.x + platform1L.width - Eggs[1].width - 12
-            Eggs[1].y = platform1L.y - Eggs[1].height
-            Eggs[1].graveyard = false
-            Eggs[1].hatchCountdown = 30
-            Eggs[2].x = platform2.x + 16
-            Eggs[2].y = platform2.y - Eggs[2].height
-            Eggs[2].graveyard = false
-            Eggs[2].hatchCountdown = 30
-            Eggs[3].x = platform2.x + platform2.width - 27
-            Eggs[3].y = platform2.y - Eggs[3].height
-            Eggs[3].graveyard = false
-            Eggs[3].hatchCountdown = 30
-            Eggs[4].x = platform4.x + 4
-            Eggs[4].y = platform4.y - Eggs[4].height
-            Eggs[4].graveyard = false
-            Eggs[4].hatchCountdown = 30
-            Eggs[5].x = platform5.x + 35
-            Eggs[5].y = platform5.y - Eggs[5].height
-            Eggs[5].graveyard = false
-            Eggs[5].hatchCountdown = 30
-            Eggs[6].x = 58
-            Eggs[6].y = groundPlatform.y - Eggs[6].height
-            Eggs[6].graveyard = false
-            Eggs[6].hatchCountdown = 30
-            Eggs[7].x = 145
-            Eggs[7].y = groundPlatform.y - Eggs[7].height
-            Eggs[7].graveyard = false
-            Eggs[7].hatchCountdown = 30
+            eggPlacement()
             tablesPopulated = true
         end
 
@@ -493,34 +497,7 @@ function PlayState:update(dt)
             platform1L.retracted = false
             platform5.retracted = false
             collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-            Eggs[1].x = platform1L.x + platform1L.width - Eggs[1].width - 12
-            Eggs[1].y = platform1L.y - Eggs[1].height
-            Eggs[1].graveyard = false
-            Eggs[1].hatchCountdown = 30
-            Eggs[2].x = platform2.x + 16
-            Eggs[2].y = platform2.y - Eggs[2].height
-            Eggs[2].graveyard = false
-            Eggs[2].hatchCountdown = 30
-            Eggs[3].x = platform2.x + platform2.width - 27
-            Eggs[3].y = platform2.y - Eggs[3].height
-            Eggs[3].graveyard = false
-            Eggs[3].hatchCountdown = 30
-            Eggs[4].x = platform4.x + 4
-            Eggs[4].y = platform4.y - Eggs[4].height
-            Eggs[4].graveyard = false
-            Eggs[4].hatchCountdown = 30
-            Eggs[5].x = platform5.x + 35
-            Eggs[5].y = platform5.y - Eggs[5].height
-            Eggs[5].graveyard = false
-            Eggs[5].hatchCountdown = 30
-            Eggs[6].x = 58
-            Eggs[6].y = groundPlatform.y - Eggs[6].height
-            Eggs[6].graveyard = false
-            Eggs[6].hatchCountdown = 30
-            Eggs[7].x = 145
-            Eggs[7].y = groundPlatform.y - Eggs[7].height
-            Eggs[7].graveyard = false
-            Eggs[7].hatchCountdown = 30
+            eggPlacement()
             tablesPopulated = true
         end
 
@@ -656,34 +633,7 @@ function PlayState:update(dt)
             platform1L.retracted = false
             platform5.retracted = false
             collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-            Eggs[1].x = platform1L.x + platform1L.width - Eggs[1].width - 12
-            Eggs[1].y = platform1L.y - Eggs[1].height
-            Eggs[1].graveyard = false
-            Eggs[1].hatchCountdown = 30
-            Eggs[2].x = platform2.x + 16
-            Eggs[2].y = platform2.y - Eggs[2].height
-            Eggs[2].graveyard = false
-            Eggs[2].hatchCountdown = 30
-            Eggs[3].x = platform2.x + platform2.width - 27
-            Eggs[3].y = platform2.y - Eggs[3].height
-            Eggs[3].graveyard = false
-            Eggs[3].hatchCountdown = 30
-            Eggs[4].x = platform4.x + 4
-            Eggs[4].y = platform4.y - Eggs[4].height
-            Eggs[4].graveyard = false
-            Eggs[4].hatchCountdown = 30
-            Eggs[5].x = platform5.x + 35
-            Eggs[5].y = platform5.y - Eggs[5].height
-            Eggs[5].graveyard = false
-            Eggs[5].hatchCountdown = 30
-            Eggs[6].x = 58
-            Eggs[6].y = groundPlatform.y - Eggs[6].height
-            Eggs[6].graveyard = false
-            Eggs[6].hatchCountdown = 30
-            Eggs[7].x = 145
-            Eggs[7].y = groundPlatform.y - Eggs[7].height
-            Eggs[7].graveyard = false
-            Eggs[7].hatchCountdown = 30
+            eggPlacement()
             tablesPopulated = true
         end
 
@@ -820,34 +770,7 @@ function PlayState:update(dt)
             platform1L.retracted = false
             platform5.retracted = false
             collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-            Eggs[1].x = platform1L.x + platform1L.width - Eggs[1].width - 12
-            Eggs[1].y = platform1L.y - Eggs[1].height
-            Eggs[1].graveyard = false
-            Eggs[1].hatchCountdown = 30
-            Eggs[2].x = platform2.x + 16
-            Eggs[2].y = platform2.y - Eggs[2].height
-            Eggs[2].graveyard = false
-            Eggs[2].hatchCountdown = 30
-            Eggs[3].x = platform2.x + platform2.width - 27
-            Eggs[3].y = platform2.y - Eggs[3].height
-            Eggs[3].graveyard = false
-            Eggs[3].hatchCountdown = 30
-            Eggs[4].x = platform4.x + 4
-            Eggs[4].y = platform4.y - Eggs[4].height
-            Eggs[4].graveyard = false
-            Eggs[4].hatchCountdown = 30
-            Eggs[5].x = platform5.x + 35
-            Eggs[5].y = platform5.y - Eggs[5].height
-            Eggs[5].graveyard = false
-            Eggs[5].hatchCountdown = 30
-            Eggs[6].x = 58
-            Eggs[6].y = groundPlatform.y - Eggs[6].height
-            Eggs[6].graveyard = false
-            Eggs[6].hatchCountdown = 30
-            Eggs[7].x = 145
-            Eggs[7].y = groundPlatform.y - Eggs[7].height
-            Eggs[7].graveyard = false
-            Eggs[7].hatchCountdown = 30
+            eggPlacement()
             tablesPopulated = true
         end
 
@@ -987,34 +910,7 @@ function PlayState:update(dt)
             platform1L.retracted = false
             platform5.retracted = false
             collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-            Eggs[1].x = platform1L.x + platform1L.width - Eggs[1].width - 12
-            Eggs[1].y = platform1L.y - Eggs[1].height
-            Eggs[1].graveyard = false
-            Eggs[1].hatchCountdown = 30
-            Eggs[2].x = platform2.x + 16
-            Eggs[2].y = platform2.y - Eggs[2].height
-            Eggs[2].graveyard = false
-            Eggs[2].hatchCountdown = 30
-            Eggs[3].x = platform2.x + platform2.width - 27
-            Eggs[3].y = platform2.y - Eggs[3].height
-            Eggs[3].graveyard = false
-            Eggs[3].hatchCountdown = 30
-            Eggs[4].x = platform4.x + 4
-            Eggs[4].y = platform4.y - Eggs[4].height
-            Eggs[4].graveyard = false
-            Eggs[4].hatchCountdown = 30
-            Eggs[5].x = platform5.x + 35
-            Eggs[5].y = platform5.y - Eggs[5].height
-            Eggs[5].graveyard = false
-            Eggs[5].hatchCountdown = 30
-            Eggs[6].x = 58
-            Eggs[6].y = groundPlatform.y - Eggs[6].height
-            Eggs[6].graveyard = false
-            Eggs[6].hatchCountdown = 30
-            Eggs[7].x = 145
-            Eggs[7].y = groundPlatform.y - Eggs[7].height
-            Eggs[7].graveyard = false
-            Eggs[7].hatchCountdown = 30
+            eggPlacement()
             tablesPopulated = true
         end
 
