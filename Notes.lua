@@ -79,6 +79,7 @@ X_Take out EggWave timers into one shared timer
 __Player1Spawn bug after dying,
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
+__if twoplayer mode, show both players score at the end, no leaderboard
 __Tweak player to vulture top collision to jump a little less high
 __Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
 __Ensure Hunters are inheriting faster dx than bounder when instantiating
@@ -91,6 +92,7 @@ __Add player to Vulture collision sound
 __Add player to Egg sound
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
+
 
 SCORES
 __Load Dummy Scores if highscores file does not exist

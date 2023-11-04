@@ -81,7 +81,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 1
+    wave = 25 
     fireAnimation = .2
     fireSprite = 1
 end
@@ -915,8 +915,8 @@ function PlayState:update(dt)
         end
 
         if eggWaveTransitionTimer > 4 then
-            saveHighScore()
-            loadHighScore()
+            --saveHighScore()
+            --loadHighScore()
             gStateMachine:change('highScoreState')
             waveTimer = 3
             eggWaveTextTimer = 3

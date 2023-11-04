@@ -17,23 +17,7 @@ function HighScoreState:init()
     sounds['select']:setVolume(0.3)
 end
 
-function loadDummyScores()
-    saveData = {}
-    table.insert(saveData, HighScores(1, {'J', 'D', 'H'}, 9250))
-    table.insert(saveData, HighScores(2, {'J', 'D', 'H'},8250))
-    table.insert(saveData, HighScores(3, {'J', 'D', 'H'}, 7650))
-    table.insert(saveData, HighScores(4, {'J', 'D', 'H'}, 7250))
-    table.insert(saveData, HighScores(5, {'J', 'D', 'H'}, 6250))
-    table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 5555))
-    table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 4250))
-    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 3250))
-    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 2250))
-    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 1250))
-    --saveData.score1 = Score --USER SCORE
-    love.filesystem.write('highScores.txt', serialize(saveData))
-end
-
-function saveHighScore()
+function loadDefaultScoreBoard()
     saveData = {}
     table.insert(saveData, HighScores(1, {'J', 'D', 'H'}, 1250))
     table.insert(saveData, HighScores(2, {'J', 'D', 'H'}, 2250))
@@ -54,10 +38,22 @@ function loadHighScore()
     return saveData
 end
 
+function insertPlayerScore()
+    --LOOP THROUGH ALL HIGH SCORES AND INSERT PLAYER SCORE INTO APPROPRIATE INDEX
+    --
+    --SHIFT ALL TRAILING SCORES TO BE ONE PLACE LOWER
+    --
+    --DELETE THE 11TH SCORE, DO WE NEED DUMMY HIGH SCORE OBJECT?
+end
+
 function HighScoreState:update(dt)
-    saveHighScore()
-    loadHighScore()
-    saveData[2].score = Score
+    loadDefaultScoreBoard()
+    --loadHighScore()
+    --CHECK IF PLAYER BEATS 10th PLACE SCOREBOARD
+    if Score > saveData[10].score then
+        insertPlayerScore()
+    end
+    --saveData[2].score = Score
     flashTimer = flashTimer - dt
     if flashTimer <= 0 then
         flashing = not flashing
@@ -191,5 +187,8 @@ function HighScoreState:render()
     end
     if playerSCoreLocked then
         --love.graphics.printf('CONGRATULATIONS, ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3] .. '!!!', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
+    end
+    if Score > saveData[10].score then
+       love.graphics.print('SCORE IS GREATER THAN SAVEDATA 10', 0, 200) 
     end
 end
