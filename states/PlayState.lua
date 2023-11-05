@@ -81,30 +81,9 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    wave = 25 
+    wave = 25
     fireAnimation = .2
     fireSprite = 1
-end
-
-function saveHighScore()
-    saveData = {}
-    table.insert(saveData, HighScores(1, {'A', 'A', 'A'}, 1250))
-    table.insert(saveData, HighScores(2, {'A', 'A', 'A'}, 2250))
-    table.insert(saveData, HighScores(3, {'A', 'A', 'A'}, 3250))
-    table.insert(saveData, HighScores(4, {'A', 'A', 'A'}, 4250))
-    table.insert(saveData, HighScores(5, {'A', 'A', 'A'}, 5555))
-    table.insert(saveData, HighScores(6, {'A', 'A', 'A'}, 6250))
-    table.insert(saveData, HighScores(7, {'A', 'A', 'A'}, 7250))
-    table.insert(saveData, HighScores(8, {'A', 'A', 'A'}, 7250))
-    table.insert(saveData, HighScores(9, {'A', 'A', 'A'},8250))
-    table.insert(saveData, HighScores(10, {'A', 'A', 'A'}, 9250))
-    --saveData.score1 = Score --USER SCORE
-    love.filesystem.write('highScores.txt', serialize(saveData))
-end
-
-function loadHighScore()
-    saveData = love.filesystem.load('highScores.txt')()
-    return saveData
 end
 
 function leftTrollCollide(player)
@@ -915,8 +894,6 @@ function PlayState:update(dt)
         end
 
         if eggWaveTransitionTimer > 4 then
-            --saveHighScore()
-            --loadHighScore()
             gStateMachine:change('highScoreState')
             waveTimer = 3
             eggWaveTextTimer = 3
