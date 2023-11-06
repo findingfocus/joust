@@ -10,7 +10,7 @@ function HighScoreState:init()
     letter1InputChoice = true
     letter2InputChoice = false
     letter3InputChoice = false
-    playerScoreLocked = false
+    playerInitialsLocked = false
     letter1Locked = 'A'
     flashTimer = .5
     sounds['beep']:setVolume(0.3)
@@ -52,7 +52,9 @@ function HighScoreState:update(dt)
     --CHECK IF PLAYER BEATS 10th PLACE SCOREBOARD
     if Score > saveData[10].score then
         insertPlayerScore()
-        --playerScoreLocked = true
+        --playerInitialsLocked = false
+    else
+        --playerInitialsLocked = true
     end
     --saveData[2].score = Score
     flashTimer = flashTimer - dt
@@ -120,7 +122,7 @@ function HighScoreState:update(dt)
     end
 
     if love.keyboard.wasPressed('right') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        if not playerScoreLocked then
+        if not playerInitialsLocked then
             sounds['select']:play()
             if letter1InputChoice then
                 scoreInitials[1] = letters[letter1Index]
@@ -133,7 +135,8 @@ function HighScoreState:update(dt)
             elseif letter3InputChoice then
                 scoreInitials[3] = letters[letter3Index]
                 letter3InputChoice = false
-                playerScoreLocked = true
+                playerInitialsLocked = true
+                initialInput = false
             end
         end
     end
@@ -145,10 +148,7 @@ function HighScoreState:render()
     love.graphics.printf('HELLO HIGHSCORE STATE!', 0, 0, VIRTUAL_WIDTH, 'center')
     --love.graphics.printf('flashing: ' .. tostring(flashing), 0, 20, VIRTUAL_WIDTH, 'center')
     --PRINT TOP TEN SCORES
-    if playerScoreLocked then
-        love.graphics.printf(tostring(saveData[8].place ..  ' ' .. saveData[8].name[1] .. saveData[8].name[2] .. saveData[8].name[3]), 50, 100, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[8].score), -50, 100, VIRTUAL_WIDTH, 'right')
-
+    if playerInitialsLocked then
         love.graphics.printf(tostring(saveData[1].place ..  ' ' .. saveData[1].name[1] .. saveData[1].name[2] .. saveData[1].name[3]), 50, 30, VIRTUAL_WIDTH, 'left')
         love.graphics.printf('         ' .. tostring(saveData[1].score), -50, 30, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[2].place ..  ' ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3]), 50, 40, VIRTUAL_WIDTH, 'left')
@@ -199,27 +199,14 @@ function HighScoreState:render()
         end
         love.graphics.printf(tostring(letters[letter3Index]), 16, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
     end
-    if playerScoreLocked then
-        love.graphics.print('SCORE IS GREATER THAN SAVEDATA 10', 0, 200) 
-       -- love.graphics.printf('CONGRATULATIONS, ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3] .. '!!!', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
+
+    if playerInitialsLocked then
+        love.graphics.print('SCORE IS GREATER THAN SAVEDATA 10', 0, 200)
+        -- love.graphics.printf('CONGRATULATIONS, ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3] .. '!!!', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
     end
     --[[
     if Score > saveData[1].score then
-       love.graphics.print('SCORE IS GREATER THAN SAVEDATA 10', 0, 200) 
+       love.graphics.print('SCORE IS GREATER THAN SAVEDATA 10', 0, 200)
     end
     --]]
-    --LEFT PLACE AND INITIAL ALIGNMENT
-    if playerScoreLocked then
-        --[[
-        love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-        love.graphics.printf(tostring(saveData[8].place ..  ' ' .. saveData[8].name[1] .. saveData[8].name[2] .. saveData[8].name[3]), 50, 100, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[8].score), -50, 100, VIRTUAL_WIDTH, 'right')
-        love.graphics.printf(tostring(saveData[7].place ..  ' ' .. saveData[7].name[1] .. saveData[7].name[2] .. saveData[7].name[3]), 50, 90, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[7].score), -50, 90, VIRTUAL_WIDTH, 'right')
-        love.graphics.printf(tostring(saveData[6].place ..  ' ' .. saveData[6].name[1] .. saveData[6].name[2] .. saveData[6].name[3]), 50, 80, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[6].score), -50, 80, VIRTUAL_WIDTH, 'right')
-        love.graphics.printf(tostring(saveData[10].place ..  ' ' .. saveData[10].name[1] .. saveData[10].name[2] .. saveData[10].name[3]), 42, 110, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[10].score), -50, 120, VIRTUAL_WIDTH, 'right')
-        --]]
-    end
 end
