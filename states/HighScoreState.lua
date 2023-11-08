@@ -16,6 +16,12 @@ function HighScoreState:init()
     flashTimer = .5
     sounds['beep']:setVolume(0.3)
     sounds['select']:setVolume(0.3)
+    highScoresExist = love.filesystem.exists('highScores.txt')
+    if not highScoresExist then
+        saveDefaultScoreBoard()
+    else
+        loadHighScore()
+    end
 end
 
 function saveDefaultScoreBoard()
@@ -48,8 +54,6 @@ function insertPlayerScore()
 end
 
 function HighScoreState:update(dt)
-    saveDefaultScoreBoard()
-    --loadHighScore()
     --CHECK IF PLAYER BEATS 10th PLACE SCOREBOARD
     if Score > saveData[10].score and counter == 0 then
         insertPlayerScore()
@@ -67,6 +71,13 @@ function HighScoreState:update(dt)
     if flashTimer <= 0 then
         flashing = not flashing
         flashTimer = .5
+    end
+
+    if twoPlayerMode then
+        letter1InputChoice = false
+        letter2InputChoice = false
+        letter3InputChoice = false
+        playerInitialsLocked = true
     end
 
     if not playerInitialsLocked then
@@ -222,4 +233,7 @@ function HighScoreState:render()
     end
     --]]
 --    love.graphics.print('playerInitialsLocked: ' .. tostring(playerInitialsLocked), 10, VIRTUAL_HEIGHT - 20)
+
+    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+    love.graphics.print('HIGHSCORES.TXT: ' .. tostring(highScoresExist), 0, VIRTUAL_HEIGHT - 25)
 end
