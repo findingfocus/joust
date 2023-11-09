@@ -7,6 +7,7 @@ function HighScoreState:init()
     letter2Index = 1
     letter3Index = 1
     counter = 0
+    count = 0
     flashing = false
     letter1InputChoice = false
     letter2InputChoice = false
@@ -21,6 +22,19 @@ function HighScoreState:init()
         saveDefaultScoreBoard()
     else
         loadHighScore()
+    end
+    --
+    --CHECK IF PLAYER BEATS 10th PLACE SCOREBOARD
+    if Score > saveData[10].score and counter == 0 then
+        insertPlayerScore()
+        playerInitialsLocked = false
+        letter1InputChoice = true
+        counter = 1
+    elseif Score < saveData[10].score then
+        letter1InputChoice = false
+        letter2InputChoice = false
+        letter3InputChoice = false
+        playerInitialsLocked = true
     end
 end
 
@@ -46,26 +60,32 @@ function loadHighScore()
 end
 
 function insertPlayerScore()
+    inserted = true
     --LOOP THROUGH ALL HIGH SCORES AND INSERT PLAYER SCORE INTO APPROPRIATE INDEX
-    --
-    --SHIFT ALL TRAILING SCORES TO BE ONE PLACE LOWER
-    --
+    for i, k in pairs(saveData) do
+        count = count + 1
+        if Score > saveData[i].score then
+            --SHIFT TRAILING SCORES FUNCTION
+            shiftTrailingScores(i)
+            --COPY CURRENT SCORE AND INITIALS INTO CURRENT SCORE
+        end
+    end
     --DELETE THE 11TH SCORE, DO WE NEED DUMMY HIGH SCORE OBJECT?
 end
 
-function HighScoreState:update(dt)
-    --CHECK IF PLAYER BEATS 10th PLACE SCOREBOARD
-    if Score > saveData[10].score and counter == 0 then
-        insertPlayerScore()
-        playerInitialsLocked = false
-        letter1InputChoice = true
-        counter = 1
-    elseif Score < saveData[10].score then
-        letter1InputChoice = false
-        letter2InputChoice = false
-        letter3InputChoice = false
-        playerInitialsLocked = true
+function shiftTrailingScores(index)
+    for i = 1, index do
+        if saveData[i].place == 10 then
+            return
+        else
+            --COPY CURRENT HIGHSCORE OBJECT INTO NEXT PLACE
+            saveData[i].name
+            saveData[i].place
+            saveData[i].score
     end
+end
+
+function HighScoreState:update(dt)
     --saveData[2].score = Score
     flashTimer = flashTimer - dt
     if flashTimer <= 0 then
@@ -223,10 +243,6 @@ function HighScoreState:render()
     end
     --]]
 
-    if playerInitialsLocked then
-        love.graphics.print('SCORE IS GREATER THAN SAVEDATA 10', 0, 200)
-        -- love.graphics.printf('CONGRATULATIONS, ' .. scoreInitials[1] .. scoreInitials[2] .. scoreInitials[3] .. '!!!', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
-    end
     --[[
     if Score > saveData[1].score then
        love.graphics.print('SCORE IS GREATER THAN SAVEDATA 10', 0, 200)
@@ -234,6 +250,11 @@ function HighScoreState:render()
     --]]
 --    love.graphics.print('playerInitialsLocked: ' .. tostring(playerInitialsLocked), 10, VIRTUAL_HEIGHT - 20)
 
+    if inserted then
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('PLAYER SCORE INSERTED', 0, VIRTUAL_HEIGHT - 35)
+        love.graphics.print('saveData count: ' .. tostring(count), 0, VIRTUAL_HEIGHT - 45)
+    end
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     love.graphics.print('HIGHSCORES.TXT: ' .. tostring(highScoresExist), 0, VIRTUAL_HEIGHT - 25)
 end
