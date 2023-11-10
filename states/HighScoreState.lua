@@ -9,6 +9,7 @@ function HighScoreState:init()
     counter = 0
     count = 0
     flashing = false
+    playerScoreInserted = false
     letter1InputChoice = false
     letter2InputChoice = false
     letter3InputChoice = false
@@ -26,7 +27,6 @@ function HighScoreState:init()
     --
     --CHECK IF PLAYER BEATS 10th PLACE SCOREBOARD
     if Score > saveData[10].score and counter == 0 then
-        insertPlayerScore()
         playerInitialsLocked = false
         letter1InputChoice = true
         counter = 1
@@ -60,29 +60,17 @@ function loadHighScore()
 end
 
 function insertPlayerScore()
-    inserted = true
+    playerScoreInserted = true
     --LOOP THROUGH ALL HIGH SCORES AND INSERT PLAYER SCORE INTO APPROPRIATE INDEX
     for i, k in pairs(saveData) do
         count = count + 1
         if Score > saveData[i].score then
             --SHIFT TRAILING SCORES FUNCTION
-            shiftTrailingScores(i)
+            --shiftTrailingScores(i)
             --COPY CURRENT SCORE AND INITIALS INTO CURRENT SCORE
         end
     end
     --DELETE THE 11TH SCORE, DO WE NEED DUMMY HIGH SCORE OBJECT?
-end
-
-function shiftTrailingScores(index)
-    for i = 1, index do
-        if saveData[i].place == 10 then
-            return
-        else
-            --COPY CURRENT HIGHSCORE OBJECT INTO NEXT PLACE
-            saveData[i].name
-            saveData[i].place
-            saveData[i].score
-    end
 end
 
 function HighScoreState:update(dt)
@@ -180,6 +168,11 @@ function HighScoreState:update(dt)
             end
         end
     end
+
+    if playerInitialsLocked and not playerScoreInserted then
+        insertPlayerScore()
+        playerScoreInserted = true
+    end
 end
 
 function HighScoreState:render()
@@ -250,7 +243,7 @@ function HighScoreState:render()
     --]]
 --    love.graphics.print('playerInitialsLocked: ' .. tostring(playerInitialsLocked), 10, VIRTUAL_HEIGHT - 20)
 
-    if inserted then
+    if playerScoreInserted then
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.print('PLAYER SCORE INSERTED', 0, VIRTUAL_HEIGHT - 35)
         love.graphics.print('saveData count: ' .. tostring(count), 0, VIRTUAL_HEIGHT - 45)
