@@ -40,16 +40,17 @@ end
 
 function saveDefaultScoreBoard()
     saveData = {}
-    table.insert(saveData, HighScores(1, {'J', 'D', 'H'}, 1250))
-    table.insert(saveData, HighScores(2, {'J', 'D', 'H'}, 2250))
-    table.insert(saveData, HighScores(3, {'J', 'D', 'H'}, 3250))
-    table.insert(saveData, HighScores(4, {'J', 'D', 'H'}, 4250))
-    table.insert(saveData, HighScores(5, {'J', 'D', 'H'}, 5555))
-    table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 6250))
-    table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 1777250))
-    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 107250))
-    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 88250))
-    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 50))
+    table.insert(saveData, HighScores(1, {'J', 'D', 'H'}, 101))
+    table.insert(saveData, HighScores(2, {'J', 'D', 'H'}, 102))
+    table.insert(saveData, HighScores(3, {'J', 'D', 'H'}, 103))
+    table.insert(saveData, HighScores(4, {'J', 'D', 'H'}, 104))
+    table.insert(saveData, HighScores(5, {'J', 'D', 'H'}, 105))
+    table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 106))
+    table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 107))
+    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 108))
+    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 109))
+    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 110))
+    table.insert(saveData, HighScores(11, {'X', 'X', 'X'}, 0)) --DUMMY VALUE TO OVERWRITE
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
 end
@@ -62,12 +63,26 @@ end
 function insertPlayerScore()
     playerScoreInserted = true
     --LOOP THROUGH ALL HIGH SCORES AND INSERT PLAYER SCORE INTO APPROPRIATE INDEX
+    --[[
     for i, k in pairs(saveData) do
         count = count + 1
         if Score > saveData[i].score then
             --SHIFT TRAILING SCORES FUNCTION
             --shiftTrailingScores(i)
             --COPY CURRENT SCORE AND INITIALS INTO CURRENT SCORE
+        end
+    end
+    --]]
+    for i = #saveData, 1, -1 do
+        count = count + 1
+        if i == 11 then
+
+        elseif Score >= saveData[i].score then --SHIFTS BOTTOM SCORE DOWN ONE PLACE
+            --saveData[i + 1].place = saveData[i].place
+            saveData[i + 1].name = saveData[i].name
+            saveData[i + 1].score = saveData[i].score
+        else
+           break
         end
     end
     --DELETE THE 11TH SCORE, DO WE NEED DUMMY HIGH SCORE OBJECT?
@@ -171,7 +186,6 @@ function HighScoreState:update(dt)
 
     if playerInitialsLocked and not playerScoreInserted then
         insertPlayerScore()
-        playerScoreInserted = true
     end
 end
 
@@ -202,6 +216,8 @@ function HighScoreState:render()
         love.graphics.printf('         ' .. tostring(saveData[9].score), -50, 110, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[10].place ..  ' ' .. saveData[10].name[1] .. saveData[10].name[2] .. saveData[10].name[3]), 42, 120, VIRTUAL_WIDTH, 'left')
         love.graphics.printf('         ' .. tostring(saveData[10].score), -50, 120, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf(tostring(saveData[11].place ..  ' ' .. saveData[11].name[1] .. saveData[11].name[2] .. saveData[11].name[3]), 42, 130, VIRTUAL_WIDTH, 'left')
+        love.graphics.printf('         ' .. tostring(saveData[11].score), -50, 130, VIRTUAL_WIDTH, 'right')
     end
 ---[[
     if not playerInitialsLocked then
