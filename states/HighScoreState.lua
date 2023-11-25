@@ -6,6 +6,7 @@ function HighScoreState:init()
     letter1Index = 1
     letter2Index = 1
     letter3Index = 1
+    insertionIndex = 4
     counter = 0
     count = 0
     flashing = false
@@ -29,7 +30,7 @@ function HighScoreState:init()
     if Score > saveData[10].score and counter == 0 then
         playerInitialsLocked = false
         letter1InputChoice = true
-        counter = 1
+        --counter = 1
     elseif Score < saveData[10].score then
         letter1InputChoice = false
         letter2InputChoice = false
@@ -40,17 +41,17 @@ end
 
 function saveDefaultScoreBoard()
     saveData = {}
-    table.insert(saveData, HighScores(1, {'A', 'A', 'A'}, 101))
-    table.insert(saveData, HighScores(2, {'B', 'B', 'B'}, 102))
-    table.insert(saveData, HighScores(3, {'C', 'C', 'C'}, 103))
-    table.insert(saveData, HighScores(4, {'D', 'D', 'D'}, 104))
-    table.insert(saveData, HighScores(5, {'E', 'E', 'E'}, 105))
-    table.insert(saveData, HighScores(6, {'F', 'F', 'F'}, 106))
-    table.insert(saveData, HighScores(7, {'G', 'G', 'G'}, 107))
-    table.insert(saveData, HighScores(8, {'H', 'H', 'H'}, 108))
-    table.insert(saveData, HighScores(9, {'I', 'I', 'I'}, 109))
-    table.insert(saveData, HighScores(10, {'J', 'J', 'J'}, 110))
-    table.insert(saveData, HighScores(11, {'X', 'X', 'X'}, 0)) --DUMMY VALUE TO OVERWRITE
+    table.insert(saveData, HighScores(1, {'A', 'A', 'A'}, 255))
+    table.insert(saveData, HighScores(2, {'B', 'B', 'B'}, 254))
+    table.insert(saveData, HighScores(3, {'C', 'C', 'C'}, 253))
+    table.insert(saveData, HighScores(4, {'D', 'D', 'D'}, 252))
+    table.insert(saveData, HighScores(5, {'E', 'E', 'E'}, 251))
+    table.insert(saveData, HighScores(6, {'F', 'F', 'F'}, 249))
+    table.insert(saveData, HighScores(7, {'G', 'G', 'G'}, 248))
+    table.insert(saveData, HighScores(8, {'H', 'H', 'H'}, 247))
+    table.insert(saveData, HighScores(9, {'I', 'I', 'I'}, 246))
+    table.insert(saveData, HighScores(10, {'J', 'J', 'J'}, 245))
+    table.insert(saveData, HighScores(11, {'X', 'X', 'X'}, 200)) --DUMMY VALUE TO OVERWRITE
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
 end
@@ -61,7 +62,7 @@ function loadHighScore()
 end
 
 function insertPlayerScore()
-    playerScoreInserted = true
+    --playerScoreInserted = true
     --LOOP THROUGH ALL HIGH SCORES AND INSERT PLAYER SCORE INTO APPROPRIATE INDEX
     --[[
     for i, k in pairs(saveData) do
@@ -73,14 +74,25 @@ function insertPlayerScore()
         end
     end
     --]]
-    for i = #saveData, 1, -1 do
-        count = count + 1
-        if i == 11 then
+    for i = 1, 10 do
+        --count = count + 1
+        count = #saveData
+        if Score >= saveData[i].score then --SHIFTS BOTTOM SCORE DOWN ONE PLACE
+            --insertionIndex = i
 
-        elseif Score >= saveData[i].score then --SHIFTS BOTTOM SCORE DOWN ONE PLACE
+            table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
+            --table.remove(saveData, 11)
+            love.filesystem.write('highScores.txt', serialize(saveData))
+            return
+            --table.insert(
             --saveData[i + 1].place = saveData[i].place
-            saveData[i + 1].name = saveData[i].name
-            saveData[i + 1].score = saveData[i].score
+            --saveData[i + 1].name = saveData[i].name
+            --saveData[i + 1].score = saveData[i].score
+            --[[
+            --8.  12
+            --9.  10
+            --10. 9
+            ----]]
         else
            break
         end
@@ -184,8 +196,11 @@ function HighScoreState:update(dt)
         end
     end
 
-    if playerInitialsLocked and not playerScoreInserted then
+
+    if playerInitialsLocked then
+        playerScoreInserted = true
         insertPlayerScore()
+        playerScoreInserted = false
     end
 end
 
@@ -239,7 +254,7 @@ function HighScoreState:render()
                 love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
             end
             love.graphics.printf(tostring(letters[letter2Index]), 8, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
-        elseif letter3InputChoice then
+       elseif letter3InputChoice then
             love.graphics.printf(tostring(scoreInitials[1]), 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
             love.graphics.printf(tostring(scoreInitials[2]), 8, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
             if flashing then
@@ -266,4 +281,5 @@ function HighScoreState:render()
     end
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     love.graphics.print('HIGHSCORES.TXT: ' .. tostring(highScoresExist), 0, VIRTUAL_HEIGHT - 25)
+    love.graphics.print('insertionIndex: ' .. tostring(insertionIndex), 0, VIRTUAL_HEIGHT - 55)
 end
