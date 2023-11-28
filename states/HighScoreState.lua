@@ -94,7 +94,6 @@ function HighScoreState:update(dt)
     if not scoreInsertionLocked then
 
     end
-    --saveData[2].score = Score
     flashTimer = flashTimer - dt
     if flashTimer <= 0 then
         flashing = not flashing
@@ -191,10 +190,7 @@ function HighScoreState:update(dt)
 
 
     if playerInitialsLocked then
-
-        --playerScoreInserted = true
         insertPlayerScore()
-        --playerScoreInserted = false
     end
 end
 
@@ -202,7 +198,6 @@ function HighScoreState:render()
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     love.graphics.setFont(smallFont)
     love.graphics.printf('HELLO HIGHSCORE STATE!', 0, 0, VIRTUAL_WIDTH, 'center')
-    --love.graphics.printf('flashing: ' .. tostring(flashing), 0, 20, VIRTUAL_WIDTH, 'center')
     --PRINT TOP TEN SCORES
     if playerInitialsLocked then
         love.graphics.printf(tostring(saveData[1].place ..  ' ' .. saveData[1].name[1] .. saveData[1].name[2] .. saveData[1].name[3]), 50, 30, VIRTUAL_WIDTH, 'left')
