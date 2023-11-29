@@ -82,6 +82,7 @@ function insertPlayerScore()
                 --saveData[i + 1].name = saveData[i].name
                 --saveData[i + 1].score = saveData[i].score
                 ----]]
+                --Maybe we refactor this into a new class...
             else
                 break
             end
