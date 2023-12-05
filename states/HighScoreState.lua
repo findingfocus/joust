@@ -62,27 +62,35 @@ function loadHighScore()
     return saveData
 end
 
-function insertPlayerScore()
-    --playerScoreInserted = true
-    if not playerScoreInserted then
-        --table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
-        --playerScoreInserted = true
-        for i, k in pairs(saveData) do
-            --count = count + 1
-            count = #saveData
-            if Score >= saveData[i].score then --SHIFTS BOTTOM SCORE DOWN ONE PLACE
-                insertionIndex = i
-
-                table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
-                --table.remove(saveData, 11)
-                love.filesystem.write('highScores.txt', serialize(saveData))
-                playerScoreInserted = true
-                return
-                --saveData[i + 1].place = saveData[i].place
+function shiftTrailingScores(index)
+    startingIndex = 10
+    while  startingIndex > index do
+       saveData[startingIndex + 1].place = saveData[startingIndex].place
+       saveData[startingIndex + 1].name = saveData[startingIndex].name
+       saveData[startingIndex + 1].score = saveData[startingIndex].score
+       startingIndex = startingIndex - 1
+       --saveData[i + 1].place = saveData[i].place
                 --saveData[i + 1].name = saveData[i].name
                 --saveData[i + 1].score = saveData[i].score
-                ----]]
-                --Maybe we refactor this into a new class...
+    end
+    newHighScoreLocked = true
+
+end
+
+
+function insertPlayerScore()
+    if not playerScoreInserted then
+        for i, k in pairs(saveData) do
+            count = #saveData
+            if Score >= saveData[i].score then
+                shiftTrailingScores(i)
+                --DEBUG INSERTION INDEX FOR SCORE OF 250
+                insertionIndex = i
+                table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
+                playerScoreInserted = true
+                love.filesystem.write('highScores.txt', serialize(saveData))
+                --REMOVE SCORE 11
+                break
             else
                 break
             end
@@ -191,7 +199,9 @@ function HighScoreState:update(dt)
 
 
     if playerInitialsLocked then
-        insertPlayerScore()
+        ---[[
+            insertPlayerScore()
+        --]]
     end
 end
 
