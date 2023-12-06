@@ -9,7 +9,7 @@ function HighScoreState:init()
     insertionIndex = 0
     counter = 0
     count = 0
-    scoreInsertionLocked = false
+    scoreNeedsInsertion = false
     flashing = false
     playerScoreInserted = false
     letter1InputChoice = false
@@ -38,6 +38,7 @@ function HighScoreState:init()
         letter3InputChoice = false
         playerInitialsLocked = true
     end
+    findInsertionIndex()
 end
 
 function saveDefaultScoreBoard()
@@ -77,19 +78,25 @@ function shiftTrailingScores(index)
 
 end
 
+function findInsertionIndex()
+    for i = 1, 10 do
+        if Score >= saveData[i].score then
+            insertionIndex = i
+            return
+        end
+    end
+end
 
 function insertPlayerScore()
     if not playerScoreInserted then
         for i, k in pairs(saveData) do
             count = #saveData
             if Score >= saveData[i].score then
-                shiftTrailingScores(i)
-                --DEBUG INSERTION INDEX FOR SCORE OF 250
-                insertionIndex = i
+                --shiftTrailingScores(i) --FIX THIS FUNCTION NEXT
                 table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
                 playerScoreInserted = true
-                love.filesystem.write('highScores.txt', serialize(saveData))
                 --REMOVE SCORE 11
+                love.filesystem.write('highScores.txt', serialize(saveData))
                 break
             else
                 break
@@ -100,8 +107,10 @@ function insertPlayerScore()
 end
 
 function HighScoreState:update(dt)
-    if not scoreInsertionLocked then
-
+    if scoreNeedsInsertion then
+            insertPlayerScore()
+            --table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
+            scoreNeedsInsertion = false
     end
     flashTimer = flashTimer - dt
     if flashTimer <= 0 then
@@ -193,16 +202,12 @@ function HighScoreState:update(dt)
                 letter3InputChoice = false
                 playerInitialsLocked = true
                 initialInput = false
+                scoreNeedsInsertion = true
             end
         end
     end
 
 
-    if playerInitialsLocked then
-        ---[[
-            insertPlayerScore()
-        --]]
-    end
 end
 
 function HighScoreState:render()
