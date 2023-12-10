@@ -53,7 +53,7 @@ function saveDefaultScoreBoard()
     table.insert(saveData, HighScores(8, {'H', 'H', 'H'}, 247))
     table.insert(saveData, HighScores(9, {'I', 'I', 'I'}, 246))
     table.insert(saveData, HighScores(10, {'J', 'J', 'J'}, 245))
-    table.insert(saveData, HighScores(11, {'X', 'X', 'X'}, 200)) --DUMMY VALUE TO OVERWRITE
+    --table.insert(saveData, HighScores(11, {'X', 'X', 'X'}, 200)) --DUMMY VALUE TO OVERWRITE
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
 end
@@ -96,6 +96,7 @@ function insertPlayerScore()
                 table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
                 playerScoreInserted = true
                 --REMOVE SCORE 11
+                table.remove(saveData, 11)
                 love.filesystem.write('highScores.txt', serialize(saveData))
                 break
             else
@@ -236,8 +237,8 @@ function HighScoreState:render()
         love.graphics.printf('         ' .. tostring(saveData[9].score), -50, 110, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[10].place ..  ' ' .. saveData[10].name[1] .. saveData[10].name[2] .. saveData[10].name[3]), 42, 120, VIRTUAL_WIDTH, 'left')
         love.graphics.printf('         ' .. tostring(saveData[10].score), -50, 120, VIRTUAL_WIDTH, 'right')
-        love.graphics.printf(tostring(saveData[11].place ..  ' ' .. saveData[11].name[1] .. saveData[11].name[2] .. saveData[11].name[3]), 42, 130, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[11].score), -50, 130, VIRTUAL_WIDTH, 'right')
+        --love.graphics.printf(tostring(saveData[11].place ..  ' ' .. saveData[11].name[1] .. saveData[11].name[2] .. saveData[11].name[3]), 42, 130, VIRTUAL_WIDTH, 'left')
+        --love.graphics.printf('         ' .. tostring(saveData[11].score), -50, 130, VIRTUAL_WIDTH, 'right')
     end
 ---[[
     if not playerInitialsLocked then
