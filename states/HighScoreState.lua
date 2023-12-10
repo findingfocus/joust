@@ -97,6 +97,7 @@ function insertPlayerScore()
                 playerScoreInserted = true
                 --REMOVE SCORE 11
                 table.remove(saveData, 11)
+
                 love.filesystem.write('highScores.txt', serialize(saveData))
                 break
             else
