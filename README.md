@@ -5,6 +5,7 @@ My remake of the 1982 Williams Electronics game, Joust. Built in LÖVE2d with Lu
 
 ### **How to play**
 Player 1: Use 'p' to move right, 'o' to move left, 'i' to jump
+
 Player 2: Use 'c' to move right, 'x' to move left, 'z' to jump
 
 ### **Installation Instructions**
