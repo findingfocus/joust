@@ -69,6 +69,8 @@ function love.load()
 		['collide'] = love.audio.newSource('music/collide.mp3', 'static'),
 	}
 
+    sounds['collide']:setVolume(0.5)
+
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
 		vsync = true,
 		fullscreen = true,
