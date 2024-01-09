@@ -5,11 +5,29 @@ function TitleScreenState:init()
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
     lavaRise = 0
     twoPlayerMode = false
+    startInstructions = false
+    modeSelectInstructions = false
+    instructionTimer = 0
 end
 
 local highlighted = 1
 
 function TitleScreenState:update(dt)
+    instructionTimer = instructionTimer + dt
+    if instructionTimer > 2 and instructionTimer < 4 then
+       startInstructions = true 
+    else
+        startInstructions = false
+    end
+
+    if instructionTimer > 6 and instructionTimer < 8 then
+        modeSelectInstructions = true
+    else
+        modeSelectInstructions = false
+    end
+    if instructionTimer > 8 then
+        instructionTimer = 0
+    end
 ---[[BUBBLE LOGIC
 	if lavaBubble1.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
 		leftSpawnPoint = {9, 29}
@@ -81,8 +99,6 @@ function TitleScreenState:render()
 
     end
 
-	love.graphics.setFont(smallFont)
-	love.graphics.printf('Press "H" For Help', 0, VIRTUAL_HEIGHT / 2 + 320, VIRTUAL_WIDTH, 'center')
 	love.graphics.setFont(largeFont)
     love.graphics.setColor(163/255, 3/255, 19/255, 255/255)
 	love.graphics.printf('JOUST', 2, VIRTUAL_HEIGHT / 2 - 14, VIRTUAL_WIDTH, 'center')
@@ -103,4 +119,15 @@ function TitleScreenState:render()
     love.graphics.rectangle('fill', 100, 210, 20, 10)
 	lavaBubble1:render()
 	lavaBubble2:render()
+
+	love.graphics.setFont(smallFont)
+    --love.graphics.print('TIMER: ' .. tostring(math.floor(instructionTimer)), 0, 0)
+    if startInstructions then
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.printf('PRESS ENTER TO START GAME', 0, VIRTUAL_HEIGHT - 50, VIRTUAL_WIDTH, "center")
+    end
+    if modeSelectInstructions then
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.printf('LEFT OR RIGHT TO SELECT MODE', 0, VIRTUAL_HEIGHT - 50, VIRTUAL_WIDTH, "center")
+    end
 end

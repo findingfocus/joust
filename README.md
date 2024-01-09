@@ -8,6 +8,8 @@ Player 1: Use 'p' to move right, 'o' to move left, 'i' to jump
 
 Player 2: Use 'c' to move right, 'x' to move left, 'z' to jump
 
+Press 'h' while playing to toggle instructions
+
 ### **Installation Instructions**
 
 1.    Download the [LÖVE](https://love2d.org/) game engine and install onto your machine

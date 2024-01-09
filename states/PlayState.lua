@@ -1771,15 +1771,6 @@ function PlayState:render()
 		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2 + 55, VIRTUAL_WIDTH, 'center')
 	end
 
-	if helpToggle and not gameOver then
-		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
-		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
-		love.graphics.setFont(smallFont)
-		love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
-		love.graphics.printf('TO FLY, REPEATEDLY PRESS \'A\'', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center', 0, 1, 1, -1, -1)
-		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-		love.graphics.printf('TO FLY, REPEATEDLY PRESS \'A\'', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
-	end
 
 	--SCORE
 	love.graphics.setFont(smallFont)
@@ -1860,6 +1851,58 @@ function PlayState:render()
             love.graphics.draw(troll1, player1.x + 12, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 0, -1, 1)
         end
     end
+
+	if helpToggle and not gameOver then
+		love.graphics.setColor(200/255, 30/255, 30/255, 150/255)
+		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+		love.graphics.setFont(smallFont)
+
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('PLAYER 1 CONTROLS:', 11, PLAYER1CONTROLY + 1)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('PLAYER 1 CONTROLS:', 10, PLAYER1CONTROLY)
+        
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('   \'I\' - FLAP YOUR WINGS', 11, PLAYER1CONTROLY + 11)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('   \'I\' - FLAP YOUR WINGS', 10, PLAYER1CONTROLY + 10)
+        
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('   \'O\' - MOVE LEFT', 11, PLAYER1CONTROLY + 21)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('   \'O\' - MOVE LEFT', 10, PLAYER1CONTROLY + 20)
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('   \'P\' - MOVE RIGHT', 11, PLAYER1CONTROLY + 31)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('   \'P\' - MOVE RIGHT', 10, PLAYER1CONTROLY + 30)
+
+---[[
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('PLAYER 2 CONTROLS:', 11, PLAYER2CONTROLY + 1)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('PLAYER 2 CONTROLS:', 10, PLAYER2CONTROLY)
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('   \'Z\' - FLAP YOUR WINGS', 11, PLAYER2CONTROLY + 11)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('   \'Z\' - FLAP YOUR WINGS', 10, PLAYER2CONTROLY + 10)
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('   \'X\' - MOVE LEFT', 11, PLAYER2CONTROLY + 21)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('   \'X\' - MOVE LEFT', 10, PLAYER2CONTROLY + 20)
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('   \'C\' - MOVE RIGHT', 11, PLAYER2CONTROLY + 31)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('   \'C\' - MOVE RIGHT', 10, PLAYER2CONTROLY + 30)
+        --]]
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print('   \'H\' - TOGGLE HELP', 11, 156)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print('   \'H\' - TOGGLE HELP', 10, 155)
+        love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+        love.graphics.print(' \'ESC\' - EXIT GAME', 11, 166)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print(' \'ESC\' - EXIT GAME', 10, 165)
+	end
    --[[
 	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
