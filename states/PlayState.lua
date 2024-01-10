@@ -81,7 +81,7 @@ function PlayState:init()
 	PteroSpawnPoints[6] = SpawnZonePoint(VIRTUAL_WIDTH, VIRTUAL_HEIGHT - 80, -1.8)
 	randomPteroIndex = math.random(6)
 	monster = Pterodactyl(-30, -30, 0)
-    --wave = 25
+    --wave = 5
     fireAnimation = .2
     fireSprite = 1
 end
@@ -374,7 +374,12 @@ function PlayState:update(dt)
         --PLATFORM 2 RETRACTION
         if not platform2.retracted then
             platformRetract(platform2)
+            --TODO add gravity for ostrich standing on removed platform
+            if platform2.retracted then
+                player1.ground = Platform('name', 1, 1, 1, 1)
+            end
         end
+
         if not tablesPopulated then
             for i = 1, enemyObjects do
 				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
@@ -1264,13 +1269,17 @@ function PlayState:update(dt)
 	end
 
     if player1.y > VIRTUAL_HEIGHT - LAVAHEIGHT - player1.height - lavaRise then --PLAYER 1 EXPLODING IN LAVA
-        player1.exploded = true
+        if not player1.temporarySafety then
+            player1.exploded = true
+        end
     end
 ---[[
     --PLAYER 2 EXPLODING IN LAVA
     if twoPlayerMode then
         if player2.y > VIRTUAL_HEIGHT - 25 - 10 then
-            player2.exploded = true
+            if not player2.temporarySafety then
+                player2.exploded = true
+            end
         end
     end
     --]]
@@ -1917,4 +1926,5 @@ function PlayState:render()
         love.graphics.print(tostring(platform.name), 0, i * 8)
     end
     --]]
+    --love.graphics.print('tempSafe: ' .. tostring(player1.temporarySafety), 10, 10)
 end
