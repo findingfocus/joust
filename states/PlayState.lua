@@ -1754,22 +1754,6 @@ function PlayState:render()
         end
 	end
 
---[[KEYLOGGER
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.draw(keyloggerPlate, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
-
-	if love.keyboard.isDown('left') then
-		love.graphics.draw(keylogger1, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
-	end
-
-	if love.keyboard.isDown('a') then
-		love.graphics.draw(keylogger2, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
-	end
-
-	if love.keyboard.isDown('right') then
-		love.graphics.draw(keylogger3, VIRTUAL_WIDTH - 200, VIRTUAL_HEIGHT - 35, 0, .6, .6)
-	end
-	--]]
 	if gameOver then
 		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
 		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
@@ -1779,7 +1763,6 @@ function PlayState:render()
 		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2 + 55, VIRTUAL_WIDTH, 'center')
 	end
-
 
 	--SCORE
 	love.graphics.setFont(smallFont)
@@ -1912,19 +1895,10 @@ function PlayState:render()
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.print(' \'ESC\' - EXIT GAME', 10, 165)
 	end
-   --[[
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('righttroll4.x: ' .. tostring(VIRTUAL_WIDTH - 7), 10, 10)
-    --]]
---[[DEBUG INFO
-	love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-	love.graphics.print('waveTimer: ' .. tostring(waveTimer), 10, VIRTUAL_HEIGHT - 10)
-	love.graphics.print('eggWaveTextTimer: ' .. tostring(eggWaveTextTimer), 10, VIRTUAL_HEIGHT - 20)
---]]
 --[[
+    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)    
     for i, platform in pairs(collidablePlatforms) do
         love.graphics.print(tostring(platform.name), 0, i * 8)
     end
     --]]
-    --love.graphics.print('tempSafe: ' .. tostring(player1.temporarySafety), 10, 10)
 end

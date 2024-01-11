@@ -76,7 +76,7 @@ X_Functionalize EggWave Text Timer
 X_Add leaderboard with HighScores
 X_Take in user Initials for scores
 X_Take out EggWave timers into one shared timer
-__Player1Spawn bug after dying,
+X_Player1Spawn bug after dying,
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
 __if twoplayer mode, show both players score at the end, no leaderboard
@@ -92,6 +92,7 @@ __Add player to Vulture collision sound
 __Add player to Egg sound
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
+__explosion sound for both player death and vulture death
 
 
 SCORES
