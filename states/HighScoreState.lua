@@ -65,6 +65,16 @@ end
 
 function shiftTrailingScores(index)
     startingIndex = 10
+    for i = 10, i < startingIndex, -1 do
+       saveData[startingIndex + 1].place = saveData[startingIndex].place
+       saveData[startingIndex + 1].name = saveData[startingIndex].name
+       saveData[startingIndex + 1].score = saveData[startingIndex].score
+       startingIndex = startingIndex - 1
+       --saveData[i + 1].place = saveData[i].place
+                --saveData[i + 1].name = saveData[i].name
+                --saveData[i + 1].score = saveData[i].score
+    end
+--[[
     while  startingIndex > index do
        saveData[startingIndex + 1].place = saveData[startingIndex].place
        saveData[startingIndex + 1].name = saveData[startingIndex].name
@@ -74,6 +84,7 @@ function shiftTrailingScores(index)
                 --saveData[i + 1].name = saveData[i].name
                 --saveData[i + 1].score = saveData[i].score
     end
+  --]]
     newHighScoreLocked = true
 
 end
