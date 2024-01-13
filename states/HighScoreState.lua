@@ -38,7 +38,6 @@ function HighScoreState:init()
         letter3InputChoice = false
         playerInitialsLocked = true
     end
-    findInsertionIndex()
 end
 
 function saveDefaultScoreBoard()
@@ -53,7 +52,7 @@ function saveDefaultScoreBoard()
     table.insert(saveData, HighScores(8, {'H', 'H', 'H'}, 247))
     table.insert(saveData, HighScores(9, {'I', 'I', 'I'}, 246))
     table.insert(saveData, HighScores(10, {'J', 'J', 'J'}, 245))
-    --table.insert(saveData, HighScores(11, {'X', 'X', 'X'}, 200)) --DUMMY VALUE TO OVERWRITE
+    table.insert(saveData, HighScores(11, {'X', 'X', 'X'}, 200)) --DUMMY VALUE TO OVERWRITE
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
 end
@@ -65,11 +64,10 @@ end
 
 function shiftTrailingScores(index)
     startingIndex = 10
-    for i = 10, i < startingIndex, -1 do
-       saveData[startingIndex + 1].place = saveData[startingIndex].place
+    for i = 10, index - 1, -1 do
+       saveData[startingIndex + 1].place = 2 --WHY IS THIS NOT AFFECTING PLACE 
        saveData[startingIndex + 1].name = saveData[startingIndex].name
        saveData[startingIndex + 1].score = saveData[startingIndex].score
-       startingIndex = startingIndex - 1
        --saveData[i + 1].place = saveData[i].place
                 --saveData[i + 1].name = saveData[i].name
                 --saveData[i + 1].score = saveData[i].score
@@ -99,29 +97,36 @@ function findInsertionIndex()
 end
 
 function insertPlayerScore()
+    findInsertionIndex()
     if not playerScoreInserted then
+            shiftTrailingScores(insertionIndex) --FIX THIS FUNCTION NEXT
+            table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
+            playerScoreInserted = true
+            --REMOVE SCORE 11
+            --table.remove(saveData, 11)
+            love.filesystem.write('highScores.txt', serialize(saveData))
+        --[[
         for i, k in pairs(saveData) do
             count = #saveData
             if Score >= saveData[i].score then
-                --shiftTrailingScores(i) --FIX THIS FUNCTION NEXT
+                shiftTrailingScores(i) --FIX THIS FUNCTION NEXT
                 table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
                 playerScoreInserted = true
                 --REMOVE SCORE 11
                 table.remove(saveData, 11)
-
                 love.filesystem.write('highScores.txt', serialize(saveData))
                 break
             else
                 break
             end
         end
+        --]]
     end
-    --DELETE THE 11TH SCORE, DO WE NEED DUMMY HIGH SCORE OBJECT?
 end
 
 function HighScoreState:update(dt)
     if scoreNeedsInsertion then
-            insertPlayerScore()
+            insertPlayerScore(insertionIndex)
             --table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
             scoreNeedsInsertion = false
     end
