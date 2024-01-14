@@ -1,6 +1,7 @@
 HighScoreState = Class{__includes = BaseState}
 
 function HighScoreState:init()
+    loopCount = 0
     letters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'}
     scoreInitials = {'X', 'X', 'X'}
     letter1Index = 1
@@ -64,10 +65,11 @@ end
 
 function shiftTrailingScores(index)
     startingIndex = 10
-    for i = 10, index - 1, -1 do
-       saveData[startingIndex + 1].place = 2 --WHY IS THIS NOT AFFECTING PLACE 
-       saveData[startingIndex + 1].name = saveData[startingIndex].name
-       saveData[startingIndex + 1].score = saveData[startingIndex].score
+    for i = startingIndex, index, -1 do
+       saveData[i + 1].place = saveData[i].place
+       saveData[i + 1].name = saveData[i].name
+       saveData[i + 1].score = saveData[i].score
+       loopCount = loopCount + 1
        --saveData[i + 1].place = saveData[i].place
                 --saveData[i + 1].name = saveData[i].name
                 --saveData[i + 1].score = saveData[i].score
@@ -305,4 +307,5 @@ function HighScoreState:render()
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     love.graphics.print('HIGHSCORES.TXT: ' .. tostring(highScoresExist), 0, VIRTUAL_HEIGHT - 25)
     love.graphics.print('insertionIndex: ' .. tostring(insertionIndex), 0, VIRTUAL_HEIGHT - 55)
+    love.graphics.print('loopCount: ' .. tostring(loopCount), 0, VIRTUAL_HEIGHT - 75)
 end
