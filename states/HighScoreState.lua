@@ -66,27 +66,12 @@ end
 function shiftTrailingScores(index)
     startingIndex = 10
     for i = startingIndex, index, -1 do
-       saveData[i + 1].place = saveData[i].place
+       saveData[i + 1].place = saveData[i].place + 1
        saveData[i + 1].name = saveData[i].name
        saveData[i + 1].score = saveData[i].score
        loopCount = loopCount + 1
-       --saveData[i + 1].place = saveData[i].place
-                --saveData[i + 1].name = saveData[i].name
-                --saveData[i + 1].score = saveData[i].score
     end
---[[
-    while  startingIndex > index do
-       saveData[startingIndex + 1].place = saveData[startingIndex].place
-       saveData[startingIndex + 1].name = saveData[startingIndex].name
-       saveData[startingIndex + 1].score = saveData[startingIndex].score
-       startingIndex = startingIndex - 1
-       --saveData[i + 1].place = saveData[i].place
-                --saveData[i + 1].name = saveData[i].name
-                --saveData[i + 1].score = saveData[i].score
-    end
-  --]]
     newHighScoreLocked = true
-
 end
 
 function findInsertionIndex()
@@ -101,35 +86,16 @@ end
 function insertPlayerScore()
     findInsertionIndex()
     if not playerScoreInserted then
-            shiftTrailingScores(insertionIndex) --FIX THIS FUNCTION NEXT
-            table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
+            shiftTrailingScores(insertionIndex) 
+            saveData[insertionIndex] = HighScores(insertionIndex, scoreInitials, Score)
             playerScoreInserted = true
-            --REMOVE SCORE 11
-            --table.remove(saveData, 11)
             love.filesystem.write('highScores.txt', serialize(saveData))
-        --[[
-        for i, k in pairs(saveData) do
-            count = #saveData
-            if Score >= saveData[i].score then
-                shiftTrailingScores(i) --FIX THIS FUNCTION NEXT
-                table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
-                playerScoreInserted = true
-                --REMOVE SCORE 11
-                table.remove(saveData, 11)
-                love.filesystem.write('highScores.txt', serialize(saveData))
-                break
-            else
-                break
-            end
-        end
-        --]]
     end
 end
 
 function HighScoreState:update(dt)
     if scoreNeedsInsertion then
             insertPlayerScore(insertionIndex)
-            --table.insert(saveData, insertionIndex, HighScores(insertionIndex, scoreInitials, Score))
             scoreNeedsInsertion = false
     end
     flashTimer = flashTimer - dt
