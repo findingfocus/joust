@@ -21,7 +21,8 @@ function HighScoreState:init()
     flashTimer = .5
     sounds['beep']:setVolume(0.3)
     sounds['select']:setVolume(0.3)
-    highScoresExist = love.filesystem.exists('highScores.txt')
+    --highScoresExist = love.filesystem.exists('highScores.txt')
+    highScoresExist = love.filesystem.getInfo('highScores.txt', file)
     if not highScoresExist then
         saveDefaultScoreBoard()
     else
@@ -192,8 +193,6 @@ function HighScoreState:update(dt)
             end
         end
     end
-
-
 end
 
 function HighScoreState:render()
@@ -265,6 +264,7 @@ function HighScoreState:render()
     --]]
 --    love.graphics.print('playerInitialsLocked: ' .. tostring(playerInitialsLocked), 10, VIRTUAL_HEIGHT - 20)
 
+    --[[
     if playerScoreInserted then
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.print('PLAYER SCORE INSERTED', 0, VIRTUAL_HEIGHT - 35)
@@ -274,4 +274,5 @@ function HighScoreState:render()
     love.graphics.print('HIGHSCORES.TXT: ' .. tostring(highScoresExist), 0, VIRTUAL_HEIGHT - 25)
     love.graphics.print('insertionIndex: ' .. tostring(insertionIndex), 0, VIRTUAL_HEIGHT - 55)
     love.graphics.print('loopCount: ' .. tostring(loopCount), 0, VIRTUAL_HEIGHT - 75)
+    --]]
 end
