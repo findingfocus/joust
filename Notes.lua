@@ -45,13 +45,13 @@ X_Get proper wave text delay and vulture spawn time.
 X_Add left and right arrow key functionality as well as the h l controls for  development purposes
 X_Match Lava Heights from famicom version
 X_Egg wave, egg on plaform1L, two on platform 2, 1 in tricky corner,1 on 5, two on ground
-X_Ensure Eggs in wave 5 don't hatch into Vulture
+X_Ensure Eggs in wave 5 dont hatch into Vulture
 X_Add wave 6 spawns
 X_Move game over to be in low-center position
 X_Wave 6 disappears main center platform 2 ?
 X_Ensure platform 2 disappears from collidablePlatforms table once it is retracted
 X_Add lavatroll animation
-X_REMOVE SPAWNZONEPOINT 2 ONCE PLATFORM2 is RETRACTED!!!!!
+X_ REMOVE SPAWNZONEPOINT 2 ONCE PLATFORM2 is RETRACTED!!!!!
 X_Change trollGrab.x to track player for frames 1-3
 X_How do we wipe away spawn zone point upon platform Retraction considering the render order?
 X_DecoupleSprite viewports for twoPlayers
@@ -79,7 +79,6 @@ X_Take out EggWave timers into one shared timer
 X_Player1Spawn bug after dying,
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
-__if twoplayer mode, show both players score at the end, no leaderboard
 __Tweak player to vulture top collision to jump a little less high
 __Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
 __Ensure Hunters are inheriting faster dx than bounder when instantiating
@@ -93,6 +92,7 @@ __Add player to Egg sound
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
 __explosion sound for both player death and vulture death
+__if twoplayer mode, show both players score at the end, no leaderboard
 
 
 SCORES

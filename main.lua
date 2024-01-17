@@ -84,8 +84,6 @@ function love.load()
         ['highScoreState'] = function() return HighScoreState() end
 	}
 
-    --gStateMachine:change('playState')
-	--gStateMachine:change('modeSelectState')
 	gStateMachine:change('titleState')
 
 	love.keyboard.keysPressed = {}
@@ -142,11 +140,7 @@ end
 
 function love.draw()
 	push:start()
-
 	gStateMachine:render()
-
---	displayFPS()
-
 	push:finish()
 end
 
