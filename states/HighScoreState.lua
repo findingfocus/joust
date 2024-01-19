@@ -198,29 +198,29 @@ end
 function HighScoreState:render()
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     love.graphics.setFont(smallFont)
-    love.graphics.printf('HELLO HIGHSCORE STATE!', 0, 0, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('HIGHSCORES', 0, 10, VIRTUAL_WIDTH, 'center')
     --PRINT TOP TEN SCORES
     if playerInitialsLocked then
         love.graphics.printf(tostring(saveData[1].place ..  ' ' .. saveData[1].name[1] .. saveData[1].name[2] .. saveData[1].name[3]), 50, 30, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[1].score), -50, 30, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[1].score), -65, 30, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[2].place ..  ' ' .. saveData[2].name[1] .. saveData[2].name[2] .. saveData[2].name[3]), 50, 40, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[2].score), -50, 40, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[2].score), -65, 40, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[3].place ..  ' ' .. saveData[3].name[1] .. saveData[3].name[2] .. saveData[3].name[3]), 50, 50, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[3].score), -50, 50, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[3].score), -65, 50, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[4].place ..  ' ' .. saveData[4].name[1] .. saveData[4].name[2] .. saveData[4].name[3]), 50, 60, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[4].score), -50, 60, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[4].score), -65, 60, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[5].place ..  ' ' .. saveData[5].name[1] .. saveData[5].name[2] .. saveData[5].name[3]), 50, 70, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[5].score), -50, 70, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[5].score), -65, 70, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[6].place ..  ' ' .. saveData[6].name[1] .. saveData[6].name[2] .. saveData[6].name[3]), 50, 80, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[6].score), -50, 80, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[6].score), -65, 80, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[7].place ..  ' ' .. saveData[7].name[1] .. saveData[7].name[2] .. saveData[7].name[3]), 50, 90, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[7].score), -50, 90, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[7].score), -65, 90, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[8].place ..  ' ' .. saveData[8].name[1] .. saveData[8].name[2] .. saveData[8].name[3]), 50, 100, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[8].score), -50, 100, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[8].score), -65, 100, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[9].place ..  ' ' .. saveData[9].name[1] .. saveData[9].name[2] .. saveData[9].name[3]), 50, 110, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[9].score), -50, 110, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[9].score), -65, 110, VIRTUAL_WIDTH, 'right')
         love.graphics.printf(tostring(saveData[10].place ..  ' ' .. saveData[10].name[1] .. saveData[10].name[2] .. saveData[10].name[3]), 42, 120, VIRTUAL_WIDTH, 'left')
-        love.graphics.printf('         ' .. tostring(saveData[10].score), -50, 120, VIRTUAL_WIDTH, 'right')
+        love.graphics.printf('      ' .. tostring(saveData[10].score), -65, 120, VIRTUAL_WIDTH, 'right')
         --love.graphics.printf(tostring(saveData[11].place ..  ' ' .. saveData[11].name[1] .. saveData[11].name[2] .. saveData[11].name[3]), 42, 130, VIRTUAL_WIDTH, 'left')
         --love.graphics.printf('         ' .. tostring(saveData[11].score), -50, 130, VIRTUAL_WIDTH, 'right')
     end
@@ -255,6 +255,13 @@ function HighScoreState:render()
             love.graphics.printf(tostring(letters[letter3Index]), 16, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
         end
     end
+
+    if twoPlayerMode then
+        love.graphics.printf('PLAYER 1 SCORE: ' .. tostring(Score), 0, VIRTUAL_HEIGHT - 80, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('PLAYER 2 SCORE: ' .. tostring(Score2), 0, VIRTUAL_HEIGHT - 60, VIRTUAL_WIDTH, 'center')
+    end 
+
+    love.graphics.printf('THANKS FOR PLAYING!', 0, VIRTUAL_HEIGHT - 20, VIRTUAL_WIDTH, 'center')
     --]]
 
     --[[
