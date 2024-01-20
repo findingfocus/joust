@@ -96,7 +96,8 @@ __explosion sound for both player death and vulture death
 __Show leader board after gameover for 5 seconds
 __Cease player spawns if gameover
 __Test Gameover for twoPlayer Mode
-__Add new game from hightscore state, either enter or R
+__Add new game from highscore state, either enter or R
+__Add appropriate highscores for wave achievements
 
 
 SCORES
