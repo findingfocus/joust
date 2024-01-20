@@ -8,7 +8,6 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index, spawnDelay)
     self.spawningY = y
 	self.width = width
 	self.height = height
-	self.index = index
 	self.dx = 0
 	self.dy = 0
     self.spawningDX = dx
@@ -50,6 +49,7 @@ function Vulture:init(x, y, width, height, platformSpawn, dx, index, spawnDelay)
     self.dxAssigned = false
 	self.atlas = bounderAtlas
 	self.vultureSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
+    self.attractMode = false
 end
 
 function Vulture:checkGrounded(collidablePlatforms)
@@ -145,6 +145,10 @@ function Vulture:update(dt)
             self.dxAssigned = true
         end
 	end
+
+    if self.attractMode then
+        self.dx = 0.4
+    end
     --]]
 
 	if self.graveyard then
@@ -280,14 +284,16 @@ function Vulture:update(dt)
 				end
 
 				--LOOPS player to left side of screen
-				if self.x > VIRTUAL_WIDTH - 1 then
-					self.x = -self.width + 1
-				end
+                if not self.attractMode then
+                    if self.x > VIRTUAL_WIDTH - 1 then
+                        self.x = -self.width + 1
+                    end
 
-				--LOOPS player to right side of screen
-				if self.x < -self.width + 1 then
-					self.x = VIRTUAL_WIDTH - 1
-				end
+                    --LOOPS player to right side of screen
+                    if self.x < -self.width + 1 then
+                        self.x = VIRTUAL_WIDTH - 1
+                    end
+                end
 			end
 
 			if self.grounded then
@@ -316,7 +322,9 @@ function Vulture:update(dt)
 				self.vultureSprite:setViewport(0, 0, self.width, self.height)
 			end
 
-			self.timeBetweenJumps = self.timeBetweenJumps - dt
+            if not self.attractMode then
+                self.timeBetweenJumps = self.timeBetweenJumps - dt
+            end
 
 			if self.timeBetweenJumps < 0 then
 				love.math.setRandomSeed(self.index)

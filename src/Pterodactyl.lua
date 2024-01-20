@@ -22,6 +22,7 @@ function Pterodactyl:init(x, y, dx)
 	self.lastX = 0
 	self.lastY = 0
 	self.explodedTimer = 2
+    self.attractMode = false
 end
 
 function Pterodactyl:leftCollides(collidable)
@@ -91,13 +92,15 @@ function Pterodactyl:update(dt)
 
 	---[[
 		if not self.graveyard then
-			if self.x > VIRTUAL_WIDTH then
-				self.x = -self.width
-			end
+            if not self.attractMode then
+                if self.x > VIRTUAL_WIDTH then
+                    self.x = -self.width
+                end
 
-			if self.x + self.width < 0 then
-				self.x = VIRTUAL_WIDTH
-			end
+                if self.x + self.width < 0 then
+                    self.x = VIRTUAL_WIDTH
+                end
+            end
 
 			--BOUNCES PTERO OFF FLOOR
 			if self.y + self.height > groundPlatform.y then --GROUND

@@ -78,6 +78,8 @@ X_Take in user Initials for scores
 X_Take out EggWave timers into one shared timer
 X_Player1Spawn bug after dying,
 X_if twoplayer mode, show both players score at the end, no leaderboard
+X_true pause
+__attract mode
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
 __Tweak player to vulture top collision to jump a little less high

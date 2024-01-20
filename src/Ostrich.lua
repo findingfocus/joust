@@ -61,6 +61,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber, leftInp
         spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas2:getDimensions())
     end
     self.beginningSpawn = false
+    self.attractMode = false
     lastInput = 'right'
 end
 
@@ -332,15 +333,17 @@ function Ostrich:update(dt)
 				self.dy = math.abs(self.dy) / 2 --Division to offset gravity
 			end
 
-			--LOOPS player to left side of screen
-			if self.x > VIRTUAL_WIDTH - 1 then
-				self.x = -self.width + 1
-			end
+            if not self.attractMode then
+                --LOOPS player to left side of screen
+                if self.x > VIRTUAL_WIDTH - 1 then
+                    self.x = -self.width + 1
+                end
 
-			--LOOPS player to right side of screen
-			if self.x < -self.width + 1 then
-				self.x = VIRTUAL_WIDTH - 1
-			end
+                --LOOPS player to right side of screen
+                if self.x < -self.width + 1 then
+                    self.x = VIRTUAL_WIDTH - 1
+                end
+            end
 
 ---[[INPUT HANDLING
 			--MULTIPLE DIRECTION INPUT HANDLING

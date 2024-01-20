@@ -83,6 +83,8 @@ function PlayState:init()
     wave = 1
     fireAnimation = .2
     fireSprite = 1
+    sounds['leftStep']:setVolume(1)
+    sounds['rightStep']:setVolume(1)
 end
 
 function leftTrollCollide(player)
@@ -218,957 +220,875 @@ end
 
 
 function PlayState:update(dt)
-    if leftFireCollided then
-        love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-        love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
-    end
-    if rightFireCollided then
-        love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
-        love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
-    end
-
-    --LAVA FIRE ANIMATION
-    fireAnimation = fireAnimation - dt
-    if fireAnimation < 0 then
-        fireAnimation = .2
-        fireSprite = fireSprite + 1
-        if fireSprite > 3 then
-            fireSprite = 1
+    if not helpToggle then
+        if leftFireCollided then
+            love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+            love.graphics.rectangle('fill', 16, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
         end
-    end
+        if rightFireCollided then
+            love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
+            love.graphics.rectangle('fill', VIRTUAL_WIDTH - 20, VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 16, 8, 16)
+        end
 
-    --PTERODACTYL SPAWN
-    if pteroTimer > 0 then
-        pteroTimer = pteroTimer - dt
-    end
+        --LAVA FIRE ANIMATION
+        fireAnimation = fireAnimation - dt
+        if fireAnimation < 0 then
+            fireAnimation = .2
+            fireSprite = fireSprite + 1
+            if fireSprite > 3 then
+                fireSprite = 1
+            end
+        end
 
-    if pteroTimer < 0 then
-        monster = Pterodactyl(PteroSpawnPoints[randomPteroIndex].x, PteroSpawnPoints[randomPteroIndex].y, PteroSpawnPoints[randomPteroIndex].dx)
-        monster.graveyard = false
-        pteroTimer = 0
-    end
+        --PTERODACTYL SPAWN
+        if pteroTimer > 0 then
+            pteroTimer = pteroTimer - dt
+        end
 
-    if waveTimer > 0 then
-        waveTimer = waveTimer - dt
-    end
+        if pteroTimer < 0 then
+            monster = Pterodactyl(PteroSpawnPoints[randomPteroIndex].x, PteroSpawnPoints[randomPteroIndex].y, PteroSpawnPoints[randomPteroIndex].dx)
+            monster.graveyard = false
+            pteroTimer = 0
+        end
 
-	if love.keyboard.wasPressed('h') then
-		helpToggle = not helpToggle
-	end
+        if waveTimer > 0 then
+            waveTimer = waveTimer - dt
+        end
 
----[[WAVE LOGIC
-	if wave == 1 then
-        enemyObjects = 3
-		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
-		if not tablesPopulated then
-			for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+        if love.keyboard.wasPressed('h') then
+            helpToggle = not helpToggle
+        end
+
+        ---[[WAVE LOGIC
+        if wave == 1 then
+            enemyObjects = 3
+            --GLOBAL OBJECT TABLE DUMMY INITIALIZATION
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 4)
+            end
+            waveAdvance(enemyObjects)
+        end
+
+        if wave == 2 then
+            enemyObjects = 4
+            if lavaRise < 5 then
+                lavaRise = lavaRise + dt
+            end
+            --GLOBAL OBJECT TABLE DUMMY INITIALIZATION
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 4)
+            end
+            waveAdvance(enemyObjects)
+        end
+
+        if wave == 3 then
+            if not floorRetracted then
+                floorRetract()
+            end
+            enemyObjects = 5
+            if lavaRise < 11 then
+                lavaRise = lavaRise + dt
+            end
+
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 4)
+            end
+            waveAdvance(enemyObjects)
+        end
+
+        if wave == 4 then
+            enemyObjects = 5
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 4)
+            end
+            waveAdvance(enemyObjects)
+        end
+
+        if wave == 5 then
+            enemyObjects = 7
+            eggWaveTransitionTimer = eggWaveTransitionTimer + dt
+            eggWavePrint(dt)
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                end
+                eggPlacement()
                 tablesPopulated = true
             end
-            spawnEnemies(enemyObjects, 4)
-        end
-        waveAdvance(enemyObjects)
-	end
 
-    if wave == 2 then
-        enemyObjects = 4
-        if lavaRise < 5 then
-            lavaRise = lavaRise + dt
-        end
-		--GLOBAL OBJECT TABLE DUMMY INITIALIZATION
-		if not tablesPopulated then
-			for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-			end
-            spawnEnemies(enemyObjects, 4)
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 3 then
-        if not floorRetracted then
-            floorRetract()
-        end
-        enemyObjects = 5
-        if lavaRise < 11 then
-            lavaRise = lavaRise + dt
-        end
-
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 4)
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 4 then
-        enemyObjects = 5
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 4)
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 5 then
-        enemyObjects = 7
-        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
-        eggWavePrint(dt)
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-                timesEggHatched[i] = 0
-                table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-            end
-            eggPlacement()
-            tablesPopulated = true
-        end
-
-        if eggWaveTransitionTimer > 18 then
-            wave = 6
-            waveTimer = 3
-            eggWaveTextTimer = 3
-            eggsCaught = 0
-            tablesPopulated = false
-            for i = 1, enemyObjects do
-				Eggs[i] = Egg(-10, -10, 0, i)
-                Eggs[i].collected = true
-            end
-            eggWaveTransitionTimer = 0
-        end
-    end
-
-    if wave == 6 then
-        enemyObjects = 7
-        --PLATFORM 2 RETRACTION
-        if not platform2.retracted then
-            platformRetract(platform2)
-            --TODO add gravity for ostrich standing on removed platform
-            if platform2.retracted then
-                player1.ground = Platform('name', 1, 1, 1, 1)
+            if eggWaveTransitionTimer > 18 then
+                wave = 6
+                waveTimer = 3
+                eggWaveTextTimer = 3
+                eggsCaught = 0
+                tablesPopulated = false
+                for i = 1, enemyObjects do
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Eggs[i].collected = true
+                end
+                eggWaveTransitionTimer = 0
             end
         end
 
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
+        if wave == 6 then
+            enemyObjects = 7
+            --PLATFORM 2 RETRACTION
+            if not platform2.retracted then
+                platformRetract(platform2)
+                --TODO add gravity for ostrich standing on removed platform
+                if platform2.retracted then
+                    player1.ground = Platform('name', 1, 1, 1, 1)
+                end
             end
-            spawnEnemies(enemyObjects, 3)
-        end
-        waveAdvance(enemyObjects)
-    end
 
-    if wave == 7 then
-        enemyObjects = 7
-        --PLATFORM 1 and 1L RETRACTION
-        if not platform1.retracted then
-            platformRetract(platform1)
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+            end
+            waveAdvance(enemyObjects)
         end
-        if not platform1L.retracted then
-            platformRetract(platform1L)
+
+        if wave == 7 then
+            enemyObjects = 7
+            --PLATFORM 1 and 1L RETRACTION
+            if not platform1.retracted then
+                platformRetract(platform1)
+            end
+            if not platform1L.retracted then
+                platformRetract(platform1L)
+            end
+            platform2.retracted = true
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+            end
+            waveAdvance(enemyObjects)
         end
-        platform2.retracted = true
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+
+        if wave == 8 then
+            enemyObjects = 7
+            platform2.retracted = true
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
+        end
+
+        if wave == 9 then
+            enemyObjects = 7
+            platform2.retracted = true
+            if not platform5.retracted then
+                platformRetract(platform5)
+            end
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
+        end
+
+        if wave == 10 then
+            enemyObjects = 7
+            eggWaveTransitionTimer = eggWaveTransitionTimer + dt
+            eggWavePrint(dt)
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                end
+                platform2.retracted = false
+                platform1.retracted = false
+                platform1L.retracted = false
+                platform5.retracted = false
+                collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
+                eggPlacement()
                 tablesPopulated = true
             end
-            spawnEnemies(enemyObjects, 3)
-        end
-        waveAdvance(enemyObjects)
-    end
 
-    if wave == 8 then
-        enemyObjects = 7
-        platform2.retracted = true
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
+            if eggWaveTransitionTimer > 18 then
+                wave = 11
+                waveTimer = 3
+                eggWaveTextTimer = 3
+                eggsCaught = 0
+                tablesPopulated = false
+                for i = 1, enemyObjects do
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Eggs[i].collected = true
+                end
+                eggWaveTransitionTimer = 0
             end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 9 then
-        enemyObjects = 7
-        platform2.retracted = true
-        if not platform5.retracted then
-            platformRetract(platform5)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 10 then
-        enemyObjects = 7
-        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
-        eggWavePrint(dt)
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-                timesEggHatched[i] = 0
-                table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-            end
-            platform2.retracted = false
-            platform1.retracted = false
-            platform1L.retracted = false
-            platform5.retracted = false
-            collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-            eggPlacement()
-            tablesPopulated = true
         end
 
-        if eggWaveTransitionTimer > 18 then
-            wave = 11
-            waveTimer = 3
-            eggWaveTextTimer = 3
-            eggsCaught = 0
-            tablesPopulated = false
-            for i = 1, enemyObjects do
-				Eggs[i] = Egg(-10, -10, 0, i)
-                Eggs[i].collected = true
+        if wave == 11 then
+            enemyObjects = 7
+            if not platform1.retracted then
+                platformRetract(platform1)
             end
-            eggWaveTransitionTimer = 0
-        end
-    end
-
-    if wave == 11 then
-        enemyObjects = 7
-        if not platform1.retracted then
-            platformRetract(platform1)
-        end
-        if not platform1L.retracted then
-            platformRetract(platform1L)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
+            if not platform1L.retracted then
+                platformRetract(platform1L)
             end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 12 then
-        enemyObjects = 7
-        ---[[
-        platform1.retracted = true
-        platform1L.retracted = true
-        --]]
-        if not platform5.retracted then
-            platformRetract(platform5)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
             end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 13 then
-        enemyObjects = 7
-        ---[[
-        platform5.retracted = true
-        platform1.retracted = true
-        platform1L.retracted = true
-        --]]
-        if not platform2.retracted then
-            platformRetract(platform2)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 14 then
-        enemyObjects = 7
-        platform2.retracted = true
-        ---[[
-        collidablePlatforms = {platform3, platform4, platform4L}
-        --]]
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-    if wave == 15 then
-        enemyObjects = 7
-        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
-        eggWavePrint(dt)
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-                timesEggHatched[i] = 0
-                table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-            end
-            platform2.retracted = false
-            platform1.retracted = false
-            platform1L.retracted = false
-            platform5.retracted = false
-            collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-            eggPlacement()
-            tablesPopulated = true
+            waveAdvance(enemyObjects)
         end
 
-        if eggWaveTransitionTimer > 18 then
-            wave = 16
-            waveTimer = 3
-            eggsCaught = 0
-            tablesPopulated = false
-            for i = 1, enemyObjects do
-				Eggs[i] = Egg(-10, -10, 0, i)
-                Eggs[i].collected = true
-            end
-            eggWaveTransitionTimer = 0
-        end
-    end
-    if wave == 16 then
-        enemyObjects = 7
-        if not platform5.retracted then
-            platformRetract(platform5)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 4)
-            Vultures[4].tier = 2
-            Vultures[5].tier = 2
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 17 then
-        enemyObjects = 7
-        platform5.retracted = true
-        if not platform1.retracted then
-            platformRetract(platform1)
-        end
-        if not platform1L.retracted then
-            platformRetract(platform1L)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 4)
-            Vultures[4].tier = 2
-            Vultures[5].tier = 2
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-
-    if wave == 18 then
-        enemyObjects = 7
-        platform1.retracted = true
-        platform1L.retracted = true
-        platform5.retracted = true
-        if not platform2.retracted then
-            platformRetract(platform2)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[4].tier = 2
-            Vultures[5].tier = 2
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-    if wave == 19 then
-        enemyObjects = 7
-        platform1.retracted = true
-        platform1L.retracted = true
-        platform2.retracted = true
-        platform5.retracted = true
-        collidablePlatforms = {platform3, platform4, platform4L}
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[4].tier = 2
-            Vultures[5].tier = 2
-            Vultures[6].tier = 2
-            Vultures[7].tier = 2
-        end
-        waveAdvance(enemyObjects)
-    end
-    if wave == 20 then
-        enemyObjects = 7
-        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
-        eggWavePrint(dt)
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-                timesEggHatched[i] = 0
-                table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-            end
-            platform2.retracted = false
-            platform1.retracted = false
-            platform1L.retracted = false
-            platform5.retracted = false
-            collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-            eggPlacement()
-            tablesPopulated = true
-        end
-
-        if eggWaveTransitionTimer > 18 then
-            wave = 21
-            waveTimer = 3
-            eggWaveTextTimer = 3
-            eggsCaught = 0
-            tablesPopulated = false
-            for i = 1, enemyObjects do
-				Eggs[i] = Egg(-10, -10, 0, i)
-                Eggs[i].collected = true
-            end
-            eggWaveTransitionTimer = 0
-        end
-    end
-    if wave == 21 then
-        enemyObjects = 7
-        if not platform5.retracted then
-            platformRetract(platform5)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 4)
-            Vultures[3].tier = 2
-            Vultures[4].tier = 2
-            Vultures[5].tier = 2
-            Vultures[6].tier = 2
-            Vultures[7].tier = 3
-        end
-        waveAdvance(enemyObjects)
-    end
-    if wave == 22 then
-        enemyObjects = 7
-        platform5.retracted = true
-        if not platform1.retracted then
-            platformRetract(platform1)
-        end
-        if not platform1L.retracted then
-            platformRetract(platform1L)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 4)
-            Vultures[3].tier = 2
-            Vultures[4].tier = 2
-            Vultures[5].tier = 2
-            Vultures[6].tier = 2
-            Vultures[7].tier = 3
-        end
-        waveAdvance(enemyObjects)
-    end
-    if wave == 23 then
-        enemyObjects = 7
-        platform5.retracted = true
-        platform1.retracted = true
-        platform1L.retracted = true
-        if not platform2.retracted then
-            platformRetract(platform2)
-        end
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[3].tier = 2
-            Vultures[4].tier = 2
-            Vultures[5].tier = 2
-            Vultures[6].tier = 2
-            Vultures[7].tier = 3
-        end
-        waveAdvance(enemyObjects)
-    end
-    if wave == 24 then
-        enemyObjects = 7
-        platform5.retracted = true
-        platform1.retracted = true
-        platform1L.retracted = true
-        platform2.retracted = true
-        collidablePlatforms = {platform3, platform4, platform4L}
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-                timesEggHatched[i] = 0
-				table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-                tablesPopulated = true
-            end
-            spawnEnemies(enemyObjects, 3)
-            Vultures[3].tier = 2
-            Vultures[4].tier = 2
-            Vultures[5].tier = 2
-            Vultures[6].tier = 2
-            Vultures[7].tier = 3
-        end
-        waveAdvance(enemyObjects)
-    end
-    if wave == 25 then
-        enemyObjects = 7
-        eggWaveTransitionTimer = eggWaveTransitionTimer + dt
-        eggWavePrint(dt)
-        if not tablesPopulated then
-            for i = 1, enemyObjects do
-                timesEggHatched[i] = 0
-                table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
-				Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
-				Eggs[i] = Egg(-10, -10, 0, i)
-				Jockeys[i] = Jockey(-20, -20, i)
-				Taxis[i] = Taxi(-40, -40, 16, 24, i)
-            end
-            platform2.retracted = false
-            platform1.retracted = false
-            platform1L.retracted = false
-            platform5.retracted = false
-            collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
-            eggPlacement()
-            tablesPopulated = true
-        end
-
-        if eggWaveTransitionTimer > 4 then
-            ---[[Test high score state
-            gStateMachine:change('highScoreState')
+        if wave == 12 then
+            enemyObjects = 7
+            ---[[
+            platform1.retracted = true
+            platform1L.retracted = true
             --]]
-            waveTimer = 3
-            eggWaveTextTimer = 3
-            eggsCaught = 0
-            tablesPopulated = false
-            for i = 1, enemyObjects do
-				Eggs[i] = Egg(-10, -10, 0, i)
-                Eggs[i].collected = true
+            if not platform5.retracted then
+                platformRetract(platform5)
             end
-            eggWaveTransitionTimer = 0
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
         end
-    end
---]]
 
----[[RESETS
-	--RESET PLAYER
-	if love.keyboard.wasPressed('r') then
-		player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y, 1, 'o', 'p', 'i')
-		sounds['leftStep']:stop()
-		sounds['rightStep']:stop()
-		sounds['skid']:stop()
-	end
-
-	--RESET VULTURES
-	if love.keyboard.wasPressed('v') and not Vultures[3].spawning then
-		Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 1, 1)
-		Vulture2 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, -1, 2, 1)
-		Vulture3 = Vulture(VIRTUAL_WIDTH / 2 + 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 3, 1)
-		Vulture1.graveyard = false
-		Vulture2.graveyard = false
-		Vulture3.graveyard = false
-		Vultures[1] = Vulture1
-		Vultures[2] = Vulture2
-		Vultures[3] = Vulture3
-        Vultures[1].tier = 1
-        Vultures[2].tier = 1
-        Vultures[3].tier = 1
-        Eggs[1].midairBonus = true
-        Eggs[2].midairBonus = true
-        Eggs[3].midairBonus = true
-        scoresTable[1].bonus = true
-        scoresTable[2].bonus = true
-        scoresTable[3].bonus = true
-	end
---]]
-
-    --PLAYER 1 RESPAWN
-    if player1.exploded and player1.explosionTimer > .35 then
-		--SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
-		monster.graveyard = true
-		monster = Pterodactyl(-30, -30, 0)
-		pteroTimer = vultureCount * 20
-		if lives == 1 then
-			lives = lives - 1
-			gameOver = true
-		else
-			lives = lives - 1
-            if platform2.retracted then
-                spawnPointIndex = math.random(3)
-            else
-                spawnPointIndex = math.random(4)
+        if wave == 13 then
+            enemyObjects = 7
+            ---[[
+            platform5.retracted = true
+            platform1.retracted = true
+            platform1L.retracted = true
+            --]]
+            if not platform2.retracted then
+                platformRetract(platform2)
             end
-			player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
-		end
-	end
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
+        end
 
+        if wave == 14 then
+            enemyObjects = 7
+            platform2.retracted = true
+            ---[[
+            collidablePlatforms = {platform3, platform4, platform4L}
+            --]]
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
+        end
+        if wave == 15 then
+            enemyObjects = 7
+            eggWaveTransitionTimer = eggWaveTransitionTimer + dt
+            eggWavePrint(dt)
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                end
+                platform2.retracted = false
+                platform1.retracted = false
+                platform1L.retracted = false
+                platform5.retracted = false
+                collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
+                eggPlacement()
+                tablesPopulated = true
+            end
 
-    --PLAYER 2 RESPAWN
-    if twoPlayerMode then
-        if player2.exploded and player2.explosionTimer > .35 then
+            if eggWaveTransitionTimer > 18 then
+                wave = 16
+                waveTimer = 3
+                eggsCaught = 0
+                tablesPopulated = false
+                for i = 1, enemyObjects do
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Eggs[i].collected = true
+                end
+                eggWaveTransitionTimer = 0
+            end
+        end
+        if wave == 16 then
+            enemyObjects = 7
+            if not platform5.retracted then
+                platformRetract(platform5)
+            end
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 4)
+                Vultures[4].tier = 2
+                Vultures[5].tier = 2
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
+        end
+
+        if wave == 17 then
+            enemyObjects = 7
+            platform5.retracted = true
+            if not platform1.retracted then
+                platformRetract(platform1)
+            end
+            if not platform1L.retracted then
+                platformRetract(platform1L)
+            end
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 4)
+                Vultures[4].tier = 2
+                Vultures[5].tier = 2
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
+        end
+
+        if wave == 18 then
+            enemyObjects = 7
+            platform1.retracted = true
+            platform1L.retracted = true
+            platform5.retracted = true
+            if not platform2.retracted then
+                platformRetract(platform2)
+            end
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[4].tier = 2
+                Vultures[5].tier = 2
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
+        end
+        if wave == 19 then
+            enemyObjects = 7
+            platform1.retracted = true
+            platform1L.retracted = true
+            platform2.retracted = true
+            platform5.retracted = true
+            collidablePlatforms = {platform3, platform4, platform4L}
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[4].tier = 2
+                Vultures[5].tier = 2
+                Vultures[6].tier = 2
+                Vultures[7].tier = 2
+            end
+            waveAdvance(enemyObjects)
+        end
+        if wave == 20 then
+            enemyObjects = 7
+            eggWaveTransitionTimer = eggWaveTransitionTimer + dt
+            eggWavePrint(dt)
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                end
+                platform2.retracted = false
+                platform1.retracted = false
+                platform1L.retracted = false
+                platform5.retracted = false
+                collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
+                eggPlacement()
+                tablesPopulated = true
+            end
+
+            if eggWaveTransitionTimer > 18 then
+                wave = 21
+                waveTimer = 3
+                eggWaveTextTimer = 3
+                eggsCaught = 0
+                tablesPopulated = false
+                for i = 1, enemyObjects do
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Eggs[i].collected = true
+                end
+                eggWaveTransitionTimer = 0
+            end
+        end
+        if wave == 21 then
+            enemyObjects = 7
+            if not platform5.retracted then
+                platformRetract(platform5)
+            end
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 4)
+                Vultures[3].tier = 2
+                Vultures[4].tier = 2
+                Vultures[5].tier = 2
+                Vultures[6].tier = 2
+                Vultures[7].tier = 3
+            end
+            waveAdvance(enemyObjects)
+        end
+        if wave == 22 then
+            enemyObjects = 7
+            platform5.retracted = true
+            if not platform1.retracted then
+                platformRetract(platform1)
+            end
+            if not platform1L.retracted then
+                platformRetract(platform1L)
+            end
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 4)
+                Vultures[3].tier = 2
+                Vultures[4].tier = 2
+                Vultures[5].tier = 2
+                Vultures[6].tier = 2
+                Vultures[7].tier = 3
+            end
+            waveAdvance(enemyObjects)
+        end
+        if wave == 23 then
+            enemyObjects = 7
+            platform5.retracted = true
+            platform1.retracted = true
+            platform1L.retracted = true
+            if not platform2.retracted then
+                platformRetract(platform2)
+            end
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[3].tier = 2
+                Vultures[4].tier = 2
+                Vultures[5].tier = 2
+                Vultures[6].tier = 2
+                Vultures[7].tier = 3
+            end
+            waveAdvance(enemyObjects)
+        end
+        if wave == 24 then
+            enemyObjects = 7
+            platform5.retracted = true
+            platform1.retracted = true
+            platform1L.retracted = true
+            platform2.retracted = true
+            collidablePlatforms = {platform3, platform4, platform4L}
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 5)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    tablesPopulated = true
+                end
+                spawnEnemies(enemyObjects, 3)
+                Vultures[3].tier = 2
+                Vultures[4].tier = 2
+                Vultures[5].tier = 2
+                Vultures[6].tier = 2
+                Vultures[7].tier = 3
+            end
+            waveAdvance(enemyObjects)
+        end
+        if wave == 25 then
+            enemyObjects = 7
+            eggWaveTransitionTimer = eggWaveTransitionTimer + dt
+            eggWavePrint(dt)
+            if not tablesPopulated then
+                for i = 1, enemyObjects do
+                    timesEggHatched[i] = 0
+                    table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
+                    Vultures[i] = Vulture(-20, -20, 16, 24, -20, -1, i, 0)
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Jockeys[i] = Jockey(-20, -20, i)
+                    Taxis[i] = Taxi(-40, -40, 16, 24, i)
+                end
+                platform2.retracted = false
+                platform1.retracted = false
+                platform1L.retracted = false
+                platform5.retracted = false
+                collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
+                eggPlacement()
+                tablesPopulated = true
+            end
+
+            if eggWaveTransitionTimer > 4 then
+                ---[[Test high score state
+                gStateMachine:change('highScoreState')
+                --]]
+                waveTimer = 3
+                eggWaveTextTimer = 3
+                eggsCaught = 0
+                tablesPopulated = false
+                for i = 1, enemyObjects do
+                    Eggs[i] = Egg(-10, -10, 0, i)
+                    Eggs[i].collected = true
+                end
+                eggWaveTransitionTimer = 0
+            end
+        end
+        --]]
+
+        ---[[RESETS
+        --RESET PLAYER
+        if love.keyboard.wasPressed('r') then
+            player1 = Ostrich(platform3.x, platform3.y, 16, 24, platform3.y, 1, 'o', 'p', 'i')
+            sounds['leftStep']:stop()
+            sounds['rightStep']:stop()
+            sounds['skid']:stop()
+        end
+
+        --RESET VULTURES
+        if love.keyboard.wasPressed('v') and not Vultures[3].spawning then
+            Vulture1 = Vulture(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 1, 1)
+            Vulture2 = Vulture(VIRTUAL_WIDTH / 2, groundPlatform.y, 16, 24, groundPlatform.y, -1, 2, 1)
+            Vulture3 = Vulture(VIRTUAL_WIDTH / 2 + 30, groundPlatform.y, 16, 24, groundPlatform.y, -1, 3, 1)
+            Vulture1.graveyard = false
+            Vulture2.graveyard = false
+            Vulture3.graveyard = false
+            Vultures[1] = Vulture1
+            Vultures[2] = Vulture2
+            Vultures[3] = Vulture3
+            Vultures[1].tier = 1
+            Vultures[2].tier = 1
+            Vultures[3].tier = 1
+            Eggs[1].midairBonus = true
+            Eggs[2].midairBonus = true
+            Eggs[3].midairBonus = true
+            scoresTable[1].bonus = true
+            scoresTable[2].bonus = true
+            scoresTable[3].bonus = true
+        end
+        --]]
+
+        --PLAYER 1 RESPAWN
+        if player1.exploded and player1.explosionTimer > .35 then
+            --SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
+            monster.graveyard = true
+            monster = Pterodactyl(-30, -30, 0)
             pteroTimer = vultureCount * 20
-            if player2Lives == 1 then
-                player2Lives = player2Lives - 1
+            if lives == 1 then
+                lives = lives - 1
                 gameOver = true
             else
-                player2Lives = player2Lives - 1
+                lives = lives - 1
                 if platform2.retracted then
                     spawnPointIndex = math.random(3)
                 else
                     spawnPointIndex = math.random(4)
                 end
-                player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
+                player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
             end
         end
-    end
 
-	if vultureCount == 0 then --KILLS PTERO IF NO VULTURES ON SCREEN
-		monster = Pterodactyl(-30, -30, 0)
-	end
 
----[[BUBBLE LOGIC
-	if lavaBubble1.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
-		leftSpawnPoint = {9, 29}
-		leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
-		leftSpawnRandom = {1, 2, 5, 5, 7}
-		leftSpawnRandom = leftSpawnRandom[math.random(#leftSpawnRandom)]
-		lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT, leftSpawnRandom)
-	end
-
-	if lavaBubble2.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
-		rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 30}
-		rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
-		rightSpawnRandom = {1, 2, 5, 5, 7}
-		rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
-		lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
-	end
-	--]]
-
----[[VULTURE TO VULTURE COLLISION
-	for i, vulture in pairs(Vultures) do
-		for index, others in pairs(Vultures) do
-			if vulture.index ~= index then
-				if vulture:Collides(others) then
-					vulture.dx = vulture.dx * -1
-					others.dx = others.dx * -1
-					if vulture.x < others.x then
-						others.x = vulture.x + vulture.width + 2
-					else
-						others.x = vulture.x - others.width - 2
-					end
-				end
-			end
-		end
-	end
-	--]]
-    ---[[PLAYER TO PLAYER COLLISION
-    if twoPlayerMode then
-        --PLAYER 2 BOTTOM COLLIDES
-        if player2:bottomCollides(player1) then
-            if player2.dy ~= 0 then
-                player2.dy = -.4
-            end
-            player1.dy = 0
-            player1.y = player2.y + player2.height
-        end
-        --PLAYER 1 TOP COLLIDES
-        if player1:topCollides(player2) then
-            if player1.dy ~= 0 then
-                player1.dy = .4
-            end
-            player1.y = player2.y + player2.height
-        end
-
-        --PLAYER 1 BOTTOM COLLIDES
-        if player1:bottomCollides(player2) then
-            if player1.dy ~= 0 then
-                player1.dy = -.4
-            end
-            player2.dy = 0
-            player2.y = player1.y + player1.height
-        end
-
-        --PLAYER 1 RIGHT COLLIDES
-        if player1:rightCollides(player2) then
-            if player2.dx == 0 then --PLAYER1 BOUNCES OFF STATIONARY PLAYER 2
-                player1.x = player2.x - player1.width
-                player1.dx = math.abs(player1.dx) * -1
-            else
-                player2.x = player1.x + player1.width
-                player2.dx = math.abs(player2.dx)
-                player1.dx = math.abs(player1.dx) * -1
-            end
-        end
-        --PLAYER 1 LEFT COLLIDES
-        if player1:leftCollides(player2) then
-            if player2.dx == 0 then
-                player1.x = player2.x + player2.width
-                player1.dx = math.abs(player1.dx)
-            else
-                player2.x = player1.x - player2.width
-                player2.dx = math.abs(player2.dx) * -1
-                player1.dx = math.abs(player1.dx)
-            end
-        end
-    end
-    --]]
-
----[[PLAYER TO ENEMY COLLISIONS
-	for i = 1, enemyObjects do
-		if not player1.temporarySafety then
-			if Vultures[i].spawning == false then
-				if player1:enemyTopCollides(Vultures[i]) then
-					player1.exploded = true
-					player1.graveyard = true
-					Vultures[i].dy = Vultures[i].dy * -1
-				elseif player1:enemyBottomCollides(Vultures[i]) then
-					Vultures[i].exploded = true
-					Vultures[i].graveyard = true
-                    Vultures[i].dxAssigned = false
-					Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
-					Eggs[i].graveyard = false
-					Eggs[i].invulnerable = true
-					pteroTimer = vultureCount * 20 - 20
-					Vultures[i].firstFrameExploded = true
-					player1.dy = player1.dy * -1
-					Score = Score + Vultures[i].pointTier
-				elseif player1:enemyLeftCollides(Vultures[i]) then
-					if player1.facingRight and Vultures[i].facingRight then
-						player1.exploded = true
-						player1.graveyard = true
-					elseif not player1.facingRight and not Vultures[i].facingRight then
-                        player1.x = Vultures[i].x + Vultures[i].width
-                        player1.dx = math.abs(player1.dx) / 2
-					elseif player1.facingRight and not Vultures[i].facingRight then
-						player1.dx = player1.dx * -1
-						player1.x = Vultures[i].x + Vultures[i].width
-					elseif not player1.facingRight and Vultures[i].facingRight then
-						if player1.y == Vultures[i].y then
-							player1.dx = player1.dx * -1
-							Vultures[i].dx = Vultures[i].dx * -1
-							Vultures[i].x = player1.x - Vultures[i].width
-						elseif player1.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
-							player1.exploded = true
-							player1.graveyard = true
-						elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
-							Vultures[i].exploded = true
-							Vultures[i].graveyard = true
-                            Vultures[i].dxAssigned = false
-							Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
-							Eggs[i].graveyard = false
-							Eggs[i].invulnerable = true
-							pteroTimer = vultureCount * 20 - 20
-							Vultures[i].firstFrameExploded = true
-							Score = Score + Vultures[i].pointTier
-						end
-					end
-				elseif player1:enemyRightCollides(Vultures[i]) then
-					if player1.facingRight and Vultures[i].facingRight then
-                        player1.x = Vultures[i].x - player1.width
-                        player1.dx = (math.abs(player1.dx) * -1) / 2
-                   elseif not player1.facingRight and not Vultures[i].facingRight then
-						player1.exploded = true
-						player1.graveyard = true
-					elseif player1.facingRight and not Vultures[i].facingRight then
-						if player1.y == Vultures[i].y then
-							player1.dx = player1.dx * -1
-							Vultures[i].dx = Vultures[i].dx * -1
-							Vultures[i].x = player1.x + player1.width
-						elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
-                            pteroTimer = vultureCount * 20 - 20
-							Vultures[i].exploded = true
-							Vultures[i].graveyard = true
-                            Vultures[i].dxAssigned = false
-							Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
-							Eggs[i].graveyard = false
-							Eggs[i].invulnerable = true
-							Vultures[i].firstFrameExploded = true
-							Score = Score + Vultures[i].pointTier
-						elseif player1.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
-							player1.exploded = true
-							player1.graveyard = true
-						end
-					elseif not player1.facingRight and Vultures[i].facingRight then
-						player1.dx = player1.dx * -1
-						player1.x = Vultures[i].x - player1.width
-					end
-				end
-			end
-        end
-
-        --PLAYER 2 ENEMY COLLISIONS
+        --PLAYER 2 RESPAWN
         if twoPlayerMode then
-            if not player2.temporarySafety then
+            if player2.exploded and player2.explosionTimer > .35 then
+                pteroTimer = vultureCount * 20
+                if player2Lives == 1 then
+                    player2Lives = player2Lives - 1
+                    gameOver = true
+                else
+                    player2Lives = player2Lives - 1
+                    if platform2.retracted then
+                        spawnPointIndex = math.random(3)
+                    else
+                        spawnPointIndex = math.random(4)
+                    end
+                    player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
+                end
+            end
+        end
+
+        if vultureCount == 0 then --KILLS PTERO IF NO VULTURES ON SCREEN
+            monster = Pterodactyl(-30, -30, 0)
+        end
+
+        ---[[BUBBLE LOGIC
+        if lavaBubble1.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
+            leftSpawnPoint = {9, 29}
+            leftSpawnPoint = leftSpawnPoint[math.random(#leftSpawnPoint)]
+            leftSpawnRandom = {1, 2, 5, 5, 7}
+            leftSpawnRandom = leftSpawnRandom[math.random(#leftSpawnRandom)]
+            lavaBubble1 = LavaBubble(leftSpawnPoint, VIRTUAL_HEIGHT, leftSpawnRandom)
+        end
+
+        if lavaBubble2.popped then --REMOVES POPPED LAVABUBBLES, REINSTANTIATES NEW ONES
+            rightSpawnPoint = {VIRTUAL_WIDTH - 11, VIRTUAL_WIDTH - 30}
+            rightSpawnPoint = rightSpawnPoint[math.random(#rightSpawnPoint)]
+            rightSpawnRandom = {1, 2, 5, 5, 7}
+            rightSpawnRandom = rightSpawnRandom[math.random(#rightSpawnRandom)]
+            lavaBubble2 = LavaBubble(rightSpawnPoint, VIRTUAL_HEIGHT, rightSpawnRandom)
+        end
+        --]]
+
+        ---[[VULTURE TO VULTURE COLLISION
+        for i, vulture in pairs(Vultures) do
+            for index, others in pairs(Vultures) do
+                if vulture.index ~= index then
+                    if vulture:Collides(others) then
+                        vulture.dx = vulture.dx * -1
+                        others.dx = others.dx * -1
+                        if vulture.x < others.x then
+                            others.x = vulture.x + vulture.width + 2
+                        else
+                            others.x = vulture.x - others.width - 2
+                        end
+                    end
+                end
+            end
+        end
+        --]]
+        ---[[PLAYER TO PLAYER COLLISION
+        if twoPlayerMode then
+            --PLAYER 2 BOTTOM COLLIDES
+            if player2:bottomCollides(player1) then
+                if player2.dy ~= 0 then
+                    player2.dy = -.4
+                end
+                player1.dy = 0
+                player1.y = player2.y + player2.height
+            end
+            --PLAYER 1 TOP COLLIDES
+            if player1:topCollides(player2) then
+                if player1.dy ~= 0 then
+                    player1.dy = .4
+                end
+                player1.y = player2.y + player2.height
+            end
+
+            --PLAYER 1 BOTTOM COLLIDES
+            if player1:bottomCollides(player2) then
+                if player1.dy ~= 0 then
+                    player1.dy = -.4
+                end
+                player2.dy = 0
+                player2.y = player1.y + player1.height
+            end
+
+            --PLAYER 1 RIGHT COLLIDES
+            if player1:rightCollides(player2) then
+                if player2.dx == 0 then --PLAYER1 BOUNCES OFF STATIONARY PLAYER 2
+                    player1.x = player2.x - player1.width
+                    player1.dx = math.abs(player1.dx) * -1
+                else
+                    player2.x = player1.x + player1.width
+                    player2.dx = math.abs(player2.dx)
+                    player1.dx = math.abs(player1.dx) * -1
+                end
+            end
+            --PLAYER 1 LEFT COLLIDES
+            if player1:leftCollides(player2) then
+                if player2.dx == 0 then
+                    player1.x = player2.x + player2.width
+                    player1.dx = math.abs(player1.dx)
+                else
+                    player2.x = player1.x - player2.width
+                    player2.dx = math.abs(player2.dx) * -1
+                    player1.dx = math.abs(player1.dx)
+                end
+            end
+        end
+        --]]
+
+        ---[[PLAYER TO ENEMY COLLISIONS
+        for i = 1, enemyObjects do
+            if not player1.temporarySafety then
                 if Vultures[i].spawning == false then
-                    if player2:enemyTopCollides(Vultures[i]) then
-                        player2.exploded = true
-                        player2.graveyard = true
+                    if player1:enemyTopCollides(Vultures[i]) then
+                        player1.exploded = true
+                        player1.graveyard = true
                         Vultures[i].dy = Vultures[i].dy * -1
-                    elseif player2:enemyBottomCollides(Vultures[i]) then
+                    elseif player1:enemyBottomCollides(Vultures[i]) then
                         Vultures[i].exploded = true
                         Vultures[i].graveyard = true
                         Vultures[i].dxAssigned = false
@@ -1177,27 +1097,27 @@ function PlayState:update(dt)
                         Eggs[i].invulnerable = true
                         pteroTimer = vultureCount * 20 - 20
                         Vultures[i].firstFrameExploded = true
-                        player2.dy = player2.dy * -1
+                        player1.dy = player1.dy * -1
                         Score = Score + Vultures[i].pointTier
-                    elseif player2:enemyLeftCollides(Vultures[i]) then
-                        if player2.facingRight and Vultures[i].facingRight then
-                            player2.exploded = true
-                            player2.graveyard = true
-                        elseif not player2.facingRight and not Vultures[i].facingRight then
-                            player2.x = Vultures[i].x + Vultures[i].width
-                            player2.dx = math.abs(player2.dx) / 2
-                        elseif player2.facingRight and not Vultures[i].facingRight then
-                            player2.dx = player2.dx * -1
-                            player2.x = Vultures[i].x + Vultures[i].width
-                        elseif not player2.facingRight and Vultures[i].facingRight then
-                            if player2.y == Vultures[i].y then
-                                player2.dx = player2.dx * -1
+                    elseif player1:enemyLeftCollides(Vultures[i]) then
+                        if player1.facingRight and Vultures[i].facingRight then
+                            player1.exploded = true
+                            player1.graveyard = true
+                        elseif not player1.facingRight and not Vultures[i].facingRight then
+                            player1.x = Vultures[i].x + Vultures[i].width
+                            player1.dx = math.abs(player1.dx) / 2
+                        elseif player1.facingRight and not Vultures[i].facingRight then
+                            player1.dx = player1.dx * -1
+                            player1.x = Vultures[i].x + Vultures[i].width
+                        elseif not player1.facingRight and Vultures[i].facingRight then
+                            if player1.y == Vultures[i].y then
+                                player1.dx = player1.dx * -1
                                 Vultures[i].dx = Vultures[i].dx * -1
-                                Vultures[i].x = player2.x - Vultures[i].width
-                            elseif player2.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
-                                player2.exploded = true
-                                player2.graveyard = true
-                            elseif player2.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
+                                Vultures[i].x = player1.x - Vultures[i].width
+                            elseif player1.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
+                                player1.exploded = true
+                                player1.graveyard = true
+                            elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
                                 Vultures[i].exploded = true
                                 Vultures[i].graveyard = true
                                 Vultures[i].dxAssigned = false
@@ -1209,19 +1129,19 @@ function PlayState:update(dt)
                                 Score = Score + Vultures[i].pointTier
                             end
                         end
-                    elseif player2:enemyRightCollides(Vultures[i]) then
-                        if player2.facingRight and Vultures[i].facingRight then
-                            player2.x = Vultures[i].x - player2.width
-                            player2.dx = (math.abs(player2.dx) * -1) / 2
-                        elseif not player2.facingRight and not Vultures[i].facingRight then
-                            player2.exploded = true
-                            player2.graveyard = true
-                        elseif player2.facingRight and not Vultures[i].facingRight then
-                            if player2.y == Vultures[i].y then
-                                player2.dx = player2.dx * -1
+                    elseif player1:enemyRightCollides(Vultures[i]) then
+                        if player1.facingRight and Vultures[i].facingRight then
+                            player1.x = Vultures[i].x - player1.width
+                            player1.dx = (math.abs(player1.dx) * -1) / 2
+                        elseif not player1.facingRight and not Vultures[i].facingRight then
+                            player1.exploded = true
+                            player1.graveyard = true
+                        elseif player1.facingRight and not Vultures[i].facingRight then
+                            if player1.y == Vultures[i].y then
+                                player1.dx = player1.dx * -1
                                 Vultures[i].dx = Vultures[i].dx * -1
-                                Vultures[i].x = player2.x + player2.width
-                            elseif player2.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
+                                Vultures[i].x = player1.x + player1.width
+                            elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
                                 pteroTimer = vultureCount * 20 - 20
                                 Vultures[i].exploded = true
                                 Vultures[i].graveyard = true
@@ -1231,74 +1151,175 @@ function PlayState:update(dt)
                                 Eggs[i].invulnerable = true
                                 Vultures[i].firstFrameExploded = true
                                 Score = Score + Vultures[i].pointTier
-                            elseif player2.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
-                                player2.exploded = true
-                                player2.graveyard = true
+                            elseif player1.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
+                                player1.exploded = true
+                                player1.graveyard = true
                             end
-                        elseif not player2.facingRight and Vultures[i].facingRight then
-                            player2.dx = player2.dx * -1
-                            player2.x = Vultures[i].x - player2.width
+                        elseif not player1.facingRight and Vultures[i].facingRight then
+                            player1.dx = player1.dx * -1
+                            player1.x = Vultures[i].x - player1.width
                         end
                     end
                 end
             end
-		end
-	end
-	--]]
 
----[[JOCKEY AND TAXI SPAWN
-	for i = 1, enemyObjects do
-		if Eggs[i].hatched then
-            timesEggHatched[i] = timesEggHatched[i] + 1
-			Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY, i)
-			Jockeys[i].graveyard = false
-			if Jockeys[i].x <= VIRTUAL_WIDTH / 2 then --IF JOCKEY LEFT SIDE OF SCREEN
-				Taxis[i] = Taxi(VIRTUAL_WIDTH, Jockeys[i].y - 25, 16, 24, -1, i)
-			else --JOCKEY IS ON RIGHT SIDE OF SCREEN
-				Taxis[i] = Taxi(-16, Jockeys[i].y - 25, 16, 24, 1, i)
-			end
-
-			Taxis[i].graveyard = false
-			Eggs[i].graveyard = true
-			Eggs[i].hatched = false
-		end
-
-        if Eggs[i].y > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - Eggs[i].height then --EGGS EXPLODING IN LAVA
-           Eggs[i].graveyard = true
-           Eggs[i].collected = true
-        end
-	end
-
-    if player1.y > VIRTUAL_HEIGHT - LAVAHEIGHT - player1.height - lavaRise then --PLAYER 1 EXPLODING IN LAVA
-        if not player1.temporarySafety then
-            player1.exploded = true
-        end
-    end
----[[
-    --PLAYER 2 EXPLODING IN LAVA
-    if twoPlayerMode then
-        if player2.y > VIRTUAL_HEIGHT - 25 - 10 then
-            if not player2.temporarySafety then
-                player2.exploded = true
+            --PLAYER 2 ENEMY COLLISIONS
+            if twoPlayerMode then
+                if not player2.temporarySafety then
+                    if Vultures[i].spawning == false then
+                        if player2:enemyTopCollides(Vultures[i]) then
+                            player2.exploded = true
+                            player2.graveyard = true
+                            Vultures[i].dy = Vultures[i].dy * -1
+                        elseif player2:enemyBottomCollides(Vultures[i]) then
+                            Vultures[i].exploded = true
+                            Vultures[i].graveyard = true
+                            Vultures[i].dxAssigned = false
+                            Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+                            Eggs[i].graveyard = false
+                            Eggs[i].invulnerable = true
+                            pteroTimer = vultureCount * 20 - 20
+                            Vultures[i].firstFrameExploded = true
+                            player2.dy = player2.dy * -1
+                            Score = Score + Vultures[i].pointTier
+                        elseif player2:enemyLeftCollides(Vultures[i]) then
+                            if player2.facingRight and Vultures[i].facingRight then
+                                player2.exploded = true
+                                player2.graveyard = true
+                            elseif not player2.facingRight and not Vultures[i].facingRight then
+                                player2.x = Vultures[i].x + Vultures[i].width
+                                player2.dx = math.abs(player2.dx) / 2
+                            elseif player2.facingRight and not Vultures[i].facingRight then
+                                player2.dx = player2.dx * -1
+                                player2.x = Vultures[i].x + Vultures[i].width
+                            elseif not player2.facingRight and Vultures[i].facingRight then
+                                if player2.y == Vultures[i].y then
+                                    player2.dx = player2.dx * -1
+                                    Vultures[i].dx = Vultures[i].dx * -1
+                                    Vultures[i].x = player2.x - Vultures[i].width
+                                elseif player2.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
+                                    player2.exploded = true
+                                    player2.graveyard = true
+                                elseif player2.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
+                                    Vultures[i].exploded = true
+                                    Vultures[i].graveyard = true
+                                    Vultures[i].dxAssigned = false
+                                    Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+                                    Eggs[i].graveyard = false
+                                    Eggs[i].invulnerable = true
+                                    pteroTimer = vultureCount * 20 - 20
+                                    Vultures[i].firstFrameExploded = true
+                                    Score = Score + Vultures[i].pointTier
+                                end
+                            end
+                        elseif player2:enemyRightCollides(Vultures[i]) then
+                            if player2.facingRight and Vultures[i].facingRight then
+                                player2.x = Vultures[i].x - player2.width
+                                player2.dx = (math.abs(player2.dx) * -1) / 2
+                            elseif not player2.facingRight and not Vultures[i].facingRight then
+                                player2.exploded = true
+                                player2.graveyard = true
+                            elseif player2.facingRight and not Vultures[i].facingRight then
+                                if player2.y == Vultures[i].y then
+                                    player2.dx = player2.dx * -1
+                                    Vultures[i].dx = Vultures[i].dx * -1
+                                    Vultures[i].x = player2.x + player2.width
+                                elseif player2.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
+                                    pteroTimer = vultureCount * 20 - 20
+                                    Vultures[i].exploded = true
+                                    Vultures[i].graveyard = true
+                                    Vultures[i].dxAssigned = false
+                                    Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
+                                    Eggs[i].graveyard = false
+                                    Eggs[i].invulnerable = true
+                                    Vultures[i].firstFrameExploded = true
+                                    Score = Score + Vultures[i].pointTier
+                                elseif player2.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
+                                    player2.exploded = true
+                                    player2.graveyard = true
+                                end
+                            elseif not player2.facingRight and Vultures[i].facingRight then
+                                player2.dx = player2.dx * -1
+                                player2.x = Vultures[i].x - player2.width
+                            end
+                        end
+                    end
+                end
             end
         end
-    end
-    --]]
+        --]]
 
-	--]]
+        ---[[JOCKEY AND TAXI SPAWN
+        for i = 1, enemyObjects do
+            if Eggs[i].hatched then
+                timesEggHatched[i] = timesEggHatched[i] + 1
+                Jockeys[i] = Jockey(Eggs[i].lastX, Eggs[i].lastY, i)
+                Jockeys[i].graveyard = false
+                if Jockeys[i].x <= VIRTUAL_WIDTH / 2 then --IF JOCKEY LEFT SIDE OF SCREEN
+                    Taxis[i] = Taxi(VIRTUAL_WIDTH, Jockeys[i].y - 25, 16, 24, -1, i)
+                else --JOCKEY IS ON RIGHT SIDE OF SCREEN
+                    Taxis[i] = Taxi(-16, Jockeys[i].y - 25, 16, 24, 1, i)
+                end
 
----[[PLAYER TO OBJECT COLLISIONS
-	for i = 1, enemyObjects do
-		if player1:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER TO EGG COLLISIONS
-			if math.abs(player1.dx) < .3 then --SLOW COLLISION
-				if player1.x + (player1.width / 2) < Eggs[i].x + 4.2 and player1.x + (player1.width / 2) > Eggs[i].x + 3.8 then
+                Taxis[i].graveyard = false
+                Eggs[i].graveyard = true
+                Eggs[i].hatched = false
+            end
+
+            if Eggs[i].y > VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - Eggs[i].height then --EGGS EXPLODING IN LAVA
+                Eggs[i].graveyard = true
+                Eggs[i].collected = true
+            end
+        end
+
+        if player1.y > VIRTUAL_HEIGHT - LAVAHEIGHT - player1.height - lavaRise then --PLAYER 1 EXPLODING IN LAVA
+            if not player1.temporarySafety then
+                player1.exploded = true
+            end
+        end
+        ---[[
+        --PLAYER 2 EXPLODING IN LAVA
+        if twoPlayerMode then
+            if player2.y > VIRTUAL_HEIGHT - 25 - 10 then
+                if not player2.temporarySafety then
+                    player2.exploded = true
+                end
+            end
+        end
+        --]]
+
+        --]]
+
+        ---[[PLAYER TO OBJECT COLLISIONS
+        for i = 1, enemyObjects do
+            if player1:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER TO EGG COLLISIONS
+                if math.abs(player1.dx) < .3 then --SLOW COLLISION
+                    if player1.x + (player1.width / 2) < Eggs[i].x + 4.2 and player1.x + (player1.width / 2) > Eggs[i].x + 3.8 then
+                        eggsCaught = eggsCaught + 1
+                        Eggs[i].graveyard = true
+                        Eggs[i].collected = true
+                        scoresTable[i].lastX = Eggs[i].lastX
+                        scoresTable[i].lastY = Eggs[i].lastY
+                        scoresTable[i].timer = 1.5
+                        if scoresTable[i].bonus then
+                            Score = Score + 500
+                        end
+                        if eggsCaught > 3 then
+                            scoresTable[i].scoreAmount = 1000
+                            Score = Score + scoresTable[i].scoreAmount
+                        else
+                            scoresTable[i].scoreAmount = eggsCaught * 250
+                            Score = Score + scoresTable[i].scoreAmount
+                        end
+                    end
+                elseif math.abs(player1.dx) >= .3 then --FAST COLLISION
                     eggsCaught = eggsCaught + 1
-					Eggs[i].graveyard = true
-					Eggs[i].collected = true
-					scoresTable[i].lastX = Eggs[i].lastX
-					scoresTable[i].lastY = Eggs[i].lastY
-					scoresTable[i].timer = 1.5
-					if scoresTable[i].bonus then
+                    Eggs[i].graveyard = true
+                    Eggs[i].collected = true
+                    scoresTable[i].lastX = Eggs[i].lastX
+                    scoresTable[i].lastY = Eggs[i].lastY
+                    scoresTable[i].timer = 1.5
+                    if scoresTable[i].bonus then
                         Score = Score + 500
                     end
                     if eggsCaught > 3 then
@@ -1308,29 +1329,29 @@ function PlayState:update(dt)
                         scoresTable[i].scoreAmount = eggsCaught * 250
                         Score = Score + scoresTable[i].scoreAmount
                     end
-				end
-			elseif math.abs(player1.dx) >= .3 then --FAST COLLISION
-                eggsCaught = eggsCaught + 1
-				Eggs[i].graveyard = true
-				Eggs[i].collected = true
-				scoresTable[i].lastX = Eggs[i].lastX
-				scoresTable[i].lastY = Eggs[i].lastY
-				scoresTable[i].timer = 1.5
-                if scoresTable[i].bonus then
-                    Score = Score + 500
                 end
-                if eggsCaught > 3 then
-                    scoresTable[i].scoreAmount = 1000
-                    Score = Score + scoresTable[i].scoreAmount
-                else
-                    scoresTable[i].scoreAmount = eggsCaught * 250
-                    Score = Score + scoresTable[i].scoreAmount
-                end
-			end
-        elseif twoPlayerMode then
-            if player2:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER 2 TO EGG COLLISIONS
-                if math.abs(player2.dx) < .3 then --SLOW COLLISION
-                    if player2.x + (player2.width / 2) < Eggs[i].x + 4.2 and player2.x + (player2.width / 2) > Eggs[i].x + 3.8 then
+            elseif twoPlayerMode then
+                if player2:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER 2 TO EGG COLLISIONS
+                    if math.abs(player2.dx) < .3 then --SLOW COLLISION
+                        if player2.x + (player2.width / 2) < Eggs[i].x + 4.2 and player2.x + (player2.width / 2) > Eggs[i].x + 3.8 then
+                            eggsCaught = eggsCaught + 1
+                            Eggs[i].graveyard = true
+                            Eggs[i].collected = true
+                            scoresTable[i].lastX = Eggs[i].lastX
+                            scoresTable[i].lastY = Eggs[i].lastY
+                            scoresTable[i].timer = 1.5
+                            if scoresTable[i].bonus then
+                                Score2 = Score2 + 500
+                            end
+                            if eggsCaught > 3 then
+                                scoresTable[i].scoreAmount = 1000
+                                Score2 = Score2 + scoresTable[i].scoreAmount
+                            else
+                                scoresTable[i].scoreAmount = eggsCaught * 250
+                                Score2 = Score2 + scoresTable[i].scoreAmount
+                            end
+                        end
+                    elseif math.abs(player2.dx) >= .3 then --FAST COLLISION
                         eggsCaught = eggsCaught + 1
                         Eggs[i].graveyard = true
                         Eggs[i].collected = true
@@ -1348,44 +1369,11 @@ function PlayState:update(dt)
                             Score2 = Score2 + scoresTable[i].scoreAmount
                         end
                     end
-                elseif math.abs(player2.dx) >= .3 then --FAST COLLISION
-                    eggsCaught = eggsCaught + 1
-                    Eggs[i].graveyard = true
-                    Eggs[i].collected = true
-                    scoresTable[i].lastX = Eggs[i].lastX
-                    scoresTable[i].lastY = Eggs[i].lastY
-                    scoresTable[i].timer = 1.5
-                    if scoresTable[i].bonus then
-                        Score2 = Score2 + 500
-                    end
-                    if eggsCaught > 3 then
-                        scoresTable[i].scoreAmount = 1000
-                        Score2 = Score2 + scoresTable[i].scoreAmount
-                    else
-                        scoresTable[i].scoreAmount = eggsCaught * 250
-                        Score2 = Score2 + scoresTable[i].scoreAmount
-                    end
                 end
             end
-		end
 
-        ---[[PLAYER TO JOCKEY COLLISION
-		if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
-			Jockeys[i].collected = true
-			scoresTable[i].bonus = false
-            scoresTable[i].scoreAmount = 250
-			Score = Score + scoresTable[i].scoreAmount
-			scoresTable[i].timer = 1.5
-			scoresTable[i].lastX = Jockeys[i].lastX
-			scoresTable[i].lastY = Jockeys[i].lastY
-			Jockeys[i].graveyard = true
-            Eggs[i].collected = true
-            Taxis[i].graveyard = true
-		end
-
-        --PLAYER 2 TO JOCKEY COLLISION
-        if twoPlayerMode then
-            if not Jockeys[i].graveyard and player2:Collides(Jockeys[i]) then
+            ---[[PLAYER TO JOCKEY COLLISION
+            if not Jockeys[i].graveyard and player1:Collides(Jockeys[i]) then
                 Jockeys[i].collected = true
                 scoresTable[i].bonus = false
                 scoresTable[i].scoreAmount = 250
@@ -1397,283 +1385,301 @@ function PlayState:update(dt)
                 Eggs[i].collected = true
                 Taxis[i].graveyard = true
             end
+
+            --PLAYER 2 TO JOCKEY COLLISION
+            if twoPlayerMode then
+                if not Jockeys[i].graveyard and player2:Collides(Jockeys[i]) then
+                    Jockeys[i].collected = true
+                    scoresTable[i].bonus = false
+                    scoresTable[i].scoreAmount = 250
+                    Score = Score + scoresTable[i].scoreAmount
+                    scoresTable[i].timer = 1.5
+                    scoresTable[i].lastX = Jockeys[i].lastX
+                    scoresTable[i].lastY = Jockeys[i].lastY
+                    Jockeys[i].graveyard = true
+                    Eggs[i].collected = true
+                    Taxis[i].graveyard = true
+                end
+            end
+            --]]
+
+            ---[[EGGS TO FLOOR COLLISION
+            --EGGS ON GROUND COLLISION
+            if Eggs[i]:groundCollide(groundPlatform) then
+                Eggs[i].bouncedOffFloor = true
+                Eggs[i].y = groundPlatform.y - Eggs[i].height
+                Eggs[i].dy = math.max(-Eggs[i].dy + .25, -.9)
+            end
+
+            --EGGS AND PLATFORM COLLISION
+            for m, platform in pairs(collidablePlatforms) do
+                if Eggs[i]:groundCollide(platform) then
+                    Eggs[i].bouncedOffFloor = true
+                    Eggs[i].y = platform.y - Eggs[i].height
+                    Eggs[i].dy = math.max(-Eggs[i].dy + .25, -.9)
+                end
+                if Eggs[i]:leftCollide(platform) then
+                    Eggs[i].x = platform.x + platform.width
+                    Eggs[i].dx = math.abs(Eggs[i].dx)
+                end
+                if Eggs[i]:rightCollide(platform) then
+                    Eggs[i].x = platform.x - Eggs[i].width
+                    Eggs[i].dx = -1 * Eggs[i].dx
+                end
+            end
+
+            if Eggs[i]:rightCollide(groundPlatform) then
+                Eggs[i].x = groundPlatform.x - Eggs[i].width
+                Eggs[i].dx =  Eggs[i].dx * -1
+            end
+
+            if Eggs[i]:leftCollide(groundPlatform) then
+                Eggs[i].x = groundPlatform.x + groundPlatform.width
+                Eggs[i].dx = math.abs(Eggs[i].dx)
+            end
         end
-	--]]
 
----[[EGGS TO FLOOR COLLISION
-		--EGGS ON GROUND COLLISION
-		if Eggs[i]:groundCollide(groundPlatform) then
-				Eggs[i].bouncedOffFloor = true
-				Eggs[i].y = groundPlatform.y - Eggs[i].height
-				Eggs[i].dy = math.max(-Eggs[i].dy + .25, -.9)
-		end
+        for i = 1, enemyObjects do
+            if Eggs[i].bouncedOffFloor and not Eggs[i].collected then
+                Eggs[i].midairBonus = false
+                scoresTable[i].bonus = false
+            end
+        end
+        --]]
 
-		--EGGS AND PLATFORM COLLISION
-		for m, platform in pairs(collidablePlatforms) do
-			if Eggs[i]:groundCollide(platform) then
-				Eggs[i].bouncedOffFloor = true
-				Eggs[i].y = platform.y - Eggs[i].height
-				Eggs[i].dy = math.max(-Eggs[i].dy + .25, -.9)
-			end
-			if Eggs[i]:leftCollide(platform) then
-				Eggs[i].x = platform.x + platform.width
-				Eggs[i].dx = math.abs(Eggs[i].dx)
-			end
-			if Eggs[i]:rightCollide(platform) then
-				Eggs[i].x = platform.x - Eggs[i].width
-				Eggs[i].dx = -1 * Eggs[i].dx
-			end
-		end
-
-        if Eggs[i]:rightCollide(groundPlatform) then
-           Eggs[i].x = groundPlatform.x - Eggs[i].width
-           Eggs[i].dx =  Eggs[i].dx * -1
+        for k, v in pairs(scoresTable) do
+            scoresTable[k]:update(dt)
         end
 
-        if Eggs[i]:leftCollide(groundPlatform) then
-           Eggs[i].x = groundPlatform.x + groundPlatform.width
-           Eggs[i].dx = math.abs(Eggs[i].dx)
+        ---[[PTERODACTYL COLLISION
+
+        --PTERODACTYL AND PLATFORM COLLISION
+        for k, platform in pairs(collidablePlatforms) do
+            if monster:leftCollides(platform) then
+                monster.x = platform.x + platform.width
+                monster.dx = monster.dx * -1
+            elseif monster:rightCollides(platform) then
+                monster.x = platform.x - monster.width
+                monster.dx = monster.dx * -1
+            elseif monster:topCollides(platform) then
+                monster.y = platform.y + platform.height
+                monster.dy = math.abs(monster.dy)
+            elseif monster:bottomCollides(platform) then
+                monster.y = platform.y - monster.height
+                monster.dy = monster.dy * -1
+            end
         end
-	end
 
-	for i = 1, enemyObjects do
-		if Eggs[i].bouncedOffFloor and not Eggs[i].collected then
-			Eggs[i].midairBonus = false
-            scoresTable[i].bonus = false
-		end
-	end
-	--]]
+        --PTERODACTYL AND VULTURE COLLISION
+        for i, vulture in pairs(Vultures) do
+            if monster:leftCollides(vulture) then
+                vulture.dx = math.abs(vulture.dx) * -1
+                monster.x = vulture.x + vulture.width
+                monster.dx = math.abs(monster.dx)
+            elseif monster:rightCollides(vulture) then
+                vulture.dx = math.abs(vulture.dx)
+                monster.x = vulture.x - monster.width
+                monster.dx = math.abs(monster.dx) * -1
+            elseif monster:topCollides(vulture) then
+                vulture.dy = math.abs(vulture.dy) * -1
+                monster.y = vulture.y + vulture.height
+                monster.dy = math.abs(monster.dy)
+            elseif monster:bottomCollides(vulture) then
+                vulture.dy = math.abs(vulture.dy)
+                monster.y = vulture.y - monster.height
+                monster.dy = math.abs(monster.dy) * -1
+            end
+        end
 
-	for k, v in pairs(scoresTable) do
-		scoresTable[k]:update(dt)
-	end
-
----[[PTERODACTYL COLLISION
-
-	--PTERODACTYL AND PLATFORM COLLISION
-	for k, platform in pairs(collidablePlatforms) do
-		if monster:leftCollides(platform) then
-			monster.x = platform.x + platform.width
-			monster.dx = monster.dx * -1
-		elseif monster:rightCollides(platform) then
-			monster.x = platform.x - monster.width
-			monster.dx = monster.dx * -1
-		elseif monster:topCollides(platform) then
-			monster.y = platform.y + platform.height
-			monster.dy = math.abs(monster.dy)
-		elseif monster:bottomCollides(platform) then
-			monster.y = platform.y - monster.height
-			monster.dy = monster.dy * -1
-		end
-	end
-
-	--PTERODACTYL AND VULTURE COLLISION
-	for i, vulture in pairs(Vultures) do
-		if monster:leftCollides(vulture) then
-			vulture.dx = math.abs(vulture.dx) * -1
-			monster.x = vulture.x + vulture.width
-			monster.dx = math.abs(monster.dx)
-		elseif monster:rightCollides(vulture) then
-			vulture.dx = math.abs(vulture.dx)
-			monster.x = vulture.x - monster.width
-			monster.dx = math.abs(monster.dx) * -1
-		elseif monster:topCollides(vulture) then
-			vulture.dy = math.abs(vulture.dy) * -1
-			monster.y = vulture.y + vulture.height
-			monster.dy = math.abs(monster.dy)
-		elseif monster:bottomCollides(vulture) then
-			vulture.dy = math.abs(vulture.dy)
-			monster.y = vulture.y - monster.height
-			monster.dy = math.abs(monster.dy) * -1
-		end
-	end
-
-	--LANCE TO PTERODACTYL COLLISION
-	if not player1.temporarySafety and not monster.facingRight then
-		if player1.facingRight then
-			if monster:leftCollides(player1) then
-				if player1.y + 4 > monster.y + 1 and player1.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
-					monster.exploded = true
-					monster.graveyard = true
-				elseif monster:leftCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
-					player1.exploded = true
-				end
-			end
-		end
-
-	elseif not player1.temporarySafety and monster.facingRight then
-		if not player1.facingRight then
-			if monster:rightCollides(player1) then
-				if player1.y + 4 > monster.y + 1 and player1.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
-					monster.exploded = true
-					monster.graveyard = true
-				elseif monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
-					player1.exploded = true
-				end
-			end
-		end
-	end
-
-    --PLAYER2 TO PTERO COLLISION
-    if twoPlayerMode then
-        if not player2.temporarySafety and not monster.facingRight then
-            if player2.facingRight then
-                if monster:leftCollides(player2) then
-                    if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
+        --LANCE TO PTERODACTYL COLLISION
+        if not player1.temporarySafety and not monster.facingRight then
+            if player1.facingRight then
+                if monster:leftCollides(player1) then
+                    if player1.y + 4 > monster.y + 1 and player1.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
                         monster.exploded = true
                         monster.graveyard = true
-                    elseif monster:leftCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
-                        player2.exploded = true
+                    elseif monster:leftCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
+                        player1.exploded = true
                     end
                 end
             end
 
-        elseif not player2.temporarySafety and monster.facingRight then
-            if not player2.facingRight then
-                if monster:rightCollides(player2) then
-                    if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
+        elseif not player1.temporarySafety and monster.facingRight then
+            if not player1.facingRight then
+                if monster:rightCollides(player1) then
+                    if player1.y + 4 > monster.y + 1 and player1.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
                         monster.exploded = true
                         monster.graveyard = true
-                    elseif monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
-                        player2.exploded = true
+                    elseif monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
+                        player1.exploded = true
                     end
                 end
             end
         end
-	end
 
+        --PLAYER2 TO PTERO COLLISION
+        if twoPlayerMode then
+            if not player2.temporarySafety and not monster.facingRight then
+                if player2.facingRight then
+                    if monster:leftCollides(player2) then
+                        if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
+                            monster.exploded = true
+                            monster.graveyard = true
+                        elseif monster:leftCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+                            player2.exploded = true
+                        end
+                    end
+                end
 
-	if player1.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
-		if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
-			player1.exploded = true
-		end
-	elseif not player1.facingRight and not monster.facingRight then
-		if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
-			player1.exploded = true
-		end
-	end
-
-    if twoPlayerMode then
-        --PLAYER2 DEATH BY PTERO
-        if player2.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
-            if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
-                player2.exploded = true
-            end
-        elseif not player2.facingRight and not monster.facingRight then
-            if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
-                player2.exploded = true
+            elseif not player2.temporarySafety and monster.facingRight then
+                if not player2.facingRight then
+                    if monster:rightCollides(player2) then
+                        if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
+                            monster.exploded = true
+                            monster.graveyard = true
+                        elseif monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+                            player2.exploded = true
+                        end
+                    end
+                end
             end
         end
-    end
 
---TAXI TO JOCKEY COLLISION --INSTANTIATES HIGHER TIER VULTURE
----[[
-    for i = 1, enemyObjects do
-        if Taxis[i]:collides(Jockeys[i]) then
-            Taxis[i].graveyard = true
-            Jockeys[i].graveyard = true
-            if Taxis[i].facingRight then
-                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, 1, Vultures[i].index, 0)
-                Vultures[i].graveyard = false
-                Vultures[i].dx = Vultures[i].spawningDX
-            else
-                Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, -1, Vultures[i].index, 0)
-                Vultures[i].graveyard = false
-                Vultures[i].dx = Vultures[i].spawningDX
+
+        if player1.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
+            if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
+                player1.exploded = true
             end
-            Vultures[i].graveyard = false
-            Vultures[i].grounded = false
-            Vultures[i].tier = timesEggHatched[i] + 1
-            Eggs[i].midairBonus = true
-            Eggs[i].bouncedOffFloor = false
-            scoresTable[i].bonus = true
-            pteroTimer = pteroTimer + 20
+        elseif not player1.facingRight and not monster.facingRight then
+            if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
+                player1.exploded = true
+            end
         end
-    end
-    --]]
-    if player1.exploded then
-        eggsCaught = 0
-    end
 
-    if twoPlayerMode then
-        if player2.exploded then
+        if twoPlayerMode then
+            --PLAYER2 DEATH BY PTERO
+            if player2.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
+                if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+                    player2.exploded = true
+                end
+            elseif not player2.facingRight and not monster.facingRight then
+                if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
+                    player2.exploded = true
+                end
+            end
+        end
+
+        --TAXI TO JOCKEY COLLISION --INSTANTIATES HIGHER TIER VULTURE
+        ---[[
+        for i = 1, enemyObjects do
+            if Taxis[i]:collides(Jockeys[i]) then
+                Taxis[i].graveyard = true
+                Jockeys[i].graveyard = true
+                if Taxis[i].facingRight then
+                    Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, 1, Vultures[i].index, 0)
+                    Vultures[i].graveyard = false
+                    Vultures[i].dx = Vultures[i].spawningDX
+                else
+                    Vultures[i] = Vulture(Taxis[i].lastX, Taxis[i].lastY, 16, 16, Taxis[i].lastY - 8, -1, Vultures[i].index, 0)
+                    Vultures[i].graveyard = false
+                    Vultures[i].dx = Vultures[i].spawningDX
+                end
+                Vultures[i].graveyard = false
+                Vultures[i].grounded = false
+                Vultures[i].tier = timesEggHatched[i] + 1
+                Eggs[i].midairBonus = true
+                Eggs[i].bouncedOffFloor = false
+                scoresTable[i].bonus = true
+                pteroTimer = pteroTimer + 20
+            end
+        end
+        --]]
+        if player1.exploded then
             eggsCaught = 0
         end
-    end
 
----[[OBJECT UPDATES
-	for i = 1, enemyObjects do
-		Eggs[i]:update(dt)
-		Vultures[i]:update(dt)
-		Jockeys[i]:update(dt)
-		Taxis[i]:update(dt)
-	end
+        if twoPlayerMode then
+            if player2.exploded then
+                eggsCaught = 0
+            end
+        end
 
-	monster:update(dt)
-	lavaBubble1:update(dt)
-	lavaBubble2:update(dt)
-	player1:update(dt)
-    if twoPlayerMode then
-        player2:update(dt)
-    end
+        ---[[OBJECT UPDATES
+        for i = 1, enemyObjects do
+            Eggs[i]:update(dt)
+            Vultures[i]:update(dt)
+            Jockeys[i]:update(dt)
+            Taxis[i]:update(dt)
+        end
 
----[[VULTURE COUNT
-    vultureCount = 0
+        monster:update(dt)
+        lavaBubble1:update(dt)
+        lavaBubble2:update(dt)
+        player1:update(dt)
+        if twoPlayerMode then
+            player2:update(dt)
+        end
 
-    for i = 1, enemyObjects do
-        if not Vultures[i].graveyard then
-           vultureCount = vultureCount + 1
-        end
-    end
+        ---[[VULTURE COUNT
+        vultureCount = 0
 
-    if leftTrollCollide(player1) then
-        leftFireCollided = true
-        leftFireTimer = leftFireTimer + dt * 4
-        if leftFireTimer > 3 then
-            player1.x = 12
-            player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
-            player1.dy = 0
-            player1.dx = 0
-            player1.grabbed = true
+        for i = 1, enemyObjects do
+            if not Vultures[i].graveyard then
+                vultureCount = vultureCount + 1
+            end
         end
-    else
-        leftFireCollided = false
-        leftFireTimer = 0
-    end
-    if rightTrollCollide(player1) then
-        rightFireCollided = true
-        rightFireTimer = rightFireTimer + dt * 4
-        if rightFireTimer > 3 then
-            player1.x = VIRTUAL_WIDTH - 24
-            player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
-            player1.dy = 0
-            player1.dx = 0
-            player1.grabbed = true
-        end
-    else
-        rightFireCollided = false
-        rightFireTimer = 0
-    end
 
-    if player1.grabbed then
-        grabTimer = grabTimer + dt
-        if grabTimer > 5 then
-            grabTimer = 0
-            player1.grabbed = false
-            player1.y = player1.y - 10
-            player1.dy = -.5
-            player1.escapeJump = 0
+        if leftTrollCollide(player1) then
+            leftFireCollided = true
+            leftFireTimer = leftFireTimer + dt * 4
+            if leftFireTimer > 3 then
+                player1.x = 12
+                player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
+                player1.dy = 0
+                player1.dx = 0
+                player1.grabbed = true
+            end
+        else
+            leftFireCollided = false
+            leftFireTimer = 0
         end
-        if love.keyboard.wasPressed('x') then
-            player1.escapeJump = player1.escapeJump + 1
+        if rightTrollCollide(player1) then
+            rightFireCollided = true
+            rightFireTimer = rightFireTimer + dt * 4
+            if rightFireTimer > 3 then
+                player1.x = VIRTUAL_WIDTH - 24
+                player1.y = VIRTUAL_HEIGHT - LAVAHEIGHT - lavaRise - 26
+                player1.dy = 0
+                player1.dx = 0
+                player1.grabbed = true
+            end
+        else
+            rightFireCollided = false
+            rightFireTimer = 0
         end
-        if player1.escapeJump > 5 then
-            player1.grabbed = false
-            grabTimer = 0
-            player1.y = player1.y - 10
-            player1.dy = -.5
-            player1.escapeJump = 0
+
+        if player1.grabbed then
+            grabTimer = grabTimer + dt
+            if grabTimer > 5 then
+                grabTimer = 0
+                player1.grabbed = false
+                player1.y = player1.y - 10
+                player1.dy = -.5
+                player1.escapeJump = 0
+            end
+            if love.keyboard.wasPressed('x') then
+                player1.escapeJump = player1.escapeJump + 1
+            end
+            if player1.escapeJump > 5 then
+                player1.grabbed = false
+                grabTimer = 0
+                player1.y = player1.y - 10
+                player1.dy = -.5
+                player1.escapeJump = 0
+            end
         end
+    elseif love.keyboard.wasPressed('h') then
+        helpToggle = not helpToggle
     end
 end
 
@@ -1854,12 +1860,12 @@ function PlayState:render()
         love.graphics.print('PLAYER 1 CONTROLS:', 11, PLAYER1CONTROLY + 1)
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.print('PLAYER 1 CONTROLS:', 10, PLAYER1CONTROLY)
-        
+
         love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
         love.graphics.print('   \'I\' - FLAP YOUR WINGS', 11, PLAYER1CONTROLY + 11)
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.print('   \'I\' - FLAP YOUR WINGS', 10, PLAYER1CONTROLY + 10)
-        
+
         love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
         love.graphics.print('   \'O\' - MOVE LEFT', 11, PLAYER1CONTROLY + 21)
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
