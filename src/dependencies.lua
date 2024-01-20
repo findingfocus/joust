@@ -15,10 +15,11 @@ require '/src/PrintScore'
 require '/src/Pterodactyl'
 require '/src/Jockey'
 require '/src/Taxi'
-require '/src/HighScores'
+require '/src/highScores'
 
 require '/src/StateMachine'
 require '/src/BaseState'
+serialize = require '/src/ser'
 
 require '/states/TitleScreenState'
 require '/states/PlayState'

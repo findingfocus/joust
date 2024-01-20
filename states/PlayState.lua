@@ -1,5 +1,4 @@
 PlayState = Class{__includes = BaseState}
-serialize = require '/src/ser'
 
 function PlayState:init()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)

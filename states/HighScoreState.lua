@@ -44,17 +44,17 @@ end
 
 function saveDefaultScoreBoard()
     saveData = {}
-    table.insert(saveData, HighScores(1, {'A', 'A', 'A'}, 255))
-    table.insert(saveData, HighScores(2, {'B', 'B', 'B'}, 254))
-    table.insert(saveData, HighScores(3, {'C', 'C', 'C'}, 253))
-    table.insert(saveData, HighScores(4, {'D', 'D', 'D'}, 252))
-    table.insert(saveData, HighScores(5, {'E', 'E', 'E'}, 251))
-    table.insert(saveData, HighScores(6, {'F', 'F', 'F'}, 249))
-    table.insert(saveData, HighScores(7, {'G', 'G', 'G'}, 248))
-    table.insert(saveData, HighScores(8, {'H', 'H', 'H'}, 247))
-    table.insert(saveData, HighScores(9, {'I', 'I', 'I'}, 246))
-    table.insert(saveData, HighScores(10, {'J', 'J', 'J'}, 245))
-    table.insert(saveData, HighScores(11, {'X', 'X', 'X'}, 200)) --DUMMY VALUE TO OVERWRITE
+    table.insert(saveData, HighScores(1, {'J', 'D', 'H'}, 255))
+    table.insert(saveData, HighScores(2, {'J', 'D', 'H'}, 254))
+    table.insert(saveData, HighScores(3, {'J', 'D', 'H'}, 253))
+    table.insert(saveData, HighScores(4, {'J', 'D', 'H'}, 252))
+    table.insert(saveData, HighScores(5, {'J', 'D', 'H'}, 251))
+    table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 249))
+    table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 248))
+    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 247))
+    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 246))
+    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 245))
+    table.insert(saveData, HighScores(11, {'J', 'D', 'H'}, 200)) --DUMMY VALUE TO OVERWRITE
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
 end
@@ -114,7 +114,7 @@ function HighScoreState:update(dt)
 
     if not playerInitialsLocked then
         if letter1InputChoice then
-            if love.keyboard.wasPressed('down') then
+            if love.keyboard.wasPressed('down') or love.keyboard.wasPressed('right') then
                 sounds['beep']:play()
                 flashing = false
                 flashTimer = .5
@@ -123,7 +123,7 @@ function HighScoreState:update(dt)
                     letter1Index = 1
                 end
             end
-            if love.keyboard.wasPressed('up') then
+            if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('left') then
                 sounds['beep']:play()
                 flashing = false
                 flashTimer = .5
@@ -133,7 +133,7 @@ function HighScoreState:update(dt)
                 end
             end
         elseif letter2InputChoice then
-            if love.keyboard.wasPressed('down') then
+            if love.keyboard.wasPressed('down') or love.keyboard.wasPressed('right') then
                 sounds['beep']:play()
                 flashing = false
                 flashTimer = .5
@@ -142,7 +142,7 @@ function HighScoreState:update(dt)
                     letter2Index = 1
                 end
             end
-            if love.keyboard.wasPressed('up') then
+            if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('left') then
                 sounds['beep']:play()
                 flashing = false
                 flashTimer = .5
@@ -152,7 +152,7 @@ function HighScoreState:update(dt)
                 end
             end
         elseif letter3InputChoice then
-            if love.keyboard.wasPressed('down') then
+            if love.keyboard.wasPressed('down') or love.keyboard.wasPressed('right') then
                 sounds['beep']:play()
                 flashing = false
                 flashTimer = .5
@@ -161,7 +161,7 @@ function HighScoreState:update(dt)
                     letter3Index = 1
                 end
             end
-            if love.keyboard.wasPressed('up') then
+            if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('left') then
                 sounds['beep']:play()
                 flashing = false
                 flashTimer = .5
@@ -173,7 +173,7 @@ function HighScoreState:update(dt)
         end
     end
 
-    if love.keyboard.wasPressed('right') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         if not playerInitialsLocked then
             sounds['select']:play()
             if letter1InputChoice then
@@ -197,8 +197,14 @@ end
 
 function HighScoreState:render()
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-    love.graphics.setFont(smallFont)
-    love.graphics.printf('HIGHSCORES', 0, 10, VIRTUAL_WIDTH, 'center')
+    if playerInitialsLocked then
+        love.graphics.setFont(smallFont)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.printf('HIGHSCORES', 0, 10, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('THANKS FOR PLAYING!', 0, VIRTUAL_HEIGHT - 20, VIRTUAL_WIDTH, 'center')
+    else
+        love.graphics.printf('ENTER INITIALS', 0, 10, VIRTUAL_WIDTH, 'center')
+    end
     --PRINT TOP TEN SCORES
     if playerInitialsLocked then
         love.graphics.printf(tostring(saveData[1].place ..  ' ' .. saveData[1].name[1] .. saveData[1].name[2] .. saveData[1].name[3]), 50, 30, VIRTUAL_WIDTH, 'left')
@@ -259,9 +265,8 @@ function HighScoreState:render()
     if twoPlayerMode then
         love.graphics.printf('PLAYER 1 SCORE: ' .. tostring(Score), 0, VIRTUAL_HEIGHT - 80, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('PLAYER 2 SCORE: ' .. tostring(Score2), 0, VIRTUAL_HEIGHT - 60, VIRTUAL_WIDTH, 'center')
-    end 
+    end
 
-    love.graphics.printf('THANKS FOR PLAYING!', 0, VIRTUAL_HEIGHT - 20, VIRTUAL_WIDTH, 'center')
     --]]
 
     --[[
