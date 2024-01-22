@@ -5,7 +5,7 @@ WINDOW_HEIGHT = 960
 --]]
 
 --toggle this one for 1:1 pixel output
---[[
+---[[
 WINDOW_WIDTH = 292
 WINDOW_HEIGHT = 240
 --]]
