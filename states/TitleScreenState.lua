@@ -32,11 +32,16 @@ function TitleScreenState:init()
     attractModeShadowLordTimer = 0
     resetTimer = 0
     pteroTimer = 39
+    sfx = false
 end
 
 local highlighted = 1
 
 function TitleScreenState:update(dt)
+    if not sfx then
+        sounds['bleep']:play()
+        sfx = true
+    end
     if attractModePlayer1Timer >= 0 then
         attractModePlayer1Timer = attractModePlayer1Timer + dt
     end

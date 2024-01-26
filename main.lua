@@ -67,6 +67,14 @@ function love.load()
 		['flap'] = love.audio.newSource('music/flap.mp3', 'static'),
 		['land'] = love.audio.newSource('music/land.mp3', 'static'),
 		['collide'] = love.audio.newSource('music/collide.mp3', 'static'),
+
+        ['bleep'] = love.audio.newSource('music/bleep.mp3', 'static'),
+        ['spawn'] = love.audio.newSource('music/spawn.mp3', 'static'),
+        ['respawn'] = love.audio.newSource('music/respawn.mp3', 'static'),
+        ['airEgg'] = love.audio.newSource('music/airEgg.mp3', 'static'),
+        ['ptero'] = love.audio.newSource('music/ptero.mp3', 'static'),
+        --GROUNDED EGG SOUND
+
 	}
 
     sounds['collide']:setVolume(0.5)
