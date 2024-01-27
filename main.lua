@@ -68,16 +68,19 @@ function love.load()
 		['land'] = love.audio.newSource('music/land.mp3', 'static'),
 		['collide'] = love.audio.newSource('music/collide.mp3', 'static'),
 
-        ['bleep'] = love.audio.newSource('music/bleep.mp3', 'static'),
-        ['spawn'] = love.audio.newSource('music/spawn.mp3', 'static'),
-        ['respawn'] = love.audio.newSource('music/respawn.mp3', 'static'),
-        ['airEgg'] = love.audio.newSource('music/airEgg.mp3', 'static'),
-        ['ptero'] = love.audio.newSource('music/ptero.mp3', 'static'),
-        --GROUNDED EGG SOUND
-
+        ['bleep'] = love.audio.newSource('music/bleep.mp3', 'static'), --TWO OSTRICHES BOUNCING OFF ONE ANOTHER
+        ['spawn'] = love.audio.newSource('music/spawn.mp3', 'static'), --VULTURES SPAWNING
+        ['respawn'] = love.audio.newSource('music/respawn.mp3', 'static'), --PLAYER SPAWNING
+        ['respawn2'] = love.audio.newSource('music/respawn2.mp3', 'static'), --PLAYER SPAWNING
+        ['airEgg'] = love.audio.newSource('music/airEgg.mp3', 'static'), --BONUS EGG CATCH IN MID AIR
+        ['ptero'] = love.audio.newSource('music/ptero.mp3', 'static'), --PTERODACTYL
+        ['explode'] = love.audio.newSource('music/explode.mp3', 'static'), --OBJECT EXPLODE
+        ['egg'] = love.audio.newSource('music/egg.mp3', 'static'), --GROUNDED EGG PICKUP
+        ['theme'] = love.audio.newSource('music/theme.mp3', 'static'), --MENU MUSIC
 	}
 
     sounds['collide']:setVolume(0.5)
+    sounds['bleep']:setVolume(0.5)
 
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
 		vsync = true,

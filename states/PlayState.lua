@@ -1,6 +1,7 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
+    sounds['theme']:stop()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)
 	platform1L = Platform('platform1L', -35, 68, 69, 7)
 	platform2 = Platform('platform2', 70, 77, 94, 7)
@@ -246,6 +247,7 @@ function PlayState:update(dt)
         end
 
         if pteroTimer < 0 then
+            sounds['ptero']:play()
             monster = Pterodactyl(PteroSpawnPoints[randomPteroIndex].x, PteroSpawnPoints[randomPteroIndex].y, PteroSpawnPoints[randomPteroIndex].dx)
             monster.graveyard = false
             pteroTimer = 0
@@ -272,6 +274,7 @@ function PlayState:update(dt)
                     timesEggHatched[i] = 0
                     table.insert(scoresTable, PrintScore(-20, -20, 0, true, i))
                     tablesPopulated = true
+                    sounds['explode']:stop()
                 end
                 spawnEnemies(enemyObjects, 4)
             end
@@ -966,6 +969,7 @@ function PlayState:update(dt)
                     spawnPointIndex = math.random(4)
                 end
                 player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
+                sounds['respawn']:play()
             end
         end
 
@@ -985,6 +989,7 @@ function PlayState:update(dt)
                         spawnPointIndex = math.random(4)
                     end
                     player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
+                    sounds['respawn2']:play()
                 end
             end
         end
@@ -1057,6 +1062,8 @@ function PlayState:update(dt)
 
             --PLAYER 1 RIGHT COLLIDES
             if player1:rightCollides(player2) then
+                sounds['bleep']:stop()
+                sounds['bleep']:play()
                 if player2.dx == 0 then --PLAYER1 BOUNCES OFF STATIONARY PLAYER 2
                     player1.x = player2.x - player1.width
                     player1.dx = math.abs(player1.dx) * -1
@@ -1068,6 +1075,8 @@ function PlayState:update(dt)
             end
             --PLAYER 1 LEFT COLLIDES
             if player1:leftCollides(player2) then
+                sounds['bleep']:stop()
+                sounds['bleep']:play()
                 if player2.dx == 0 then
                     player1.x = player2.x + player2.width
                     player1.dx = math.abs(player1.dx)
@@ -1086,10 +1095,12 @@ function PlayState:update(dt)
                 if Vultures[i].spawning == false then
                     if player1:enemyTopCollides(Vultures[i]) then
                         player1.exploded = true
+                        sounds['explode']:play()
                         player1.graveyard = true
                         Vultures[i].dy = Vultures[i].dy * -1
                     elseif player1:enemyBottomCollides(Vultures[i]) then
                         Vultures[i].exploded = true
+                        sounds['explode']:play()
                         Vultures[i].graveyard = true
                         Vultures[i].dxAssigned = false
                         Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
@@ -1102,22 +1113,27 @@ function PlayState:update(dt)
                     elseif player1:enemyLeftCollides(Vultures[i]) then
                         if player1.facingRight and Vultures[i].facingRight then
                             player1.exploded = true
+                            sounds['explode']:play()
                             player1.graveyard = true
                         elseif not player1.facingRight and not Vultures[i].facingRight then
                             player1.x = Vultures[i].x + Vultures[i].width
                             player1.dx = math.abs(player1.dx) / 2
                         elseif player1.facingRight and not Vultures[i].facingRight then
+                            sounds['bleep']:play()
                             player1.dx = player1.dx * -1
                             player1.x = Vultures[i].x + Vultures[i].width
                         elseif not player1.facingRight and Vultures[i].facingRight then
                             if player1.y == Vultures[i].y then
+                                sounds['collide']:play()
                                 player1.dx = player1.dx * -1
                                 Vultures[i].dx = Vultures[i].dx * -1
                                 Vultures[i].x = player1.x - Vultures[i].width
                             elseif player1.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
+                                sounds['explode']:play()
                                 player1.exploded = true
                                 player1.graveyard = true
                             elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
+                                sounds['explode']:play()
                                 Vultures[i].exploded = true
                                 Vultures[i].graveyard = true
                                 Vultures[i].dxAssigned = false
@@ -1134,16 +1150,19 @@ function PlayState:update(dt)
                             player1.x = Vultures[i].x - player1.width
                             player1.dx = (math.abs(player1.dx) * -1) / 2
                         elseif not player1.facingRight and not Vultures[i].facingRight then
+                            sounds['explode']:play()
                             player1.exploded = true
                             player1.graveyard = true
                         elseif player1.facingRight and not Vultures[i].facingRight then
                             if player1.y == Vultures[i].y then
+                                sounds['collide']:play()
                                 player1.dx = player1.dx * -1
                                 Vultures[i].dx = Vultures[i].dx * -1
                                 Vultures[i].x = player1.x + player1.width
                             elseif player1.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
                                 pteroTimer = vultureCount * 20 - 20
                                 Vultures[i].exploded = true
+                                sounds['explode']:play()
                                 Vultures[i].graveyard = true
                                 Vultures[i].dxAssigned = false
                                 Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
@@ -1153,9 +1172,11 @@ function PlayState:update(dt)
                                 Score = Score + Vultures[i].pointTier
                             elseif player1.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
                                 player1.exploded = true
+                                sounds['explode']:play()
                                 player1.graveyard = true
                             end
                         elseif not player1.facingRight and Vultures[i].facingRight then
+                            sounds['collide']:play()
                             player1.dx = player1.dx * -1
                             player1.x = Vultures[i].x - player1.width
                         end
@@ -1169,10 +1190,12 @@ function PlayState:update(dt)
                     if Vultures[i].spawning == false then
                         if player2:enemyTopCollides(Vultures[i]) then
                             player2.exploded = true
+                            sounds['explode']:play()
                             player2.graveyard = true
                             Vultures[i].dy = Vultures[i].dy * -1
                         elseif player2:enemyBottomCollides(Vultures[i]) then
                             Vultures[i].exploded = true
+                            sounds['explode']:play()
                             Vultures[i].graveyard = true
                             Vultures[i].dxAssigned = false
                             Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
@@ -1185,23 +1208,29 @@ function PlayState:update(dt)
                         elseif player2:enemyLeftCollides(Vultures[i]) then
                             if player2.facingRight and Vultures[i].facingRight then
                                 player2.exploded = true
+                                sounds['explode']:play()
                                 player2.graveyard = true
                             elseif not player2.facingRight and not Vultures[i].facingRight then
+                                sounds['bleep']:play()
                                 player2.x = Vultures[i].x + Vultures[i].width
                                 player2.dx = math.abs(player2.dx) / 2
                             elseif player2.facingRight and not Vultures[i].facingRight then
+                                sounds['collide']:play()
                                 player2.dx = player2.dx * -1
                                 player2.x = Vultures[i].x + Vultures[i].width
                             elseif not player2.facingRight and Vultures[i].facingRight then
                                 if player2.y == Vultures[i].y then
+                                    sounds['collide']:play()
                                     player2.dx = player2.dx * -1
                                     Vultures[i].dx = Vultures[i].dx * -1
                                     Vultures[i].x = player2.x - Vultures[i].width
                                 elseif player2.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
                                     player2.exploded = true
+                                    sounds['explode']:play()
                                     player2.graveyard = true
                                 elseif player2.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
                                     Vultures[i].exploded = true
+                                    sounds['explode']:play()
                                     Vultures[i].graveyard = true
                                     Vultures[i].dxAssigned = false
                                     Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
@@ -1214,19 +1243,23 @@ function PlayState:update(dt)
                             end
                         elseif player2:enemyRightCollides(Vultures[i]) then
                             if player2.facingRight and Vultures[i].facingRight then
+                                sounds['bleep']:play()
                                 player2.x = Vultures[i].x - player2.width
                                 player2.dx = (math.abs(player2.dx) * -1) / 2
                             elseif not player2.facingRight and not Vultures[i].facingRight then
                                 player2.exploded = true
+                                sounds['explode']:play()
                                 player2.graveyard = true
                             elseif player2.facingRight and not Vultures[i].facingRight then
                                 if player2.y == Vultures[i].y then
+                                    sounds['collide']:play()
                                     player2.dx = player2.dx * -1
                                     Vultures[i].dx = Vultures[i].dx * -1
                                     Vultures[i].x = player2.x + player2.width
                                 elseif player2.y < Vultures[i].y then --OSTRICH HAS HIGHER LANCE
                                     pteroTimer = vultureCount * 20 - 20
                                     Vultures[i].exploded = true
+                                    sounds['explode']:play()
                                     Vultures[i].graveyard = true
                                     Vultures[i].dxAssigned = false
                                     Eggs[i] = Egg(Vultures[i].lastX + 4, Vultures[i].lastY + 2, Vultures[i].lastDX)
@@ -1236,9 +1269,11 @@ function PlayState:update(dt)
                                     Score = Score + Vultures[i].pointTier
                                 elseif player2.y > Vultures[i].y then --VULTURE HAS HIGHER LANCE
                                     player2.exploded = true
+                                    sounds['explode']:play()
                                     player2.graveyard = true
                                 end
                             elseif not player2.facingRight and Vultures[i].facingRight then
+                                sounds['collide']:play()
                                 player2.dx = player2.dx * -1
                                 player2.x = Vultures[i].x - player2.width
                             end
@@ -1283,6 +1318,7 @@ function PlayState:update(dt)
             if player2.y > VIRTUAL_HEIGHT - 25 - 10 then
                 if not player2.temporarySafety then
                     player2.exploded = true
+                    sounds['explode']:play()
                 end
             end
         end
@@ -1295,6 +1331,7 @@ function PlayState:update(dt)
             if player1:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER TO EGG COLLISIONS
                 if math.abs(player1.dx) < .3 then --SLOW COLLISION
                     if player1.x + (player1.width / 2) < Eggs[i].x + 4.2 and player1.x + (player1.width / 2) > Eggs[i].x + 3.8 then
+                        sounds['egg']:play()
                         eggsCaught = eggsCaught + 1
                         Eggs[i].graveyard = true
                         Eggs[i].collected = true
@@ -1313,6 +1350,11 @@ function PlayState:update(dt)
                         end
                     end
                 elseif math.abs(player1.dx) >= .3 then --FAST COLLISION
+                    if Eggs[i].midairBonus then
+                        sounds['airEgg']:play()
+                    else
+                        sounds['egg']:play()
+                    end
                     eggsCaught = eggsCaught + 1
                     Eggs[i].graveyard = true
                     Eggs[i].collected = true
@@ -1334,6 +1376,7 @@ function PlayState:update(dt)
                 if player2:Collides(Eggs[i]) and not Eggs[i].invulnerable and not Eggs[i].collected then --PLAYER 2 TO EGG COLLISIONS
                     if math.abs(player2.dx) < .3 then --SLOW COLLISION
                         if player2.x + (player2.width / 2) < Eggs[i].x + 4.2 and player2.x + (player2.width / 2) > Eggs[i].x + 3.8 then
+                            sounds['egg']:play()
                             eggsCaught = eggsCaught + 1
                             Eggs[i].graveyard = true
                             Eggs[i].collected = true
@@ -1352,6 +1395,11 @@ function PlayState:update(dt)
                             end
                         end
                     elseif math.abs(player2.dx) >= .3 then --FAST COLLISION
+                        if Eggs[i].midairBonus then
+                            sounds['airEgg']:play()
+                        else
+                            sounds['egg']:play()
+                        end
                         eggsCaught = eggsCaught + 1
                         Eggs[i].graveyard = true
                         Eggs[i].collected = true
@@ -1497,9 +1545,11 @@ function PlayState:update(dt)
                 if monster:leftCollides(player1) then
                     if player1.y + 4 > monster.y + 1 and player1.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
                         monster.exploded = true
+                        sounds['ptero']:play()
                         monster.graveyard = true
                     elseif monster:leftCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
                         player1.exploded = true
+                        sounds['explode']:play()
                     end
                 end
             end
@@ -1509,9 +1559,11 @@ function PlayState:update(dt)
                 if monster:rightCollides(player1) then
                     if player1.y + 4 > monster.y + 1 and player1.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
                         monster.exploded = true
+                        sounds['ptero']:play()
                         monster.graveyard = true
                     elseif monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
                         player1.exploded = true
+                        sounds['explode']:play()
                     end
                 end
             end
@@ -1524,9 +1576,11 @@ function PlayState:update(dt)
                     if monster:leftCollides(player2) then
                         if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
                             monster.exploded = true
+                            sounds['ptero']:play()
                             monster.graveyard = true
                         elseif monster:leftCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
                             player2.exploded = true
+                            sounds['explode']:play()
                         end
                     end
                 end
@@ -1536,9 +1590,11 @@ function PlayState:update(dt)
                     if monster:rightCollides(player2) then
                         if player2.y + 4 > monster.y + 1 and player2.y + 4 < monster.y + 8 and monster.frame == 3 then --KILLS PTERO
                             monster.exploded = true
+                            sounds['explode']:play()
                             monster.graveyard = true
                         elseif monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
                             player2.exploded = true
+                            sounds['explode']:play()
                         end
                     end
                 end
@@ -1549,10 +1605,12 @@ function PlayState:update(dt)
         if player1.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
             if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
                 player1.exploded = true
+                sounds['explode']:play()
             end
         elseif not player1.facingRight and not monster.facingRight then
             if monster:leftCollides(player1) or monster:rightCollides(player1) or monster:topCollides(player1) or monster:bottomCollides(player1) then
                 player1.exploded = true
+                sounds['explode']:play()
             end
         end
 
@@ -1561,10 +1619,12 @@ function PlayState:update(dt)
             if player2.facingRight and monster.facingRight then --KILLS PLAYER IF TOUCHES PTERO OUTSIDE OF WEAKSPOT
                 if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
                     player2.exploded = true
+                    sounds['explode']:play()
                 end
             elseif not player2.facingRight and not monster.facingRight then
                 if monster:leftCollides(player2) or monster:rightCollides(player2) or monster:topCollides(player2) or monster:bottomCollides(player2) then
                     player2.exploded = true
+                    sounds['explode']:play()
                 end
             end
         end

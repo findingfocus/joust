@@ -32,15 +32,22 @@ function TitleScreenState:init()
     attractModeShadowLordTimer = 0
     resetTimer = 0
     pteroTimer = 39
-    sfx = false
+    musicPlayed = false
+    musicTimer = 0
 end
 
 local highlighted = 1
 
 function TitleScreenState:update(dt)
-    if not sfx then
-        sounds['bleep']:play()
-        sfx = true
+    musicTimer = musicTimer + dt
+    if musicTimer > 25 then
+        musicPlayed = false
+        musicTimer = 0
+    end
+
+    if not musicPlayed then
+        sounds['theme']:play()
+        musicPlayed = true
     end
     if attractModePlayer1Timer >= 0 then
         attractModePlayer1Timer = attractModePlayer1Timer + dt
@@ -112,6 +119,7 @@ function TitleScreenState:update(dt)
     end
     if pteroTimer < 0 then
         attractModeMonster = Pterodactyl(PteroSpawnPoints[randomPteroIndex].x, PteroSpawnPoints[randomPteroIndex].y, PteroSpawnPoints[randomPteroIndex].dx)
+        sounds['ptero']:play()
         attractModeMonster.attractMode = true
         attractModeMonster.graveyard = false
         pteroTimer = 39

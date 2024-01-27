@@ -80,9 +80,15 @@ X_Player1Spawn bug after dying,
 X_if twoplayer mode, show both players score at the end, no leaderboard
 X_true pause
 X_attract mode
-__Finish installing sonicpi for debian
-__Pulseaudio-jackd
-__add and edit all last soundfx
+X_Finish installing sonicpi for debian
+X_Pulseaudio-jackd
+X_add and edit all last soundfx
+X_Add player to Vulture collision sound == bleep
+X_Add player to Egg sound  eggair and egg
+X_add explode sound
+X_add ptero sound
+X_add vulture spawns sfx
+X_add player respawn sfx
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
 __Tweak player to vulture top collision to jump a little less high
@@ -93,16 +99,18 @@ __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
-__Add player to Vulture collision sound
-__Add player to Egg sound
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
 __explosion sound for both player death and vulture death
 __Show leader board after gameover for 5 seconds
 __Cease player spawns if gameover
 __Test Gameover for twoPlayer Mode
+
 __Add new game from highscore state, either enter or R
 __Add appropriate highscores for wave achievements
+__Prevent players from spawning at same spawn point
+__Add ptero roar every ten seconds hes alive
+
 
 
 SCORES

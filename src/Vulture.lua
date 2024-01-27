@@ -114,10 +114,7 @@ function Vulture:update(dt)
     if self.spawnDelay > 0 then
         self.spawnDelay = self.spawnDelay - dt
     elseif self.spawnDelay < 0 then
-        self.spawnDelay = 0
-    end
-
-    if self.spawnDelay < 0 then
+        sounds['spawn']:play()
         self.graveyard = false
         self.x = self.spawningX
         self.y = self.spawningY

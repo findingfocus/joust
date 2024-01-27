@@ -174,6 +174,11 @@ function Ostrich:update(dt)
 	if love.keyboard.isDown(self.leftInput) or love.keyboard.isDown(self.rightInput) or love.keyboard.wasPressed(self.jumpInput) then
 		if not self.spawning then
 			self.temporarySafety = false
+            if self.playerNumber == 1 then
+                sounds['respawn']:stop()
+            else
+                sounds['respawn2']:stop()
+            end
 		end
 	end
 
