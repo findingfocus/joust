@@ -89,6 +89,11 @@ X_add explode sound
 X_add ptero sound
 X_add vulture spawns sfx
 X_add player respawn sfx
+X_Add ptero roar every seven seconds hes alive
+X_Cease player1 spawns if gameover
+X_explosion sound for both player death and vulture death
+X_Fixed double explode sfx bug
+X_Show leader board after gameover for 3 seconds
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
 __Tweak player to vulture top collision to jump a little less high
@@ -101,23 +106,21 @@ __Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
-__explosion sound for both player death and vulture death
-__Show leader board after gameover for 5 seconds
-__Cease player spawns if gameover
+__Cease player2 spawns if gameover
 __Test Gameover for twoPlayer Mode
+__Add proper high score amounts
 
-__Add new game from highscore state, either enter or R
 __Add appropriate highscores for wave achievements
 __Prevent players from spawning at same spawn point
-__Add ptero roar every ten seconds hes alive
+__Add new game from highscore state, either enter or R
 
 
 
 SCORES
-__Load Dummy Scores if highscores file does not exist
-__Present leaderboard if player score is not higher than tenth score
-__Insert Players score into highscores by looping through values and inserting at proper place
-__How do we shift all remainder values including place field once score is inserted above? --place = place + 1 for every score after player score
+X_Load Dummy Scores if highscores file does not exist
+X_Present leaderboard if player score is not higher than tenth score
+X_Insert Players score into highscores by looping through values and inserting at proper place
+X_How do we shift all remainder values including place field once score is inserted above? --place = place + 1 for every score after player score
 
 
 Unseating Bounder   500 Unseating Hunter    750 Unseating Shadowlord    1500

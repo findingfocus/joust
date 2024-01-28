@@ -333,10 +333,12 @@ function Ostrich:update(dt)
 			end
 
 			--BOUNCING OFF TOP
-			if self.y <= 0 then
-				self.y = 1
-				self.dy = math.abs(self.dy) / 2 --Division to offset gravity
-			end
+            if not self.graveyard then
+                if self.y <= 0 then
+                    self.y = 1
+                    self.dy = math.abs(self.dy) / 2 --Division to offset gravity
+                end
+            end
 
             if not self.attractMode then
                 --LOOPS player to left side of screen

@@ -21,7 +21,6 @@ function HighScoreState:init()
     flashTimer = .5
     sounds['beep']:setVolume(0.3)
     sounds['select']:setVolume(0.3)
-    --highScoresExist = love.filesystem.exists('highScores.txt')
     highScoresExist = love.filesystem.getInfo('highScores.txt', file)
     if not highScoresExist then
         saveDefaultScoreBoard()

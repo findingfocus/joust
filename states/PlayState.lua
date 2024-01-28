@@ -86,6 +86,8 @@ function PlayState:init()
     fireSprite = 1
     sounds['leftStep']:setVolume(1)
     sounds['rightStep']:setVolume(1)
+    gameOverTimer = 0
+    roarTimer = 0
 end
 
 function leftTrollCollide(player)
@@ -251,6 +253,14 @@ function PlayState:update(dt)
             monster = Pterodactyl(PteroSpawnPoints[randomPteroIndex].x, PteroSpawnPoints[randomPteroIndex].y, PteroSpawnPoints[randomPteroIndex].dx)
             monster.graveyard = false
             pteroTimer = 0
+        end
+
+        if monster.graveyard == false then
+                roarTimer = roarTimer + dt
+                if roarTimer > 7 then
+                    sounds['ptero']:play()
+                    roarTimer = 0
+                end
         end
 
         if waveTimer > 0 then
@@ -955,21 +965,34 @@ function PlayState:update(dt)
         --PLAYER 1 RESPAWN
         if player1.exploded and player1.explosionTimer > .35 then
             --SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
-            monster.graveyard = true
             monster = Pterodactyl(-30, -30, 0)
             pteroTimer = vultureCount * 20
             if lives == 1 then
                 lives = lives - 1
                 gameOver = true
             else
+                player1.exploded = false
                 lives = lives - 1
                 if platform2.retracted then
                     spawnPointIndex = math.random(3)
                 else
                     spawnPointIndex = math.random(4)
                 end
-                player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
-                sounds['respawn']:play()
+                if lives > 0 then
+                    player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
+                    sounds['respawn']:play()
+                else
+                    lives = 0
+                    player1.graveyard = true
+                end
+            end
+        end
+
+        --HIGHSCORE STATE TRIGGER
+        if gameOver then
+            gameOverTimer = gameOverTimer + dt
+            if gameOverTimer > 3 then
+                gStateMachine:change('highScoreState')
             end
         end
 
@@ -988,8 +1011,10 @@ function PlayState:update(dt)
                     else
                         spawnPointIndex = math.random(4)
                     end
-                    player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
-                    sounds['respawn2']:play()
+                    if player2Lives > 0 then
+                        player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
+                        sounds['respawn2']:play()
+                    end
                 end
             end
         end
@@ -1821,16 +1846,6 @@ function PlayState:render()
         end
 	end
 
-	if gameOver then
-		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
-		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
-		love.graphics.setFont(smallFont)
-		love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
-		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2 + 55, VIRTUAL_WIDTH, 'center', 0, 1, 1, -1, -1)
-		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2 + 55, VIRTUAL_WIDTH, 'center')
-	end
-
 	--SCORE
 	love.graphics.setFont(smallFont)
 	love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
@@ -1842,6 +1857,16 @@ function PlayState:render()
         love.graphics.setColor(254/255, 224/255, 50/255, 255/255)
         love.graphics.print(tostring(player2Lives), VIRTUAL_WIDTH - 58, VIRTUAL_HEIGHT - 28)
     end
+
+	if gameOver then
+		love.graphics.setColor(255/255, 30/255, 30/255, 100/255)
+		love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+		love.graphics.setFont(smallFont)
+		love.graphics.setColor(0/255, 0/255, 0/255, 255/255)
+		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2 + 55, VIRTUAL_WIDTH, 'center', 0, 1, 1, -1, -1)
+		love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+		love.graphics.printf('GAME OVER', 0, VIRTUAL_HEIGHT / 2 + 55, VIRTUAL_WIDTH, 'center')
+	end
 
     love.graphics.setFont(smallFont)
 
@@ -1963,7 +1988,7 @@ function PlayState:render()
         love.graphics.print(' \'ESC\' - EXIT GAME', 10, 165)
 	end
 --[[
-    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)    
+    love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     for i, platform in pairs(collidablePlatforms) do
         love.graphics.print(tostring(platform.name), 0, i * 8)
     end
