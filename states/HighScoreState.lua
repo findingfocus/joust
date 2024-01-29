@@ -12,6 +12,7 @@ function HighScoreState:init()
     count = 0
     scoreNeedsInsertion = false
     flashing = false
+    playAgainFlashing = false
     playerScoreInserted = false
     letter1InputChoice = false
     letter2InputChoice = false
@@ -19,6 +20,7 @@ function HighScoreState:init()
     playerInitialsLocked = false
     letter1Locked = 'A'
     flashTimer = .5
+    playAgainTimer = 1
     sounds['beep']:setVolume(0.3)
     sounds['select']:setVolume(0.3)
     highScoresExist = love.filesystem.getInfo('highScores.txt', file)
@@ -86,7 +88,7 @@ end
 function insertPlayerScore()
     findInsertionIndex()
     if not playerScoreInserted then
-            shiftTrailingScores(insertionIndex) 
+            shiftTrailingScores(insertionIndex)
             saveData[insertionIndex] = HighScores(insertionIndex, scoreInitials, Score)
             playerScoreInserted = true
             love.filesystem.write('highScores.txt', serialize(saveData))
@@ -99,9 +101,14 @@ function HighScoreState:update(dt)
             scoreNeedsInsertion = false
     end
     flashTimer = flashTimer - dt
+    playAgainTimer = playAgainTimer -dt
     if flashTimer <= 0 then
         flashing = not flashing
         flashTimer = .5
+    end
+    if playAgainTimer < 0 then
+        playAgainFlashing = not playAgainFlashing
+        playAgainTimer = 1
     end
 
     if twoPlayerMode then
@@ -190,6 +197,8 @@ function HighScoreState:update(dt)
                 initialInput = false
                 scoreNeedsInsertion = true
             end
+        else
+            gStateMachine:change('playState')
         end
     end
 end
@@ -201,6 +210,9 @@ function HighScoreState:render()
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.printf('HIGHSCORES', 0, 10, VIRTUAL_WIDTH, 'center')
         love.graphics.printf('THANKS FOR PLAYING!', 0, VIRTUAL_HEIGHT - 20, VIRTUAL_WIDTH, 'center')
+        if playAgainFlashing then
+            love.graphics.printf('PRESS ENTER TO PLAY AGAIN', 0, VIRTUAL_HEIGHT - 35, VIRTUAL_WIDTH, 'center')
+        end
     else
         love.graphics.printf('ENTER INITIALS', 0, 10, VIRTUAL_WIDTH, 'center')
     end

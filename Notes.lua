@@ -94,6 +94,7 @@ X_Cease player1 spawns if gameover
 X_explosion sound for both player death and vulture death
 X_Fixed double explode sfx bug
 X_Show leader board after gameover for 3 seconds
+X_Add new game from highscore state, either enter or R
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
 __Tweak player to vulture top collision to jump a little less high
@@ -112,7 +113,6 @@ __Add proper high score amounts
 
 __Add appropriate highscores for wave achievements
 __Prevent players from spawning at same spawn point
-__Add new game from highscore state, either enter or R
 
 
 
@@ -128,7 +128,7 @@ Killing Pterodactyl 1000
 First Egg   250
 Second Egg  500
 Third Egg   750
-Fourth+ Egg 1000
+Fourth + Egg 1000
 Egg bonus in air    500
 SUCCESSFUL WAVE 3000
 
