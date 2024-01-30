@@ -1,6 +1,7 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
+    conflict = false
     sounds['theme']:stop()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)
 	platform1L = Platform('platform1L', -35, 68, 69, 7)
@@ -28,6 +29,7 @@ function PlayState:init()
 	scoresTable = {}
     eggsCaught = 0
     timesEggHatched = {} -- {0, 0, 0, 0}
+    legalSpawns = {1, 2, 3, 4}
 	wave = 1
 	lives = 5
     player2Lives = 5
@@ -273,6 +275,26 @@ function PlayState:update(dt)
 
         ---[[WAVE LOGIC
         if wave == 1 then
+            --legalSpawn()
+            --SET LEGAL SPAWN TABLE
+            --REMOVE VALUES THAT SHARE X WITH EITHER PLAYER
+            if player1.x > platform4L.x + platform4L.width - 27 -player1.width and player1.x + player1.width < platform4L.x + platform4L.width - 27 + SPAWNSAFETYWIDTH then
+                if player1.y < platform4L.y and player1.y > platform4L.y - SPAWNSAFETYHEIGHT then
+                    conflict = true
+                else
+                    conflict = false
+                end
+            else
+                conflict = false
+            end
+           --[[
+            SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y) --RIGHTMOST
+            SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y) --LEFT
+            SpawnZonePoints[3] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)   --BOTTOM
+            SpawnZonePoints[4] = SpawnZonePoint(platform2.x + 20, platform2.y) --TOP
+            --]]
+
+
             enemyObjects = 3
             --GLOBAL OBJECT TABLE DUMMY INITIALIZATION
             if not tablesPopulated then
@@ -392,6 +414,15 @@ function PlayState:update(dt)
                 --TODO add gravity for ostrich standing on removed platform
                 if platform2.retracted then
                     player1.ground = Platform('name', 1, 1, 1, 1)
+                    legalSpawns = {1, 2, 3}
+                    --REMOVE SPAWN POINT
+                    --[[
+                    for i, v in pairs(legalSpawns) do
+                        if legalSpawns[i] == 2 then
+                            table.remove(legalSpawns, i)
+                        end
+                    end
+                    --]]
                 end
             end
 
@@ -973,11 +1004,9 @@ function PlayState:update(dt)
             else
                 player1.exploded = false
                 lives = lives - 1
-                if platform2.retracted then
-                    spawnPointIndex = math.random(3)
-                else
-                    spawnPointIndex = math.random(4)
-                end
+
+                spawnPointIndex = math.random(#legalSpawns)
+
                 if lives > 0 then
                     player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
                     sounds['respawn']:play()
@@ -1987,6 +2016,13 @@ function PlayState:render()
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.print(' \'ESC\' - EXIT GAME', 10, 165)
 	end
+
+    for i, v in pairs(legalSpawns) do
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print(tostring(legalSpawns[i]), 5, i * 10)
+    end
+
+    love.graphics.print('conflict: ' .. tostring(conflict), 5, 50)
 --[[
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     for i, platform in pairs(collidablePlatforms) do

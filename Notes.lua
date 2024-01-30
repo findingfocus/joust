@@ -103,7 +103,7 @@ __Ensure Hunters are inheriting faster dx than bounder when instantiating
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
-__Dummy initialization function implement
+__ Dummy initialization function implement
 __Add portal sound on vulture spawn (player spawn?)
 __PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
