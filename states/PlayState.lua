@@ -278,6 +278,22 @@ function PlayState:update(dt)
             --legalSpawn()
             --SET LEGAL SPAWN TABLE
             --REMOVE VALUES THAT SHARE X WITH EITHER PLAYER
+            
+            --POINT 1
+            --[[
+            if player1.x > platform3.x + 20 - player1.width and player1.x + player1.width < platform3.x + 20 + SPAWNSAFETYWIDTH then
+                if player1.y < platform3.y and player1.y > platform3.y - SPAWNSAFETYHEIGHT then
+                    conflict = true
+                else
+                    conflict = false
+                end
+            else
+                conflict = false
+            end
+            --]]
+
+            --POINT 2
+            --[[
             if player1.x > platform4L.x + platform4L.width - 27 -player1.width and player1.x + player1.width < platform4L.x + platform4L.width - 27 + SPAWNSAFETYWIDTH then
                 if player1.y < platform4L.y and player1.y > platform4L.y - SPAWNSAFETYHEIGHT then
                     conflict = true
@@ -287,6 +303,33 @@ function PlayState:update(dt)
             else
                 conflict = false
             end
+            --]]
+            
+            --POUNT 3
+            --[[
+            if player1.x > VIRTUAL_WIDTH / 2 - 30 - player1.width and player1.x + player1.width < VIRTUAL_WIDTH / 2 - 30 + SPAWNSAFETYWIDTH then
+                if player1.y < groundPlatform.y and player1.y > groundPlatform.y - SPAWNSAFETYHEIGHT then
+                    conflict = true
+                else
+                    conflict = false
+                end
+            else
+                conflict = false
+            end
+            --]]
+            
+            --POINT 4
+            --[[
+            if player1.x > platform2.x + 20 - player1.width and player1.x + player1.width < platform2.x + 20 + SPAWNSAFETYWIDTH then
+                if player1.y < platform2.y and player1.y > platform2.y - SPAWNSAFETYHEIGHT then
+                    conflict = true
+                else
+                    conflict = false    
+                end
+            else
+                conflict = false
+            end
+            --]]
            --[[
             SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y) --RIGHTMOST
             SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y) --LEFT
