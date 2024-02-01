@@ -304,8 +304,8 @@ function PlayState:update(dt)
                 conflict = false
             end
             --]]
-            
-            --POUNT 3
+
+            --POINT 3
             --[[
             if player1.x > VIRTUAL_WIDTH / 2 - 30 - player1.width and player1.x + player1.width < VIRTUAL_WIDTH / 2 - 30 + SPAWNSAFETYWIDTH then
                 if player1.y < groundPlatform.y and player1.y > groundPlatform.y - SPAWNSAFETYHEIGHT then
@@ -317,14 +317,14 @@ function PlayState:update(dt)
                 conflict = false
             end
             --]]
-            
+
             --POINT 4
             --[[
             if player1.x > platform2.x + 20 - player1.width and player1.x + player1.width < platform2.x + 20 + SPAWNSAFETYWIDTH then
                 if player1.y < platform2.y and player1.y > platform2.y - SPAWNSAFETYHEIGHT then
                     conflict = true
                 else
-                    conflict = false    
+                    conflict = false
                 end
             else
                 conflict = false
