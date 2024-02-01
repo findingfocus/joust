@@ -57,6 +57,10 @@ function PlayState:init()
 	tablesPopulated = false
     leftFireCollided = false
     rightFireCollided = false
+    SpawnZone1Conflict = false
+    SpawnZone2Conflict = false
+    SpawnZone3Conflict = false
+    SpawnZone4Conflict = false
 	player1 = Ostrich(VIRTUAL_WIDTH / 3 - 5, VIRTUAL_HEIGHT - GROUND_OFFSET, 16, 24, VIRTUAL_HEIGHT - GROUND_OFFSET, 1, 'o', 'p', 'i')
 	player1.y = VIRTUAL_HEIGHT - GROUND_OFFSET - player1.height
 	player1.temporarySafety = false
@@ -223,6 +227,81 @@ function eggPlacement()
     Eggs[7].hatchCountdown = 30
 end
 
+function legalSpawn()
+    --POINT 1
+    ---[[
+    if player1.x > platform3.x + 20 - player1.width and player1.x + player1.width < platform3.x + 20 + SPAWNSAFETYWIDTH then
+        if player1.y < platform3.y and player1.y > platform3.y - SPAWNSAFETYHEIGHT then
+            SpawnZone1Conflict = true
+        else
+            SpawnZone1Conflict = false
+        end
+    else
+        SpawnZone1Conflict = false
+    end
+    --]]
+
+    --POINT 2
+    ---[[
+    if player1.x > platform4L.x + platform4L.width - 27 -player1.width and player1.x + player1.width < platform4L.x + platform4L.width - 27 + SPAWNSAFETYWIDTH then
+        if player1.y < platform4L.y and player1.y > platform4L.y - SPAWNSAFETYHEIGHT then
+            SpawnZone2Conflict = true
+        else
+            SpawnZone2Conflict = false
+        end
+    else
+        SpawnZone2Conflict = false
+    end
+    --]]
+    --POINT 3
+    ---[[
+    if player1.x > VIRTUAL_WIDTH / 2 - 30 - player1.width and player1.x + player1.width < VIRTUAL_WIDTH / 2 - 30 + SPAWNSAFETYWIDTH then
+        if player1.y < groundPlatform.y and player1.y > groundPlatform.y - SPAWNSAFETYHEIGHT then
+            SpawnZone3Conflict = true
+        else
+            SpawnZone3Conflict = false
+        end
+    else
+        SpawnZone3Conflict = false
+    end
+    --]]
+
+    --POINT 4
+    ---[[
+    if player1.x > platform2.x + 20 - player1.width and player1.x + player1.width < platform2.x + 20 + SPAWNSAFETYWIDTH then
+        if player1.y < platform2.y and player1.y > platform2.y - SPAWNSAFETYHEIGHT then
+            SpawnZone4Conflict = true
+        else
+            SpawnZone4Conflict = false
+        end
+    else
+        SpawnZone4Conflict = false
+    end
+
+    for i, v in pairs(legalSpawns) do
+        if legalSpawns[i] == 1 then
+            if SpawnZone1Conflict then
+                table.remove(legalSpawns, i)
+            end
+        end
+        if legalSpawns[i] == 2 then
+            if SpawnZone2Conflict then
+                table.remove(legalSpawns, i)
+            end
+        end
+        if legalSpawns[i] == 3 then
+            if SpawnZone3Conflict then
+                table.remove(legalSpawns, i)
+            end
+        end
+        if legalSpawns[i] == 4 then
+            if SpawnZone4Conflict then
+                table.remove(legalSpawns, i)
+            end
+        end
+    end
+end
+
 
 function PlayState:update(dt)
     if not helpToggle then
@@ -275,60 +354,12 @@ function PlayState:update(dt)
 
         ---[[WAVE LOGIC
         if wave == 1 then
-            --legalSpawn()
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             --SET LEGAL SPAWN TABLE
             --REMOVE VALUES THAT SHARE X WITH EITHER PLAYER
-            
-            --POINT 1
-            --[[
-            if player1.x > platform3.x + 20 - player1.width and player1.x + player1.width < platform3.x + 20 + SPAWNSAFETYWIDTH then
-                if player1.y < platform3.y and player1.y > platform3.y - SPAWNSAFETYHEIGHT then
-                    conflict = true
-                else
-                    conflict = false
-                end
-            else
-                conflict = false
-            end
-            --]]
 
-            --POINT 2
-            --[[
-            if player1.x > platform4L.x + platform4L.width - 27 -player1.width and player1.x + player1.width < platform4L.x + platform4L.width - 27 + SPAWNSAFETYWIDTH then
-                if player1.y < platform4L.y and player1.y > platform4L.y - SPAWNSAFETYHEIGHT then
-                    conflict = true
-                else
-                    conflict = false
-                end
-            else
-                conflict = false
-            end
-            --]]
 
-            --POINT 3
-            --[[
-            if player1.x > VIRTUAL_WIDTH / 2 - 30 - player1.width and player1.x + player1.width < VIRTUAL_WIDTH / 2 - 30 + SPAWNSAFETYWIDTH then
-                if player1.y < groundPlatform.y and player1.y > groundPlatform.y - SPAWNSAFETYHEIGHT then
-                    conflict = true
-                else
-                    conflict = false
-                end
-            else
-                conflict = false
-            end
-            --]]
-
-            --POINT 4
-            --[[
-            if player1.x > platform2.x + 20 - player1.width and player1.x + player1.width < platform2.x + 20 + SPAWNSAFETYWIDTH then
-                if player1.y < platform2.y and player1.y > platform2.y - SPAWNSAFETYHEIGHT then
-                    conflict = true
-                else
-                    conflict = false
-                end
-            else
-                conflict = false
-            end
             --]]
            --[[
             SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y) --RIGHTMOST
@@ -2065,7 +2096,7 @@ function PlayState:render()
         love.graphics.print(tostring(legalSpawns[i]), 5, i * 10)
     end
 
-    love.graphics.print('conflict: ' .. tostring(conflict), 5, 50)
+    --love.graphics.print('conflict: ' .. tostring(SpawnZone1Conflict), 5, 50)
 --[[
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     for i, platform in pairs(collidablePlatforms) do
