@@ -96,6 +96,8 @@ X_Fixed double explode sfx bug
 X_Show leader board after gameover for 3 seconds
 X_Add new game from highscore state, either enter or R
 X_legalSpawn function removing unnecessary spawns
+X_Add player 2 to legalSpawn function
+X_Prevent players from spawning at same spawn point
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
 __Tweak player to vulture top collision to jump a little less high
@@ -111,10 +113,10 @@ __Need to assess which Ostrich Collisions can be moved into the class itself to 
 __Cease player2 spawns if gameover
 __Test Gameover for twoPlayer Mode
 __Add proper high score amounts
+__Death in eggWave advances wave?
+__Try and find source of the butt pixel for player 1
 
 __Add appropriate highscores for wave achievements
-__Add player 2 to legalSpawn function
-__Prevent players from spawning at same spawn point
 
 
 

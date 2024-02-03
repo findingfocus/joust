@@ -327,9 +327,9 @@ function Vulture:update(dt)
 				love.math.setRandomSeed(self.index)
 				self.justJumped = true
                 if self.tier == 1 then
-                    self.timeBetweenJumps = math.random(.2, .3, .5, 1, 1, 2, 3, 3, 3, 3, 5)
+                    self.timeBetweenJumps = math.random(.2, .3, .5, .8, 1, 1, 2, 3, 3, 3, 5)
                 elseif self.tier == 2 then
-                    self.timeBetweenJumps = math.random(.15, .25, .45, .8, .8, 1.8, 2.8, 3, 3, 3, 5)
+                    self.timeBetweenJumps = math.random(.15, .25, .45, .3, .8, .8, 1.8, 2.8, 3, 3, 3, 5)
                 elseif self.tier == 3 then
                     self.timeBetweenJumps = math.random(.14, .22, .4, .3, .2, 1, 2.4, 3, 3, 3, 4, 4, 4, 5, 5,5)
                 end

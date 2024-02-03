@@ -11,8 +11,10 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber, leftInp
     self.playerNumber = playerNumber
     if playerNumber == 1 then
         self.atlas = playerAtlas
+        self.spawningAtlas = temporarySafetyAtlas
     elseif playerNumber == 2 then
         self.atlas = player2Atlas
+        self.spawningAtlas = temporarySafetyAtlas2
     end
     if self.playerNumber == 1 then
         self.temporarySafetyAtlas = temporarySafetyAtlas
@@ -32,7 +34,7 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber, leftInp
 	self.frame = 1
 	self.totalFrames = 4
 	self.explosionTimer = 0
-	self.spawnHeight = .5
+	self.spawnHeight = 0.5
 	self.safetyTime = 5
 	self.spawnFrameCount = 0
     self.escapeJump = 0
@@ -56,9 +58,9 @@ function Ostrich:init(x, y, width, height, platformSpawnY, playerNumber, leftInp
 	ostrich1Sprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
     ostrich2Sprite = love.graphics.newQuad(0, 0, self.width, self.height, self.atlas:getDimensions())
     if self.playerNumber == 1 then
-        spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas:getDimensions())
+        player1SpawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas:getDimensions())
     elseif self.playerNumber == 2 then
-        spawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas2:getDimensions())
+        player2SpawningSprite = love.graphics.newQuad(0, 0, self.width, self.height, self.temporarySafetyAtlas2:getDimensions())
     end
     self.beginningSpawn = false
     self.attractMode = false
@@ -193,11 +195,21 @@ function Ostrich:update(dt)
 		end
 
 		if self.spawnFrame1 then
-			spawningSprite:setViewport(1, 0, self.width, self.spawnHeight) -- SPAWN FRAME 1
-			self.spawnFrameCount = self.spawnFrameCount + 1
+            if self.playerNumber == 1 then
+                player1SpawningSprite:setViewport(1, 0, self.width, self.spawnHeight) -- SPAWN FRAME 1
+                self.spawnFrameCount = self.spawnFrameCount + 1
+            elseif self.playerNumber == 2 then
+                player2SpawningSprite:setViewport(1, 0, self.width, self.spawnHeight) -- SPAWN FRAME 1
+                self.spawnFrameCount = self.spawnFrameCount + 1
+            end
 		else
-			spawningSprite:setViewport(18, 0, self.width, self.spawnHeight) -- SPAWN FRAME 2
-			self.spawnFrameCount = self.spawnFrameCount + 1
+            if self.playerNumber == 1 then
+                player1SpawningSprite:setViewport(18, 0, self.width, self.spawnHeight) -- SPAWN FRAME 2
+                self.spawnFrameCount = self.spawnFrameCount + 1
+            elseif self.playerNumber == 2 then
+                player2SpawningSprite:setViewport(18, 0, self.width, self.spawnHeight) -- SPAWN FRAME 2
+                self.spawnFrameCount = self.spawnFrameCount + 1
+            end
 		end
 	end
 	--]]
@@ -659,15 +671,15 @@ function Ostrich:render()
 		if not self.exploded then
 			if self.facingRight then
                 if self.playerNumber == 1 then
-                    love.graphics.draw(self.temporarySafetyAtlas, spawningSprite, self.x, self.y, 0, 1, 1)
+                    love.graphics.draw(self.temporarySafetyAtlas, player1SpawningSprite, self.x, self.y, 0, 1, 1)
                 else
-                    love.graphics.draw(self.temporarySafetyAtlas2, spawningSprite, self.x, self.y, 0, 1, 1)
+                    love.graphics.draw(self.temporarySafetyAtlas2, player2SpawningSprite, self.x, self.y, 0, 1, 1)
                 end
 			else
                 if self.playerNumber == 1 then
-                    love.graphics.draw(self.temporarySafetyAtlas, spawningSprite, self.x, self.y, 0, -1, 1, self.width)
+                    love.graphics.draw(self.temporarySafetyAtlas, player1SpawningSprite, self.x, self.y, 0, -1, 1, self.width)
                 else
-                    love.graphics.draw(self.temporarySafetyAtlas2, spawningSprite, self.x, self.y, 0, -1, 1, self.width)
+                    love.graphics.draw(self.temporarySafetyAtlas2, player2SpawningSprite, self.x, self.y, 0, -1, 1, self.width)
                 end
 			end
 		end

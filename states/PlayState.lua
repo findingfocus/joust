@@ -6,6 +6,10 @@ function PlayState:init()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)
 	platform1L = Platform('platform1L', -35, 68, 69, 7)
 	platform2 = Platform('platform2', 70, 77, 94, 7)
+	platform3 = Platform('platform3', 192, 120, 50, 7)
+	platform4 = Platform('platform4', 233, 129, 79, 7)
+	platform4L = Platform('platform4L', -35, 129, 79, 7)
+	platform5 = Platform('platform5', 86, 146, 69, 7)
     platform2LeftWipeX = 70
     platform2LeftWipeY = 77
     platform2RightWipeX = 164
@@ -14,10 +18,6 @@ function PlayState:init()
     platform2WipeTimer = 0
     Score = 0
     Score2 = 0
-	platform3 = Platform('platform3', 192, 120, 50, 7)
-	platform4 = Platform('platform4', 233, 129, 79, 7)
-	platform4L = Platform('platform4L', -35, 129, 79, 7)
-	platform5 = Platform('platform5', 86, 146, 69, 7)
 	lavaBubble1 = LavaBubble(22, VIRTUAL_HEIGHT, 2)
 	lavaBubble2 = LavaBubble(VIRTUAL_WIDTH - 11, VIRTUAL_HEIGHT, 5)
 	collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
@@ -74,10 +74,10 @@ function PlayState:init()
 	vultureCount = 0
 	pteroTimer = 0
 	SpawnZonePoints = {}
-	SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y)
-	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y)
-	SpawnZonePoints[3] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)
-	SpawnZonePoints[4] = SpawnZonePoint(platform2.x + 20, platform2.y)
+	SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y, 0, 1)
+	SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y, 0, 2)
+	SpawnZonePoints[3] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y, 0, 3)
+	SpawnZonePoints[4] = SpawnZonePoint(platform2.x + 20, platform2.y, 0, 4)
 	PteroSpawnPoints = {}
 	PteroSpawnPoints[1] = SpawnZonePoint(-24, 12, 1.8)
 	PteroSpawnPoints[2] = SpawnZonePoint(VIRTUAL_WIDTH, 12, -1.8)
@@ -228,8 +228,8 @@ function eggPlacement()
 end
 
 function legalSpawn()
+    --PLAYER1 SPAWN CONFLICTS
     --POINT 1
-    ---[[
     if player1.x > platform3.x + 20 - player1.width and player1.x + player1.width < platform3.x + 20 + SPAWNSAFETYWIDTH then
         if player1.y < platform3.y and player1.y > platform3.y - SPAWNSAFETYHEIGHT then
             SpawnZone1Conflict = true
@@ -239,10 +239,7 @@ function legalSpawn()
     else
         SpawnZone1Conflict = false
     end
-    --]]
-
     --POINT 2
-    ---[[
     if player1.x > platform4L.x + platform4L.width - 27 -player1.width and player1.x + player1.width < platform4L.x + platform4L.width - 27 + SPAWNSAFETYWIDTH then
         if player1.y < platform4L.y and player1.y > platform4L.y - SPAWNSAFETYHEIGHT then
             SpawnZone2Conflict = true
@@ -252,9 +249,7 @@ function legalSpawn()
     else
         SpawnZone2Conflict = false
     end
-    --]]
     --POINT 3
-    ---[[
     if player1.x > VIRTUAL_WIDTH / 2 - 30 - player1.width and player1.x + player1.width < VIRTUAL_WIDTH / 2 - 30 + SPAWNSAFETYWIDTH then
         if player1.y < groundPlatform.y and player1.y > groundPlatform.y - SPAWNSAFETYHEIGHT then
             SpawnZone3Conflict = true
@@ -264,10 +259,7 @@ function legalSpawn()
     else
         SpawnZone3Conflict = false
     end
-    --]]
-
     --POINT 4
-    ---[[
     if player1.x > platform2.x + 20 - player1.width and player1.x + player1.width < platform2.x + 20 + SPAWNSAFETYWIDTH then
         if player1.y < platform2.y and player1.y > platform2.y - SPAWNSAFETYHEIGHT then
             SpawnZone4Conflict = true
@@ -278,6 +270,53 @@ function legalSpawn()
         SpawnZone4Conflict = false
     end
 
+    --PLAYER2 SPAWN CONFLICTS
+    --POINT 1
+    ---[[
+    if twoPlayerMode then
+        if player2.x > platform3.x + 20 - player2.width and player2.x + player2.width < platform3.x + 20 + SPAWNSAFETYWIDTH then
+            if player2.y < platform3.y and player2.y > platform3.y - SPAWNSAFETYHEIGHT then
+                SpawnZone1Conflict2 = true
+            else
+                SpawnZone1Conflict2 = false
+            end
+        else
+            SpawnZone1Conflict2 = false
+        end
+
+        --POINT 2
+        if player2.x > platform4L.x + platform4L.width - 27 -player2.width and player2.x + player2.width < platform4L.x + platform4L.width - 27 + SPAWNSAFETYWIDTH then
+            if player2.y < platform4L.y and player2.y > platform4L.y - SPAWNSAFETYHEIGHT then
+                SpawnZone2Conflict2 = true
+            else
+                SpawnZone2Conflict2 = false
+            end
+        else
+            SpawnZone2Conflict2 = false
+        end
+        --POINT 3
+        if player2.x > VIRTUAL_WIDTH / 2 - 30 - player2.width and player2.x + player2.width < VIRTUAL_WIDTH / 2 - 30 + SPAWNSAFETYWIDTH then
+            if player2.y < groundPlatform.y and player2.y > groundPlatform.y - SPAWNSAFETYHEIGHT then
+                SpawnZone3Conflict2 = true
+            else
+                SpawnZone3Conflict2 = false
+            end
+        else
+            SpawnZone3Conflict2 = false
+        end
+        --POINT 4
+        if player2.x > platform2.x + 20 - player2.width and player2.x + player2.width < platform2.x + 20 + SPAWNSAFETYWIDTH then
+            if player2.y < platform2.y and player2.y > platform2.y - SPAWNSAFETYHEIGHT then
+                SpawnZone4Conflict2 = true
+            else
+                SpawnZone4Conflict2 = false
+            end
+        else
+            SpawnZone4Conflict2 = false
+        end
+    end
+
+    --PLAYER 1 CONFLICT SPAWNZONE REMOVAL
     for i, v in pairs(legalSpawns) do
         if legalSpawns[i] == 1 then
             if SpawnZone1Conflict then
@@ -300,10 +339,37 @@ function legalSpawn()
             end
         end
     end
+
+    if twoPlayerMode then
+        --PLAYER 2 CONFLICT SPAWNZONE REMOVAL
+        for i, v in pairs(legalSpawns) do
+            if legalSpawns[i] == 1 then
+                if SpawnZone1Conflict2 then
+                    table.remove(legalSpawns, i)
+                end
+            end
+            if legalSpawns[i] == 2 then
+                if SpawnZone2Conflict2 then
+                    table.remove(legalSpawns, i)
+                end
+            end
+            if legalSpawns[i] == 3 then
+                if SpawnZone3Conflict2 then
+                    table.remove(legalSpawns, i)
+                end
+            end
+            if legalSpawns[i] == 4 then
+                if SpawnZone4Conflict2 then
+                    table.remove(legalSpawns, i)
+                end
+            end
+        end
+    end
 end
 
 
 function PlayState:update(dt)
+
     if not helpToggle then
         if leftFireCollided then
             love.graphics.setColor(255/255, 0/255, 0/255, 255/255)
@@ -356,18 +422,6 @@ function PlayState:update(dt)
         if wave == 1 then
             legalSpawns = {1, 2, 3, 4}
             legalSpawn()
-            --SET LEGAL SPAWN TABLE
-            --REMOVE VALUES THAT SHARE X WITH EITHER PLAYER
-
-
-            --]]
-           --[[
-            SpawnZonePoints[1] = SpawnZonePoint(platform3.x + 20, platform3.y) --RIGHTMOST
-            SpawnZonePoints[2] = SpawnZonePoint(platform4L.x + platform4L.width - 27, platform4L.y) --LEFT
-            SpawnZonePoints[3] = SpawnZonePoint(VIRTUAL_WIDTH / 2 - 30, groundPlatform.y)   --BOTTOM
-            SpawnZonePoints[4] = SpawnZonePoint(platform2.x + 20, platform2.y) --TOP
-            --]]
-
 
             enemyObjects = 3
             --GLOBAL OBJECT TABLE DUMMY INITIALIZATION
@@ -388,6 +442,8 @@ function PlayState:update(dt)
         end
 
         if wave == 2 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 4
             if lavaRise < 5 then
                 lavaRise = lavaRise + dt
@@ -409,6 +465,8 @@ function PlayState:update(dt)
         end
 
         if wave == 3 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             if not floorRetracted then
                 floorRetract()
             end
@@ -433,6 +491,8 @@ function PlayState:update(dt)
         end
 
         if wave == 4 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 5
             if not tablesPopulated then
                 for i = 1, enemyObjects do
@@ -450,6 +510,8 @@ function PlayState:update(dt)
         end
 
         if wave == 5 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             eggWaveTransitionTimer = eggWaveTransitionTimer + dt
             eggWavePrint(dt)
@@ -481,6 +543,8 @@ function PlayState:update(dt)
         end
 
         if wave == 6 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             --PLATFORM 2 RETRACTION
             if not platform2.retracted then
@@ -516,6 +580,8 @@ function PlayState:update(dt)
         end
 
         if wave == 7 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             --PLATFORM 1 and 1L RETRACTION
             if not platform1.retracted then
@@ -541,6 +607,8 @@ function PlayState:update(dt)
         end
 
         if wave == 8 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             platform2.retracted = true
             if not tablesPopulated then
@@ -561,6 +629,8 @@ function PlayState:update(dt)
         end
 
         if wave == 9 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             platform2.retracted = true
             if not platform5.retracted then
@@ -584,6 +654,8 @@ function PlayState:update(dt)
         end
 
         if wave == 10 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             eggWaveTransitionTimer = eggWaveTransitionTimer + dt
             eggWavePrint(dt)
@@ -596,10 +668,10 @@ function PlayState:update(dt)
                     Jockeys[i] = Jockey(-20, -20, i)
                     Taxis[i] = Taxi(-40, -40, 16, 24, i)
                 end
-                platform2.retracted = false
-                platform1.retracted = false
-                platform1L.retracted = false
-                platform5.retracted = false
+                platform1 = Platform('platform1R', 233, 68, 69, 7)
+                platform1L = Platform('platform1L', -35, 68, 69, 7)
+                platform2 = Platform('platform2', 70, 77, 94, 7)
+                platform5 = Platform('platform5', 86, 146, 69, 7)
                 collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
                 eggPlacement()
                 tablesPopulated = true
@@ -620,6 +692,8 @@ function PlayState:update(dt)
         end
 
         if wave == 11 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             if not platform1.retracted then
                 platformRetract(platform1)
@@ -645,6 +719,8 @@ function PlayState:update(dt)
         end
 
         if wave == 12 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             ---[[
             platform1.retracted = true
@@ -671,6 +747,8 @@ function PlayState:update(dt)
         end
 
         if wave == 13 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             ---[[
             platform5.retracted = true
@@ -698,6 +776,8 @@ function PlayState:update(dt)
         end
 
         if wave == 14 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             platform2.retracted = true
             ---[[
@@ -720,6 +800,8 @@ function PlayState:update(dt)
             waveAdvance(enemyObjects)
         end
         if wave == 15 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             eggWaveTransitionTimer = eggWaveTransitionTimer + dt
             eggWavePrint(dt)
@@ -732,10 +814,10 @@ function PlayState:update(dt)
                     Jockeys[i] = Jockey(-20, -20, i)
                     Taxis[i] = Taxi(-40, -40, 16, 24, i)
                 end
-                platform2.retracted = false
-                platform1.retracted = false
-                platform1L.retracted = false
-                platform5.retracted = false
+                platform1 = Platform('platform1R', 233, 68, 69, 7)
+                platform1L = Platform('platform1L', -35, 68, 69, 7)
+                platform2 = Platform('platform2', 70, 77, 94, 7)
+                platform5 = Platform('platform5', 86, 146, 69, 7)
                 collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
                 eggPlacement()
                 tablesPopulated = true
@@ -754,6 +836,8 @@ function PlayState:update(dt)
             end
         end
         if wave == 16 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             if not platform5.retracted then
                 platformRetract(platform5)
@@ -778,6 +862,8 @@ function PlayState:update(dt)
         end
 
         if wave == 17 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             platform5.retracted = true
             if not platform1.retracted then
@@ -806,6 +892,8 @@ function PlayState:update(dt)
         end
 
         if wave == 18 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             platform1.retracted = true
             platform1L.retracted = true
@@ -832,6 +920,8 @@ function PlayState:update(dt)
             waveAdvance(enemyObjects)
         end
         if wave == 19 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             platform1.retracted = true
             platform1L.retracted = true
@@ -857,6 +947,8 @@ function PlayState:update(dt)
             waveAdvance(enemyObjects)
         end
         if wave == 20 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             eggWaveTransitionTimer = eggWaveTransitionTimer + dt
             eggWavePrint(dt)
@@ -869,10 +961,10 @@ function PlayState:update(dt)
                     Jockeys[i] = Jockey(-20, -20, i)
                     Taxis[i] = Taxi(-40, -40, 16, 24, i)
                 end
-                platform2.retracted = false
-                platform1.retracted = false
-                platform1L.retracted = false
-                platform5.retracted = false
+                platform1 = Platform('platform1R', 233, 68, 69, 7)
+                platform1L = Platform('platform1L', -35, 68, 69, 7)
+                platform2 = Platform('platform2', 70, 77, 94, 7)
+                platform5 = Platform('platform5', 86, 146, 69, 7)
                 collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
                 eggPlacement()
                 tablesPopulated = true
@@ -892,6 +984,8 @@ function PlayState:update(dt)
             end
         end
         if wave == 21 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             if not platform5.retracted then
                 platformRetract(platform5)
@@ -916,6 +1010,8 @@ function PlayState:update(dt)
             waveAdvance(enemyObjects)
         end
         if wave == 22 then
+            legalSpawns = {1, 2, 3, 4}
+            legalSpawn()
             enemyObjects = 7
             platform5.retracted = true
             if not platform1.retracted then
@@ -944,6 +1040,8 @@ function PlayState:update(dt)
             waveAdvance(enemyObjects)
         end
         if wave == 23 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             platform5.retracted = true
             platform1.retracted = true
@@ -971,6 +1069,8 @@ function PlayState:update(dt)
             waveAdvance(enemyObjects)
         end
         if wave == 24 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             platform5.retracted = true
             platform1.retracted = true
@@ -997,6 +1097,8 @@ function PlayState:update(dt)
             waveAdvance(enemyObjects)
         end
         if wave == 25 then
+            legalSpawns = {1, 2, 3}
+            legalSpawn()
             enemyObjects = 7
             eggWaveTransitionTimer = eggWaveTransitionTimer + dt
             eggWavePrint(dt)
@@ -1009,19 +1111,18 @@ function PlayState:update(dt)
                     Jockeys[i] = Jockey(-20, -20, i)
                     Taxis[i] = Taxi(-40, -40, 16, 24, i)
                 end
-                platform2.retracted = false
-                platform1.retracted = false
-                platform1L.retracted = false
-                platform5.retracted = false
+                platform1 = Platform('platform1R', 233, 68, 69, 7)
+                platform1L = Platform('platform1L', -35, 68, 69, 7)
+                platform2 = Platform('platform2', 70, 77, 94, 7)
+                platform5 = Platform('platform5', 86, 146, 69, 7)
                 collidablePlatforms = {platform1, platform1L, platform2, platform3, platform4, platform4L, platform5}
                 eggPlacement()
                 tablesPopulated = true
             end
 
-            if eggWaveTransitionTimer > 4 then
-                ---[[Test high score state
+            if eggWaveTransitionTimer > 18 then
                 gStateMachine:change('highScoreState')
-                --]]
+                --[[
                 waveTimer = 3
                 eggWaveTextTimer = 3
                 eggsCaught = 0
@@ -1031,6 +1132,7 @@ function PlayState:update(dt)
                     Eggs[i].collected = true
                 end
                 eggWaveTransitionTimer = 0
+                --]]
             end
         end
         --]]
@@ -1042,6 +1144,13 @@ function PlayState:update(dt)
             sounds['leftStep']:stop()
             sounds['rightStep']:stop()
             sounds['skid']:stop()
+        end
+
+        if love.keyboard.wasPressed('n') then
+            for i = 1, enemyObjects do
+                Vultures[i].graveyard = true
+                Eggs[i].collected = true
+            end
         end
 
         --RESET VULTURES
@@ -1076,13 +1185,14 @@ function PlayState:update(dt)
                 lives = lives - 1
                 gameOver = true
             else
-                player1.exploded = false
+                --player1.exploded = false
                 lives = lives - 1
 
-                spawnPointIndex = math.random(#legalSpawns)
-
+                randomIndex = math.random(#legalSpawns)
+                spawnPointIndex = legalSpawns[randomIndex]
                 if lives > 0 then
                     player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
+                    sounds['respawn']:stop()
                     sounds['respawn']:play()
                 else
                     lives = 0
@@ -1109,13 +1219,13 @@ function PlayState:update(dt)
                     gameOver = true
                 else
                     player2Lives = player2Lives - 1
-                    if platform2.retracted then
-                        spawnPointIndex = math.random(3)
-                    else
-                        spawnPointIndex = math.random(4)
-                    end
+
+                    randomIndex = math.random(#legalSpawns)
+                    spawnPointIndex = legalSpawns[randomIndex]
+
                     if player2Lives > 0 then
                         player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
+                        sounds['respawn2']:stop()
                         sounds['respawn2']:play()
                     end
                 end
@@ -2090,17 +2200,21 @@ function PlayState:render()
         love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
         love.graphics.print(' \'ESC\' - EXIT GAME', 10, 165)
 	end
-
-    for i, v in pairs(legalSpawns) do
-        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
-        love.graphics.print(tostring(legalSpawns[i]), 5, i * 10)
-    end
-
-    --love.graphics.print('conflict: ' .. tostring(SpawnZone1Conflict), 5, 50)
 --[[
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
     for i, platform in pairs(collidablePlatforms) do
         love.graphics.print(tostring(platform.name), 0, i * 8)
     end
+    --]]
+
+    --[[
+    for i, v in pairs(legalSpawns) do
+        love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
+        love.graphics.print(tostring(legalSpawns[i]), 5, i * 10)
+    end
+	SpawnZonePoints[1]:render()
+	SpawnZonePoints[2]:render()
+	SpawnZonePoints[3]:render()
+	SpawnZonePoints[4]:render()
     --]]
 end
