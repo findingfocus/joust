@@ -1181,8 +1181,7 @@ function PlayState:update(dt)
             --SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
             monster = Pterodactyl(-30, -30, 0)
             pteroTimer = vultureCount * 20
-            if lives == 1 then
-                lives = lives - 1
+            if lives == 0 then
                 gameOver = true
             else
                 --player1.exploded = false
@@ -1190,7 +1189,7 @@ function PlayState:update(dt)
 
                 randomIndex = math.random(#legalSpawns)
                 spawnPointIndex = legalSpawns[randomIndex]
-                if lives > 0 then
+                if lives >= 0 then
                     player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
                     sounds['respawn']:stop()
                     sounds['respawn']:play()
@@ -1346,7 +1345,8 @@ function PlayState:update(dt)
                         Eggs[i].invulnerable = true
                         pteroTimer = vultureCount * 20 - 20
                         Vultures[i].firstFrameExploded = true
-                        player1.dy = player1.dy * -1
+                        player1.dy = -0.5
+                        --player1.dy = player1.dy * -1
                         Score = Score + Vultures[i].pointTier
                     elseif player1:enemyLeftCollides(Vultures[i]) then
                         if player1.facingRight and Vultures[i].facingRight then

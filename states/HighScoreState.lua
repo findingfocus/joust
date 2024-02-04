@@ -45,16 +45,16 @@ end
 
 function saveDefaultScoreBoard()
     saveData = {}
-    table.insert(saveData, HighScores(1, {'J', 'D', 'H'}, 255))
-    table.insert(saveData, HighScores(2, {'J', 'D', 'H'}, 254))
-    table.insert(saveData, HighScores(3, {'J', 'D', 'H'}, 253))
-    table.insert(saveData, HighScores(4, {'J', 'D', 'H'}, 252))
-    table.insert(saveData, HighScores(5, {'J', 'D', 'H'}, 251))
-    table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 249))
-    table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 248))
-    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 8750))
-    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 5000))
-    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 2250))
+    table.insert(saveData, HighScores(1, {'J', 'D', 'H'}, 50000))
+    table.insert(saveData, HighScores(2, {'J', 'D', 'H'}, 44500))
+    table.insert(saveData, HighScores(3, {'J', 'D', 'H'}, 38750))
+    table.insert(saveData, HighScores(4, {'J', 'D', 'H'}, 33500))
+    table.insert(saveData, HighScores(5, {'J', 'D', 'H'}, 28250))
+    table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 23000))
+    table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 17750))
+    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 12500))
+    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 8750))
+    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 6250))
     table.insert(saveData, HighScores(11, {'J', 'D', 'H'}, 200)) --DUMMY VALUE TO OVERWRITE
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))

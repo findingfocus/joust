@@ -98,26 +98,29 @@ X_Add new game from highscore state, either enter or R
 X_legalSpawn function removing unnecessary spawns
 X_Add player 2 to legalSpawn function
 X_Prevent players from spawning at same spawn point
+X_Add appropriate highscores for wave achievements
+X_Play with lives at 0
+X_Tweak player to vulture top collision to jump a little less high
+X_Ensure Hunters are inheriting faster dx than bounder when instantiating
+X_Add portal sound on vulture spawn (player spawn?)
+X_Add proper high score amounts
+
+--Optional Debugging
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
 __Functionalize EggWave Spawns
-__Tweak player to vulture top collision to jump a little less high
-__Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
-__Ensure Hunters are inheriting faster dx than bounder when instantiating
 __Put Ptero inits into update function not in wave function
 __Come up with better way to check if all enemyObjects.hatched == true
 __Ensure Vultures have midair bonus in wave 2
 __ Dummy initialization function implement
-__Add portal sound on vulture spawn (player spawn?)
-__PlayerMoves when standing on vultureSpawn point --Do we want to change this?
 __Need to assess which Ostrich Collisions can be moved into the class itself to tidy up playState Code
-__Cease player2 spawns if gameover
-__Test Gameover for twoPlayer Mode
-__Add proper high score amounts
 __Death in eggWave advances wave?
 __Try and find source of the butt pixel for player 1
 
-__Add appropriate highscores for wave achievements
 
+-- Next Episode
+__Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
+__In two player Mode dont gameover until both players out of lives
+__Test Gameover for twoPlayer Mode
 
 
 
