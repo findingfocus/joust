@@ -104,6 +104,10 @@ X_Tweak player to vulture top collision to jump a little less high
 X_Ensure Hunters are inheriting faster dx than bounder when instantiating
 X_Add portal sound on vulture spawn (player spawn?)
 X_Add proper high score amounts
+X_In two player Mode dont gameover until both players out of lives
+X_Test Gameover for twoPlayer Mode
+X_Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
+X_Fixed butt pixel for both players
 
 --Optional Debugging
 __Add Pause for egg placement, so Eggwave text first, then eggPlacement()
@@ -118,9 +122,6 @@ __Try and find source of the butt pixel for player 1
 
 
 -- Next Episode
-__Ensure Ptero doesnt deinstatiate when player 1 dies in two player mode
-__In two player Mode dont gameover until both players out of lives
-__Test Gameover for twoPlayer Mode
 
 
 

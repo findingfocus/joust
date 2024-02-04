@@ -2,6 +2,8 @@ PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
     conflict = false
+    player1GameOver = false
+    player2GameOver = false
     sounds['theme']:stop()
 	platform1 = Platform('platform1R', 233, 68, 69, 7)
 	platform1L = Platform('platform1L', -35, 68, 69, 7)
@@ -1122,17 +1124,6 @@ function PlayState:update(dt)
 
             if eggWaveTransitionTimer > 18 then
                 gStateMachine:change('highScoreState')
-                --[[
-                waveTimer = 3
-                eggWaveTextTimer = 3
-                eggsCaught = 0
-                tablesPopulated = false
-                for i = 1, enemyObjects do
-                    Eggs[i] = Egg(-10, -10, 0, i)
-                    Eggs[i].collected = true
-                end
-                eggWaveTransitionTimer = 0
-                --]]
             end
         end
         --]]
@@ -1177,26 +1168,70 @@ function PlayState:update(dt)
         --]]
 
         --PLAYER 1 RESPAWN
-        if player1.exploded and player1.explosionTimer > .35 then
-            --SENDS PTERO TO GRAVEYARD UPON PLAYER DEATH
-            monster = Pterodactyl(-30, -30, 0)
-            pteroTimer = vultureCount * 20
-            if lives == 0 then
-                gameOver = true
-            else
-                --player1.exploded = false
-                lives = lives - 1
-
-                randomIndex = math.random(#legalSpawns)
-                spawnPointIndex = legalSpawns[randomIndex]
-                if lives >= 0 then
-                    player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
-                    sounds['respawn']:stop()
-                    sounds['respawn']:play()
-                else
-                    lives = 0
+        if not twoPlayerMode then
+            if player1.exploded and player1.explosionTimer > .35 then
+                --SENDS PTERO TO GRAVEYARD UPON PLAYER 1 DEATH
+                monster = Pterodactyl(-30, -30, 0)
+                pteroTimer = vultureCount * 20
+                if lives == 0 then
+                    gameOver = true
                     player1.graveyard = true
+                else
+                    randomIndex = math.random(#legalSpawns)
+                    spawnPointIndex = legalSpawns[randomIndex]
+                    if lives > 0 then
+                        player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
+                        sounds['respawn']:stop()
+                        sounds['respawn']:play()
+                    end
+                    lives = lives - 1
                 end
+            end
+        end
+
+        --TWO PLAYER MODE DEATHS
+        if twoPlayerMode then
+            if player1.exploded and player1.explosionTimer > .35 then
+                if lives == 0 then
+                    player1.graveyard = true
+                    player1GameOver = true
+                else
+                    randomIndex = math.random(#legalSpawns)
+                    spawnPointIndex = legalSpawns[randomIndex]
+                    if lives > 0 then
+                        player1 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 1, 'o', 'p', 'i')
+                        sounds['respawn']:stop()
+                        sounds['respawn']:play()
+                    end
+                    lives = lives - 1
+                end
+            end
+        end
+
+        --PLAYER 2 RESPAWN
+        if twoPlayerMode then
+            if player2.exploded and player2.explosionTimer > .35 then
+                if player2Lives == 0 then
+                    player2.graveyard = true
+                    player2GameOver = true
+                else
+                    randomIndex = math.random(#legalSpawns)
+                    spawnPointIndex = legalSpawns[randomIndex]
+                    if player2Lives > 0 then
+                        player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
+                        sounds['respawn2']:stop()
+                        sounds['respawn2']:play()
+                    end
+                    player2Lives = player2Lives - 1
+                end
+            end
+        end
+
+        if twoPlayerMode then
+            if player1GameOver and player2GameOver then
+                gameOver = true
+                player1GameOver = false
+                player2GameOver = false
             end
         end
 
@@ -1205,29 +1240,6 @@ function PlayState:update(dt)
             gameOverTimer = gameOverTimer + dt
             if gameOverTimer > 3 then
                 gStateMachine:change('highScoreState')
-            end
-        end
-
-
-        --PLAYER 2 RESPAWN
-        if twoPlayerMode then
-            if player2.exploded and player2.explosionTimer > .35 then
-                pteroTimer = vultureCount * 20
-                if player2Lives == 1 then
-                    player2Lives = player2Lives - 1
-                    gameOver = true
-                else
-                    player2Lives = player2Lives - 1
-
-                    randomIndex = math.random(#legalSpawns)
-                    spawnPointIndex = legalSpawns[randomIndex]
-
-                    if player2Lives > 0 then
-                        player2 = Ostrich(SpawnZonePoints[spawnPointIndex].x, SpawnZonePoints[spawnPointIndex].y, 16, 24, SpawnZonePoints[spawnPointIndex].y, 2, 'x', 'c', 'z')
-                        sounds['respawn2']:stop()
-                        sounds['respawn2']:play()
-                    end
-                end
             end
         end
 

@@ -596,9 +596,9 @@ function Ostrich:update(dt)
 			--PLAYER AERIAL ANIMATION
 				if not self.grounded then
                     if self.playerNumber == 1 then
-                        ostrich1Sprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
+                        ostrich1Sprite:setViewport((self.width * 5) + 6, 0, self.width, self.height)
                     else
-                        ostrich2Sprite:setViewport((self.width * 5) + 5, 0, self.width, self.height)
+                        ostrich2Sprite:setViewport((self.width * 5) + 6, 0, self.width, self.height)
                     end
 					if love.keyboard.wasPressed(self.jumpInput) then
 						self.jumpTimer = 0
@@ -607,9 +607,9 @@ function Ostrich:update(dt)
 
 					if self.flapped then
                         if self.playerNumber == 1 then
-                            ostrich1Sprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)
+                            ostrich1Sprite:setViewport((self.width * 6) + 7, 0, self.width, self.height)
                         else
-                            ostrich2Sprite:setViewport((self.width * 6) + 6, 0, self.width, self.height)
+                            ostrich2Sprite:setViewport((self.width * 6) + 7, 0, self.width, self.height)
                         end
 						self.jumpTimer = self.jumpTimer + dt
 						if self.jumpTimer > .1 then
