@@ -52,9 +52,9 @@ function saveDefaultScoreBoard()
     table.insert(saveData, HighScores(5, {'J', 'D', 'H'}, 251))
     table.insert(saveData, HighScores(6, {'J', 'D', 'H'}, 249))
     table.insert(saveData, HighScores(7, {'J', 'D', 'H'}, 248))
-    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 247))
-    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 246))
-    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 245))
+    table.insert(saveData, HighScores(8, {'J', 'D', 'H'}, 8750))
+    table.insert(saveData, HighScores(9, {'J', 'D', 'H'}, 5000))
+    table.insert(saveData, HighScores(10, {'J', 'D', 'H'}, 2250))
     table.insert(saveData, HighScores(11, {'J', 'D', 'H'}, 200)) --DUMMY VALUE TO OVERWRITE
     --saveData.score1 = Score --USER SCORE
     love.filesystem.write('highScores.txt', serialize(saveData))
