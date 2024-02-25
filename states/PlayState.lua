@@ -1137,12 +1137,14 @@ function PlayState:update(dt)
             sounds['skid']:stop()
         end
 
+        --[[
         if love.keyboard.wasPressed('n') then
             for i = 1, enemyObjects do
                 Vultures[i].graveyard = true
                 Eggs[i].collected = true
             end
         end
+        --]]
 
         --RESET VULTURES
         if love.keyboard.wasPressed('v') and not Vultures[3].spawning then
